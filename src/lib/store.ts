@@ -1,6 +1,11 @@
 import { seedProducts, seedSuppliers, type Product, type Supplier } from "./seed-data";
+import {
+  seedDeliveryCustomers, seedDeliveryProducts, seedDeliveryNotes,
+  type DeliveryCustomer, type DeliveryProduct, type DeliveryNote, type DeliveryNoteItem,
+} from "./delivery-seed-data";
 
 export type { Product, Supplier };
+export type { DeliveryCustomer, DeliveryProduct, DeliveryNote, DeliveryNoteItem };
 
 // 采购单明细
 export interface PurchaseOrderItem {
@@ -71,7 +76,7 @@ export interface OutsourcingOrder {
 }
 
 // 种子数据版本号：每次更新 seed-data 时升此值，强制覆盖旧缓存
-const STORAGE_VERSION = "v5";
+const STORAGE_VERSION = "v6";
 
 // 存储键名
 const KEYS = {
@@ -79,7 +84,134 @@ const KEYS = {
   SUPPLIERS: "aluminum_suppliers",
   PURCHASE_ORDERS: "aluminum_purchase_orders",
   OUTSOURCING_ORDERS: "aluminum_outsourcing_orders",
+  DELIVERY_CUSTOMERS: "delivery_customers",
+  DELIVERY_PRODUCTS: "delivery_products",
+  DELIVERY_NOTES: "delivery_notes",
   STORAGE_VERSION: "aluminum_storage_version",
+};
+
+// 预览下一个送货单号
+export function previewDeliveryOrderNo(): string {
+  if (typeof window === "undefined") return "";
+  return generateOrderNo("BL", KEYS.DELIVERY_NOTES);
+}
+
+// 客户管理（送货模块）
+export const deliveryCustomerStore = {
+  getAll(): DeliveryCustomer[] {
+    return getAll<DeliveryCustomer>(KEYS.DELIVERY_CUSTOMERS);
+  },
+  getById(id: string): DeliveryCustomer | undefined {
+    return this.getAll().find(c => c.id === id);
+  },
+  add(customer: Omit<DeliveryCustomer, "id">): DeliveryCustomer {
+    const list = this.getAll();
+    const newCustomer: DeliveryCustomer = { ...customer, id: generateId() };
+    list.push(newCustomer);
+    saveAll(KEYS.DELIVERY_CUSTOMERS, list);
+    return newCustomer;
+  },
+  update(id: string, data: Partial<DeliveryCustomer>): DeliveryCustomer | undefined {
+    const list = this.getAll();
+    const idx = list.findIndex(c => c.id === id);
+    if (idx === -1) return undefined;
+    list[idx] = { ...list[idx], ...data };
+    saveAll(KEYS.DELIVERY_CUSTOMERS, list);
+    return list[idx];
+  },
+  remove(id: string): boolean {
+    const list = this.getAll();
+    const filtered = list.filter(c => c.id !== id);
+    if (filtered.length === list.length) return false;
+    saveAll(KEYS.DELIVERY_CUSTOMERS, filtered);
+    return true;
+  },
+  search(keyword: string): DeliveryCustomer[] {
+    const kw = keyword.toLowerCase();
+    return this.getAll().filter(c =>
+      c.name.toLowerCase().includes(kw) ||
+      c.contact.toLowerCase().includes(kw)
+    );
+  },
+};
+
+// 送货产品管理
+export const deliveryProductStore = {
+  getAll(): DeliveryProduct[] {
+    return getAll<DeliveryProduct>(KEYS.DELIVERY_PRODUCTS);
+  },
+  getById(id: string): DeliveryProduct | undefined {
+    return this.getAll().find(p => p.id === id);
+  },
+  add(product: Omit<DeliveryProduct, "id">): DeliveryProduct {
+    const list = this.getAll();
+    const newProduct: DeliveryProduct = { ...product, id: generateId() };
+    list.push(newProduct);
+    saveAll(KEYS.DELIVERY_PRODUCTS, list);
+    return newProduct;
+  },
+  update(id: string, data: Partial<DeliveryProduct>): DeliveryProduct | undefined {
+    const list = this.getAll();
+    const idx = list.findIndex(p => p.id === id);
+    if (idx === -1) return undefined;
+    list[idx] = { ...list[idx], ...data };
+    saveAll(KEYS.DELIVERY_PRODUCTS, list);
+    return list[idx];
+  },
+  remove(id: string): boolean {
+    const list = this.getAll();
+    const filtered = list.filter(p => p.id !== id);
+    if (filtered.length === list.length) return false;
+    saveAll(KEYS.DELIVERY_PRODUCTS, filtered);
+    return true;
+  },
+  search(keyword: string): DeliveryProduct[] {
+    const kw = keyword.toLowerCase();
+    return this.getAll().filter(p =>
+      p.id.toLowerCase().includes(kw) ||
+      p.name.toLowerCase().includes(kw) ||
+      p.spec.toLowerCase().includes(kw)
+    );
+  },
+};
+
+// 送货单管理
+export const deliveryNoteStore = {
+  getAll(): DeliveryNote[] {
+    return getAll<DeliveryNote>(KEYS.DELIVERY_NOTES);
+  },
+  getById(id: string): DeliveryNote | undefined {
+    return this.getAll().find(o => o.id === id);
+  },
+  add(order: Omit<DeliveryNote, "id" | "orderNo" | "createdAt" | "updatedAt">): DeliveryNote {
+    const list = this.getAll();
+    const now = new Date().toISOString();
+    const newOrder: DeliveryNote = {
+      ...order,
+      id: generateId(),
+      orderNo: generateOrderNo("BL", KEYS.DELIVERY_NOTES),
+      createdAt: now,
+      updatedAt: now,
+    };
+    list.push(newOrder);
+    saveAll(KEYS.DELIVERY_NOTES, list);
+    return newOrder;
+  },
+  update(id: string, data: Partial<DeliveryNote>): DeliveryNote | undefined {
+    const list = this.getAll();
+    const idx = list.findIndex(o => o.id === id);
+    if (idx === -1) return undefined;
+    list[idx] = { ...list[idx], ...data, updatedAt: new Date().toISOString() };
+    saveAll(KEYS.DELIVERY_NOTES, list);
+    return list[idx];
+  },
+  remove(id: string): boolean {
+    const list = this.getAll();
+    const filtered = list.filter(o => o.id !== id);
+    if (filtered.length === list.length) return false;
+    saveAll(KEYS.DELIVERY_NOTES, filtered);
+    return true;
+  },
 };
 
 // 初始化数据
@@ -94,14 +226,20 @@ function initializeData(): void {
     localStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(seedSuppliers));
     localStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([]));
     localStorage.setItem(KEYS.OUTSOURCING_ORDERS, JSON.stringify([]));
+    localStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify(seedDeliveryCustomers));
+    localStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify(seedDeliveryProducts));
+    localStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify(seedDeliveryNotes));
     localStorage.setItem(KEYS.STORAGE_VERSION, STORAGE_VERSION);
     return;
   }
 
-  // 版本号不匹配：强制用最新种子数据覆盖产品和供应商，保留订单数据
+  // 版本号不匹配：强制用最新种子数据覆盖，保留用户订单数据
   if (currentVersion !== STORAGE_VERSION) {
     localStorage.setItem(KEYS.PRODUCTS, JSON.stringify(seedProducts));
     localStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(seedSuppliers));
+    localStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify(seedDeliveryCustomers));
+    localStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify(seedDeliveryProducts));
+    localStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify(seedDeliveryNotes));
     localStorage.setItem(KEYS.STORAGE_VERSION, STORAGE_VERSION);
   }
 }
