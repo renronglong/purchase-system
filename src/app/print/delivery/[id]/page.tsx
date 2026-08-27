@@ -25,6 +25,8 @@ export default function PrintDeliveryPage() {
 
   if (!order) return <div className="p-6 text-center text-slate-400">加载中...</div>;
 
+  const totalAmount = order.items.reduce((s, i) => s + i.amount, 0);
+
   return (
     <>
       <style jsx global>{`
@@ -49,12 +51,10 @@ export default function PrintDeliveryPage() {
         </div>
 
         <div className="grid grid-cols-2 gap-x-8 gap-y-1 text-sm mb-4 border-b border-black pb-3">
-          <div className="flex"><span className="font-medium w-20 shrink-0">单号：</span><span className="font-mono">{order.orderNo}</span></div>
-          <div className="flex"><span className="font-medium w-20 shrink-0">日期：</span><span>{order.orderDate}</span></div>
-          <div className="flex"><span className="font-medium w-20 shrink-0">客户：</span><span>{order.customerName}</span></div>
-          <div className="flex"><span className="font-medium w-20 shrink-0">联系人：</span><span>{order.customerContact}</span></div>
-          <div className="flex"><span className="font-medium w-20 shrink-0">电话：</span><span>{order.customerPhone}</span></div>
-          <div className="flex"><span className="font-medium w-20 shrink-0">地址：</span><span>{order.customerAddress}</span></div>
+          <div className="flex"><span className="font-medium w-20 shrink-0">单号：</span><span className="font-mono">{order.noteNo}</span></div>
+          <div className="flex"><span className="font-medium w-20 shrink-0">日期：</span><span>{order.date}</span></div>
+          <div className="flex"><span className="font-medium w-20 shrink-0">客户：</span><span>{order.customer}</span></div>
+          {order.orderNo && <div className="flex"><span className="font-medium w-20 shrink-0">订单号：</span><span>{order.orderNo}</span></div>}
         </div>
 
         <table className="w-full text-xs border-collapse mb-4">
@@ -67,8 +67,6 @@ export default function PrintDeliveryPage() {
               <th className="border border-black px-1.5 py-1.5 font-medium">表面处理</th>
               <th className="border border-black px-1.5 py-1.5 font-medium">单位</th>
               <th className="border border-black px-1.5 py-1.5 font-medium">数量</th>
-              <th className="border border-black px-1.5 py-1.5 font-medium">长度mm</th>
-              <th className="border border-black px-1.5 py-1.5 font-medium">重量KG</th>
               <th className="border border-black px-1.5 py-1.5 font-medium">单价</th>
               <th className="border border-black px-1.5 py-1.5 font-medium">金额</th>
               <th className="border border-black px-1.5 py-1.5 font-medium">备注</th>
@@ -78,14 +76,12 @@ export default function PrintDeliveryPage() {
             {order.items.map((item, idx) => (
               <tr key={item.id} className="border-b border-gray-300">
                 <td className="border border-black px-1.5 py-1 text-center">{idx + 1}</td>
-                <td className="border border-black px-1.5 py-1 font-mono">{item.productCode}</td>
+                <td className="border border-black px-1.5 py-1 font-mono">{item.materialCode}</td>
                 <td className="border border-black px-1.5 py-1">{item.productName}</td>
                 <td className="border border-black px-1.5 py-1">{item.spec}</td>
                 <td className="border border-black px-1.5 py-1">{item.surface}</td>
                 <td className="border border-black px-1.5 py-1 text-center">{item.unit}</td>
-                <td className="border border-black px-1.5 py-1 text-right">{item.quantity}</td>
-                <td className="border border-black px-1.5 py-1 text-right">{item.length}</td>
-                <td className="border border-black px-1.5 py-1 text-right font-mono">{item.weight.toFixed(3)}</td>
+                <td className="border border-black px-1.5 py-1 text-right">{item.qty}</td>
                 <td className="border border-black px-1.5 py-1 text-right font-mono">{item.unitPrice.toFixed(2)}</td>
                 <td className="border border-black px-1.5 py-1 text-right font-mono">{item.amount.toFixed(2)}</td>
                 <td className="border border-black px-1.5 py-1">{item.remark}</td>
@@ -95,19 +91,13 @@ export default function PrintDeliveryPage() {
           <tfoot>
             <tr className="border-t-2 border-black font-bold">
               <td colSpan={6} className="border border-black px-1.5 py-1.5 text-right">合计</td>
-              <td className="border border-black px-1.5 py-1.5 text-center">{order.items.reduce((s, i) => s + i.quantity, 0)}</td>
+              <td className="border border-black px-1.5 py-1.5"></td>
               <td></td>
-              <td className="border border-black px-1.5 py-1.5 text-right font-mono">{order.totalWeight.toFixed(3)}</td>
-              <td></td>
-              <td className="border border-black px-1.5 py-1.5 text-right font-mono">{order.totalAmount.toFixed(2)}</td>
+              <td className="border border-black px-1.5 py-1.5 text-right font-mono">{totalAmount.toFixed(2)}</td>
               <td className="border border-black px-1.5 py-1.5"></td>
             </tr>
           </tfoot>
         </table>
-
-        {order.remark && (
-          <div className="text-sm mb-4"><span className="font-medium">备注：</span>{order.remark}</div>
-        )}
 
         <div className="mt-8 grid grid-cols-3 gap-8 text-sm">
           <div><p className="font-medium mb-6">制单人：</p><div className="border-b border-black"></div></div>

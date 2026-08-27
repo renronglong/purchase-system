@@ -1,11 +1,11 @@
 import { seedProducts, seedSuppliers, type Product, type Supplier } from "./seed-data";
 import {
-  seedDeliveryCustomers, seedDeliveryProducts, seedDeliveryNotes,
-  type DeliveryCustomer, type DeliveryProduct, type DeliveryNote, type DeliveryNoteItem,
+  deliveryCustomers, deliveryProducts, deliveryNotes,
+  type DeliveryCustomer, type DeliveryProduct, type DeliveryNote, type DeliveryItem,
 } from "./delivery-seed-data";
 
 export type { Product, Supplier };
-export type { DeliveryCustomer, DeliveryProduct, DeliveryNote, DeliveryNoteItem };
+export type { DeliveryCustomer, DeliveryProduct, DeliveryNote, DeliveryItem };
 
 // 采购单明细
 export interface PurchaseOrderItem {
@@ -76,7 +76,7 @@ export interface OutsourcingOrder {
 }
 
 // 种子数据版本号：每次更新 seed-data 时升此值，强制覆盖旧缓存
-const STORAGE_VERSION = "v6";
+const STORAGE_VERSION = "v7";
 
 // 存储键名
 const KEYS = {
@@ -183,15 +183,12 @@ export const deliveryNoteStore = {
   getById(id: string): DeliveryNote | undefined {
     return this.getAll().find(o => o.id === id);
   },
-  add(order: Omit<DeliveryNote, "id" | "orderNo" | "createdAt" | "updatedAt">): DeliveryNote {
+  add(order: Omit<DeliveryNote, "id" | "noteNo">): DeliveryNote {
     const list = this.getAll();
-    const now = new Date().toISOString();
     const newOrder: DeliveryNote = {
       ...order,
       id: generateId(),
-      orderNo: generateOrderNo("BL", KEYS.DELIVERY_NOTES),
-      createdAt: now,
-      updatedAt: now,
+      noteNo: generateOrderNo("BL", KEYS.DELIVERY_NOTES),
     };
     list.push(newOrder);
     saveAll(KEYS.DELIVERY_NOTES, list);
@@ -201,7 +198,7 @@ export const deliveryNoteStore = {
     const list = this.getAll();
     const idx = list.findIndex(o => o.id === id);
     if (idx === -1) return undefined;
-    list[idx] = { ...list[idx], ...data, updatedAt: new Date().toISOString() };
+    list[idx] = { ...list[idx], ...data };
     saveAll(KEYS.DELIVERY_NOTES, list);
     return list[idx];
   },
@@ -226,9 +223,9 @@ function initializeData(): void {
     localStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(seedSuppliers));
     localStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([]));
     localStorage.setItem(KEYS.OUTSOURCING_ORDERS, JSON.stringify([]));
-    localStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify(seedDeliveryCustomers));
-    localStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify(seedDeliveryProducts));
-    localStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify(seedDeliveryNotes));
+    localStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify(deliveryCustomers));
+    localStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify(deliveryProducts));
+    localStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify(deliveryNotes));
     localStorage.setItem(KEYS.STORAGE_VERSION, STORAGE_VERSION);
     return;
   }
@@ -237,9 +234,9 @@ function initializeData(): void {
   if (currentVersion !== STORAGE_VERSION) {
     localStorage.setItem(KEYS.PRODUCTS, JSON.stringify(seedProducts));
     localStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(seedSuppliers));
-    localStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify(seedDeliveryCustomers));
-    localStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify(seedDeliveryProducts));
-    localStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify(seedDeliveryNotes));
+    localStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify(deliveryCustomers));
+    localStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify(deliveryProducts));
+    localStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify(deliveryNotes));
     localStorage.setItem(KEYS.STORAGE_VERSION, STORAGE_VERSION);
   }
 }

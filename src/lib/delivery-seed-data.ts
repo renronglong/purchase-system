@@ -1,6 +1,8 @@
-// 送货模块种子数据 - 自动生成
+// ============================================
+// 送货单模块种子数据 - 从Excel真实导入
+// 50家客户、455条送货产品、164张送货单
+// ============================================
 
-// 客户
 export interface DeliveryCustomer {
   id: string;
   name: string;
@@ -13,62 +15,62 @@ export interface DeliveryCustomer {
   paymentTerms: string;
 }
 
-export const seedDeliveryCustomers: DeliveryCustomer[] = [
-  { id: "c1", name: "佛山市南海区光明灯饰有限公司", address: "佛山市南海区工业区82栋4号", contact: "张经理", phone: "13846913810", taxNo: "914406003321819600", legalPerson: "陈小姐", email: "contact1@guangming.com", paymentTerms: "月结30天" },
-  { id: "c2", name: "中山市古镇华艺照明电器厂", address: "佛山市顺德区科技路12栋7号", contact: "李总", phone: "15977827638", taxNo: "914406009083863794", legalPerson: "刘先生", email: "contact2@huayi.com", paymentTerms: "月结60天" },
-  { id: "c3", name: "深圳市龙岗区盛达五金制品厂", address: "中山市创业大道1栋6号", contact: "王先生", phone: "18855667651", taxNo: "914406004235116155", legalPerson: "黄经理", email: "contact3@shengda.com", paymentTerms: "月结90天" },
-  { id: "c4", name: "广州市番禺区大石永丰铝材店", address: "广州市产业园78栋9号", contact: "陈小姐", phone: "13871662963", taxNo: "914406008161849593", legalPerson: "林先生", email: "contact4@yongfeng.com", paymentTerms: "货到付款" },
-  { id: "c5", name: "东莞市石碣镇鑫达电子厂", address: "深圳市经济开发区91栋3号", contact: "刘先生", phone: "13898753260", taxNo: "914406003413164752", legalPerson: "吴小姐", email: "contact5@xinda.com", paymentTerms: "预付50%" },
-  { id: "c6", name: "佛山市顺德区勒流镇恒丰五金厂", address: "东莞市商贸城48栋12号", contact: "黄经理", phone: "15999949389", taxNo: "914406004192832764", legalPerson: "何总", email: "contact6@guangming.com", paymentTerms: "预付30%" },
-  { id: "c7", name: "江门市蓬江区天河照明有限公司", address: "江门市五金市场82栋18号", contact: "林先生", phone: "15953524491", taxNo: "914406000305641395", legalPerson: "梁经理", email: "contact7@huayi.com", paymentTerms: "现款现货" },
-  { id: "c8", name: "惠州市惠城区宏达五金电器", address: "惠州市铝材城28栋16号", contact: "吴小姐", phone: "18896282117", taxNo: "914406007242388496", legalPerson: "谢先生", email: "contact8@shengda.com", paymentTerms: "月结30天" },
-  { id: "c9", name: "珠海市香洲区精锐铝业公司", address: "珠海市灯饰广场75栋13号", contact: "何总", phone: "13739436733", taxNo: "914406002871012269", legalPerson: "郑小姐", email: "contact9@yongfeng.com", paymentTerms: "月结60天" },
-  { id: "c10", name: "汕头市潮阳区金浦五金加工厂", address: "汕头市制造业基地9栋13号", contact: "梁经理", phone: "18889978790", taxNo: "914406007848018451", legalPerson: "罗总", email: "contact10@xinda.com", paymentTerms: "月结90天" },
-  { id: "c11", name: "佛山市三水区西南街永盛铝材", address: "清远市工业区38栋14号", contact: "谢先生", phone: "15870897765", taxNo: "914406000482814893", legalPerson: "韩经理", email: "contact11@guangming.com", paymentTerms: "货到付款" },
-  { id: "c12", name: "清远市清城区鑫源五金厂", address: "肇庆市科技路20栋12号", contact: "郑小姐", phone: "15882394227", taxNo: "914406008095701543", legalPerson: "唐先生", email: "contact12@huayi.com", paymentTerms: "预付50%" },
-  { id: "c13", name: "肇庆市端州区华兴灯饰配件", address: "韶关市创业大道8栋8号", contact: "罗总", phone: "13921496211", taxNo: "914406007182278248", legalPerson: "曹小姐", email: "contact13@shengda.com", paymentTerms: "预付30%" },
-  { id: "c14", name: "韶关市武江区明辉五金店", address: "梅州市产业园78栋14号", contact: "韩经理", phone: "15982383095", taxNo: "914406003465787133", legalPerson: "许总", email: "contact14@yongfeng.com", paymentTerms: "现款现货" },
-  { id: "c15", name: "梅州市梅县区恒通铝业", address: "阳江市经济开发区9栋11号", contact: "唐先生", phone: "13888961459", taxNo: "914406008393010310", legalPerson: "邓经理", email: "contact15@xinda.com", paymentTerms: "月结30天" },
-  { id: "c16", name: "阳江市江城区利达五金厂", address: "湛江市商贸城43栋3号", contact: "曹小姐", phone: "15947376585", taxNo: "914406007382997376", legalPerson: "萧先生", email: "contact16@guangming.com", paymentTerms: "月结60天" },
-  { id: "c17", name: "湛江市赤坎区鑫隆铝材", address: "茂名市五金市场25栋4号", contact: "许总", phone: "13998447167", taxNo: "914406006566701065", legalPerson: "宋小姐", email: "contact17@huayi.com", paymentTerms: "月结90天" },
-  { id: "c18", name: "茂名市茂南区光华五金店", address: "揭阳市铝材城14栋8号", contact: "邓经理", phone: "15935529407", taxNo: "914406008726247317", legalPerson: "张经理", email: "contact18@shengda.com", paymentTerms: "货到付款" },
-  { id: "c19", name: "揭阳市榕城区东升五金厂", address: "潮州市灯饰广场71栋4号", contact: "萧先生", phone: "13897529405", taxNo: "914406008013267736", legalPerson: "李总", email: "contact19@yongfeng.com", paymentTerms: "预付50%" },
-  { id: "c20", name: "潮州市湘桥区永丰铝业", address: "河源市制造业基地8栋6号", contact: "宋小姐", phone: "18810289289", taxNo: "914406006474687234", legalPerson: "王先生", email: "contact20@xinda.com", paymentTerms: "预付30%" },
-  { id: "c21", name: "河源市源城区宏达五金", address: "佛山市南海区工业区28栋2号", contact: "张经理", phone: "13852091325", taxNo: "914406000097882081", legalPerson: "陈小姐", email: "contact21@guangming.com", paymentTerms: "现款现货" },
-  { id: "c22", name: "汕尾市城区鑫盛五金店", address: "佛山市顺德区科技路24栋3号", contact: "李总", phone: "13941568532", taxNo: "914406006193990916", legalPerson: "刘先生", email: "contact22@huayi.com", paymentTerms: "月结30天" },
-  { id: "c23", name: "云浮市云城区恒丰铝材", address: "中山市创业大道85栋19号", contact: "王先生", phone: "13744999379", taxNo: "914406003534624751", legalPerson: "黄经理", email: "contact23@shengda.com", paymentTerms: "月结60天" },
-  { id: "c24", name: "佛山市南海区丹灶镇五金城", address: "广州市产业园2栋15号", contact: "陈小姐", phone: "13919832887", taxNo: "914406008384251354", legalPerson: "林先生", email: "contact24@yongfeng.com", paymentTerms: "月结90天" },
-  { id: "c25", name: "中山市小榄镇永盛灯饰", address: "深圳市经济开发区21栋15号", contact: "刘先生", phone: "13692097999", taxNo: "914406008084124118", legalPerson: "吴小姐", email: "contact25@xinda.com", paymentTerms: "货到付款" },
-  { id: "c26", name: "广州市白云区太和镇铝材市场", address: "东莞市商贸城20栋9号", contact: "黄经理", phone: "13691178885", taxNo: "914406003534874016", legalPerson: "何总", email: "contact26@guangming.com", paymentTerms: "预付50%" },
-  { id: "c27", name: "深圳市宝安新区鑫达五金", address: "江门市五金市场36栋2号", contact: "林先生", phone: "13854769200", taxNo: "914406002427868011", legalPerson: "梁经理", email: "contact27@huayi.com", paymentTerms: "预付30%" },
-  { id: "c28", name: "东莞市常平镇光华铝材", address: "惠州市铝材城89栋5号", contact: "吴小姐", phone: "13859555330", taxNo: "914406009826204505", legalPerson: "谢先生", email: "contact28@shengda.com", paymentTerms: "现款现货" },
-  { id: "c29", name: "佛山市高明区荷城五金厂", address: "珠海市灯饰广场27栋8号", contact: "何总", phone: "13957469942", taxNo: "914406008692322602", legalPerson: "郑小姐", email: "contact29@yongfeng.com", paymentTerms: "月结30天" },
-  { id: "c30", name: "江门市新会区会城灯饰配件", address: "汕头市制造业基地95栋11号", contact: "梁经理", phone: "18899913412", taxNo: "914406003421607337", legalPerson: "罗总", email: "contact30@xinda.com", paymentTerms: "月结60天" },
-  { id: "c31", name: "惠州市仲恺高新区恒通五金", address: "清远市工业区45栋10号", contact: "谢先生", phone: "15939920292", taxNo: "914406000365414586", legalPerson: "韩经理", email: "contact31@guangming.com", paymentTerms: "月结90天" },
-  { id: "c32", name: "珠海市金湾区精锐灯饰", address: "肇庆市科技路87栋18号", contact: "郑小姐", phone: "13713704481", taxNo: "914406001429401965", legalPerson: "唐先生", email: "contact32@huayi.com", paymentTerms: "货到付款" },
-  { id: "c33", name: "汕头市澄海区金源五金厂", address: "韶关市创业大道94栋11号", contact: "罗总", phone: "18891363974", taxNo: "914406008169340608", legalPerson: "曹小姐", email: "contact33@shengda.com", paymentTerms: "预付50%" },
-  { id: "c34", name: "佛山市南海区里水镇盛达铝材", address: "梅州市产业园69栋7号", contact: "韩经理", phone: "13767887757", taxNo: "914406001595148465", legalPerson: "许总", email: "contact34@yongfeng.com", paymentTerms: "预付30%" },
-  { id: "c35", name: "中山市横栏镇华艺灯饰配件", address: "阳江市经济开发区52栋10号", contact: "唐先生", phone: "15835748341", taxNo: "914406006629946804", legalPerson: "邓经理", email: "contact35@xinda.com", paymentTerms: "现款现货" },
-  { id: "c36", name: "广州市花都区新华五金店", address: "湛江市商贸城37栋7号", contact: "曹小姐", phone: "18887844239", taxNo: "914406009577738721", legalPerson: "萧先生", email: "contact36@guangming.com", paymentTerms: "月结30天" },
-  { id: "c37", name: "深圳市光明新区鑫隆铝业", address: "茂名市五金市场37栋17号", contact: "许总", phone: "13722534217", taxNo: "914406003433200379", legalPerson: "宋小姐", email: "contact37@huayi.com", paymentTerms: "月结60天" },
-  { id: "c38", name: "东莞市长安镇永丰五金", address: "揭阳市铝材城99栋3号", contact: "邓经理", phone: "18965625330", taxNo: "914406009367632016", legalPerson: "张经理", email: "contact38@shengda.com", paymentTerms: "月结90天" },
-  { id: "c39", name: "佛山市顺德区容桂镇恒丰灯饰", address: "潮州市灯饰广场29栋6号", contact: "萧先生", phone: "18916740197", taxNo: "914406008317278895", legalPerson: "李总", email: "contact39@yongfeng.com", paymentTerms: "货到付款" },
-  { id: "c40", name: "江门市鹤山市沙坪五金厂", address: "河源市制造业基地97栋15号", contact: "宋小姐", phone: "18883534128", taxNo: "914406007277434873", legalPerson: "王先生", email: "contact40@xinda.com", paymentTerms: "预付50%" },
-  { id: "c41", name: "惠州市博罗县罗阳镇鑫源五金", address: "佛山市南海区工业区36栋15号", contact: "张经理", phone: "13948349783", taxNo: "914406003455812236", legalPerson: "陈小姐", email: "contact41@guangming.com", paymentTerms: "预付30%" },
-  { id: "c42", name: "珠海市斗门区井岸铝材店", address: "佛山市顺德区科技路89栋5号", contact: "李总", phone: "15918620650", taxNo: "914406006658760366", legalPerson: "刘先生", email: "contact42@huayi.com", paymentTerms: "现款现货" },
-  { id: "c43", name: "汕头市潮南区陈店五金加工", address: "中山市创业大道99栋19号", contact: "王先生", phone: "13887267850", taxNo: "914406006705466889", legalPerson: "黄经理", email: "contact43@shengda.com", paymentTerms: "月结30天" },
-  { id: "c44", name: "佛山市南海区狮山镇光华铝材", address: "广州市产业园29栋16号", contact: "陈小姐", phone: "15946632757", taxNo: "914406006706562729", legalPerson: "林先生", email: "contact44@yongfeng.com", paymentTerms: "月结60天" },
-  { id: "c45", name: "中山市东升镇利达灯饰", address: "深圳市经济开发区69栋1号", contact: "刘先生", phone: "18889442503", taxNo: "914406009016272046", legalPerson: "吴小姐", email: "contact45@xinda.com", paymentTerms: "月结90天" },
-  { id: "c46", name: "广州市增城区新塘五金店", address: "东莞市商贸城42栋7号", contact: "黄经理", phone: "18953868501", taxNo: "914406005646417080", legalPerson: "何总", email: "contact46@guangming.com", paymentTerms: "货到付款" },
-  { id: "c47", name: "深圳市坪山新区鑫盛铝业", address: "江门市五金市场45栋8号", contact: "林先生", phone: "13997477029", taxNo: "914406000033092327", legalPerson: "梁经理", email: "contact47@huayi.com", paymentTerms: "预付50%" },
-  { id: "c48", name: "东莞市寮步镇恒通五金厂", address: "惠州市铝材城86栋4号", contact: "吴小姐", phone: "15972415804", taxNo: "914406004529912419", legalPerson: "谢先生", email: "contact48@shengda.com", paymentTerms: "预付30%" },
-  { id: "c49", name: "佛山市南海区大沥镇永盛五金", address: "珠海市灯饰广场4栋10号", contact: "何总", phone: "18863238057", taxNo: "914406003193149190", legalPerson: "郑小姐", email: "contact49@yongfeng.com", paymentTerms: "现款现货" },
-  { id: "c50", name: "江门市台山市台城灯饰配件", address: "汕头市制造业基地45栋18号", contact: "梁经理", phone: "18898787891", taxNo: "914406005185067165", legalPerson: "罗总", email: "contact50@xinda.com", paymentTerms: "月结30天" },
+export const deliveryCustomers: DeliveryCustomer[] = [
+  { id: 'dc1', name: '广东中为导光科技有限公司', address: '中山市港口镇西街路41号二楼仓库', contact: '朱新果', phone: '0760-88498121', taxNo: '914420007962856889', legalPerson: '', email: '', paymentTerms: '现金' },
+  { id: 'dc2', name: '深圳市卓仪光电科技有限公司', address: '深圳市龙华区福城街道福民社区福前路96号A栋807厂房', contact: '韦彩艳', phone: '13714621831', taxNo: '', legalPerson: '', email: '', paymentTerms: '现金' },
+  { id: 'dc3', name: '珠海市明庆电子有限分司', address: '金鼎科技园金峰西路17号302 B', contact: '曾复招', phone: '13112378734', taxNo: '', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc4', name: '珠海市启阳电子有限公司', address: '中山市三乡镇鸦岗三洲工业大街一巷4号二区六楼', contact: '吴朱启', phone: '13326678096', taxNo: '914404003151658460', legalPerson: '', email: '', paymentTerms: '现金' },
+  { id: 'dc5', name: '深圳市科录科技有限公司', address: '深圳市福田区梅林街道梅都社区中康路128号卓越梅林中心广场(北区)2号楼701B10', contact: '王淑红', phone: '18503056541', taxNo: '91440300MA5EDU7L8H', legalPerson: '欧阳华', email: '764161155@qq.com', paymentTerms: '首付50%余款月结30天' },
+  { id: 'dc6', name: '德铭', address: '', contact: '刘时刚', phone: '', taxNo: '', legalPerson: '', email: '', paymentTerms: '现金' },
+  { id: 'dc7', name: '深圳市凯明节能设备有限公司', address: '石岩镇应人石社区创见工业园A栋2楼', contact: '苏小姐', phone: '15323832391', taxNo: '', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc8', name: '江门光显电子有限公司', address: '江门市江海区科苑西路2号3栋四楼自编3#厂房', contact: '黄先生', phone: '15118067402', taxNo: '91440704MA51YXDT26', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc9', name: '东莞市裕洋钣金制品有限公司', address: '广东省东莞市樟木头镇樟木头东城路1号112', contact: '李伟霞', phone: '13534090890', taxNo: '', legalPerson: '', email: '', paymentTerms: '月结30天' },
+  { id: 'dc10', name: '东方一号电子有限公司', address: '广东佛山顺德勒流富安工业区七区富兴一路12-1-4', contact: '任东', phone: '13424395051', taxNo: '', legalPerson: '', email: '', paymentTerms: '现金' },
+  { id: 'dc11', name: '深圳市欧恩半导体照明有限公司', address: '深圳市宝安区福海街道新和社区工业南路51号', contact: '张琪', phone: '17607551145', taxNo: '914403005571604155', legalPerson: '', email: '', paymentTerms: '月结' },
+  { id: 'dc12', name: '东莞市博旺光电有限公司', address: '广东省 东莞市 常平镇 土塘村第一工业区诚兴工业园1栋101', contact: '刘宇', phone: '18145877032', taxNo: '', legalPerson: '', email: '', paymentTerms: '月结30天' },
+  { id: 'dc13', name: '萍乡市博旺实业有限公司', address: '江西省萍乡市芦溪县芦溪工业园伟德实业园内', contact: '曾小姐', phone: '18145874412', taxNo: '', legalPerson: '', email: '', paymentTerms: '月结30天' },
+  { id: 'dc14', name: '深圳市乐家乐建筑材料有限公司', address: '深圳市福田区香蜜湖街道竹林社区金众街2号益华综合楼A栋B栋3层-三楼A11号', contact: '李萍', phone: '18028789343', taxNo: '91440300697126083F', legalPerson: '', email: '', paymentTerms: '现金' },
+  { id: 'dc15', name: '珠海华炬科技有限公司', address: '珠海市南屏科技园屏东四路五号', contact: '李小姐', phone: '0756-8698139', taxNo: '', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc16', name: '江苏镭科照明科技有限公司', address: '盐城市盐都区盐龙街道世钟路1166号', contact: '徐小姐', phone: '', taxNo: '', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc17', name: '周祥好', address: '浙江省台州市椒江区前所街道新建街36号', contact: '周祥好', phone: '13857684518', taxNo: '', legalPerson: '', email: '', paymentTerms: '现金' },
+  { id: 'dc18', name: '飞科光电有限公司', address: '外海镇金溪工业区冠盈工业园二楼', contact: '梁颖', phone: '18902887867', taxNo: '', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc19', name: '深圳华唐锐照明电器有限公司', address: '深圳市南山区西丽镇麻勘路27号7栋南面4楼401-1', contact: '许菲', phone: '18898756270', taxNo: '', legalPerson: '', email: '', paymentTerms: '月结' },
+  { id: 'dc20', name: '珠海绿美能电子科技有限公司', address: '珠海市南屏科技工业园屏西五路3号厂房二楼B1', contact: '万真钦', phone: '13751852989', taxNo: '91440400555599790A', legalPerson: '黄映鹏', email: '907623919@qq.com', paymentTerms: '月结30天' },
+  { id: 'dc21', name: '深圳美因联电子有限公司', address: '广东省深圳市龙华区观澜街道库坑水围村60号三楼', contact: '张先生', phone: '13570858168', taxNo: '', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc22', name: '浙江浦江逸晨母婴用品有限公司', address: '浙江省金华市东阳市南市街道沧江工业区献华木雕厂内', contact: '甘旭', phone: '18657916318', taxNo: '', legalPerson: '', email: '', paymentTerms: '现金' },
+  { id: 'dc23', name: '珠海金逸电子科技有限公司', address: '珠海市高新区唐家湾镇科技一路6号一楼6B102室', contact: '汪辉', phone: '13250078818', taxNo: '', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc24', name: '深圳富达金技术有限公司', address: '坪山镇汤坑村二路39号', contact: '', phone: '', taxNo: '', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc25', name: '东莞市帝旺电器有限公司', address: '广东省东莞市横沥镇恒泉路395号4号楼202室', contact: '杨长发（先生）', phone: '13829935209', taxNo: '91441900MADON97A7G', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc26', name: '深圳明仕达电源技术有限公司', address: '深圳观澜黎光村中南港工业\n城G栋5楼', contact: '向岩香', phone: '18162986063', taxNo: '', legalPerson: '', email: '', paymentTerms: '现金' },
+  { id: 'dc27', name: '偃师市芯瑞能电子科技有限公司', address: '', contact: '', phone: '', taxNo: '', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc28', name: '重庆固高科技长江研究院有限公司', address: '重庆市永川区凤凰湖工业园电子五小区1栋一楼', contact: '苏茜', phone: '17353296600', taxNo: '', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc29', name: '深圳市巨磁王科技有限责任公司', address: '深圳市宝安区福永街道白石厦东区美华路68号同心工业园A栋3楼', contact: '', phone: '0755-23725116', taxNo: '', legalPerson: '胡春芳', email: '', paymentTerms: '现金' },
+  { id: 'dc30', name: '东莞市莱斯特电源科技有限公司', address: '东莞市黄江镇长洞街23号304室', contact: '', phone: '18098978049', taxNo: '', legalPerson: '何国禄', email: '', paymentTerms: '月结30天' },
+  { id: 'dc31', name: '深圳市艾尔依蒂照明电器有限公司', address: '深圳市宝安区福永镇塘尾福源工业区2栋', contact: '尹小姐', phone: '0755-27303850', taxNo: '', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc32', name: '深圳富锐吉智能科技有限公司', address: '深圳市坪山区碧岭街道汤坑社区汤坑二路39\n号富达金厂第七栋408', contact: '李先生', phone: '0755-84635699', taxNo: '91440300MA5H44UC37', legalPerson: '', email: '', paymentTerms: '货到7天' },
+  { id: 'dc33', name: '丁先生', address: '佛山市南侧海区里水镇', contact: '', phone: '', taxNo: '', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc34', name: '深圳市科普睿电子有限公司', address: '广东省 深圳市 光明区 光明街道', contact: '张紫菡', phone: '18938941906', taxNo: '', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc35', name: '常州市阿波罗电光源有限公司', address: '广州市白云区石井庆丰广场C座306室', contact: '张建伟', phone: '15018770128', taxNo: '', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc36', name: '广州凯佳电子有限公司', address: '广州市番禺区大石街会江江华路3号D栋501', contact: '杨程', phone: '13924150757/020-28988093', taxNo: '91440113304599358C', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc37', name: '和鸿电气股份有限公司', address: '安徽省阜阳市颍泉区颖阳路6号', contact: '冯涛', phone: '13567775797', taxNo: '', legalPerson: '', email: '', paymentTerms: '现金' },
+  { id: 'dc38', name: '江苏联康电子有限公司', address: '江苏省 宿迁市泗阳县珠海路', contact: '胡苗', phone: '193 0519 1550', taxNo: '', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc39', name: '佛山市三水弘美电器配件有限公司', address: '佛山市三水区西南科技工业园创业1路10号', contact: '邓小姐', phone: '0757-87726993', taxNo: '', legalPerson: '', email: '', paymentTerms: '现金' },
+  { id: 'dc40', name: '盛世', address: '', contact: '', phone: '', taxNo: '', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc41', name: '凯明智汇科技（东莞）有限公司', address: '东莞市大朗镇松木山新永顺科技园4栋6楼', contact: '孙春香', phone: '15323832391', taxNo: '', legalPerson: '', email: '', paymentTerms: '现金' },
+  { id: 'dc42', name: '惠州市子阳光电照明有限公司', address: '惠州市惠阳区大亚湾龙海三路西区三小附近日上光电产业园A栋2楼', contact: '刘健平', phone: '15970933060', taxNo: '', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc43', name: '开普勒灯具', address: '河北省保定竟秀区南奇乡隆兴路与西堤路交叉口向南1000米路东', contact: '田鹏飞', phone: '13171690616', taxNo: '', legalPerson: '', email: '', paymentTerms: '现金' },
+  { id: 'dc44', name: '东莞市百川慧通科技有限公司', address: '地址东莞市凤岗镇凤深大道1号永基工业园5栋103室', contact: '王淑红', phone: '18503056541', taxNo: '', legalPerson: '', email: '', paymentTerms: '首付50%款到发货' },
+  { id: 'dc45', name: '江门深华港湾照明有限公司', address: '广东省江门市江海区龙溪路319号3栋9F', contact: '张先生', phone: '0750-3499443', taxNo: '', legalPerson: '', email: '', paymentTerms: '月结30天' },
+  { id: 'dc46', name: '玖嘉久电子科技', address: '广东 佛山 顺德区 北滘镇 涛汇家电园6栋804', contact: '罗斌鹏', phone: '18076604614', taxNo: '', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc47', name: '佛山市奕旺照明科技有限公司', address: '', contact: '', phone: '', taxNo: '', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc48', name: '刘先生', address: '', contact: '', phone: '', taxNo: '', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc49', name: '廖先生', address: '', contact: '', phone: '', taxNo: '', legalPerson: '', email: '', paymentTerms: '' },
+  { id: 'dc50', name: '合肥智测电子有限公司', address: '合肥市高新区香樟大道168号科技实业园D-7号楼', contact: '李小姐', phone: '0551-65334813', taxNo: '', legalPerson: '', email: '', paymentTerms: '首付50%款到发货' },
 ];
 
-// 送货产品
 export interface DeliveryProduct {
   id: string;
+  code: string;
   name: string;
   spec: string;
   surface: string;
@@ -78,666 +80,1163 @@ export interface DeliveryProduct {
   customer: string;
 }
 
-export const seedDeliveryProducts: DeliveryProduct[] = [
-  { id: "BL-001", name: "LED灯体外壳", spec: "49*60", surface: "坯料", unit: "支", weightPerMeter: 2.243, unitPrice: 55.24, customer: "佛山市南海区光明灯饰有限公司" },
-  { id: "SM-002", name: "散热器型材", spec: "79*83", surface: "阳极氧化", unit: "米", weightPerMeter: 0.658, unitPrice: 37.74, customer: "" },
-  { id: "ZG-003", name: "电源外壳", spec: "133*64", surface: "喷砂氧化", unit: "个", weightPerMeter: 2.838, unitPrice: 38.68, customer: "" },
-  { id: "HP-004", name: "灯管外壳", spec: "78*46", surface: "银白氧化", unit: "支", weightPerMeter: 1.553, unitPrice: 49.67, customer: "广州市番禺区大石永丰铝材店" },
-  { id: "LD-005", name: "线条灯壳", spec: "32*40", surface: "砂银氧化", unit: "米", weightPerMeter: 2.988, unitPrice: 55.35, customer: "" },
-  { id: "CT-006", name: "洗墙灯壳", spec: "128*77", surface: "铁灰氧化", unit: "个", weightPerMeter: 3.092, unitPrice: 21.9, customer: "" },
-  { id: "YL-007", name: "投光灯壳", spec: "17*68", surface: "喷涂砂黑", unit: "支", weightPerMeter: 2.156, unitPrice: 29.6, customer: "江门市蓬江区天河照明有限公司" },
-  { id: "GZ-008", name: "地埋灯壳", spec: "64*50", surface: "喷涂白", unit: "米", weightPerMeter: 2.986, unitPrice: 18.36, customer: "" },
-  { id: "ZW-009", name: "水下灯壳", spec: "80*76", surface: "拉丝亮银", unit: "个", weightPerMeter: 2.803, unitPrice: 27.4, customer: "" },
-  { id: "HS-010", name: "隧道灯壳", spec: "31*35", surface: "拉丝铁灰", unit: "支", weightPerMeter: 0.085, unitPrice: 62.04, customer: "汕头市潮阳区金浦五金加工厂" },
-  { id: "BL-011", name: "路灯外壳", spec: "71*93", surface: "拉丝金色", unit: "米", weightPerMeter: 2.534, unitPrice: 35.85, customer: "" },
-  { id: "SM-012", name: "泛光灯壳", spec: "124*7", surface: "高光白", unit: "个", weightPerMeter: 1.693, unitPrice: 48.58, customer: "" },
-  { id: "ZG-013", name: "壁灯外壳", spec: "72*44", surface: "电泳黑", unit: "支", weightPerMeter: 0.371, unitPrice: 20.63, customer: "肇庆市端州区华兴灯饰配件" },
-  { id: "HP-014", name: "吊灯外壳", spec: "145*49", surface: "电泳金", unit: "米", weightPerMeter: 2.341, unitPrice: 29.03, customer: "" },
-  { id: "LD-015", name: "吸顶灯框", spec: "94*50", surface: "粉末喷涂", unit: "个", weightPerMeter: 1.518, unitPrice: 50.52, customer: "" },
-  { id: "CT-016", name: "射灯外壳", spec: "74*34", surface: "氟碳喷涂", unit: "支", weightPerMeter: 2.475, unitPrice: 23.44, customer: "阳江市江城区利达五金厂" },
-  { id: "YL-017", name: "轨道灯壳", spec: "40*100", surface: "坯料", unit: "米", weightPerMeter: 0.466, unitPrice: 18.98, customer: "" },
-  { id: "GZ-018", name: "面板灯框", spec: "57*29", surface: "阳极氧化", unit: "个", weightPerMeter: 1.899, unitPrice: 51.44, customer: "" },
-  { id: "ZW-019", name: "筒灯外壳", spec: "144*81", surface: "喷砂氧化", unit: "支", weightPerMeter: 0.797, unitPrice: 35.6, customer: "揭阳市榕城区东升五金厂" },
-  { id: "HS-020", name: "格栅灯框", spec: "59*42", surface: "银白氧化", unit: "米", weightPerMeter: 1.026, unitPrice: 13.73, customer: "" },
-  { id: "BL-021", name: "灯带铝槽", spec: "13*95", surface: "砂银氧化", unit: "个", weightPerMeter: 0.835, unitPrice: 18.23, customer: "" },
-  { id: "SM-022", name: "灯条外壳", spec: "23*75", surface: "铁灰氧化", unit: "支", weightPerMeter: 1.893, unitPrice: 23.64, customer: "汕尾市城区鑫盛五金店" },
-  { id: "ZG-023", name: "硬灯条壳", spec: "135*18", surface: "喷涂砂黑", unit: "米", weightPerMeter: 1.058, unitPrice: 61.81, customer: "" },
-  { id: "HP-024", name: "软灯条槽", spec: "130*66", surface: "喷涂白", unit: "个", weightPerMeter: 3.061, unitPrice: 40.72, customer: "" },
-  { id: "LD-025", name: "T5灯管壳", spec: "23*37", surface: "拉丝亮银", unit: "支", weightPerMeter: 1.57, unitPrice: 18.51, customer: "中山市小榄镇永盛灯饰" },
-  { id: "CT-026", name: "T8灯管壳", spec: "26*56", surface: "拉丝铁灰", unit: "米", weightPerMeter: 3.297, unitPrice: 35.23, customer: "" },
-  { id: "YL-027", name: "天花灯框", spec: "23*24", surface: "拉丝金色", unit: "个", weightPerMeter: 1.747, unitPrice: 40.89, customer: "" },
-  { id: "GZ-028", name: "商照外壳", spec: "87*15", surface: "高光白", unit: "支", weightPerMeter: 0.565, unitPrice: 40.08, customer: "东莞市常平镇光华铝材" },
-  { id: "ZW-029", name: "明装灯框", spec: "116*82", surface: "电泳黑", unit: "米", weightPerMeter: 3.479, unitPrice: 14.75, customer: "" },
-  { id: "HS-030", name: "嵌入式灯框", spec: "143*53", surface: "电泳金", unit: "个", weightPerMeter: 2.107, unitPrice: 43.25, customer: "" },
-  { id: "BL-031", name: "导轨灯壳", spec: "119*44", surface: "粉末喷涂", unit: "支", weightPerMeter: 1.604, unitPrice: 33.24, customer: "惠州市仲恺高新区恒通五金" },
-  { id: "SM-032", name: "磁吸灯框", spec: "35*31", surface: "氟碳喷涂", unit: "米", weightPerMeter: 2.012, unitPrice: 11.43, customer: "" },
-  { id: "ZG-033", name: "橱柜灯壳", spec: "30*25", surface: "坯料", unit: "个", weightPerMeter: 2.208, unitPrice: 23.08, customer: "" },
-  { id: "HP-034", name: "衣柜灯框", spec: "50*5", surface: "阳极氧化", unit: "支", weightPerMeter: 0.878, unitPrice: 39.46, customer: "佛山市南海区里水镇盛达铝材" },
-  { id: "LD-035", name: "镜前灯壳", spec: "130*42", surface: "喷砂氧化", unit: "米", weightPerMeter: 1.459, unitPrice: 47.29, customer: "" },
-  { id: "CT-036", name: "床头灯框", spec: "82*94", surface: "银白氧化", unit: "个", weightPerMeter: 0.163, unitPrice: 24.42, customer: "" },
-  { id: "YL-037", name: "台灯外壳", spec: "69*38", surface: "砂银氧化", unit: "支", weightPerMeter: 3.016, unitPrice: 12.06, customer: "深圳市光明新区鑫隆铝业" },
-  { id: "GZ-038", name: "落地灯框", spec: "60*59", surface: "铁灰氧化", unit: "米", weightPerMeter: 2.768, unitPrice: 43.63, customer: "" },
-  { id: "ZW-039", name: "铝角码", spec: "48*39", surface: "喷涂砂黑", unit: "个", weightPerMeter: 0.446, unitPrice: 20.81, customer: "" },
-  { id: "HS-040", name: "铝方管", spec: "52*44", surface: "喷涂白", unit: "支", weightPerMeter: 2.902, unitPrice: 12.07, customer: "江门市鹤山市沙坪五金厂" },
-  { id: "BL-041", name: "铝圆管", spec: "83*61", surface: "拉丝亮银", unit: "米", weightPerMeter: 2.103, unitPrice: 54.98, customer: "" },
-  { id: "SM-042", name: "铝扁条", spec: "113*39", surface: "拉丝铁灰", unit: "个", weightPerMeter: 0.479, unitPrice: 47.25, customer: "" },
-  { id: "ZG-043", name: "铝槽", spec: "30*81", surface: "拉丝金色", unit: "支", weightPerMeter: 1.777, unitPrice: 36.15, customer: "汕头市潮南区陈店五金加工" },
-  { id: "HP-044", name: "铝工字材", spec: "92*82", surface: "高光白", unit: "米", weightPerMeter: 0.188, unitPrice: 32.63, customer: "" },
-  { id: "LD-045", name: "铝基板", spec: "15*91", surface: "电泳黑", unit: "个", weightPerMeter: 0.914, unitPrice: 13.21, customer: "" },
-  { id: "CT-046", name: "散热片", spec: "54*65", surface: "电泳金", unit: "支", weightPerMeter: 2.884, unitPrice: 40.85, customer: "广州市增城区新塘五金店" },
-  { id: "YL-047", name: "安装支架", spec: "81*28", surface: "粉末喷涂", unit: "米", weightPerMeter: 1.84, unitPrice: 33.21, customer: "" },
-  { id: "GZ-048", name: "固定座", spec: "135*16", surface: "氟碳喷涂", unit: "个", weightPerMeter: 3.489, unitPrice: 32.85, customer: "" },
-  { id: "ZW-049", name: "连接件", spec: "92*90", surface: "坯料", unit: "支", weightPerMeter: 1.672, unitPrice: 31.28, customer: "佛山市南海区大沥镇永盛五金" },
-  { id: "HS-050", name: "端盖", spec: "115*93", surface: "阳极氧化", unit: "米", weightPerMeter: 0.411, unitPrice: 17.17, customer: "" },
-  { id: "BL-051", name: "堵头", spec: "112*75", surface: "喷砂氧化", unit: "个", weightPerMeter: 1.759, unitPrice: 45.77, customer: "" },
-  { id: "SM-052", name: "密封条", spec: "74*46", surface: "银白氧化", unit: "支", weightPerMeter: 0.177, unitPrice: 13.02, customer: "中山市古镇华艺照明电器厂" },
-  { id: "ZG-053", name: "装饰盖", spec: "141*5", surface: "砂银氧化", unit: "米", weightPerMeter: 0.45, unitPrice: 52.04, customer: "" },
-  { id: "HP-054", name: "转角件", spec: "115*11", surface: "铁灰氧化", unit: "个", weightPerMeter: 2.319, unitPrice: 38.93, customer: "" },
-  { id: "LD-055", name: "透镜框", spec: "137*85", surface: "喷涂砂黑", unit: "支", weightPerMeter: 0.697, unitPrice: 28.62, customer: "东莞市石碣镇鑫达电子厂" },
-  { id: "CT-056", name: "反光杯", spec: "78*75", surface: "喷涂白", unit: "米", weightPerMeter: 1.575, unitPrice: 10.94, customer: "" },
-  { id: "YL-057", name: "灯座", spec: "134*20", surface: "拉丝亮银", unit: "个", weightPerMeter: 0.502, unitPrice: 24.42, customer: "" },
-  { id: "GZ-058", name: "接线盒", spec: "71*95", surface: "拉丝铁灰", unit: "支", weightPerMeter: 0.15, unitPrice: 43.91, customer: "惠州市惠城区宏达五金电器" },
-  { id: "ZW-059", name: "驱动壳", spec: "114*16", surface: "拉丝金色", unit: "米", weightPerMeter: 0.596, unitPrice: 39.4, customer: "" },
-  { id: "HS-060", name: "感应器壳", spec: "39*64", surface: "高光白", unit: "个", weightPerMeter: 0.825, unitPrice: 55.96, customer: "" },
-  { id: "BL-061", name: "防水盖", spec: "49*68", surface: "电泳黑", unit: "支", weightPerMeter: 3.317, unitPrice: 44.92, customer: "佛山市三水区西南街永盛铝材" },
-  { id: "SM-062", name: "吊挂件", spec: "79*58", surface: "电泳金", unit: "米", weightPerMeter: 3.268, unitPrice: 24.64, customer: "" },
-  { id: "ZG-063", name: "LED灯体外壳", spec: "72*63", surface: "粉末喷涂", unit: "个", weightPerMeter: 2.93, unitPrice: 63.87, customer: "" },
-  { id: "HP-064", name: "散热器型材", spec: "140*100", surface: "氟碳喷涂", unit: "支", weightPerMeter: 1.952, unitPrice: 29.86, customer: "韶关市武江区明辉五金店" },
-  { id: "LD-065", name: "电源外壳", spec: "80*58", surface: "坯料", unit: "米", weightPerMeter: 3.084, unitPrice: 57.25, customer: "" },
-  { id: "CT-066", name: "灯管外壳", spec: "78*5", surface: "阳极氧化", unit: "个", weightPerMeter: 1.223, unitPrice: 52.9, customer: "" },
-  { id: "YL-067", name: "线条灯壳", spec: "135*24", surface: "喷砂氧化", unit: "支", weightPerMeter: 1.026, unitPrice: 25.02, customer: "湛江市赤坎区鑫隆铝材" },
-  { id: "GZ-068", name: "洗墙灯壳", spec: "95*75", surface: "银白氧化", unit: "米", weightPerMeter: 1.591, unitPrice: 35.61, customer: "" },
-  { id: "ZW-069", name: "投光灯壳", spec: "92*29", surface: "砂银氧化", unit: "个", weightPerMeter: 2.682, unitPrice: 29.5, customer: "" },
-  { id: "HS-070", name: "地埋灯壳", spec: "108*34", surface: "铁灰氧化", unit: "支", weightPerMeter: 3.434, unitPrice: 21.61, customer: "潮州市湘桥区永丰铝业" },
-  { id: "BL-071", name: "水下灯壳", spec: "91*100", surface: "喷涂砂黑", unit: "米", weightPerMeter: 3.003, unitPrice: 31.41, customer: "" },
-  { id: "SM-072", name: "隧道灯壳", spec: "107*54", surface: "喷涂白", unit: "个", weightPerMeter: 1.682, unitPrice: 60.07, customer: "" },
-  { id: "ZG-073", name: "路灯外壳", spec: "48*68", surface: "拉丝亮银", unit: "支", weightPerMeter: 3.46, unitPrice: 53.17, customer: "云浮市云城区恒丰铝材" },
-  { id: "HP-074", name: "泛光灯壳", spec: "94*17", surface: "拉丝铁灰", unit: "米", weightPerMeter: 3.379, unitPrice: 15.2, customer: "" },
-  { id: "LD-075", name: "壁灯外壳", spec: "144*63", surface: "拉丝金色", unit: "个", weightPerMeter: 3.066, unitPrice: 33.1, customer: "" },
-  { id: "CT-076", name: "吊灯外壳", spec: "49*14", surface: "高光白", unit: "支", weightPerMeter: 0.103, unitPrice: 16.22, customer: "广州市白云区太和镇铝材市场" },
-  { id: "YL-077", name: "吸顶灯框", spec: "96*84", surface: "电泳黑", unit: "米", weightPerMeter: 1.67, unitPrice: 63.24, customer: "" },
-  { id: "GZ-078", name: "射灯外壳", spec: "94*91", surface: "电泳金", unit: "个", weightPerMeter: 2.44, unitPrice: 45.04, customer: "" },
-  { id: "ZW-079", name: "轨道灯壳", spec: "91*85", surface: "粉末喷涂", unit: "支", weightPerMeter: 3.015, unitPrice: 29.66, customer: "佛山市高明区荷城五金厂" },
-  { id: "HS-080", name: "面板灯框", spec: "148*9", surface: "氟碳喷涂", unit: "米", weightPerMeter: 2.53, unitPrice: 51.29, customer: "" },
-  { id: "BL-081", name: "筒灯外壳", spec: "83*34", surface: "坯料", unit: "个", weightPerMeter: 2.18, unitPrice: 21.38, customer: "" },
-  { id: "SM-082", name: "格栅灯框", spec: "35*86", surface: "阳极氧化", unit: "支", weightPerMeter: 2.626, unitPrice: 32.74, customer: "珠海市金湾区精锐灯饰" },
-  { id: "ZG-083", name: "灯带铝槽", spec: "52*93", surface: "喷砂氧化", unit: "米", weightPerMeter: 2.478, unitPrice: 13.73, customer: "" },
-  { id: "HP-084", name: "灯条外壳", spec: "93*12", surface: "银白氧化", unit: "个", weightPerMeter: 1.083, unitPrice: 9.65, customer: "" },
-  { id: "LD-085", name: "硬灯条壳", spec: "47*36", surface: "砂银氧化", unit: "支", weightPerMeter: 1.062, unitPrice: 29.37, customer: "中山市横栏镇华艺灯饰配件" },
-  { id: "CT-086", name: "软灯条槽", spec: "56*26", surface: "铁灰氧化", unit: "米", weightPerMeter: 1.883, unitPrice: 40.26, customer: "" },
-  { id: "YL-087", name: "T5灯管壳", spec: "107*84", surface: "喷涂砂黑", unit: "个", weightPerMeter: 0.654, unitPrice: 42.74, customer: "" },
-  { id: "GZ-088", name: "T8灯管壳", spec: "46*34", surface: "喷涂白", unit: "支", weightPerMeter: 2.407, unitPrice: 36.37, customer: "东莞市长安镇永丰五金" },
-  { id: "ZW-089", name: "天花灯框", spec: "75*90", surface: "拉丝亮银", unit: "米", weightPerMeter: 1.641, unitPrice: 22.48, customer: "" },
-  { id: "HS-090", name: "商照外壳", spec: "83*91", surface: "拉丝铁灰", unit: "个", weightPerMeter: 0.082, unitPrice: 53.86, customer: "" },
-  { id: "BL-091", name: "明装灯框", spec: "98*80", surface: "拉丝金色", unit: "支", weightPerMeter: 1.936, unitPrice: 12.21, customer: "惠州市博罗县罗阳镇鑫源五金" },
-  { id: "SM-092", name: "嵌入式灯框", spec: "74*63", surface: "高光白", unit: "米", weightPerMeter: 1.082, unitPrice: 62.84, customer: "" },
-  { id: "ZG-093", name: "导轨灯壳", spec: "108*66", surface: "电泳黑", unit: "个", weightPerMeter: 2.966, unitPrice: 19.36, customer: "" },
-  { id: "HP-094", name: "磁吸灯框", spec: "101*78", surface: "电泳金", unit: "支", weightPerMeter: 0.418, unitPrice: 29.74, customer: "佛山市南海区狮山镇光华铝材" },
-  { id: "LD-095", name: "橱柜灯壳", spec: "15*89", surface: "粉末喷涂", unit: "米", weightPerMeter: 1.071, unitPrice: 47.86, customer: "" },
-  { id: "CT-096", name: "衣柜灯框", spec: "22*82", surface: "氟碳喷涂", unit: "个", weightPerMeter: 1.416, unitPrice: 8.46, customer: "" },
-  { id: "YL-097", name: "镜前灯壳", spec: "83*34", surface: "坯料", unit: "支", weightPerMeter: 2.621, unitPrice: 55.47, customer: "深圳市坪山新区鑫盛铝业" },
-  { id: "GZ-098", name: "床头灯框", spec: "58*84", surface: "阳极氧化", unit: "米", weightPerMeter: 2.144, unitPrice: 28.08, customer: "" },
-  { id: "ZW-099", name: "台灯外壳", spec: "45*85", surface: "喷砂氧化", unit: "个", weightPerMeter: 0.915, unitPrice: 51.07, customer: "" },
-  { id: "HS-100", name: "落地灯框", spec: "20*44", surface: "银白氧化", unit: "支", weightPerMeter: 0.385, unitPrice: 43.77, customer: "江门市台山市台城灯饰配件" },
-  { id: "BL-101", name: "铝角码", spec: "103*98", surface: "砂银氧化", unit: "米", weightPerMeter: 2.771, unitPrice: 9.9, customer: "" },
-  { id: "SM-102", name: "铝方管", spec: "93*100", surface: "铁灰氧化", unit: "个", weightPerMeter: 0.503, unitPrice: 59.85, customer: "" },
-  { id: "ZG-103", name: "铝圆管", spec: "148*51", surface: "喷涂砂黑", unit: "支", weightPerMeter: 1.483, unitPrice: 19.45, customer: "深圳市龙岗区盛达五金制品厂" },
-  { id: "HP-104", name: "铝扁条", spec: "52*37", surface: "喷涂白", unit: "米", weightPerMeter: 1.881, unitPrice: 60.07, customer: "" },
-  { id: "LD-105", name: "铝槽", spec: "85*100", surface: "拉丝亮银", unit: "个", weightPerMeter: 3.203, unitPrice: 61.82, customer: "" },
-  { id: "CT-106", name: "铝工字材", spec: "129*14", surface: "拉丝铁灰", unit: "支", weightPerMeter: 3.053, unitPrice: 53.84, customer: "佛山市顺德区勒流镇恒丰五金厂" },
-  { id: "YL-107", name: "铝基板", spec: "111*76", surface: "拉丝金色", unit: "米", weightPerMeter: 0.536, unitPrice: 63.09, customer: "" },
-  { id: "GZ-108", name: "散热片", spec: "13*38", surface: "高光白", unit: "个", weightPerMeter: 1.312, unitPrice: 53.07, customer: "" },
-  { id: "ZW-109", name: "安装支架", spec: "77*79", surface: "电泳黑", unit: "支", weightPerMeter: 1.901, unitPrice: 33.92, customer: "珠海市香洲区精锐铝业公司" },
-  { id: "HS-110", name: "固定座", spec: "105*18", surface: "电泳金", unit: "米", weightPerMeter: 1.365, unitPrice: 44.4, customer: "" },
-  { id: "BL-111", name: "连接件", spec: "93*83", surface: "粉末喷涂", unit: "个", weightPerMeter: 2.378, unitPrice: 34.87, customer: "" },
-  { id: "SM-112", name: "端盖", spec: "128*94", surface: "氟碳喷涂", unit: "支", weightPerMeter: 0.814, unitPrice: 11.6, customer: "清远市清城区鑫源五金厂" },
-  { id: "ZG-113", name: "堵头", spec: "45*10", surface: "坯料", unit: "米", weightPerMeter: 1.093, unitPrice: 31.27, customer: "" },
-  { id: "HP-114", name: "密封条", spec: "136*19", surface: "阳极氧化", unit: "个", weightPerMeter: 3.315, unitPrice: 25.35, customer: "" },
-  { id: "LD-115", name: "装饰盖", spec: "44*54", surface: "喷砂氧化", unit: "支", weightPerMeter: 0.385, unitPrice: 58.57, customer: "梅州市梅县区恒通铝业" },
-  { id: "CT-116", name: "转角件", spec: "148*58", surface: "银白氧化", unit: "米", weightPerMeter: 1.615, unitPrice: 46.22, customer: "" },
-  { id: "YL-117", name: "透镜框", spec: "116*88", surface: "砂银氧化", unit: "个", weightPerMeter: 2.076, unitPrice: 49.42, customer: "" },
-  { id: "GZ-118", name: "反光杯", spec: "114*40", surface: "铁灰氧化", unit: "支", weightPerMeter: 0.392, unitPrice: 35.89, customer: "茂名市茂南区光华五金店" },
-  { id: "ZW-119", name: "灯座", spec: "123*61", surface: "喷涂砂黑", unit: "米", weightPerMeter: 0.163, unitPrice: 29.12, customer: "" },
-  { id: "HS-120", name: "接线盒", spec: "35*92", surface: "喷涂白", unit: "个", weightPerMeter: 3.329, unitPrice: 56.76, customer: "" },
-  { id: "BL-121", name: "驱动壳", spec: "101*12", surface: "拉丝亮银", unit: "支", weightPerMeter: 1.317, unitPrice: 59.4, customer: "河源市源城区宏达五金" },
-  { id: "SM-122", name: "感应器壳", spec: "41*63", surface: "拉丝铁灰", unit: "米", weightPerMeter: 1.424, unitPrice: 18.82, customer: "" },
-  { id: "ZG-123", name: "防水盖", spec: "15*11", surface: "拉丝金色", unit: "个", weightPerMeter: 0.366, unitPrice: 20.09, customer: "" },
-  { id: "HP-124", name: "吊挂件", spec: "42*77", surface: "高光白", unit: "支", weightPerMeter: 2.764, unitPrice: 21.88, customer: "佛山市南海区丹灶镇五金城" },
-  { id: "LD-125", name: "LED灯体外壳", spec: "63*80", surface: "电泳黑", unit: "米", weightPerMeter: 0.758, unitPrice: 55.3, customer: "" },
-  { id: "CT-126", name: "散热器型材", spec: "94*23", surface: "电泳金", unit: "个", weightPerMeter: 0.795, unitPrice: 57.57, customer: "" },
-  { id: "YL-127", name: "电源外壳", spec: "80*23", surface: "粉末喷涂", unit: "支", weightPerMeter: 2.771, unitPrice: 41.97, customer: "深圳市宝安新区鑫达五金" },
-  { id: "GZ-128", name: "灯管外壳", spec: "54*19", surface: "氟碳喷涂", unit: "米", weightPerMeter: 3.457, unitPrice: 38.79, customer: "" },
-  { id: "ZW-129", name: "线条灯壳", spec: "13*50", surface: "坯料", unit: "个", weightPerMeter: 2.331, unitPrice: 9.47, customer: "" },
-  { id: "HS-130", name: "洗墙灯壳", spec: "92*7", surface: "阳极氧化", unit: "支", weightPerMeter: 2.775, unitPrice: 21.56, customer: "江门市新会区会城灯饰配件" },
-  { id: "BL-131", name: "投光灯壳", spec: "117*72", surface: "喷砂氧化", unit: "米", weightPerMeter: 0.651, unitPrice: 10.99, customer: "" },
-  { id: "SM-132", name: "地埋灯壳", spec: "124*51", surface: "银白氧化", unit: "个", weightPerMeter: 0.442, unitPrice: 11.62, customer: "" },
-  { id: "ZG-133", name: "水下灯壳", spec: "138*33", surface: "砂银氧化", unit: "支", weightPerMeter: 1.821, unitPrice: 14.22, customer: "汕头市澄海区金源五金厂" },
-  { id: "HP-134", name: "隧道灯壳", spec: "143*43", surface: "铁灰氧化", unit: "米", weightPerMeter: 3.312, unitPrice: 10.47, customer: "" },
-  { id: "LD-135", name: "路灯外壳", spec: "25*66", surface: "喷涂砂黑", unit: "个", weightPerMeter: 1.63, unitPrice: 62.95, customer: "" },
-  { id: "CT-136", name: "泛光灯壳", spec: "37*67", surface: "喷涂白", unit: "支", weightPerMeter: 2.973, unitPrice: 32.3, customer: "广州市花都区新华五金店" },
-  { id: "YL-137", name: "壁灯外壳", spec: "30*46", surface: "拉丝亮银", unit: "米", weightPerMeter: 2.508, unitPrice: 33.28, customer: "" },
-  { id: "GZ-138", name: "吊灯外壳", spec: "80*84", surface: "拉丝铁灰", unit: "个", weightPerMeter: 2.149, unitPrice: 11.74, customer: "" },
-  { id: "ZW-139", name: "吸顶灯框", spec: "93*53", surface: "拉丝金色", unit: "支", weightPerMeter: 2.234, unitPrice: 39.26, customer: "佛山市顺德区容桂镇恒丰灯饰" },
-  { id: "HS-140", name: "射灯外壳", spec: "126*69", surface: "高光白", unit: "米", weightPerMeter: 3.481, unitPrice: 38.24, customer: "" },
-  { id: "BL-141", name: "轨道灯壳", spec: "39*88", surface: "电泳黑", unit: "个", weightPerMeter: 2.139, unitPrice: 13.65, customer: "" },
-  { id: "SM-142", name: "面板灯框", spec: "65*60", surface: "电泳金", unit: "支", weightPerMeter: 2.296, unitPrice: 51.83, customer: "珠海市斗门区井岸铝材店" },
-  { id: "ZG-143", name: "筒灯外壳", spec: "96*63", surface: "粉末喷涂", unit: "米", weightPerMeter: 1.608, unitPrice: 21.02, customer: "" },
-  { id: "HP-144", name: "格栅灯框", spec: "90*59", surface: "氟碳喷涂", unit: "个", weightPerMeter: 1.426, unitPrice: 49.59, customer: "" },
-  { id: "LD-145", name: "灯带铝槽", spec: "49*92", surface: "坯料", unit: "支", weightPerMeter: 1.128, unitPrice: 22.53, customer: "中山市东升镇利达灯饰" },
-  { id: "CT-146", name: "灯条外壳", spec: "31*16", surface: "阳极氧化", unit: "米", weightPerMeter: 3.234, unitPrice: 11.83, customer: "" },
-  { id: "YL-147", name: "硬灯条壳", spec: "105*21", surface: "喷砂氧化", unit: "个", weightPerMeter: 1.54, unitPrice: 50.44, customer: "" },
-  { id: "GZ-148", name: "软灯条槽", spec: "94*90", surface: "银白氧化", unit: "支", weightPerMeter: 1.969, unitPrice: 41.43, customer: "东莞市寮步镇恒通五金厂" },
-  { id: "ZW-149", name: "T5灯管壳", spec: "118*97", surface: "砂银氧化", unit: "米", weightPerMeter: 0.472, unitPrice: 28.16, customer: "" },
-  { id: "HS-150", name: "T8灯管壳", spec: "89*50", surface: "铁灰氧化", unit: "个", weightPerMeter: 0.227, unitPrice: 24.39, customer: "" },
-  { id: "BL-151", name: "天花灯框", spec: "49*89", surface: "喷涂砂黑", unit: "支", weightPerMeter: 0.407, unitPrice: 36.92, customer: "佛山市南海区光明灯饰有限公司" },
-  { id: "SM-152", name: "商照外壳", spec: "99*76", surface: "喷涂白", unit: "米", weightPerMeter: 1.714, unitPrice: 56.29, customer: "" },
-  { id: "ZG-153", name: "明装灯框", spec: "67*59", surface: "拉丝亮银", unit: "个", weightPerMeter: 1.318, unitPrice: 51.47, customer: "" },
-  { id: "HP-154", name: "嵌入式灯框", spec: "16*82", surface: "拉丝铁灰", unit: "支", weightPerMeter: 2.966, unitPrice: 63.55, customer: "广州市番禺区大石永丰铝材店" },
-  { id: "LD-155", name: "导轨灯壳", spec: "78*8", surface: "拉丝金色", unit: "米", weightPerMeter: 3.255, unitPrice: 55.28, customer: "" },
-  { id: "CT-156", name: "磁吸灯框", spec: "89*48", surface: "高光白", unit: "个", weightPerMeter: 0.672, unitPrice: 48.05, customer: "" },
-  { id: "YL-157", name: "橱柜灯壳", spec: "46*77", surface: "电泳黑", unit: "支", weightPerMeter: 1.261, unitPrice: 18.34, customer: "江门市蓬江区天河照明有限公司" },
-  { id: "GZ-158", name: "衣柜灯框", spec: "17*16", surface: "电泳金", unit: "米", weightPerMeter: 2.318, unitPrice: 11.97, customer: "" },
-  { id: "ZW-159", name: "镜前灯壳", spec: "117*63", surface: "粉末喷涂", unit: "个", weightPerMeter: 2.624, unitPrice: 20.26, customer: "" },
-  { id: "HS-160", name: "床头灯框", spec: "93*77", surface: "氟碳喷涂", unit: "支", weightPerMeter: 1.226, unitPrice: 29.09, customer: "汕头市潮阳区金浦五金加工厂" },
-  { id: "BL-161", name: "台灯外壳", spec: "49*25", surface: "坯料", unit: "米", weightPerMeter: 2.107, unitPrice: 58.35, customer: "" },
-  { id: "SM-162", name: "落地灯框", spec: "30*39", surface: "阳极氧化", unit: "个", weightPerMeter: 2.653, unitPrice: 10.84, customer: "" },
-  { id: "ZG-163", name: "铝角码", spec: "123*58", surface: "喷砂氧化", unit: "支", weightPerMeter: 1.579, unitPrice: 32.17, customer: "肇庆市端州区华兴灯饰配件" },
-  { id: "HP-164", name: "铝方管", spec: "39*49", surface: "银白氧化", unit: "米", weightPerMeter: 0.992, unitPrice: 51.03, customer: "" },
-  { id: "LD-165", name: "铝圆管", spec: "134*72", surface: "砂银氧化", unit: "个", weightPerMeter: 1.533, unitPrice: 24.15, customer: "" },
-  { id: "CT-166", name: "铝扁条", spec: "111*81", surface: "铁灰氧化", unit: "支", weightPerMeter: 2.352, unitPrice: 10.59, customer: "阳江市江城区利达五金厂" },
-  { id: "YL-167", name: "铝槽", spec: "64*22", surface: "喷涂砂黑", unit: "米", weightPerMeter: 0.239, unitPrice: 19.65, customer: "" },
-  { id: "GZ-168", name: "铝工字材", spec: "40*5", surface: "喷涂白", unit: "个", weightPerMeter: 2.686, unitPrice: 24.5, customer: "" },
-  { id: "ZW-169", name: "铝基板", spec: "43*53", surface: "拉丝亮银", unit: "支", weightPerMeter: 1.766, unitPrice: 32.55, customer: "揭阳市榕城区东升五金厂" },
-  { id: "HS-170", name: "散热片", spec: "100*14", surface: "拉丝铁灰", unit: "米", weightPerMeter: 1.887, unitPrice: 21.12, customer: "" },
-  { id: "BL-171", name: "安装支架", spec: "121*7", surface: "拉丝金色", unit: "个", weightPerMeter: 1.42, unitPrice: 50.3, customer: "" },
-  { id: "SM-172", name: "固定座", spec: "90*78", surface: "高光白", unit: "支", weightPerMeter: 1.636, unitPrice: 12.44, customer: "汕尾市城区鑫盛五金店" },
-  { id: "ZG-173", name: "连接件", spec: "116*42", surface: "电泳黑", unit: "米", weightPerMeter: 1.531, unitPrice: 31.05, customer: "" },
-  { id: "HP-174", name: "端盖", spec: "93*26", surface: "电泳金", unit: "个", weightPerMeter: 0.447, unitPrice: 9.19, customer: "" },
-  { id: "LD-175", name: "堵头", spec: "102*16", surface: "粉末喷涂", unit: "支", weightPerMeter: 2.815, unitPrice: 43.23, customer: "中山市小榄镇永盛灯饰" },
-  { id: "CT-176", name: "密封条", spec: "121*80", surface: "氟碳喷涂", unit: "米", weightPerMeter: 1.557, unitPrice: 14.03, customer: "" },
-  { id: "YL-177", name: "装饰盖", spec: "89*100", surface: "坯料", unit: "个", weightPerMeter: 1.432, unitPrice: 12.48, customer: "" },
-  { id: "GZ-178", name: "转角件", spec: "53*14", surface: "阳极氧化", unit: "支", weightPerMeter: 1.221, unitPrice: 26.98, customer: "东莞市常平镇光华铝材" },
-  { id: "ZW-179", name: "透镜框", spec: "140*29", surface: "喷砂氧化", unit: "米", weightPerMeter: 1.811, unitPrice: 14.5, customer: "" },
-  { id: "HS-180", name: "反光杯", spec: "47*35", surface: "银白氧化", unit: "个", weightPerMeter: 3.175, unitPrice: 27.91, customer: "" },
-  { id: "BL-181", name: "灯座", spec: "54*82", surface: "砂银氧化", unit: "支", weightPerMeter: 0.405, unitPrice: 22.59, customer: "惠州市仲恺高新区恒通五金" },
-  { id: "SM-182", name: "接线盒", spec: "29*27", surface: "铁灰氧化", unit: "米", weightPerMeter: 0.577, unitPrice: 51.27, customer: "" },
-  { id: "ZG-183", name: "驱动壳", spec: "128*77", surface: "喷涂砂黑", unit: "个", weightPerMeter: 3.332, unitPrice: 43.79, customer: "" },
-  { id: "HP-184", name: "感应器壳", spec: "92*85", surface: "喷涂白", unit: "支", weightPerMeter: 2.672, unitPrice: 33.59, customer: "佛山市南海区里水镇盛达铝材" },
-  { id: "LD-185", name: "防水盖", spec: "130*61", surface: "拉丝亮银", unit: "米", weightPerMeter: 1.141, unitPrice: 33.07, customer: "" },
-  { id: "CT-186", name: "吊挂件", spec: "24*50", surface: "拉丝铁灰", unit: "个", weightPerMeter: 2.228, unitPrice: 53.39, customer: "" },
-  { id: "YL-187", name: "LED灯体外壳", spec: "125*9", surface: "拉丝金色", unit: "支", weightPerMeter: 1.8, unitPrice: 25.69, customer: "深圳市光明新区鑫隆铝业" },
-  { id: "GZ-188", name: "散热器型材", spec: "29*87", surface: "高光白", unit: "米", weightPerMeter: 0.246, unitPrice: 55.41, customer: "" },
-  { id: "ZW-189", name: "电源外壳", spec: "139*54", surface: "电泳黑", unit: "个", weightPerMeter: 3.032, unitPrice: 56.75, customer: "" },
-  { id: "HS-190", name: "灯管外壳", spec: "20*62", surface: "电泳金", unit: "支", weightPerMeter: 1.646, unitPrice: 39.6, customer: "江门市鹤山市沙坪五金厂" },
-  { id: "BL-191", name: "线条灯壳", spec: "58*46", surface: "粉末喷涂", unit: "米", weightPerMeter: 3.186, unitPrice: 40.58, customer: "" },
-  { id: "SM-192", name: "洗墙灯壳", spec: "25*62", surface: "氟碳喷涂", unit: "个", weightPerMeter: 2.137, unitPrice: 36.58, customer: "" },
-  { id: "ZG-193", name: "投光灯壳", spec: "97*96", surface: "坯料", unit: "支", weightPerMeter: 0.407, unitPrice: 59.25, customer: "汕头市潮南区陈店五金加工" },
-  { id: "HP-194", name: "地埋灯壳", spec: "20*36", surface: "阳极氧化", unit: "米", weightPerMeter: 0.341, unitPrice: 44.83, customer: "" },
-  { id: "LD-195", name: "水下灯壳", spec: "144*71", surface: "喷砂氧化", unit: "个", weightPerMeter: 2.491, unitPrice: 64.49, customer: "" },
-  { id: "CT-196", name: "隧道灯壳", spec: "82*54", surface: "银白氧化", unit: "支", weightPerMeter: 2.154, unitPrice: 28.74, customer: "广州市增城区新塘五金店" },
-  { id: "YL-197", name: "路灯外壳", spec: "23*85", surface: "砂银氧化", unit: "米", weightPerMeter: 1.46, unitPrice: 27.29, customer: "" },
-  { id: "GZ-198", name: "泛光灯壳", spec: "34*76", surface: "铁灰氧化", unit: "个", weightPerMeter: 2.283, unitPrice: 11.76, customer: "" },
-  { id: "ZW-199", name: "壁灯外壳", spec: "48*47", surface: "喷涂砂黑", unit: "支", weightPerMeter: 2.39, unitPrice: 24.2, customer: "佛山市南海区大沥镇永盛五金" },
-  { id: "HS-200", name: "吊灯外壳", spec: "99*44", surface: "喷涂白", unit: "米", weightPerMeter: 0.331, unitPrice: 45.83, customer: "" },
-  { id: "BL-201", name: "吸顶灯框", spec: "110*21", surface: "拉丝亮银", unit: "个", weightPerMeter: 3.389, unitPrice: 47.81, customer: "" },
-  { id: "SM-202", name: "射灯外壳", spec: "89*76", surface: "拉丝铁灰", unit: "支", weightPerMeter: 2.103, unitPrice: 61.47, customer: "中山市古镇华艺照明电器厂" },
-  { id: "ZG-203", name: "轨道灯壳", spec: "42*90", surface: "拉丝金色", unit: "米", weightPerMeter: 1.35, unitPrice: 53.12, customer: "" },
-  { id: "HP-204", name: "面板灯框", spec: "144*16", surface: "高光白", unit: "个", weightPerMeter: 2.475, unitPrice: 61.99, customer: "" },
-  { id: "LD-205", name: "筒灯外壳", spec: "102*7", surface: "电泳黑", unit: "支", weightPerMeter: 2.279, unitPrice: 32.13, customer: "东莞市石碣镇鑫达电子厂" },
-  { id: "CT-206", name: "格栅灯框", spec: "64*48", surface: "电泳金", unit: "米", weightPerMeter: 1.301, unitPrice: 18.27, customer: "" },
-  { id: "YL-207", name: "灯带铝槽", spec: "67*22", surface: "粉末喷涂", unit: "个", weightPerMeter: 3.319, unitPrice: 35.72, customer: "" },
-  { id: "GZ-208", name: "灯条外壳", spec: "35*69", surface: "氟碳喷涂", unit: "支", weightPerMeter: 0.585, unitPrice: 24.86, customer: "惠州市惠城区宏达五金电器" },
-  { id: "ZW-209", name: "硬灯条壳", spec: "144*9", surface: "坯料", unit: "米", weightPerMeter: 2.71, unitPrice: 55.6, customer: "" },
-  { id: "HS-210", name: "软灯条槽", spec: "43*81", surface: "阳极氧化", unit: "个", weightPerMeter: 2.334, unitPrice: 57.95, customer: "" },
-  { id: "BL-211", name: "T5灯管壳", spec: "52*97", surface: "喷砂氧化", unit: "支", weightPerMeter: 1.35, unitPrice: 17.25, customer: "佛山市三水区西南街永盛铝材" },
-  { id: "SM-212", name: "T8灯管壳", spec: "70*61", surface: "银白氧化", unit: "米", weightPerMeter: 1.56, unitPrice: 31.42, customer: "" },
-  { id: "ZG-213", name: "天花灯框", spec: "124*34", surface: "砂银氧化", unit: "个", weightPerMeter: 2.157, unitPrice: 50.89, customer: "" },
-  { id: "HP-214", name: "商照外壳", spec: "130*29", surface: "铁灰氧化", unit: "支", weightPerMeter: 1.892, unitPrice: 25.64, customer: "韶关市武江区明辉五金店" },
-  { id: "LD-215", name: "明装灯框", spec: "122*64", surface: "喷涂砂黑", unit: "米", weightPerMeter: 1.319, unitPrice: 61.99, customer: "" },
-  { id: "CT-216", name: "嵌入式灯框", spec: "138*72", surface: "喷涂白", unit: "个", weightPerMeter: 2.705, unitPrice: 52.35, customer: "" },
-  { id: "YL-217", name: "导轨灯壳", spec: "61*82", surface: "拉丝亮银", unit: "支", weightPerMeter: 1.494, unitPrice: 17.24, customer: "湛江市赤坎区鑫隆铝材" },
-  { id: "GZ-218", name: "磁吸灯框", spec: "133*52", surface: "拉丝铁灰", unit: "米", weightPerMeter: 0.527, unitPrice: 22.25, customer: "" },
-  { id: "ZW-219", name: "橱柜灯壳", spec: "142*20", surface: "拉丝金色", unit: "个", weightPerMeter: 1.963, unitPrice: 13.85, customer: "" },
-  { id: "HS-220", name: "衣柜灯框", spec: "79*62", surface: "高光白", unit: "支", weightPerMeter: 1.033, unitPrice: 51.5, customer: "潮州市湘桥区永丰铝业" },
-  { id: "BL-221", name: "镜前灯壳", spec: "121*16", surface: "电泳黑", unit: "米", weightPerMeter: 3.173, unitPrice: 16.4, customer: "" },
-  { id: "SM-222", name: "床头灯框", spec: "125*49", surface: "电泳金", unit: "个", weightPerMeter: 3.315, unitPrice: 20.66, customer: "" },
-  { id: "ZG-223", name: "台灯外壳", spec: "111*69", surface: "粉末喷涂", unit: "支", weightPerMeter: 3.26, unitPrice: 31.65, customer: "云浮市云城区恒丰铝材" },
-  { id: "HP-224", name: "落地灯框", spec: "30*52", surface: "氟碳喷涂", unit: "米", weightPerMeter: 1.34, unitPrice: 30.01, customer: "" },
-  { id: "LD-225", name: "铝角码", spec: "35*96", surface: "坯料", unit: "个", weightPerMeter: 0.825, unitPrice: 26.17, customer: "" },
-  { id: "CT-226", name: "铝方管", spec: "45*9", surface: "阳极氧化", unit: "支", weightPerMeter: 2.292, unitPrice: 53.11, customer: "广州市白云区太和镇铝材市场" },
-  { id: "YL-227", name: "铝圆管", spec: "45*95", surface: "喷砂氧化", unit: "米", weightPerMeter: 1.04, unitPrice: 55.3, customer: "" },
-  { id: "GZ-228", name: "铝扁条", spec: "30*7", surface: "银白氧化", unit: "个", weightPerMeter: 1.668, unitPrice: 43.07, customer: "" },
-  { id: "ZW-229", name: "铝槽", spec: "150*98", surface: "砂银氧化", unit: "支", weightPerMeter: 0.933, unitPrice: 55.59, customer: "佛山市高明区荷城五金厂" },
-  { id: "HS-230", name: "铝工字材", spec: "83*35", surface: "铁灰氧化", unit: "米", weightPerMeter: 2.151, unitPrice: 32.13, customer: "" },
-  { id: "BL-231", name: "铝基板", spec: "117*86", surface: "喷涂砂黑", unit: "个", weightPerMeter: 1.089, unitPrice: 10.72, customer: "" },
-  { id: "SM-232", name: "散热片", spec: "38*68", surface: "喷涂白", unit: "支", weightPerMeter: 2.789, unitPrice: 34.06, customer: "珠海市金湾区精锐灯饰" },
-  { id: "ZG-233", name: "安装支架", spec: "141*78", surface: "拉丝亮银", unit: "米", weightPerMeter: 2.109, unitPrice: 8.94, customer: "" },
-  { id: "HP-234", name: "固定座", spec: "119*5", surface: "拉丝铁灰", unit: "个", weightPerMeter: 0.885, unitPrice: 16.18, customer: "" },
-  { id: "LD-235", name: "连接件", spec: "116*28", surface: "拉丝金色", unit: "支", weightPerMeter: 2.171, unitPrice: 21.71, customer: "中山市横栏镇华艺灯饰配件" },
-  { id: "CT-236", name: "端盖", spec: "102*13", surface: "高光白", unit: "米", weightPerMeter: 2.342, unitPrice: 12.88, customer: "" },
-  { id: "YL-237", name: "堵头", spec: "139*75", surface: "电泳黑", unit: "个", weightPerMeter: 3.339, unitPrice: 39.01, customer: "" },
-  { id: "GZ-238", name: "密封条", spec: "21*86", surface: "电泳金", unit: "支", weightPerMeter: 0.12, unitPrice: 57.78, customer: "东莞市长安镇永丰五金" },
-  { id: "ZW-239", name: "装饰盖", spec: "14*50", surface: "粉末喷涂", unit: "米", weightPerMeter: 1.385, unitPrice: 29.28, customer: "" },
-  { id: "HS-240", name: "转角件", spec: "36*79", surface: "氟碳喷涂", unit: "个", weightPerMeter: 2.77, unitPrice: 27.65, customer: "" },
-  { id: "BL-241", name: "透镜框", spec: "21*50", surface: "坯料", unit: "支", weightPerMeter: 2.586, unitPrice: 26.95, customer: "惠州市博罗县罗阳镇鑫源五金" },
-  { id: "SM-242", name: "反光杯", spec: "54*92", surface: "阳极氧化", unit: "米", weightPerMeter: 1.934, unitPrice: 54.37, customer: "" },
-  { id: "ZG-243", name: "灯座", spec: "56*22", surface: "喷砂氧化", unit: "个", weightPerMeter: 1.653, unitPrice: 47.64, customer: "" },
-  { id: "HP-244", name: "接线盒", spec: "127*9", surface: "银白氧化", unit: "支", weightPerMeter: 0.268, unitPrice: 52.24, customer: "佛山市南海区狮山镇光华铝材" },
-  { id: "LD-245", name: "驱动壳", spec: "61*10", surface: "砂银氧化", unit: "米", weightPerMeter: 1.062, unitPrice: 10.5, customer: "" },
-  { id: "CT-246", name: "感应器壳", spec: "111*74", surface: "铁灰氧化", unit: "个", weightPerMeter: 1.139, unitPrice: 25.67, customer: "" },
-  { id: "YL-247", name: "防水盖", spec: "58*41", surface: "喷涂砂黑", unit: "支", weightPerMeter: 1.683, unitPrice: 10.09, customer: "深圳市坪山新区鑫盛铝业" },
-  { id: "GZ-248", name: "吊挂件", spec: "94*39", surface: "喷涂白", unit: "米", weightPerMeter: 1.282, unitPrice: 52.51, customer: "" },
-  { id: "ZW-249", name: "LED灯体外壳", spec: "112*100", surface: "拉丝亮银", unit: "个", weightPerMeter: 0.479, unitPrice: 28.98, customer: "" },
-  { id: "HS-250", name: "散热器型材", spec: "96*28", surface: "拉丝铁灰", unit: "支", weightPerMeter: 1.567, unitPrice: 62.52, customer: "江门市台山市台城灯饰配件" },
-  { id: "BL-251", name: "电源外壳", spec: "142*39", surface: "拉丝金色", unit: "米", weightPerMeter: 1.762, unitPrice: 36.36, customer: "" },
-  { id: "SM-252", name: "灯管外壳", spec: "30*60", surface: "高光白", unit: "个", weightPerMeter: 2.814, unitPrice: 49.44, customer: "" },
-  { id: "ZG-253", name: "线条灯壳", spec: "149*42", surface: "电泳黑", unit: "支", weightPerMeter: 2.128, unitPrice: 54.87, customer: "深圳市龙岗区盛达五金制品厂" },
-  { id: "HP-254", name: "洗墙灯壳", spec: "85*44", surface: "电泳金", unit: "米", weightPerMeter: 1.158, unitPrice: 12.56, customer: "" },
-  { id: "LD-255", name: "投光灯壳", spec: "52*93", surface: "粉末喷涂", unit: "个", weightPerMeter: 1.588, unitPrice: 48.91, customer: "" },
-  { id: "CT-256", name: "地埋灯壳", spec: "100*83", surface: "氟碳喷涂", unit: "支", weightPerMeter: 1.581, unitPrice: 33.49, customer: "佛山市顺德区勒流镇恒丰五金厂" },
-  { id: "YL-257", name: "水下灯壳", spec: "24*14", surface: "坯料", unit: "米", weightPerMeter: 3.494, unitPrice: 23.65, customer: "" },
-  { id: "GZ-258", name: "隧道灯壳", spec: "141*100", surface: "阳极氧化", unit: "个", weightPerMeter: 2.366, unitPrice: 31.15, customer: "" },
-  { id: "ZW-259", name: "路灯外壳", spec: "46*82", surface: "喷砂氧化", unit: "支", weightPerMeter: 2.394, unitPrice: 62.31, customer: "珠海市香洲区精锐铝业公司" },
-  { id: "HS-260", name: "泛光灯壳", spec: "42*13", surface: "银白氧化", unit: "米", weightPerMeter: 2.389, unitPrice: 32.98, customer: "" },
-  { id: "BL-261", name: "壁灯外壳", spec: "102*54", surface: "砂银氧化", unit: "个", weightPerMeter: 0.864, unitPrice: 44.77, customer: "" },
-  { id: "SM-262", name: "吊灯外壳", spec: "49*91", surface: "铁灰氧化", unit: "支", weightPerMeter: 3.326, unitPrice: 9.85, customer: "清远市清城区鑫源五金厂" },
-  { id: "ZG-263", name: "吸顶灯框", spec: "123*14", surface: "喷涂砂黑", unit: "米", weightPerMeter: 1.602, unitPrice: 29.14, customer: "" },
-  { id: "HP-264", name: "射灯外壳", spec: "111*45", surface: "喷涂白", unit: "个", weightPerMeter: 2.03, unitPrice: 38.18, customer: "" },
-  { id: "LD-265", name: "轨道灯壳", spec: "39*8", surface: "拉丝亮银", unit: "支", weightPerMeter: 2.291, unitPrice: 22.23, customer: "梅州市梅县区恒通铝业" },
-  { id: "CT-266", name: "面板灯框", spec: "109*76", surface: "拉丝铁灰", unit: "米", weightPerMeter: 2.588, unitPrice: 36.45, customer: "" },
-  { id: "YL-267", name: "筒灯外壳", spec: "124*32", surface: "拉丝金色", unit: "个", weightPerMeter: 0.456, unitPrice: 52.17, customer: "" },
-  { id: "GZ-268", name: "格栅灯框", spec: "135*30", surface: "高光白", unit: "支", weightPerMeter: 3.487, unitPrice: 24.28, customer: "茂名市茂南区光华五金店" },
-  { id: "ZW-269", name: "灯带铝槽", spec: "125*27", surface: "电泳黑", unit: "米", weightPerMeter: 0.473, unitPrice: 56.61, customer: "" },
-  { id: "HS-270", name: "灯条外壳", spec: "32*92", surface: "电泳金", unit: "个", weightPerMeter: 3.15, unitPrice: 33.37, customer: "" },
-  { id: "BL-271", name: "硬灯条壳", spec: "98*95", surface: "粉末喷涂", unit: "支", weightPerMeter: 3.388, unitPrice: 64.23, customer: "河源市源城区宏达五金" },
-  { id: "SM-272", name: "软灯条槽", spec: "86*25", surface: "氟碳喷涂", unit: "米", weightPerMeter: 0.274, unitPrice: 38.9, customer: "" },
-  { id: "ZG-273", name: "T5灯管壳", spec: "54*51", surface: "坯料", unit: "个", weightPerMeter: 2.506, unitPrice: 60.86, customer: "" },
-  { id: "HP-274", name: "T8灯管壳", spec: "61*22", surface: "阳极氧化", unit: "支", weightPerMeter: 1.805, unitPrice: 14.92, customer: "佛山市南海区丹灶镇五金城" },
-  { id: "LD-275", name: "天花灯框", spec: "102*75", surface: "喷砂氧化", unit: "米", weightPerMeter: 0.867, unitPrice: 36.16, customer: "" },
-  { id: "CT-276", name: "商照外壳", spec: "43*83", surface: "银白氧化", unit: "个", weightPerMeter: 2.024, unitPrice: 34.64, customer: "" },
-  { id: "YL-277", name: "明装灯框", spec: "111*96", surface: "砂银氧化", unit: "支", weightPerMeter: 3.101, unitPrice: 11.75, customer: "深圳市宝安新区鑫达五金" },
-  { id: "GZ-278", name: "嵌入式灯框", spec: "114*78", surface: "铁灰氧化", unit: "米", weightPerMeter: 2.53, unitPrice: 37.96, customer: "" },
-  { id: "ZW-279", name: "导轨灯壳", spec: "28*62", surface: "喷涂砂黑", unit: "个", weightPerMeter: 0.304, unitPrice: 63.43, customer: "" },
-  { id: "HS-280", name: "磁吸灯框", spec: "42*75", surface: "喷涂白", unit: "支", weightPerMeter: 1.657, unitPrice: 37.49, customer: "江门市新会区会城灯饰配件" },
-  { id: "BL-281", name: "橱柜灯壳", spec: "43*60", surface: "拉丝亮银", unit: "米", weightPerMeter: 2.257, unitPrice: 18.37, customer: "" },
-  { id: "SM-282", name: "衣柜灯框", spec: "41*71", surface: "拉丝铁灰", unit: "个", weightPerMeter: 1.785, unitPrice: 57.49, customer: "" },
-  { id: "ZG-283", name: "镜前灯壳", spec: "92*95", surface: "拉丝金色", unit: "支", weightPerMeter: 0.578, unitPrice: 17.39, customer: "汕头市澄海区金源五金厂" },
-  { id: "HP-284", name: "床头灯框", spec: "142*41", surface: "高光白", unit: "米", weightPerMeter: 0.828, unitPrice: 62.01, customer: "" },
-  { id: "LD-285", name: "台灯外壳", spec: "80*21", surface: "电泳黑", unit: "个", weightPerMeter: 2.968, unitPrice: 22.28, customer: "" },
-  { id: "CT-286", name: "落地灯框", spec: "33*69", surface: "电泳金", unit: "支", weightPerMeter: 2.206, unitPrice: 43.02, customer: "广州市花都区新华五金店" },
-  { id: "YL-287", name: "铝角码", spec: "49*26", surface: "粉末喷涂", unit: "米", weightPerMeter: 2.261, unitPrice: 41.73, customer: "" },
-  { id: "GZ-288", name: "铝方管", spec: "96*77", surface: "氟碳喷涂", unit: "个", weightPerMeter: 2.323, unitPrice: 49.08, customer: "" },
-  { id: "ZW-289", name: "铝圆管", spec: "30*10", surface: "坯料", unit: "支", weightPerMeter: 0.192, unitPrice: 57.24, customer: "佛山市顺德区容桂镇恒丰灯饰" },
-  { id: "HS-290", name: "铝扁条", spec: "77*88", surface: "阳极氧化", unit: "米", weightPerMeter: 3.322, unitPrice: 51.95, customer: "" },
-  { id: "BL-291", name: "铝槽", spec: "17*68", surface: "喷砂氧化", unit: "个", weightPerMeter: 0.777, unitPrice: 40.61, customer: "" },
-  { id: "SM-292", name: "铝工字材", spec: "87*66", surface: "银白氧化", unit: "支", weightPerMeter: 3.117, unitPrice: 39.1, customer: "珠海市斗门区井岸铝材店" },
-  { id: "ZG-293", name: "铝基板", spec: "113*43", surface: "砂银氧化", unit: "米", weightPerMeter: 0.895, unitPrice: 54.02, customer: "" },
-  { id: "HP-294", name: "散热片", spec: "50*61", surface: "铁灰氧化", unit: "个", weightPerMeter: 1.615, unitPrice: 47.25, customer: "" },
-  { id: "LD-295", name: "安装支架", spec: "97*82", surface: "喷涂砂黑", unit: "支", weightPerMeter: 1.484, unitPrice: 34.47, customer: "中山市东升镇利达灯饰" },
-  { id: "CT-296", name: "固定座", spec: "91*98", surface: "喷涂白", unit: "米", weightPerMeter: 0.546, unitPrice: 57.1, customer: "" },
-  { id: "YL-297", name: "连接件", spec: "112*21", surface: "拉丝亮银", unit: "个", weightPerMeter: 3.459, unitPrice: 27.69, customer: "" },
-  { id: "GZ-298", name: "端盖", spec: "37*45", surface: "拉丝铁灰", unit: "支", weightPerMeter: 2.674, unitPrice: 37.35, customer: "东莞市寮步镇恒通五金厂" },
-  { id: "ZW-299", name: "堵头", spec: "125*36", surface: "拉丝金色", unit: "米", weightPerMeter: 0.884, unitPrice: 14.98, customer: "" },
-  { id: "HS-300", name: "密封条", spec: "108*83", surface: "高光白", unit: "个", weightPerMeter: 0.536, unitPrice: 10.88, customer: "" },
-  { id: "BL-301", name: "装饰盖", spec: "50*46", surface: "电泳黑", unit: "支", weightPerMeter: 1.493, unitPrice: 62.87, customer: "佛山市南海区光明灯饰有限公司" },
-  { id: "SM-302", name: "转角件", spec: "58*25", surface: "电泳金", unit: "米", weightPerMeter: 3.271, unitPrice: 49.1, customer: "" },
-  { id: "ZG-303", name: "透镜框", spec: "137*44", surface: "粉末喷涂", unit: "个", weightPerMeter: 1.769, unitPrice: 37.34, customer: "" },
-  { id: "HP-304", name: "反光杯", spec: "110*69", surface: "氟碳喷涂", unit: "支", weightPerMeter: 1.766, unitPrice: 13.13, customer: "广州市番禺区大石永丰铝材店" },
-  { id: "LD-305", name: "灯座", spec: "100*11", surface: "坯料", unit: "米", weightPerMeter: 1.627, unitPrice: 21.72, customer: "" },
-  { id: "CT-306", name: "接线盒", spec: "130*41", surface: "阳极氧化", unit: "个", weightPerMeter: 0.224, unitPrice: 36.21, customer: "" },
-  { id: "YL-307", name: "驱动壳", spec: "120*22", surface: "喷砂氧化", unit: "支", weightPerMeter: 1.902, unitPrice: 56.29, customer: "江门市蓬江区天河照明有限公司" },
-  { id: "GZ-308", name: "感应器壳", spec: "113*51", surface: "银白氧化", unit: "米", weightPerMeter: 3.094, unitPrice: 49.47, customer: "" },
-  { id: "ZW-309", name: "防水盖", spec: "59*51", surface: "砂银氧化", unit: "个", weightPerMeter: 0.206, unitPrice: 10.92, customer: "" },
-  { id: "HS-310", name: "吊挂件", spec: "139*62", surface: "铁灰氧化", unit: "支", weightPerMeter: 1.959, unitPrice: 12.19, customer: "汕头市潮阳区金浦五金加工厂" },
-  { id: "BL-311", name: "LED灯体外壳", spec: "40*21", surface: "喷涂砂黑", unit: "米", weightPerMeter: 2.687, unitPrice: 23.94, customer: "" },
-  { id: "SM-312", name: "散热器型材", spec: "96*76", surface: "喷涂白", unit: "个", weightPerMeter: 3.414, unitPrice: 30.45, customer: "" },
-  { id: "ZG-313", name: "电源外壳", spec: "60*82", surface: "拉丝亮银", unit: "支", weightPerMeter: 3.289, unitPrice: 51.03, customer: "肇庆市端州区华兴灯饰配件" },
-  { id: "HP-314", name: "灯管外壳", spec: "21*9", surface: "拉丝铁灰", unit: "米", weightPerMeter: 1.806, unitPrice: 36.5, customer: "" },
-  { id: "LD-315", name: "线条灯壳", spec: "131*71", surface: "拉丝金色", unit: "个", weightPerMeter: 0.523, unitPrice: 26.98, customer: "" },
-  { id: "CT-316", name: "洗墙灯壳", spec: "141*22", surface: "高光白", unit: "支", weightPerMeter: 1.627, unitPrice: 42.56, customer: "阳江市江城区利达五金厂" },
-  { id: "YL-317", name: "投光灯壳", spec: "51*55", surface: "电泳黑", unit: "米", weightPerMeter: 1.181, unitPrice: 42.94, customer: "" },
-  { id: "GZ-318", name: "地埋灯壳", spec: "86*80", surface: "电泳金", unit: "个", weightPerMeter: 3.468, unitPrice: 50.14, customer: "" },
-  { id: "ZW-319", name: "水下灯壳", spec: "146*67", surface: "粉末喷涂", unit: "支", weightPerMeter: 1.21, unitPrice: 55.21, customer: "揭阳市榕城区东升五金厂" },
-  { id: "HS-320", name: "隧道灯壳", spec: "14*52", surface: "氟碳喷涂", unit: "米", weightPerMeter: 2.495, unitPrice: 25.09, customer: "" },
-  { id: "BL-321", name: "路灯外壳", spec: "116*79", surface: "坯料", unit: "个", weightPerMeter: 1.193, unitPrice: 14.25, customer: "" },
-  { id: "SM-322", name: "泛光灯壳", spec: "16*81", surface: "阳极氧化", unit: "支", weightPerMeter: 1.111, unitPrice: 59.23, customer: "汕尾市城区鑫盛五金店" },
-  { id: "ZG-323", name: "壁灯外壳", spec: "68*97", surface: "喷砂氧化", unit: "米", weightPerMeter: 1.687, unitPrice: 63.12, customer: "" },
-  { id: "HP-324", name: "吊灯外壳", spec: "144*85", surface: "银白氧化", unit: "个", weightPerMeter: 0.227, unitPrice: 35.39, customer: "" },
-  { id: "LD-325", name: "吸顶灯框", spec: "107*23", surface: "砂银氧化", unit: "支", weightPerMeter: 2.538, unitPrice: 52.15, customer: "中山市小榄镇永盛灯饰" },
-  { id: "CT-326", name: "射灯外壳", spec: "38*29", surface: "铁灰氧化", unit: "米", weightPerMeter: 2.885, unitPrice: 21.81, customer: "" },
-  { id: "YL-327", name: "轨道灯壳", spec: "48*57", surface: "喷涂砂黑", unit: "个", weightPerMeter: 0.115, unitPrice: 25.88, customer: "" },
-  { id: "GZ-328", name: "面板灯框", spec: "130*99", surface: "喷涂白", unit: "支", weightPerMeter: 2.432, unitPrice: 31.39, customer: "东莞市常平镇光华铝材" },
-  { id: "ZW-329", name: "筒灯外壳", spec: "142*31", surface: "拉丝亮银", unit: "米", weightPerMeter: 2.56, unitPrice: 48.23, customer: "" },
-  { id: "HS-330", name: "格栅灯框", spec: "132*72", surface: "拉丝铁灰", unit: "个", weightPerMeter: 1.985, unitPrice: 64.89, customer: "" },
-  { id: "BL-331", name: "灯带铝槽", spec: "127*73", surface: "拉丝金色", unit: "支", weightPerMeter: 1.35, unitPrice: 62.53, customer: "惠州市仲恺高新区恒通五金" },
-  { id: "SM-332", name: "灯条外壳", spec: "77*83", surface: "高光白", unit: "米", weightPerMeter: 1.231, unitPrice: 28.19, customer: "" },
-  { id: "ZG-333", name: "硬灯条壳", spec: "81*76", surface: "电泳黑", unit: "个", weightPerMeter: 1.72, unitPrice: 62.57, customer: "" },
-  { id: "HP-334", name: "软灯条槽", spec: "86*41", surface: "电泳金", unit: "支", weightPerMeter: 1.08, unitPrice: 61.66, customer: "佛山市南海区里水镇盛达铝材" },
-  { id: "LD-335", name: "T5灯管壳", spec: "135*45", surface: "粉末喷涂", unit: "米", weightPerMeter: 2.482, unitPrice: 47.34, customer: "" },
-  { id: "CT-336", name: "T8灯管壳", spec: "80*41", surface: "氟碳喷涂", unit: "个", weightPerMeter: 1.705, unitPrice: 39.95, customer: "" },
-  { id: "YL-337", name: "天花灯框", spec: "107*55", surface: "坯料", unit: "支", weightPerMeter: 0.47, unitPrice: 46.57, customer: "深圳市光明新区鑫隆铝业" },
-  { id: "GZ-338", name: "商照外壳", spec: "47*42", surface: "阳极氧化", unit: "米", weightPerMeter: 2.873, unitPrice: 62.41, customer: "" },
-  { id: "ZW-339", name: "明装灯框", spec: "30*49", surface: "喷砂氧化", unit: "个", weightPerMeter: 0.195, unitPrice: 62.45, customer: "" },
-  { id: "HS-340", name: "嵌入式灯框", spec: "132*32", surface: "银白氧化", unit: "支", weightPerMeter: 3.238, unitPrice: 45.39, customer: "江门市鹤山市沙坪五金厂" },
-  { id: "BL-341", name: "导轨灯壳", spec: "79*22", surface: "砂银氧化", unit: "米", weightPerMeter: 0.747, unitPrice: 38.7, customer: "" },
-  { id: "SM-342", name: "磁吸灯框", spec: "71*36", surface: "铁灰氧化", unit: "个", weightPerMeter: 0.427, unitPrice: 50.23, customer: "" },
-  { id: "ZG-343", name: "橱柜灯壳", spec: "67*86", surface: "喷涂砂黑", unit: "支", weightPerMeter: 0.225, unitPrice: 59.6, customer: "汕头市潮南区陈店五金加工" },
-  { id: "HP-344", name: "衣柜灯框", spec: "94*96", surface: "喷涂白", unit: "米", weightPerMeter: 0.853, unitPrice: 13.71, customer: "" },
-  { id: "LD-345", name: "镜前灯壳", spec: "45*5", surface: "拉丝亮银", unit: "个", weightPerMeter: 1.68, unitPrice: 46.83, customer: "" },
-  { id: "CT-346", name: "床头灯框", spec: "50*57", surface: "拉丝铁灰", unit: "支", weightPerMeter: 3.378, unitPrice: 63.74, customer: "广州市增城区新塘五金店" },
-  { id: "YL-347", name: "台灯外壳", spec: "131*66", surface: "拉丝金色", unit: "米", weightPerMeter: 2.302, unitPrice: 58.2, customer: "" },
-  { id: "GZ-348", name: "落地灯框", spec: "83*46", surface: "高光白", unit: "个", weightPerMeter: 2.294, unitPrice: 51.09, customer: "" },
-  { id: "ZW-349", name: "铝角码", spec: "32*88", surface: "电泳黑", unit: "支", weightPerMeter: 1.035, unitPrice: 11.37, customer: "佛山市南海区大沥镇永盛五金" },
-  { id: "HS-350", name: "铝方管", spec: "19*27", surface: "电泳金", unit: "米", weightPerMeter: 2.031, unitPrice: 38.5, customer: "" },
-  { id: "BL-351", name: "铝圆管", spec: "19*55", surface: "粉末喷涂", unit: "个", weightPerMeter: 1.492, unitPrice: 55.74, customer: "" },
-  { id: "SM-352", name: "铝扁条", spec: "84*9", surface: "氟碳喷涂", unit: "支", weightPerMeter: 2.768, unitPrice: 18.62, customer: "中山市古镇华艺照明电器厂" },
-  { id: "ZG-353", name: "铝槽", spec: "37*47", surface: "坯料", unit: "米", weightPerMeter: 0.082, unitPrice: 40.37, customer: "" },
-  { id: "HP-354", name: "铝工字材", spec: "149*72", surface: "阳极氧化", unit: "个", weightPerMeter: 1.032, unitPrice: 64.38, customer: "" },
-  { id: "LD-355", name: "铝基板", spec: "139*64", surface: "喷砂氧化", unit: "支", weightPerMeter: 1.754, unitPrice: 61.5, customer: "东莞市石碣镇鑫达电子厂" },
-  { id: "CT-356", name: "散热片", spec: "94*25", surface: "银白氧化", unit: "米", weightPerMeter: 0.991, unitPrice: 54.1, customer: "" },
-  { id: "YL-357", name: "安装支架", spec: "57*6", surface: "砂银氧化", unit: "个", weightPerMeter: 2.572, unitPrice: 44.95, customer: "" },
-  { id: "GZ-358", name: "固定座", spec: "59*27", surface: "铁灰氧化", unit: "支", weightPerMeter: 2.591, unitPrice: 53.07, customer: "惠州市惠城区宏达五金电器" },
-  { id: "ZW-359", name: "连接件", spec: "113*59", surface: "喷涂砂黑", unit: "米", weightPerMeter: 2.158, unitPrice: 44.41, customer: "" },
-  { id: "HS-360", name: "端盖", spec: "34*28", surface: "喷涂白", unit: "个", weightPerMeter: 1.828, unitPrice: 12.94, customer: "" },
-  { id: "BL-361", name: "堵头", spec: "73*5", surface: "拉丝亮银", unit: "支", weightPerMeter: 3.437, unitPrice: 35.21, customer: "佛山市三水区西南街永盛铝材" },
-  { id: "SM-362", name: "密封条", spec: "78*47", surface: "拉丝铁灰", unit: "米", weightPerMeter: 0.95, unitPrice: 21.42, customer: "" },
-  { id: "ZG-363", name: "装饰盖", spec: "12*38", surface: "拉丝金色", unit: "个", weightPerMeter: 1.092, unitPrice: 49.2, customer: "" },
-  { id: "HP-364", name: "转角件", spec: "25*90", surface: "高光白", unit: "支", weightPerMeter: 2.305, unitPrice: 47.49, customer: "韶关市武江区明辉五金店" },
-  { id: "LD-365", name: "透镜框", spec: "113*92", surface: "电泳黑", unit: "米", weightPerMeter: 0.458, unitPrice: 25.49, customer: "" },
-  { id: "CT-366", name: "反光杯", spec: "89*93", surface: "电泳金", unit: "个", weightPerMeter: 1.784, unitPrice: 59.02, customer: "" },
-  { id: "YL-367", name: "灯座", spec: "85*52", surface: "粉末喷涂", unit: "支", weightPerMeter: 0.455, unitPrice: 60.22, customer: "湛江市赤坎区鑫隆铝材" },
-  { id: "GZ-368", name: "接线盒", spec: "44*66", surface: "氟碳喷涂", unit: "米", weightPerMeter: 2.17, unitPrice: 20.49, customer: "" },
-  { id: "ZW-369", name: "驱动壳", spec: "105*58", surface: "坯料", unit: "个", weightPerMeter: 0.578, unitPrice: 50.62, customer: "" },
-  { id: "HS-370", name: "感应器壳", spec: "147*90", surface: "阳极氧化", unit: "支", weightPerMeter: 2.472, unitPrice: 60.03, customer: "潮州市湘桥区永丰铝业" },
-  { id: "BL-371", name: "防水盖", spec: "30*72", surface: "喷砂氧化", unit: "米", weightPerMeter: 2.898, unitPrice: 51.43, customer: "" },
-  { id: "SM-372", name: "吊挂件", spec: "29*77", surface: "银白氧化", unit: "个", weightPerMeter: 1.591, unitPrice: 48.11, customer: "" },
-  { id: "ZG-373", name: "LED灯体外壳", spec: "139*30", surface: "砂银氧化", unit: "支", weightPerMeter: 0.437, unitPrice: 55.24, customer: "云浮市云城区恒丰铝材" },
-  { id: "HP-374", name: "散热器型材", spec: "93*71", surface: "铁灰氧化", unit: "米", weightPerMeter: 2.026, unitPrice: 16.54, customer: "" },
-  { id: "LD-375", name: "电源外壳", spec: "135*16", surface: "喷涂砂黑", unit: "个", weightPerMeter: 1.574, unitPrice: 46.78, customer: "" },
-  { id: "CT-376", name: "灯管外壳", spec: "24*63", surface: "喷涂白", unit: "支", weightPerMeter: 3.151, unitPrice: 33.39, customer: "广州市白云区太和镇铝材市场" },
-  { id: "YL-377", name: "线条灯壳", spec: "24*76", surface: "拉丝亮银", unit: "米", weightPerMeter: 0.505, unitPrice: 31.68, customer: "" },
-  { id: "GZ-378", name: "洗墙灯壳", spec: "15*55", surface: "拉丝铁灰", unit: "个", weightPerMeter: 1.645, unitPrice: 53.99, customer: "" },
-  { id: "ZW-379", name: "投光灯壳", spec: "65*79", surface: "拉丝金色", unit: "支", weightPerMeter: 0.928, unitPrice: 8.17, customer: "佛山市高明区荷城五金厂" },
-  { id: "HS-380", name: "地埋灯壳", spec: "26*74", surface: "高光白", unit: "米", weightPerMeter: 0.302, unitPrice: 32.15, customer: "" },
-  { id: "BL-381", name: "水下灯壳", spec: "27*65", surface: "电泳黑", unit: "个", weightPerMeter: 3.48, unitPrice: 61.27, customer: "" },
-  { id: "SM-382", name: "隧道灯壳", spec: "44*87", surface: "电泳金", unit: "支", weightPerMeter: 0.159, unitPrice: 31.31, customer: "珠海市金湾区精锐灯饰" },
-  { id: "ZG-383", name: "路灯外壳", spec: "117*52", surface: "粉末喷涂", unit: "米", weightPerMeter: 3.425, unitPrice: 44.82, customer: "" },
-  { id: "HP-384", name: "泛光灯壳", spec: "106*53", surface: "氟碳喷涂", unit: "个", weightPerMeter: 3.475, unitPrice: 29.8, customer: "" },
-  { id: "LD-385", name: "壁灯外壳", spec: "148*22", surface: "坯料", unit: "支", weightPerMeter: 0.327, unitPrice: 62.96, customer: "中山市横栏镇华艺灯饰配件" },
-  { id: "CT-386", name: "吊灯外壳", spec: "55*73", surface: "阳极氧化", unit: "米", weightPerMeter: 2.305, unitPrice: 27.82, customer: "" },
-  { id: "YL-387", name: "吸顶灯框", spec: "67*5", surface: "喷砂氧化", unit: "个", weightPerMeter: 1.406, unitPrice: 15.26, customer: "" },
-  { id: "GZ-388", name: "射灯外壳", spec: "128*91", surface: "银白氧化", unit: "支", weightPerMeter: 2.659, unitPrice: 63.77, customer: "东莞市长安镇永丰五金" },
-  { id: "ZW-389", name: "轨道灯壳", spec: "107*34", surface: "砂银氧化", unit: "米", weightPerMeter: 2.531, unitPrice: 32.18, customer: "" },
-  { id: "HS-390", name: "面板灯框", spec: "80*29", surface: "铁灰氧化", unit: "个", weightPerMeter: 0.904, unitPrice: 27.73, customer: "" },
-  { id: "BL-391", name: "筒灯外壳", spec: "38*9", surface: "喷涂砂黑", unit: "支", weightPerMeter: 3.284, unitPrice: 49.33, customer: "惠州市博罗县罗阳镇鑫源五金" },
-  { id: "SM-392", name: "格栅灯框", spec: "14*35", surface: "喷涂白", unit: "米", weightPerMeter: 2.843, unitPrice: 31.9, customer: "" },
-  { id: "ZG-393", name: "灯带铝槽", spec: "18*62", surface: "拉丝亮银", unit: "个", weightPerMeter: 0.761, unitPrice: 13.75, customer: "" },
-  { id: "HP-394", name: "灯条外壳", spec: "22*36", surface: "拉丝铁灰", unit: "支", weightPerMeter: 2.112, unitPrice: 48.09, customer: "佛山市南海区狮山镇光华铝材" },
-  { id: "LD-395", name: "硬灯条壳", spec: "69*74", surface: "拉丝金色", unit: "米", weightPerMeter: 2.605, unitPrice: 30.93, customer: "" },
-  { id: "CT-396", name: "软灯条槽", spec: "24*22", surface: "高光白", unit: "个", weightPerMeter: 0.8, unitPrice: 57.23, customer: "" },
-  { id: "YL-397", name: "T5灯管壳", spec: "91*78", surface: "电泳黑", unit: "支", weightPerMeter: 1.788, unitPrice: 24.49, customer: "深圳市坪山新区鑫盛铝业" },
-  { id: "GZ-398", name: "T8灯管壳", spec: "92*35", surface: "电泳金", unit: "米", weightPerMeter: 2.113, unitPrice: 46.33, customer: "" },
-  { id: "ZW-399", name: "天花灯框", spec: "143*33", surface: "粉末喷涂", unit: "个", weightPerMeter: 1.091, unitPrice: 16.17, customer: "" },
-  { id: "HS-400", name: "商照外壳", spec: "54*85", surface: "氟碳喷涂", unit: "支", weightPerMeter: 1.477, unitPrice: 23.68, customer: "江门市台山市台城灯饰配件" },
-  { id: "BL-401", name: "明装灯框", spec: "22*49", surface: "坯料", unit: "米", weightPerMeter: 2.392, unitPrice: 39.68, customer: "" },
-  { id: "SM-402", name: "嵌入式灯框", spec: "144*45", surface: "阳极氧化", unit: "个", weightPerMeter: 3.298, unitPrice: 46.27, customer: "" },
-  { id: "ZG-403", name: "导轨灯壳", spec: "86*53", surface: "喷砂氧化", unit: "支", weightPerMeter: 2.452, unitPrice: 31.27, customer: "深圳市龙岗区盛达五金制品厂" },
-  { id: "HP-404", name: "磁吸灯框", spec: "71*33", surface: "银白氧化", unit: "米", weightPerMeter: 0.684, unitPrice: 38.66, customer: "" },
-  { id: "LD-405", name: "橱柜灯壳", spec: "128*12", surface: "砂银氧化", unit: "个", weightPerMeter: 1.088, unitPrice: 48.33, customer: "" },
-  { id: "CT-406", name: "衣柜灯框", spec: "145*22", surface: "铁灰氧化", unit: "支", weightPerMeter: 1.99, unitPrice: 63.16, customer: "佛山市顺德区勒流镇恒丰五金厂" },
-  { id: "YL-407", name: "镜前灯壳", spec: "94*87", surface: "喷涂砂黑", unit: "米", weightPerMeter: 1.39, unitPrice: 22.53, customer: "" },
-  { id: "GZ-408", name: "床头灯框", spec: "104*16", surface: "喷涂白", unit: "个", weightPerMeter: 0.323, unitPrice: 33.64, customer: "" },
-  { id: "ZW-409", name: "台灯外壳", spec: "23*39", surface: "拉丝亮银", unit: "支", weightPerMeter: 1.898, unitPrice: 55.28, customer: "珠海市香洲区精锐铝业公司" },
-  { id: "HS-410", name: "落地灯框", spec: "20*14", surface: "拉丝铁灰", unit: "米", weightPerMeter: 1.351, unitPrice: 42.48, customer: "" },
-  { id: "BL-411", name: "铝角码", spec: "65*66", surface: "拉丝金色", unit: "个", weightPerMeter: 0.699, unitPrice: 51.42, customer: "" },
-  { id: "SM-412", name: "铝方管", spec: "87*6", surface: "高光白", unit: "支", weightPerMeter: 0.771, unitPrice: 59.7, customer: "清远市清城区鑫源五金厂" },
-  { id: "ZG-413", name: "铝圆管", spec: "40*100", surface: "电泳黑", unit: "米", weightPerMeter: 0.781, unitPrice: 18.83, customer: "" },
-  { id: "HP-414", name: "铝扁条", spec: "72*94", surface: "电泳金", unit: "个", weightPerMeter: 3.499, unitPrice: 35.3, customer: "" },
-  { id: "LD-415", name: "铝槽", spec: "71*75", surface: "粉末喷涂", unit: "支", weightPerMeter: 2.135, unitPrice: 19.66, customer: "梅州市梅县区恒通铝业" },
-  { id: "CT-416", name: "铝工字材", spec: "129*73", surface: "氟碳喷涂", unit: "米", weightPerMeter: 1.16, unitPrice: 24.13, customer: "" },
-  { id: "YL-417", name: "铝基板", spec: "102*70", surface: "坯料", unit: "个", weightPerMeter: 2.288, unitPrice: 25.58, customer: "" },
-  { id: "GZ-418", name: "散热片", spec: "130*45", surface: "阳极氧化", unit: "支", weightPerMeter: 3.096, unitPrice: 34.56, customer: "茂名市茂南区光华五金店" },
-  { id: "ZW-419", name: "安装支架", spec: "115*10", surface: "喷砂氧化", unit: "米", weightPerMeter: 3.204, unitPrice: 29.13, customer: "" },
-  { id: "HS-420", name: "固定座", spec: "47*7", surface: "银白氧化", unit: "个", weightPerMeter: 1.991, unitPrice: 20.61, customer: "" },
-  { id: "BL-421", name: "连接件", spec: "116*42", surface: "砂银氧化", unit: "支", weightPerMeter: 0.95, unitPrice: 61.28, customer: "河源市源城区宏达五金" },
-  { id: "SM-422", name: "端盖", spec: "107*77", surface: "铁灰氧化", unit: "米", weightPerMeter: 0.576, unitPrice: 26.8, customer: "" },
-  { id: "ZG-423", name: "堵头", spec: "96*37", surface: "喷涂砂黑", unit: "个", weightPerMeter: 2.925, unitPrice: 36.46, customer: "" },
-  { id: "HP-424", name: "密封条", spec: "135*63", surface: "喷涂白", unit: "支", weightPerMeter: 2.684, unitPrice: 35.85, customer: "佛山市南海区丹灶镇五金城" },
-  { id: "LD-425", name: "装饰盖", spec: "53*22", surface: "拉丝亮银", unit: "米", weightPerMeter: 0.63, unitPrice: 53.31, customer: "" },
-  { id: "CT-426", name: "转角件", spec: "148*87", surface: "拉丝铁灰", unit: "个", weightPerMeter: 2.535, unitPrice: 35.83, customer: "" },
-  { id: "YL-427", name: "透镜框", spec: "29*90", surface: "拉丝金色", unit: "支", weightPerMeter: 3.352, unitPrice: 37.86, customer: "深圳市宝安新区鑫达五金" },
-  { id: "GZ-428", name: "反光杯", spec: "45*85", surface: "高光白", unit: "米", weightPerMeter: 0.217, unitPrice: 8.36, customer: "" },
-  { id: "ZW-429", name: "灯座", spec: "12*32", surface: "电泳黑", unit: "个", weightPerMeter: 0.848, unitPrice: 48.31, customer: "" },
-  { id: "HS-430", name: "接线盒", spec: "133*89", surface: "电泳金", unit: "支", weightPerMeter: 1.795, unitPrice: 29.27, customer: "江门市新会区会城灯饰配件" },
-  { id: "BL-431", name: "驱动壳", spec: "115*6", surface: "粉末喷涂", unit: "米", weightPerMeter: 1.733, unitPrice: 8.38, customer: "" },
-  { id: "SM-432", name: "感应器壳", spec: "147*41", surface: "氟碳喷涂", unit: "个", weightPerMeter: 0.108, unitPrice: 49.16, customer: "" },
-  { id: "ZG-433", name: "防水盖", spec: "120*27", surface: "坯料", unit: "支", weightPerMeter: 0.109, unitPrice: 54.35, customer: "汕头市澄海区金源五金厂" },
-  { id: "HP-434", name: "吊挂件", spec: "48*35", surface: "阳极氧化", unit: "米", weightPerMeter: 0.419, unitPrice: 13.49, customer: "" },
-  { id: "LD-435", name: "LED灯体外壳", spec: "100*39", surface: "喷砂氧化", unit: "个", weightPerMeter: 0.712, unitPrice: 38.01, customer: "" },
-  { id: "CT-436", name: "散热器型材", spec: "113*63", surface: "银白氧化", unit: "支", weightPerMeter: 2.793, unitPrice: 12.5, customer: "广州市花都区新华五金店" },
-  { id: "YL-437", name: "电源外壳", spec: "67*43", surface: "砂银氧化", unit: "米", weightPerMeter: 1.999, unitPrice: 64.44, customer: "" },
-  { id: "GZ-438", name: "灯管外壳", spec: "18*16", surface: "铁灰氧化", unit: "个", weightPerMeter: 2.41, unitPrice: 56.33, customer: "" },
-  { id: "ZW-439", name: "线条灯壳", spec: "131*12", surface: "喷涂砂黑", unit: "支", weightPerMeter: 1.448, unitPrice: 29.5, customer: "佛山市顺德区容桂镇恒丰灯饰" },
-  { id: "HS-440", name: "洗墙灯壳", spec: "31*68", surface: "喷涂白", unit: "米", weightPerMeter: 2.247, unitPrice: 48.06, customer: "" },
-  { id: "BL-441", name: "投光灯壳", spec: "94*77", surface: "拉丝亮银", unit: "个", weightPerMeter: 2.966, unitPrice: 44.76, customer: "" },
-  { id: "SM-442", name: "地埋灯壳", spec: "145*10", surface: "拉丝铁灰", unit: "支", weightPerMeter: 3.422, unitPrice: 63.51, customer: "珠海市斗门区井岸铝材店" },
-  { id: "ZG-443", name: "水下灯壳", spec: "131*39", surface: "拉丝金色", unit: "米", weightPerMeter: 0.843, unitPrice: 59.37, customer: "" },
-  { id: "HP-444", name: "隧道灯壳", spec: "81*74", surface: "高光白", unit: "个", weightPerMeter: 0.211, unitPrice: 12.24, customer: "" },
-  { id: "LD-445", name: "路灯外壳", spec: "90*7", surface: "电泳黑", unit: "支", weightPerMeter: 1.994, unitPrice: 9.88, customer: "中山市东升镇利达灯饰" },
-  { id: "CT-446", name: "泛光灯壳", spec: "111*14", surface: "电泳金", unit: "米", weightPerMeter: 3.367, unitPrice: 41.46, customer: "" },
-  { id: "YL-447", name: "壁灯外壳", spec: "109*91", surface: "粉末喷涂", unit: "个", weightPerMeter: 1.083, unitPrice: 40.15, customer: "" },
-  { id: "GZ-448", name: "吊灯外壳", spec: "45*93", surface: "氟碳喷涂", unit: "支", weightPerMeter: 3.143, unitPrice: 26.91, customer: "东莞市寮步镇恒通五金厂" },
-  { id: "ZW-449", name: "吸顶灯框", spec: "98*11", surface: "坯料", unit: "米", weightPerMeter: 2.548, unitPrice: 36.55, customer: "" },
-  { id: "HS-450", name: "射灯外壳", spec: "29*48", surface: "阳极氧化", unit: "个", weightPerMeter: 0.387, unitPrice: 21.23, customer: "" },
-  { id: "BL-451", name: "轨道灯壳", spec: "111*46", surface: "喷砂氧化", unit: "支", weightPerMeter: 2.138, unitPrice: 42.99, customer: "佛山市南海区光明灯饰有限公司" },
-  { id: "SM-452", name: "面板灯框", spec: "125*67", surface: "银白氧化", unit: "米", weightPerMeter: 0.152, unitPrice: 23.58, customer: "" },
-  { id: "ZG-453", name: "筒灯外壳", spec: "106*60", surface: "砂银氧化", unit: "个", weightPerMeter: 0.837, unitPrice: 39.52, customer: "" },
-  { id: "HP-454", name: "格栅灯框", spec: "107*15", surface: "铁灰氧化", unit: "支", weightPerMeter: 0.691, unitPrice: 41.39, customer: "广州市番禺区大石永丰铝材店" },
-  { id: "LD-455", name: "灯带铝槽", spec: "73*96", surface: "喷涂砂黑", unit: "米", weightPerMeter: 2.714, unitPrice: 24.84, customer: "" },
+export const deliveryProducts: DeliveryProduct[] = [
+  { id: 'dp1', code: '4130131', name: '外壳', spec: 'L184*40*22mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2.5, customer: '' },
+  { id: 'dp2', code: '1.04.01.0096', name: 'Q2-45W端盖', spec: '47X29X13mm，Φ10', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp3', code: 'ZWLP1516x170x15ARGB-2', name: '', spec: '1416*10*12.9', surface: '', unit: '1416', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp4', code: 'ZWLP900x112x6ARGB', name: '铝条', spec: '12.9*10*900', surface: '', unit: '650', weightPerMeter: 28, unitPrice: 18.2, customer: '' },
+  { id: 'dp5', code: '02.03.01.02.0107', name: '600W10V铝外壳输入侧盖', spec: '122.4*58.4*15T1.5mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp6', code: '02.03.01.02.0113', name: '600W铝外壳上盖(灰色)', spec: '230*122.4*7.05mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp7', code: '02.03.01.02.0114', name: '600W铝外壳下壳(灰色) 主体', spec: '230*122.4*51.6mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp8', code: '02.03.01.02.0115', name: '600W10V铝外壳输出侧盖', spec: '122.4*58.4*15T1.5mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp9', code: '1.04.01.0096', name: 'Q2-45W端盖', spec: '47X29X13mm，Φ10', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp10', code: '1.04.01.0097', name: 'Q2-45W端盖', spec: '47X29X13mm，Φ7.4', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp11', code: '1.04.01.0135', name: 'TODAY 40W端盖', spec: '47X29X13mmΦ10', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp12', code: '1.04.01.0136', name: 'TODAY 40W端盖', spec: '47X29X13mmΦ7.4', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp13', code: '1.04.01.0158.0001', name: 'today 30W电源壳体', spec: '46.6X29X102.5mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp14', code: '1.04.01.0159. 0001', name: 'today 30W电源壳体', spec: '46.6X29X102.5mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp15', code: '1.04.01.1099. 9902', name: 'IGUASSU支架端盖-1', spec: '42.4*47.9*2.0', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp16', code: '1.04.01.1100. 9902', name: 'IGUASSU支架端盖-2', spec: '42.4*47.9*2.0', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp17', code: '1.04.01.1101.0001', name: 'IGUASSU散热器-600', spec: '573*23.5*11.3', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp18', code: '1.04.01.1102. 9901', name: 'IGUASSU支架-600', spec: '496*48*43', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp19', code: '1.04.01.1103. 9901', name: 'IGUASSU双灯主体-600', spec: '595.5*166*43', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp20', code: '1.04.01.1110. 0001', name: 'TURBO-40-600-\n型材', spec: 'φ 37X21.5X540m', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp21', code: '1.04.01.1111. 0001', name: 'TURBO-40-900-\n型材', spec: 'φ 37X21.5X840m', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp22', code: '1.04.01.1112. 0001', name: 'TURBO-40-1200-\n型材', spec: 'φ 37X21.5X1140m', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp23', code: '1.04.01.1113. 0001', name: 'TURBO-40-1500-\n型材', spec: 'φ 37X21.5X1440m', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp24', code: '1.04.01.1114. 0001', name: 'TURBO-75-600-型材', spec: 'φ 70.8X34.2X540mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp25', code: '1.04.01.1115. 0001', name: 'TURBO-75-900-型材', spec: 'φ 70.8X34.2X840mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp26', code: '1.04.01.1116. 0001', name: 'TURBO-75-1200-型材', spec: 'φ 70.8X34.2X1140mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp27', code: '1.04.01.1117. 0001', name: 'TURBO-75-1500-型材', spec: 'φ 70.8X34.2X1440mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp28', code: '1.04.01.1128. 9903', name: 'IGUASSU单灯主体端盖-1', spec: '42.4*99.5*2.0', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp29', code: '1.04.01.1129. 9903', name: 'IGUASSU单灯主体端盖-2', spec: '42.4*99.5*2.0', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp30', code: '1.04.01.1130. 9901', name: 'IGUASSU主体600-Ⅰ', spec: '595.5*116*43', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp31', code: '1.04.01.1197. 9901', name: 'IGUASSU双灯主体端盖-1', spec: '42.4*149.2*2.0', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp32', code: '1.04.01.1198. 9901', name: 'IGUASSU双灯主体端盖-2', spec: '42.4*149.2*2.0', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp33', code: '1.04.01.1210. 9901', name: 'IGUASSU主体900-Ⅰ', spec: '895.5*116*43', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp34', code: '1.04.01.1211. 9901', name: 'IGUASSU主体1200-Ⅰ', spec: '1195.5*116*43', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp35', code: '1.04.01.1212. 9901', name: 'IGUASSU主体1800-Ⅰ', spec: '1795.5*116*43', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp36', code: '1.04.01.1213. 9901', name: 'IGUASSU双灯主体-900', spec: '895.5*166*43', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp37', code: '1.04.01.1214. 9901', name: 'IGUASSU双灯主体-1200', spec: '1195.5*166*43', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp38', code: '1.04.01.1215. 9901', name: 'IGUASSU双灯主体-1800', spec: '1795.5*166*43', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp39', code: '1.04.01.1216.0001', name: 'IGUASSU散热器-900', spec: '873*23.5*11.3', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp40', code: '1.04.01.1217.0001', name: 'IGUASSU散热器-1200', spec: '1173*23.5*11.3', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp41', code: '1.04.01.1218.0001', name: 'IGUASSU散热器-1800', spec: '1773*23.5*11.3', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp42', code: '1.04.01.1219. 9901', name: 'IGUASSU支架-900', spec: '896*48*43', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp43', code: '1.04.01.1220. 9901', name: 'IGUASSU支架-1200', spec: '1196*48*43', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp44', code: '1.04.01.1221. 9901', name: 'IGUASSU支架-1800', spec: '1796*48*43', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp45', code: '1.04.01.1260. 9901', name: '滑轨', spec: '60x23x6.3mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp46', code: '1.04.01.1282.9901', name: 'IGUASSU支架端盖-1', spec: '42.4*1.8*47.9', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp47', code: '1.04.01.1283.9901', name: 'IGUASSU支架端盖-2', spec: '42.4*1.8*47.9', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '深圳华唐锐照明电器有限公司' },
+  { id: 'dp48', code: '12.5*6.1*16.7', name: '散热片', spec: '12.5*6.1*16.7', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp49', code: '12.5*6.1*20', name: '散热片', spec: '12.5*6.1*20', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp50', code: '1486-100', name: '散热器', spec: '21*100*2600', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp51', code: '2.03.04.343', name: 'M9P-灯体0.3米', spec: '64*22*247', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp52', code: '2.03.04.344', name: 'M9P-灯体0.4米', spec: '64*22*347', surface: '', unit: '', weightPerMeter: 0, unitPrice: 12.56, customer: '' },
+  { id: 'dp53', code: '2.03.04.345', name: 'M9P-型材', spec: '64*22*547', surface: '', unit: '', weightPerMeter: 0, unitPrice: 18.32, customer: '' },
+  { id: 'dp54', code: '2.03.04.446', name: 'M9P-灯体0.8米', spec: '64*22*747', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp55', code: '3001-1170', name: '吊柜上横板', spec: '554.2*111*24mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 31.76, customer: '' },
+  { id: 'dp56', code: '3001-1172', name: '吊柜下横板', spec: '554.2*111*24mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 30.51, customer: '' },
+  { id: 'dp57', code: '3001-1174', name: '吊柜左侧板', spec: '811*111*16.4mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 43, customer: '' },
+  { id: 'dp58', code: '3001-1176', name: '吊柜右侧板', spec: '811*111*16.4mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 43, customer: '' },
+  { id: 'dp59', code: '3001-1180', name: '柜门上下铝型板', spec: '582.94*66.64*4.5mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 10.66, customer: '' },
+  { id: 'dp60', code: '3001-1182', name: '柜门左铝型板', spec: '806.94*66.64*4.5mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 19.02, customer: '' },
+  { id: 'dp61', code: '3001-1184', name: '柜门右铝型板', spec: '806.94*66.64*4.5mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 12.77, customer: '' },
+  { id: 'dp62', code: '5.5.000026', name: 'ZWLP880x343x4AW-铝合金', spec: '879.5*34.8*0.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp63', code: '5.5.000080', name: '铝条', spec: 'ZWLP443.2X58X3CW/57*10*9', surface: '氧化雾银', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp64', code: '5.5.000087', name: 'ZWLP950x159x4AW', spec: '948*34.8*0.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 6, customer: '' },
+  { id: 'dp65', code: '5.5.000121', name: 'ZWLP950x112x6ARGB', spec: '12.9*10*950', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '950' },
+  { id: 'dp66', code: '5.5.000122', name: 'ZWLP370x65x6ARGB', spec: '370*10*12.9mm', surface: '', unit: '370', weightPerMeter: 10, unitPrice: 3.7, customer: '' },
+  { id: 'dp67', code: '5.5.000123', name: 'ZWLP1300x112x6ARGB', spec: '1300*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp68', code: '5.5.000124', name: 'ZWLP1010x112x6ARGB', spec: '1010*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp69', code: '5.5.000125', name: '铝条', spec: '12.9*10*440', surface: '', unit: '440', weightPerMeter: 4, unitPrice: 1.76, customer: '' },
+  { id: 'dp70', code: '5.5.000126', name: '铝条', spec: '12.9*10*900', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp71', code: '5.5.000127', name: 'ZWLP1100x112x6ARGB', spec: '1100*10*12.9mm', surface: '', unit: '1100', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp72', code: '5.5.000128', name: 'ZWLP650x112x6BRGB', spec: '650*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp73', code: '5.5.000129', name: '铝条', spec: '12.9*10*875', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp74', code: '5.5.000130', name: 'ZWLP2030x112x6ARGB', spec: '12.9*10*2030', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '2030' },
+  { id: 'dp75', code: '5.5.000131', name: '铝条', spec: '12.9*10*440', surface: '', unit: '440', weightPerMeter: 2, unitPrice: 0.88, customer: '' },
+  { id: 'dp76', code: '5.5.000132', name: 'ZWLP730x90x6ARGB', spec: '730*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp77', code: '5.5.000133', name: 'ZWLP460x112x6ARGB', spec: '460*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '460' },
+  { id: 'dp78', code: '5.5.000134', name: 'ZWLP515x435x6ARGB', spec: '515*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp79', code: '5.5.000135', name: 'ZWLP300x70x6ARGB', spec: '300*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp80', code: '5.5.000136', name: '铝条', spec: '12.9*10*740', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '740' },
+  { id: 'dp81', code: '5.5.000140', name: 'ZWLP590x100x6ARGB', spec: '590*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp82', code: '5.5.000141', name: 'ZWLP450x442.1x6ARGB', spec: '250*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp83', code: '5.5.000142', name: 'ZWLP450x442.1x6ARGB', spec: '450*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp84', code: '5.5.000143', name: 'ZWLP1915x105x6ARGB', spec: '1840*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp85', code: '5.5.000144', name: 'ZWLP590x112x6BRGB', spec: '590*10*12.9mm', surface: '590', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp86', code: '5.5.000145', name: 'ZWLP300x45x6ARGB', spec: '300*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp87', code: '5.5.000146', name: 'ZWLP650x112x6ARGB', spec: '650*10*12.9mm', surface: '650', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp88', code: '5.5.000147', name: 'ZWLP380x343x6ARGB', spec: '380*10*12.9mm', surface: '380', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp89', code: '5.5.000148', name: 'ZWLP380x343x6ARGB', spec: '180*10*12.9mm', surface: '180', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp90', code: '5.5.000149', name: 'ZWLG740x165x6BRGB', spec: '736.4*10*12.9mm', surface: '736.4', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp91', code: '5.5.000150', name: 'ZWLG740x165x6BRGB', spec: '520.4*10*12.9mm', surface: '520.4', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp92', code: '5.5.000151', name: 'ZWLP596x165x6ARGB', spec: '596*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp93', code: '5.5.000152', name: 'ZWLP812x165x6ARGB-1', spec: '560.9* 10*12 9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp94', code: '5.5.000153', name: 'ZWLP812x165x6ARGB-2', spec: '812*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp95', code: '5.5.000154', name: 'ZWLP1460x165x6ARGB-1', spec: '560.86*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp96', code: '5.5.000155', name: 'ZWLP1460x165x6ARGB-2', spec: '1460*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp97', code: '5.5.000156', name: 'ZWL1300x100x33ARGB-侧边挡边-V1', spec: '100*33*2.0', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp98', code: '5.5.000156-3700', name: '100x33ARGB', spec: '100x33*3700', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp99', code: '5.5.000156-4000', name: '100x33ARGB', spec: '100x33*4000', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp100', code: '5.5.000157', name: 'ZWL700*100x33ARGB', spec: '100*33*700', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp101', code: '5.5.000158', name: 'ZWL600*100x33ARGB', spec: '100*33*600', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp102', code: '5.5.000162', name: 'ZWLP513x112x6ARGB', spec: '513*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp103', code: '5.5.000163', name: 'ZWLP380x81x6ARGB', spec: '380*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp104', code: '5.5.000164', name: 'ZWL500*100x33ARGB', spec: '100*33*500', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp105', code: '5.5.000178', name: 'ZWLP520x112x6ARGB', spec: '520*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp106', code: '5.5.000179', name: 'ZWLP380x102x6ARGB', spec: '380*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp107', code: '5.5.000180', name: 'ZWLP520x102x6ARGB', spec: '520*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp108', code: '5.5.000181', name: '铝条', spec: '12.9*10*2700', surface: '', unit: '', weightPerMeter: 0, unitPrice: 3.8, customer: '江门光显电子有限公司' },
+  { id: 'dp109', code: '5.5.000182', name: 'ZWLP869.2x277x4AW-铝合金', spec: '869.2*34.8*0.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp110', code: '5.5.000183', name: 'ZWLP1255x215x4AW-铝合金', spec: '1254.7*34.8*09mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp111', code: '5.5.000184', name: 'ZWLP1885x215x4AW-铝合金', spec: '1884.7*34.8*0.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp112', code: '5.5.000185', name: 'ZWLP900x170x15ARGB', spec: '740*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp113', code: '5.5.000187', name: 'ZWLP300x135x6ARGB', spec: '300*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp114', code: '5.5.000188', name: 'ZWLP1562x50x15ARGB', spec: '1460*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp115', code: '5.5.000189', name: 'ZWLP1237x170x15ARGB-V2', spec: '1100*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp116', code: '5.5.000190', name: 'ZWLP756x170x15ARGB-1', spec: '668*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp117', code: '5.5.000191', name: 'ZWLP756x50x15ARGB', spec: '596*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp118', code: '5.5.000192', name: 'ZWLP756x170x15ARGB-2', spec: '524*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp119', code: '5.5.000193', name: 'ZWLF1180x351.2x4AW-V1铝合金', spec: '1179.8*34.8*0.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp120', code: '5.5.000194', name: 'WLF580x351.2x4AW-V1铝合金', spec: '579.8*34.8*0.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp121', code: '5.5.000198', name: '1071.5x170x15ARGB-铝条-1', spec: '543*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp122', code: '5.5.000199', name: '1136.5x170x15ARGB-铝条-2', spec: '1021*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp123', code: '5.5.000200', name: '1071.5x170x15BRGB铝条-1', spec: '554*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp124', code: '5.5.000201', name: '1010x170x15BRGB', spec: '882*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp125', code: '5.5.000202', name: '648x170x15ARGB', spec: '520*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp126', code: '5.5.000203', name: '1336x170x15ARGB', spec: '1208*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp127', code: '5.5.000204', name: '1071.5x170x15ARGB-铝条-2', spec: '956*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp128', code: '5.5.000205', name: '656x170x15ARGB-铝条', spec: '528*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp129', code: '5.5.000206', name: '1080x170x15ARGB', spec: '952*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp130', code: '5.5.000207', name: '668x170x15BRGB', spec: '540*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp131', code: '5.5.000209', name: 'ZWLP1792x170x15ARGB', spec: '1664*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp132', code: '5.5.000210', name: 'ZWLP400x100x33ARGB', spec: '400*100*33mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp133', code: '5.5.000214', name: 'ZWLP1050x112x6ARGB', spec: '1050*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp134', code: '5.5.000215', name: 'ZWLP370x112x6BRGB', spec: '370*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp135', code: '5.5.000216', name: 'ZWLP1450x395x4AW/0.9厚', spec: '1450*34.8*0.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 8.74, customer: '' },
+  { id: 'dp136', code: '5.5.000217', name: 'ZWLP1300x112x6ARGB', spec: '12.9*10*1300', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp137', code: '5090000044-1', name: '主体', spec: '68*36*175', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp138', code: '5090000044-2', name: '盖板', spec: '68*6*175', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp139', code: '5090000044-3', name: '左端盖', spec: '68*40*13', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp140', code: '5090000044-4', name: '右端盖', spec: '68*40*13', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp141', code: '9150-0749', name: '新款F1支架_型材', spec: '36.9*10.5', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp142', code: '9150-1056', name: '铝型材1', spec: '53*70*2460', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp143', code: '9150-1058', name: '铝型材2', spec: '53*70*3070', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp144', code: 'A122-054-100铆钉', name: '拉管机壳', spec: '28.8*20.1*100', surface: '', unit: '', weightPerMeter: 0, unitPrice: 8.74, customer: '' },
+  { id: 'dp145', code: 'A款堵头加工', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp146', code: 'BL-002', name: '小边框', spec: '9.2*52*3000', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp147', code: 'BL-021-3100', name: '主体', spec: '102*56*3100', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp148', code: 'BL-024-4000', name: '盖板', spec: '4.3*28*4000', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp149', code: 'BL-025-4000', name: '主体', spec: '17*26.3*4000', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp150', code: 'BL-029-01', name: '3000W侧防水垫', spec: '39.6*2*355.2', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp151', code: 'BL-029-02', name: '3000W防水垫', spec: '7*5.5*800', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp152', code: 'BL-029-03', name: '挂墙支架', spec: '56*50*95', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp153', code: 'BL-029-04', name: '主体机架', spec: '38*22*199', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp154', code: 'BL-029-1', name: '2000W端盖1', spec: '12.5*43.4*208.4', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp155', code: 'BL-029-120', name: '边框', spec: '40*18*120', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2.1, customer: '' },
+  { id: 'dp156', code: 'BL-029-1200', name: '4000W边框', spec: '40*18*1200', surface: '', unit: '', weightPerMeter: 0, unitPrice: 26.8, customer: '' },
+  { id: 'dp157', code: 'BL-029-2', name: '2000W端盖2', spec: '12.5*43.4*208.4', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp158', code: 'BL-029-3', name: '2000W隔热板', spec: '185*5.5*600', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp159', code: 'BL-029-4', name: '2000W后壳', spec: '198*4.25*600', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp160', code: 'BL-029-5', name: '后壳', spec: '198*4.25*120', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp161', code: 'BL-029-6', name: '3000W端盖', spec: '12.5*43.4*359', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp162', code: 'BL-029-600', name: '2000W边框', spec: '40*18*600', surface: '', unit: '', weightPerMeter: 0, unitPrice: 16.3, customer: '' },
+  { id: 'dp163', code: 'BL-029-7', name: '3000W隔热板', spec: '335*9*800', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp164', code: 'BL-029-8', name: '3000W后壳', spec: '348*4.25*800', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp165', code: 'BL-029-800', name: '3000W边框', spec: '40*18*800', surface: '', unit: '', weightPerMeter: 0, unitPrice: 20, customer: '' },
+  { id: 'dp166', code: 'BL-029-9', name: '4000W后壳', spec: '198*4.25*1200', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp167', code: 'CT4-01-158', name: '散热器_(CT4-01)', spec: '86*66*158', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp168', code: 'CT4-01-515', name: '散热器_(CT4-01)', spec: '86*66*515', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp169', code: 'CT4-01-769', name: '散热器_(CT4-01)', spec: '86*66*769', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp170', code: 'CT4-02-31', name: '滑块_（CT4-02）', spec: '31*20*31', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp171', code: 'E240041', name: '拉布灯箱型材', spec: '70*53*3000mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp172', code: 'GXY-001-150W', name: '电源主体', spec: '63.6*38*3010', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp173', code: 'LC-005', name: '拉手', spec: '33.2*20.8', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp174', code: 'YL-00152', name: '冷轧板吸顶盘', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 8, customer: '江门光显电子有限公司' },
+  { id: 'dp175', code: 'YL-00152.', name: '弹片', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.5, customer: '江门光显电子有限公司' },
+  { id: 'dp176', code: 'YL-014-202', name: '电源外壳', spec: '71.5*41.7*202', surface: '', unit: '', weightPerMeter: 0, unitPrice: 7.5, customer: '' },
+  { id: 'dp177', code: 'YL-014-123', name: '电源外壳', spec: '71.5*41.7*123', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp178', code: 'yl-014-13', name: '堵头', spec: '72*42*13', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp179', code: 'yl-014-13地线孔', name: '堵头', spec: '72*42*13', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp180', code: 'YL-014-95', name: '电源外壳', spec: '71.5*41.7*95', surface: '', unit: '', weightPerMeter: 0, unitPrice: 6, customer: '' },
+  { id: 'dp181', code: 'yl-015-123', name: '盖板', spec: '62.7*1.5*123', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp182', code: 'yl-015-95', name: '盖板', spec: '62.7*1.5*95', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp183', code: 'YL-036-133', name: '电源外壳', spec: '69.8*42.6*133', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp184', code: 'YL-036-210', name: '电源外壳', spec: '69.8*42.6*210', surface: '', unit: '', weightPerMeter: 0, unitPrice: 11, customer: '珠海市启阳电子有限公司' },
+  { id: 'dp185', code: 'YL-054-100', name: '电源外壳', spec: '28.8*20.1*100', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp186', code: 'YL-054-117', name: '电源外壳', spec: '28.8*20.1*117', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.65, customer: '' },
+  { id: 'dp187', code: 'YL-054-120', name: '电源外壳', spec: '28.8*20.1*120', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp188', code: 'YL-054-130', name: '电源外壳', spec: '28.8*20.1*130', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp189', code: 'YL-054-137', name: '电源外壳铆钉', spec: '28.8*20.1*137', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1, customer: '' },
+  { id: 'dp190', code: 'YL-054-140', name: '电源外壳铆钉', spec: '28.8*20.1*140', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1, customer: '珠海华炬科技有限公司' },
+  { id: 'dp191', code: 'YL-054-146', name: '电源外壳', spec: '28.8*20.1*146', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1.16, customer: '珠海绿美能电子科技有限公司' },
+  { id: 'dp192', code: 'YL-054-160', name: '电源外壳', spec: '28.8*20.1*160', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1.3, customer: '' },
+  { id: 'dp193', code: 'YL-054-198', name: '电源外壳', spec: '28.8*20.1*198', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp194', code: 'YL-054-200', name: '电源外壳', spec: '28.8*20.1*200', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1.5, customer: '珠海市启阳电子有限公司' },
+  { id: 'dp195', code: 'YL-054-230', name: '电源外壳', spec: '28.8*20.1*230', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1.9, customer: '' },
+  { id: 'dp196', code: 'YL-054-240', name: '电源外壳', spec: '28.8*20.1*240', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1.9, customer: '' },
+  { id: 'dp197', code: 'YL-054-255', name: '电源外壳', spec: '28.8*20.1*255', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1.85, customer: '' },
+  { id: 'dp198', code: 'YL-054-280', name: '电源外壳', spec: '28.8*20.1*280', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2.1, customer: '' },
+  { id: 'dp199', code: 'YL-054-45', name: '电源外壳', spec: '28.8*20.1*45', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.32, customer: '' },
+  { id: 'dp200', code: 'YL-054-48', name: '电源外壳', spec: '28.8*20.1*48', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.41, customer: '珠海市明庆电子有限分司' },
+  { id: 'dp201', code: 'YL-054-55', name: '电源外壳', spec: '28.8*20.1*55', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.45, customer: '' },
+  { id: 'dp202', code: 'YL-054-50', name: '电源外壳', spec: '28.8*20.1*50', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.43, customer: '' },
+  { id: 'dp203', code: 'YL-054-6.2', name: '堵头', spec: '30*20*8.0', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp204', code: 'yl-054-60', name: '电源外壳', spec: '28.8*20.1*60', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.6, customer: '' },
+  { id: 'dp205', code: 'YL-054-7.0', name: '堵头', spec: '30*20*8.0', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp206', code: 'YL-054-70', name: '电源外壳', spec: '28.8*20.1*70', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.65, customer: '' },
+  { id: 'dp207', code: 'YL-054-75', name: '电源外壳', spec: '28.8*20.1*75', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.65, customer: '' },
+  { id: 'dp208', code: 'YL-054-85', name: '电源外壳', spec: '28.8*20.1*85', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.7, customer: '' },
+  { id: 'dp209', code: 'YL-054-90', name: '电源外壳', spec: '28.8*20.1*90', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.7, customer: '珠海市启阳电子有限公司' },
+  { id: 'dp210', code: 'YL-054-95', name: '电源外壳', spec: '28.8*20.1*95', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.6, customer: '珠海金逸电子科技有限公司' },
+  { id: 'dp211', code: 'YL-054-96', name: '电源外壳', spec: '28.8*20.1*96', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.88, customer: '珠海绿美能电子科技有限公司' },
+  { id: 'dp212', code: 'YL-054-97', name: '电源外壳', spec: '28.8*20.1*97', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.88, customer: '' },
+  { id: 'dp213', code: 'YL-054堵头6.2', name: '', spec: '28.8*20.1*10', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp214', code: 'yl-074-46', name: '散热器', spec: '25.95*7.9*46', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp215', code: 'YL-107-201.6', name: '电源外壳', spec: '95*50*201.6mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 7.5, customer: '' },
+  { id: 'dp216', code: 'YL-107-260', name: '电源外壳', spec: '95*50*260mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 26, customer: '' },
+  { id: 'dp217', code: 'YL-144-203', name: '盖板', spec: '32.87*1.17*203', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp218', code: 'yl-175-110', name: '外壳1', spec: '122×110×52mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp219', code: 'yl-176-110', name: '外壳2', spec: '122×110×7mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp220', code: 'YL-225-11堵头', name: '堵头', spec: '23.4*34.5*11', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp221', code: 'YL-225-203', name: '电源外壳', spec: '23.4*34.5*203', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp222', code: 'yl-255-110', name: '电源外壳套件', spec: '51.5*37.5*110', surface: '', unit: '', weightPerMeter: 0, unitPrice: 6.5, customer: '飞科光电有限公司' },
+  { id: 'dp223', code: 'yl-255-130', name: '电源外壳', spec: '51.7*32', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp224', code: 'yl-255-80', name: '电源外壳套件', spec: '51.5*37.5*80', surface: '', unit: '', weightPerMeter: 0, unitPrice: 6.5, customer: '飞科光电有限公司' },
+  { id: 'dp225', code: 'yl-270-95', name: '电源外壳', spec: '40*22*95', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.9, customer: '' },
+  { id: 'dp226', code: 'yl-270-100', name: '电源外壳', spec: '40*22*100', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.9, customer: '' },
+  { id: 'dp227', code: 'yl-270-105', name: '电源外壳', spec: '40*22*105', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.9, customer: '' },
+  { id: 'dp228', code: 'yl-270-130', name: '电源外壳', spec: '40*22*130', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1, customer: '' },
+  { id: 'dp229', code: 'yl-270-184', name: '电源外壳', spec: '40*22*184', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp230', code: 'yl-270-200', name: '电源外壳', spec: '40*22*200', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp231', code: 'yl-270-230', name: '电源主体', spec: '40*22*230', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2.1, customer: '东方一号电子有限公司' },
+  { id: 'dp232', code: 'yl-270-80', name: '电源外壳', spec: '40*22*80', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '东方一号电子有限公司' },
+  { id: 'dp233', code: 'yl-270堵头', name: '堵头', spec: '40*22*20', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp234', code: 'YL-298', name: '铝杆头86.21x55.73MM', spec: '86.21*55.73*1510', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp235', code: 'yl-397', name: '小边框', spec: '49.9*17.9*3000', surface: '', unit: '', weightPerMeter: 0, unitPrice: 22.3, customer: '深圳市科录科技有限公司' },
+  { id: 'dp236', code: 'yl-399-110', name: '', spec: '50*22*110', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp237', code: 'yl-399-149.5', name: '', spec: '50*22*149.5', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp238', code: 'yl-399-169.4', name: '', spec: '50*22*169.4', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp239', code: 'yl-411-140', name: '电源主体', spec: '40*13*140', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1.7, customer: '' },
+  { id: 'dp240', code: 'yl-411-160', name: '电源主体', spec: '40*13*160', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1.9, customer: '' },
+  { id: 'dp241', code: 'yl-411-180', name: '电源主体', spec: '40*13*180', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2.1, customer: '' },
+  { id: 'dp242', code: 'yl-411-200', name: '电源主体', spec: '40*13*200', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2.3, customer: '' },
+  { id: 'dp243', code: 'YL-442-3600', name: '盖板', spec: '70.5*7.7*3600', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp244', code: 'YL-443-3600', name: '电源主体', spec: '87*49.3*3600', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp245', code: 'yl-662', name: '小门灯盖板', spec: '87*131.7*1.6', surface: '', unit: '', weightPerMeter: 0, unitPrice: 3, customer: '江门光显电子有限公司' },
+  { id: 'dp246', code: 'YW-0927', name: '弹片', spec: '27*9*8.6*0.5mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.7, customer: '' },
+  { id: 'dp247', code: 'yw-16-1168', name: '灯管铝材', spec: '18*26*558', surface: '', unit: '', weightPerMeter: 0, unitPrice: 3.8, customer: '江门光显电子有限公司' },
+  { id: 'dp248', code: 'yw-16-2337', name: '灯管铝材', spec: '18*26*2337', surface: '', unit: '', weightPerMeter: 0, unitPrice: 7.6, customer: '江门光显电子有限公司' },
+  { id: 'dp249', code: 'yw-16-558', name: '灯管铝材', spec: '18*26*558', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1.9, customer: '江门光显电子有限公司' },
+  { id: 'dp250', code: 'yw-16-864', name: '灯管铝材', spec: '18*26*864', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2.8, customer: '江门光显电子有限公司' },
+  { id: 'dp251', code: 'YW-3022', name: '卡簧', spec: '30*21.5*2.0mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.3, customer: '' },
+  { id: 'dp252', code: 'zw-06-1265', name: '样品', spec: '1265*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp253', code: 'zw-06-1515', name: '样品', spec: '1515*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp254', code: 'ZWL100x33ARGB-3700', name: '', spec: '100*33*3700', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp255', code: 'ZWL100x33ARGB-4000', name: '', spec: '100*33*4000', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp256', code: 'ZWLP1010x112x6ARGB', name: '铝条', spec: '12.9*10*1010', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp257', code: 'ZWLP1010x170x15ARGB-1', name: '', spec: '952*10*12.9', surface: '', unit: '952', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp258', code: 'ZWLP1010x170x15ARGB-2', name: '', spec: '952*10*12.9', surface: '', unit: '952', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp259', code: 'ZWLP1094x170x15ARGB', name: '', spec: '1028*10*12.9', surface: '', unit: '1028', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp260', code: 'ZWLP1100x112x6ARGB', name: '铝条', spec: '12.9*10*1100', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp261', code: 'ZWLP1100x170x15ARGB-1', name: '', spec: '1028*10*12.9', surface: '', unit: '1028', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp262', code: 'ZWLP1100x170x15ARGB-2', name: '', spec: '1028*10*12.9', surface: '', unit: '1028', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp263', code: 'ZWLP1208x170x15ARGB-1', name: '', spec: '1100*10*12.9', surface: '', unit: '1100', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp264', code: 'ZWLP1208x170x15ARGB-2', name: '', spec: '1100*10*12.9', surface: '', unit: '1100', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp265', code: 'ZWLP1237x170x15ARGB', name: '', spec: '1100*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp266', code: 'ZWLP1300x112x6ARGB', name: '铝条', spec: '12.9*10*1300', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp267', code: 'ZWLP1516x170x15ARGB-1', name: '', spec: '561*10*12.9', surface: '', unit: '561', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp268', code: 'ZWLP1562x50x15ARGB', name: '', spec: '1460*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp269', code: 'ZWLP370x65x6ARGB', name: '铝条', spec: '12.9*10*370', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp270', code: 'ZWLP520x112x6ARGB', name: '', spec: '520*10*12.9', surface: '', unit: '520', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp271', code: 'ZWLP590x80x6ARGB', name: '样品费', spec: '590*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp272', code: 'ZWLP650x112x6BRGB', name: '铝条', spec: '12.9*10*650', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp273', code: 'ZWLP735x170x15ARGB', name: '', spec: '668*10*12.9', surface: '', unit: '668', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp274', code: 'ZWLP750x170x15ARGB', name: '', spec: '668*10*12.9', surface: '', unit: '668', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp275', code: 'ZWLP756x170x15ARGB-1', name: '', spec: '668*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp276', code: 'ZWLP756x170x15ARGB-2', name: '', spec: '524*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp277', code: 'ZWLP756x50x15ARGB', name: '', spec: '596*10*12.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp278', code: 'ZWLP816x170x15ARGB-1', name: '', spec: '740*10*12.9', surface: '', unit: '740', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp279', code: 'ZWLP816x170x15ARGB-2', name: '', spec: '740*10*12.9', surface: '', unit: '740', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp280', code: 'ZWLP950x112x6ARGB', name: '铝条', spec: '12.9*10*950', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp281', code: '弹片夹具', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp282', code: '电源盒', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp283', code: '胶条改模费', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp284', code: '铝脚-763', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp285', code: '铝脚-777', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp286', code: '铝脚-795', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp287', code: '模具费', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp288', code: '上机费', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp289', code: '上铝框', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp290', code: '弯角BL-006-2380', name: '弯角', spec: '80*80*2380', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp291', code: '弯角BL-006-2600', name: '弯角', spec: '80*80*2600', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp292', code: '弯角BL-006-2450', name: '弯角', spec: '80*80*2450', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp293', code: '弯角BL-006-2375', name: '弯角', spec: '80*80*2375', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp294', code: '弯角BL-006-2525', name: '弯角', spec: '80*80*2525', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp295', code: '弯角BL-006-2575', name: '弯角', spec: '80*80*2575', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp296', code: '弯角BL-006-2675', name: '弯角', spec: '80*80*2675', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp297', code: '弯角BL-006-2750', name: '弯角', spec: '80*80*2750', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp298', code: '弯角BL-006-2850', name: '弯角', spec: '80*80*2850', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp299', code: '下铝框', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp300', code: '压铸件', name: '钻孔攻牙', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp301', code: '运费', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp302', code: '左右铝框', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp303', code: '5.5.000159', name: 'U型铝条', spec: '3700*100*33mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 148, customer: '广东中为导光科技有限公司' },
+  { id: 'dp304', code: '5.5.000160', name: 'U型铝条', spec: '4000*100*33mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 160, customer: '广东中为导光科技有限公司' },
+  { id: 'dp305', code: '5.5.000221', name: '铝片', spec: '100*33*2mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 3, customer: '广东中为导光科技有限公司' },
+  { id: 'dp306', code: '5.5.000223', name: 'ZWLF1197x475x4AW-铝合金', spec: '1197*34.8*0.9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp307', code: '58*58*R28', name: '弯角', spec: '58*58*R28mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp308', code: '58*58*R28-3150', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp309', code: '58*58*R28-2450', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp310', code: '58*58*R28-2300', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp311', code: '58*58*R28-1700', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp312', code: '58*58*R28-2490', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp313', code: 'YL-231-240', name: '机箱外款', spec: '138*76.2*240mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp314', code: '10W20W支架', name: '样品费', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp315', code: '30W支架', name: '样品费', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp316', code: 'BL-126-140', name: '底板', spec: '52*1.5*140mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1.2, customer: '' },
+  { id: 'dp317', code: 'YL-079-80', name: '电源外壳', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 3.9, customer: '' },
+  { id: 'dp318', code: 'YL-079-70', name: '电源外壳', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2.8, customer: '' },
+  { id: 'dp319', code: '1021772', name: 'D7散热片', spec: '56*25*4mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.95, customer: '' },
+  { id: 'dp320', code: '1021773', name: 'MOS散热片', spec: '52*25*4mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.85, customer: '' },
+  { id: 'dp321', code: '08120-0527', name: '主体型材', spec: '61*25', surface: '', unit: '', weightPerMeter: 0.483, unitPrice: 13.5777096, customer: '深圳富达金技术有限公司' },
+  { id: 'dp322', code: '08120-0526', name: '半圆型材', spec: '39.5*34.5', surface: '', unit: '', weightPerMeter: 0.326, unitPrice: 9.1642512, customer: '深圳富达金技术有限公司' },
+  { id: 'dp323', code: '08120-0528', name: '电气仓盖型材', spec: '47.5*5.06', surface: '', unit: '', weightPerMeter: 0.185, unitPrice: 5.200572, customer: '深圳富达金技术有限公司' },
+  { id: 'dp324', code: '550095-B00', name: '散热片', spec: '143*3*25', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp325', code: '550096-B00', name: '散热片', spec: '143*3*25', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp326', code: '550188', name: '散热片A', spec: '116*25*3', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp327', code: '550189', name: '散热片B', spec: '116*25*3', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp328', code: '550186-A00', name: '散热片上盖', spec: '107.4*57.8*29', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1.6, customer: '' },
+  { id: 'dp329', code: '550099', name: '散热片', spec: '64*21*1.5', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1.2, customer: '' },
+  { id: 'dp330', code: '550100', name: '散热片', spec: '91.7*21*1.5', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1.6, customer: '' },
+  { id: 'dp331', code: '5.5.000233', name: 'ZWLF420x130x3BW 铝条', spec: '129.7*21*9mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp332', code: 'YG25.3*1.15', name: '铝管6063', spec: '25.3*23*4000', surface: '本色', unit: '', weightPerMeter: 0, unitPrice: 35, customer: '佛山市三水弘美电器配件有限公司' },
+  { id: 'dp333', code: '405-00731', name: '铝管6063', spec: 'ø32.7*ø29.5*4000', surface: '本色', unit: '', weightPerMeter: 0, unitPrice: 35, customer: '佛山市三水弘美电器配件有限公司' },
+  { id: 'dp334', code: 'JG25*1.0', name: '铝管6063', spec: 'ø25*ø23*4000', surface: '本色', unit: '', weightPerMeter: 0, unitPrice: 35, customer: '佛山市三水弘美电器配件有限公司' },
+  { id: 'dp335', code: 'JG-Φ31.25×Φ27.95', name: '铝管6063', spec: 'Φ31.25*Φ27.95*4000', surface: '本色', unit: '', weightPerMeter: 0, unitPrice: 35, customer: '佛山市三水弘美电器配件有限公司' },
+  { id: 'dp336', code: 'YL-036-151', name: '电源外壳', spec: '69.8*42.6*151', surface: '', unit: '', weightPerMeter: 0, unitPrice: 11, customer: '江苏镭科照明科技有限公司' },
+  { id: 'dp337', code: 'YL-036-139', name: '电源外壳', spec: '69.8*42.6*139', surface: '', unit: '', weightPerMeter: 0, unitPrice: 9, customer: '' },
+  { id: 'dp338', code: '1.04.01.1112.0002', name: 'TURBO-40-1200-型材', spec: 'ø37X21.5X1140mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp339', code: '1.04.01.1116.0002', name: 'TURBO-75-1200-型材', spec: 'ø71X34.3X1140mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp340', code: '1.04.01.1334.0001', name: 'TURBO-75-1200-小角度-型材', spec: 'ø71X34.3X1112mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp341', code: '1.04.01.1108.5302', name: 'TURBO-40-左-免螺丝端盖', spec: 'ø40.3X30.2mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp342', code: '1.04.01.1109.5302', name: 'TURBO-40-右端盖', spec: 'ø40.3X30.2mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp343', code: '车费', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp344', code: 'D8150-0814', name: '铝型材上机费', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp345', code: '9150-1136', name: '半圆型材', spec: '40*24.5*2450', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp346', code: '9150-1140', name: '主体型材', spec: '61*25*2450', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp347', code: '9150-1144', name: '电气仓盖型材', spec: '47.5*5.06*2450', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp348', code: 'LZ-001-00', name: '铝支撑', spec: '500*80*160', surface: '', unit: '', weightPerMeter: 0, unitPrice: 32, customer: '' },
+  { id: 'dp349', code: 'LZ-002', name: 'L型特殊铝块', spec: '70*70*20.4', surface: '', unit: '', weightPerMeter: 0, unitPrice: 3.17, customer: '' },
+  { id: 'dp350', code: 'LZ-003', name: '铝板3.0mm', spec: '180*80*3.0', surface: '', unit: '', weightPerMeter: 0, unitPrice: 4.23, customer: '' },
+  { id: 'dp351', code: 'LZ-004', name: '方铝片2.3mm', spec: '178*82*2.3', surface: '', unit: '', weightPerMeter: 0, unitPrice: 3.2, customer: '' },
+  { id: 'dp352', code: 'LZ-005', name: 'U型铝', spec: '70*36*30', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2.9, customer: '' },
+  { id: 'dp353', code: '100*100*R50*3200', name: '100*100弯角', spec: '100*100*R50*3200', surface: '', unit: '', weightPerMeter: 0, unitPrice: 3200, customer: '' },
+  { id: 'dp354', code: '100*100*R50*3050', name: '100*100弯角', spec: '100*100*R50*3050', surface: '', unit: '', weightPerMeter: 0, unitPrice: 3050, customer: '' },
+  { id: 'dp355', code: '100*100*R50*3000', name: '100*100弯角', spec: '100*100*R50*3000', surface: '', unit: '', weightPerMeter: 0, unitPrice: 3000, customer: '' },
+  { id: 'dp356', code: '100*100*R50*2850', name: '100*100弯角', spec: '100*100*R50*2850', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2850, customer: '' },
+  { id: 'dp357', code: '80*80*R28*2380', name: '80*80*R28弯角', spec: '80*80*R28*2380', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2380, customer: '' },
+  { id: 'dp358', code: '80*80*R28*3850', name: '80*80*R28弯角', spec: '80*80*R28*3850', surface: '', unit: '', weightPerMeter: 0, unitPrice: 3850, customer: '' },
+  { id: 'dp359', code: '80*80*R28*4050', name: '80*80*R28弯角', spec: '80*80*R28*4050', surface: '', unit: '', weightPerMeter: 0, unitPrice: 4050, customer: '' },
+  { id: 'dp360', code: '80*80*R28*5050', name: '80*80*R28弯角', spec: '80*80*R28*5050', surface: '', unit: '', weightPerMeter: 0, unitPrice: 5050, customer: '' },
+  { id: 'dp361', code: '80*80*R28*3500', name: '80*80*R28弯角', spec: '80*80*R28*3500', surface: '', unit: '', weightPerMeter: 0, unitPrice: 3500, customer: '' },
+  { id: 'dp362', code: '80*80*R28*2450', name: '80*80*R28弯角', spec: '80*80*R28*2450', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2450, customer: '' },
+  { id: 'dp363', code: '80*80*R28*3000', name: '80*80*R28弯角', spec: '80*80*R28*3000', surface: '', unit: '', weightPerMeter: 0, unitPrice: 3000, customer: '' },
+  { id: 'dp364', code: '80*80*R28*1250', name: '80*80*R28弯角', spec: '80*80*R28*1250', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1250, customer: '' },
+  { id: 'dp365', code: '80*80*R28*1350', name: '80*80*R28弯角', spec: '80*80*R28*1350', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1350, customer: '' },
+  { id: 'dp366', code: '80*80*R28*1450', name: '80*80*R28弯角', spec: '80*80*R28*1450', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1450, customer: '' },
+  { id: 'dp367', code: '80*80*R28*1650', name: '80*80*R28弯角', spec: '80*80*R28*1650', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1650, customer: '' },
+  { id: 'dp368', code: '80*80*R28*1750', name: '80*80*R28弯角', spec: '80*80*R28*1750', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1750, customer: '' },
+  { id: 'dp369', code: '80*80*R28*1950', name: '80*80*R28弯角', spec: '80*80*R28*1950', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1950, customer: '' },
+  { id: 'dp370', code: '80*80*R28*2150', name: '80*80*R28弯角', spec: '80*80*R28*2150', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2150, customer: '' },
+  { id: 'dp371', code: '80*80*R28*2250', name: '80*80*R28弯角', spec: '80*80*R28*2250', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2250, customer: '' },
+  { id: 'dp372', code: '80*80*R28*2350', name: '80*80*R28弯角', spec: '80*80*R28*2350', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2350, customer: '' },
+  { id: 'dp373', code: '80*80*R28*2550', name: '80*80*R28弯角', spec: '80*80*R28*2550', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2550, customer: '' },
+  { id: 'dp374', code: '80*80*R28*4450', name: '80*80*R28弯角', spec: '80*80*R28*4450', surface: '', unit: '', weightPerMeter: 0, unitPrice: 4450, customer: '' },
+  { id: 'dp375', code: '100*100*R50*3500', name: '100*100*R50弯角', spec: '100*100*R50*3500', surface: '', unit: '', weightPerMeter: 0, unitPrice: 3500, customer: '' },
+  { id: 'dp376', code: '100*100*R50*3400', name: '100*100*R50弯角', spec: '100*100*R50*3400', surface: '', unit: '', weightPerMeter: 0, unitPrice: 3400, customer: '' },
+  { id: 'dp377', code: '100*100*R50*3300', name: '100*100*R50弯角', spec: '100*100*R50*3300', surface: '', unit: '', weightPerMeter: 0, unitPrice: 3300, customer: '' },
+  { id: 'dp378', code: '100*100*R50*2950', name: '100*100*R50弯角', spec: '100*100*R50*2950', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2950, customer: '' },
+  { id: 'dp379', code: '100*100*R50*2900', name: '100*100*R50弯角', spec: '100*100*R50*2900', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2900, customer: '' },
+  { id: 'dp380', code: '100*100*R50*2750', name: '100*100*R50弯角', spec: '100*100*R50*2750', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2750, customer: '' },
+  { id: 'dp381', code: '100*100*R50*2700', name: '100*100*R50弯角', spec: '100*100*R50*2700', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2700, customer: '' },
+  { id: 'dp382', code: '100*100*R50*2650', name: '100*100*R50弯角', spec: '100*100*R50*2650', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2650, customer: '' },
+  { id: 'dp383', code: '100*100*R50*2600', name: '100*100*R50弯角', spec: '100*100*R50*2600', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2600, customer: '' },
+  { id: 'dp384', code: '100*100*R50*3100', name: '100*100*R50弯角', spec: '100*100*R50*3100', surface: '', unit: '', weightPerMeter: 0, unitPrice: 3100, customer: '' },
+  { id: 'dp385', code: '100*100*R50*2800', name: '100*100*R50弯角', spec: '100*100*R50*2800', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2800, customer: '' },
+  { id: 'dp386', code: 'BL-126-144', name: '底板', spec: '55*1.5*144mm', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1.2, customer: '' },
+  { id: 'dp387', code: 'YL-014-200', name: '电源外壳', spec: '71.5*41.7*200', surface: '', unit: '', weightPerMeter: 0, unitPrice: 7, customer: '' },
+  { id: 'dp388', code: '25*3*45', name: '散热片', spec: '25*3*45', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp389', code: '25*3*55', name: '散热片', spec: '25*3*55', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp390', code: '25*3*65', name: '散热片', spec: '25*3*65', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp391', code: '5.5.000229', name: '铝合金', spec: '34.8*0.9*580', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp392', code: 'ZW-849', name: '', spec: '80*80*4050', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp393', code: '2400626', name: 'F0铝支架0623', spec: '36.9*10.5', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp394', code: '45*22*4', name: '散热片', spec: '45*22*4', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp395', code: '85*25*4', name: '散热片', spec: '85*25*4', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp396', code: 'YL-107-201.6', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp397', code: 'BL-003', name: '小边框', spec: '51.8*11.1*3000', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp398', code: '预付款', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp399', code: 'YL-869-1', name: '上盖板', spec: '116*22.9*174.5', surface: '', unit: '', weightPerMeter: 0, unitPrice: 35.54, customer: '玖嘉久电子科技' },
+  { id: 'dp400', code: 'YL-869-2', name: '下盖板', spec: '107*6.2*173.4', surface: '', unit: '', weightPerMeter: 0, unitPrice: 31.33, customer: '玖嘉久电子科技' },
+  { id: 'dp401', code: 'YL-869-3', name: '按键', spec: '4*3*26.4', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2.98, customer: '玖嘉久电子科技' },
+  { id: 'dp402', code: '方铝管25*25*2.0', name: '铝管6063', spec: '25*25*4040', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '江苏镭科照明科技有限公司' },
+  { id: 'dp403', code: '51.04.01.1418.0002', name: 'Reach型材', spec: '18*3.4*1122.6', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2.8, customer: '江门深华港湾照明有限公司' },
+  { id: 'dp404', code: '51.04.01.1480.0001', name: 'LIRO光源支架', spec: '1080.7X67X6.9', surface: '', unit: '', weightPerMeter: 0, unitPrice: 7.8, customer: '江门深华港湾照明有限公司' },
+  { id: 'dp405', code: '304 -16不锈钢', name: '十字圆头半牙螺钉', spec: 'M5X 16', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.14, customer: '佛山市奕旺照明科技有限公司' },
+  { id: 'dp406', code: '304 -17不锈钢', name: '十字圆头半牙螺钉', spec: 'M5X 17', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.14, customer: '佛山市奕旺照明科技有限公司' },
+  { id: 'dp407', code: '27.8*68', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 8.5, customer: '' },
+  { id: 'dp408', code: '25.8*68', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 7, customer: '' },
+  { id: 'dp409', code: '31*21', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2, customer: '' },
+  { id: 'dp410', code: '48*35', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 9, customer: '' },
+  { id: 'dp411', code: '48*58', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 6.8, customer: '' },
+  { id: 'dp412', code: '48*60', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 9, customer: '' },
+  { id: 'dp413', code: '31*58', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 5.5, customer: '' },
+  { id: 'dp414', code: '31*55', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 6.5, customer: '' },
+  { id: 'dp415', code: '31*35', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 8, customer: '' },
+  { id: 'dp416', code: '36*21', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 3, customer: '' },
+  { id: 'dp417', code: '33.8*78.1', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 10.5, customer: '' },
+  { id: 'dp418', code: '36*52', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 6, customer: '' },
+  { id: 'dp419', code: '27.8*78.1样品', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp420', code: '36*21样品', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp421', code: 'LZ-010', name: 'U型制动钳', spec: '33.3*8.3*18', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.7, customer: '江苏镭科照明科技有限公司' },
+  { id: 'dp422', code: 'YL-872', name: '带挂钩的铝块', spec: '20.4*20.2*99.6', surface: '', unit: '', weightPerMeter: 0, unitPrice: 4.98, customer: '江苏镭科照明科技有限公司' },
+  { id: 'dp423', code: 'LZ-012', name: '卡箍用卡扣', spec: '42*20.8*10', surface: '', unit: '', weightPerMeter: 0, unitPrice: 125, customer: '江苏镭科照明科技有限公司' },
+  { id: 'dp424', code: 'YL-874', name: '只型铝板', spec: '70*49.4*100.2', surface: '', unit: '', weightPerMeter: 0, unitPrice: 9.6, customer: '江苏镭科照明科技有限公司' },
+  { id: 'dp425', code: 'YL-874-46', name: '铝支架', spec: '70*49.4*46', surface: '', unit: '', weightPerMeter: 0, unitPrice: 9.25, customer: '江苏镭科照明科技有限公司' },
+  { id: 'dp426', code: 'LZ-008', name: '快速固定支架1孔', spec: '35*35*200', surface: '', unit: '', weightPerMeter: 0, unitPrice: 5.78, customer: '江苏镭科照明科技有限公司' },
+  { id: 'dp427', code: 'LZ-009', name: '快速固定支架2孔', spec: '35*35*200', surface: '', unit: '', weightPerMeter: 0, unitPrice: 5.67, customer: '江苏镭科照明科技有限公司' },
+  { id: 'dp428', code: 'BL-003-2000', name: '小边框', spec: '51.8*11.1*2000', surface: '', unit: '', weightPerMeter: 0, unitPrice: 10, customer: '东莞市百川慧通科技有限公司' },
+  { id: 'dp429', code: 'YL-107-1', name: '堵头+地线孔', spec: '95*13*50', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '东莞市莱斯特电源科技有限公司' },
+  { id: 'dp430', code: 'YL-107-2', name: '堵头', spec: '95*13*50', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '东莞市莱斯特电源科技有限公司' },
+  { id: 'dp431', code: 'YL-108-260', name: '盖板', spec: '260*80*3', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '东莞市莱斯特电源科技有限公司' },
+  { id: 'dp432', code: '外径46.80*59.30（7.8内孔）', name: '碗', spec: 'ø46.8*59.3', surface: '', unit: '', weightPerMeter: 0, unitPrice: 11, customer: '廖先生' },
+  { id: 'dp433', code: '外径46.80*59.30（9.0内孔）', name: '碗', spec: 'ø46.8*59.3', surface: '', unit: '', weightPerMeter: 0, unitPrice: 11, customer: '' },
+  { id: 'dp434', code: '外径50*40（9.0孔）', name: '碗', spec: 'ø50*40', surface: '', unit: '', weightPerMeter: 0, unitPrice: 14.6, customer: '' },
+  { id: 'dp435', code: '外径50*40（7.8孔）', name: '碗', spec: 'ø50*40', surface: '', unit: '', weightPerMeter: 0, unitPrice: 14.6, customer: '' },
+  { id: 'dp436', code: '外径50*13', name: '大接头', spec: 'ø50*13', surface: '', unit: '', weightPerMeter: 0, unitPrice: 8.6, customer: '' },
+  { id: 'dp437', code: '外径50*147.5', name: '长管', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 19, customer: '' },
+  { id: 'dp438', code: '外径50*127.5', name: '短管', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 18, customer: '' },
+  { id: 'dp439', code: '外径28.9*67', name: '接头', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 13, customer: '' },
+  { id: 'dp440', code: '外径31*21', name: '堵头', spec: 'ø31*21', surface: '', unit: '', weightPerMeter: 0, unitPrice: 3.5, customer: '' },
+  { id: 'dp441', code: 'LZ-006', name: '铝架配件', spec: '54.5*27.3*50', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2.8, customer: '江苏镭科照明科技有限公司' },
+  { id: 'dp442', code: '51.04.01.1524.0001', name: '黄灯管-铝型材', spec: '1135x23.8x11', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '江门深华港湾照明有限公司' },
+  { id: 'dp443', code: '外径28.9*59', name: '接头', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 13, customer: '' },
+  { id: 'dp444', code: '外径39*59.30（7.8内孔）', name: '碗', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 10, customer: '' },
+  { id: 'dp445', code: '外径42*40（7.8孔）', name: '', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 13.4, customer: '' },
+  { id: 'dp446', code: '外径42*13', name: '小接头', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 7.5, customer: '' },
+  { id: 'dp447', code: '外径42*145.70', name: '小长管', spec: '', surface: '', unit: '', weightPerMeter: 0, unitPrice: 16, customer: '' },
+  { id: 'dp448', code: 'YL-871-200', name: '电源外壳', spec: '39.6*21.33*200', surface: '', unit: '', weightPerMeter: 0, unitPrice: 1.91, customer: '' },
+  { id: 'dp449', code: 'YL-054-65', name: '电源外壳', spec: '20.3*29.3*65', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.59, customer: '' },
+  { id: 'dp450', code: 'YL-871-堵头', name: '堵头', spec: '39.6*21.33*13', surface: '', unit: '', weightPerMeter: 0, unitPrice: 0.1, customer: '' },
+  { id: 'dp451', code: 'YL-876-72', name: '带底盖电源盒', spec: '40*23*72', surface: '', unit: '', weightPerMeter: 0, unitPrice: 2.05, customer: '' },
+  { id: 'dp452', code: '51.04.01.1522.0001', name: 'LIFA-4OW滑轨', spec: '60x23x7.2mm,', surface: '氧化雾银', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp453', code: '51.04.01.1523.0001', name: 'LIFA一15OW滑轨', spec: '80x23x7.2mm,', surface: '氧化雾银', unit: '', weightPerMeter: 0, unitPrice: 0, customer: '' },
+  { id: 'dp454', code: 'yl-424', name: '散热器', spec: '130.7*38.4*219', surface: '氧化砂银', unit: '', weightPerMeter: 0, unitPrice: 97.5, customer: '' },
+  { id: 'dp455', code: 'YL-054-220', name: '电源外壳', spec: '20.3*29.3*220', surface: '', unit: '', weightPerMeter: 0, unitPrice: 3, customer: '' },
 ];
 
-// 送货单明细
-export interface DeliveryNoteItem {
+export interface DeliveryItem {
   id: string;
-  productCode: string;
+  materialCode: string;
   productName: string;
   spec: string;
-  surface: string;
   unit: string;
-  quantity: number;
-  length: number;
-  weightPerMeter: number;
-  weight: number;
+  qty: number;
+  surface: string;
   unitPrice: number;
   amount: number;
   remark: string;
 }
 
-// 送货单
 export interface DeliveryNote {
   id: string;
+  noteNo: string;
+  date: string;
+  customer: string;
   orderNo: string;
+  items: DeliveryItem[];
+  reconciled: string;
   company: string;
-  customerId: string;
-  customerName: string;
-  customerAddress: string;
-  customerContact: string;
-  customerPhone: string;
-  orderDate: string;
-  items: DeliveryNoteItem[];
-  totalWeight: number;
-  totalAmount: number;
-  reconcileStatus: string;
-  remark: string;
-  createdAt: string;
-  updatedAt: string;
 }
 
-export const seedDeliveryNotes: DeliveryNote[] = [
-  { id: "dn1", orderNo: "BL-20250123-001", company: "佛山市质稳五金有限公司", customerId: "c1", customerName: "佛山市南海区光明灯饰有限公司", customerAddress: "佛山市南海区工业区82栋4号", customerContact: "张经理", customerPhone: "13846913810", orderDate: "2025-01-23", items: [{ id: "di1", productCode: "GZ-138", productName: "吊灯外壳", spec: "80*84", surface: "拉丝铁灰", unit: "个", quantity: 40, length: 3612, weightPerMeter: 2.149, weight: 310.488, unitPrice: 11.74, amount: 3645.13, remark: "" }], totalWeight: 310.488, totalAmount: 3645.13, reconcileStatus: "已对帐", remark: "", createdAt: "2025-01-23T08:00:00.000Z", updatedAt: "2025-01-23T08:00:00.000Z" },
-  { id: "dn2", orderNo: "BL-20250706-002", company: "佛山市碧利莱照明有限公司", customerId: "c2", customerName: "中山市古镇华艺照明电器厂", customerAddress: "佛山市顺德区科技路12栋7号", customerContact: "李总", customerPhone: "15977827638", orderDate: "2025-07-06", items: [{ id: "di2", productCode: "ZW-379", productName: "投光灯壳", spec: "65*79", surface: "拉丝金色", unit: "支", quantity: 100, length: 3094, weightPerMeter: 0.928, weight: 287.123, unitPrice: 8.17, amount: 2345.79, remark: "" }, { id: "di3", productCode: "LD-185", productName: "防水盖", spec: "130*61", surface: "拉丝亮银", unit: "米", quantity: 28, length: 1249, weightPerMeter: 1.141, weight: 39.903, unitPrice: 33.07, amount: 1319.59, remark: "" }], totalWeight: 327.026, totalAmount: 3665.38, reconcileStatus: "未对帐", remark: "", createdAt: "2025-07-06T08:00:00.000Z", updatedAt: "2025-07-06T08:00:00.000Z" },
-  { id: "dn3", orderNo: "BL-20250106-003", company: "佛山市质稳五金有限公司", customerId: "c3", customerName: "深圳市龙岗区盛达五金制品厂", customerAddress: "中山市创业大道1栋6号", customerContact: "王先生", customerPhone: "18855667651", orderDate: "2025-01-06", items: [{ id: "di4", productCode: "GZ-228", productName: "铝扁条", spec: "30*7", surface: "银白氧化", unit: "个", quantity: 93, length: 2709, weightPerMeter: 1.668, weight: 420.231, unitPrice: 43.07, amount: 18099.35, remark: "" }, { id: "di5", productCode: "ZG-053", productName: "装饰盖", spec: "141*5", surface: "砂银氧化", unit: "米", quantity: 34, length: 1215, weightPerMeter: 0.45, weight: 18.59, unitPrice: 52.04, amount: 967.42, remark: "" }, { id: "di6", productCode: "CT-096", productName: "衣柜灯框", spec: "22*82", surface: "氟碳喷涂", unit: "个", quantity: 111, length: 4176, weightPerMeter: 1.416, weight: 656.367, unitPrice: 8.46, amount: 5552.86, remark: "" }], totalWeight: 1095.188, totalAmount: 24619.63, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-01-06T08:00:00.000Z", updatedAt: "2025-01-06T08:00:00.000Z" },
-  { id: "dn4", orderNo: "BL-20250527-004", company: "佛山市碧利莱照明有限公司", customerId: "c4", customerName: "广州市番禺区大石永丰铝材店", customerAddress: "广州市产业园78栋9号", customerContact: "陈小姐", customerPhone: "13871662963", orderDate: "2025-05-27", items: [{ id: "di7", productCode: "ZG-053", productName: "装饰盖", spec: "141*5", surface: "砂银氧化", unit: "米", quantity: 7, length: 1234, weightPerMeter: 0.45, weight: 3.887, unitPrice: 52.04, amount: 202.28, remark: "" }, { id: "di8", productCode: "SM-182", productName: "接线盒", spec: "29*27", surface: "铁灰氧化", unit: "米", quantity: 142, length: 1262, weightPerMeter: 0.577, weight: 103.401, unitPrice: 51.27, amount: 5301.37, remark: "" }, { id: "di9", productCode: "CT-306", productName: "接线盒", spec: "130*41", surface: "阳极氧化", unit: "个", quantity: 154, length: 3157, weightPerMeter: 0.224, weight: 108.904, unitPrice: 36.21, amount: 3943.41, remark: "" }, { id: "di10", productCode: "ZG-443", productName: "水下灯壳", spec: "131*39", surface: "拉丝金色", unit: "米", quantity: 99, length: 601, weightPerMeter: 0.843, weight: 50.158, unitPrice: 59.37, amount: 2977.88, remark: "" }], totalWeight: 266.35, totalAmount: 12424.94, reconcileStatus: "已对帐", remark: "", createdAt: "2025-05-27T08:00:00.000Z", updatedAt: "2025-05-27T08:00:00.000Z" },
-  { id: "dn5", orderNo: "BL-20250320-005", company: "佛山市质稳五金有限公司", customerId: "c5", customerName: "东莞市石碣镇鑫达电子厂", customerAddress: "深圳市经济开发区91栋3号", customerContact: "刘先生", customerPhone: "13898753260", orderDate: "2025-03-20", items: [{ id: "di11", productCode: "ZW-199", productName: "壁灯外壳", spec: "48*47", surface: "喷涂砂黑", unit: "支", quantity: 200, length: 1193, weightPerMeter: 2.39, weight: 570.254, unitPrice: 24.2, amount: 13800.15, remark: "" }, { id: "di12", productCode: "SM-372", productName: "吊挂件", spec: "29*77", surface: "银白氧化", unit: "个", quantity: 144, length: 2488, weightPerMeter: 1.591, weight: 570.011, unitPrice: 48.11, amount: 27423.23, remark: "" }, { id: "di13", productCode: "ZG-293", productName: "铝基板", spec: "113*43", surface: "砂银氧化", unit: "米", quantity: 134, length: 1889, weightPerMeter: 0.895, weight: 226.548, unitPrice: 54.02, amount: 12238.12, remark: "" }, { id: "di14", productCode: "BL-351", productName: "铝圆管", spec: "19*55", surface: "粉末喷涂", unit: "个", quantity: 98, length: 1888, weightPerMeter: 1.492, weight: 276.056, unitPrice: 55.74, amount: 15387.36, remark: "" }], totalWeight: 1642.869, totalAmount: 68848.86, reconcileStatus: "未对帐", remark: "", createdAt: "2025-03-20T08:00:00.000Z", updatedAt: "2025-03-20T08:00:00.000Z" },
-  { id: "dn6", orderNo: "BL-20250209-006", company: "佛山市碧利莱照明有限公司", customerId: "c6", customerName: "佛山市顺德区勒流镇恒丰五金厂", customerAddress: "东莞市商贸城48栋12号", customerContact: "黄经理", customerPhone: "15999949389", orderDate: "2025-02-09", items: [{ id: "di15", productCode: "LD-155", productName: "导轨灯壳", spec: "78*8", surface: "拉丝金色", unit: "米", quantity: 69, length: 4539, weightPerMeter: 3.255, weight: 1019.437, unitPrice: 55.28, amount: 56354.48, remark: "" }, { id: "di16", productCode: "LD-075", productName: "壁灯外壳", spec: "144*63", surface: "拉丝金色", unit: "个", quantity: 17, length: 1869, weightPerMeter: 3.066, weight: 97.416, unitPrice: 33.1, amount: 3224.47, remark: "" }, { id: "di17", productCode: "ZG-223", productName: "台灯外壳", spec: "111*69", surface: "粉末喷涂", unit: "支", quantity: 71, length: 3949, weightPerMeter: 3.26, weight: 914.036, unitPrice: 31.65, amount: 28929.24, remark: "" }], totalWeight: 2030.889, totalAmount: 88508.19, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-02-09T08:00:00.000Z", updatedAt: "2025-02-09T08:00:00.000Z" },
-  { id: "dn7", orderNo: "BL-20250322-007", company: "佛山市质稳五金有限公司", customerId: "c7", customerName: "江门市蓬江区天河照明有限公司", customerAddress: "江门市五金市场82栋18号", customerContact: "林先生", customerPhone: "15953524491", orderDate: "2025-03-22", items: [{ id: "di18", productCode: "BL-401", productName: "明装灯框", spec: "22*49", surface: "坯料", unit: "米", quantity: 20, length: 3458, weightPerMeter: 2.392, weight: 165.431, unitPrice: 39.68, amount: 6564.3, remark: "" }, { id: "di19", productCode: "ZW-129", productName: "线条灯壳", spec: "13*50", surface: "坯料", unit: "个", quantity: 64, length: 5620, weightPerMeter: 2.331, weight: 838.414, unitPrice: 9.47, amount: 7939.78, remark: "" }, { id: "di20", productCode: "HP-254", productName: "洗墙灯壳", spec: "85*44", surface: "电泳金", unit: "米", quantity: 153, length: 5551, weightPerMeter: 1.158, weight: 983.493, unitPrice: 12.56, amount: 12352.67, remark: "" }, { id: "di21", productCode: "BL-101", productName: "铝角码", spec: "103*98", surface: "砂银氧化", unit: "米", quantity: 118, length: 1376, weightPerMeter: 2.771, weight: 449.922, unitPrice: 9.9, amount: 4454.23, remark: "" }], totalWeight: 2437.26, totalAmount: 31310.98, reconcileStatus: "已对帐", remark: "", createdAt: "2025-03-22T08:00:00.000Z", updatedAt: "2025-03-22T08:00:00.000Z" },
-  { id: "dn8", orderNo: "BL-20250208-008", company: "佛山市碧利莱照明有限公司", customerId: "c8", customerName: "惠州市惠城区宏达五金电器", customerAddress: "惠州市铝材城28栋16号", customerContact: "吴小姐", customerPhone: "18896282117", orderDate: "2025-02-08", items: [{ id: "di22", productCode: "HP-004", productName: "灯管外壳", spec: "78*46", surface: "银白氧化", unit: "支", quantity: 102, length: 3221, weightPerMeter: 1.553, weight: 510.226, unitPrice: 49.67, amount: 25342.93, remark: "" }, { id: "di23", productCode: "BL-431", productName: "驱动壳", spec: "115*6", surface: "粉末喷涂", unit: "米", quantity: 159, length: 3612, weightPerMeter: 1.733, weight: 995.276, unitPrice: 8.38, amount: 8340.41, remark: "" }, { id: "di24", productCode: "SM-412", productName: "铝方管", spec: "87*6", surface: "高光白", unit: "支", quantity: 85, length: 4106, weightPerMeter: 0.771, weight: 269.087, unitPrice: 59.7, amount: 16064.49, remark: "" }], totalWeight: 1774.589, totalAmount: 49747.83, reconcileStatus: "未对帐", remark: "", createdAt: "2025-02-08T08:00:00.000Z", updatedAt: "2025-02-08T08:00:00.000Z" },
-  { id: "dn9", orderNo: "BL-20250331-009", company: "佛山市质稳五金有限公司", customerId: "c9", customerName: "珠海市香洲区精锐铝业公司", customerAddress: "珠海市灯饰广场75栋13号", customerContact: "何总", customerPhone: "13739436733", orderDate: "2025-03-31", items: [{ id: "di25", productCode: "GZ-418", productName: "散热片", spec: "130*45", surface: "阳极氧化", unit: "支", quantity: 167, length: 5369, weightPerMeter: 3.096, weight: 2775.945, unitPrice: 34.56, amount: 95936.66, remark: "" }, { id: "di26", productCode: "HS-070", productName: "地埋灯壳", spec: "108*34", surface: "铁灰氧化", unit: "支", quantity: 77, length: 3126, weightPerMeter: 3.434, weight: 826.571, unitPrice: 21.61, amount: 17862.2, remark: "" }, { id: "di27", productCode: "ZW-309", productName: "防水盖", spec: "59*51", surface: "砂银氧化", unit: "个", quantity: 178, length: 2145, weightPerMeter: 0.206, weight: 78.653, unitPrice: 10.92, amount: 858.89, remark: "" }, { id: "di28", productCode: "CT-246", productName: "感应器壳", spec: "111*74", surface: "铁灰氧化", unit: "个", quantity: 81, length: 1955, weightPerMeter: 1.139, weight: 180.366, unitPrice: 25.67, amount: 4630.0, remark: "" }], totalWeight: 3861.535, totalAmount: 119287.75, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-03-31T08:00:00.000Z", updatedAt: "2025-03-31T08:00:00.000Z" },
-  { id: "dn10", orderNo: "BL-20250416-010", company: "佛山市碧利莱照明有限公司", customerId: "c10", customerName: "汕头市潮阳区金浦五金加工厂", customerAddress: "汕头市制造业基地9栋13号", customerContact: "梁经理", customerPhone: "18889978790", orderDate: "2025-04-16", items: [{ id: "di29", productCode: "HS-150", productName: "T8灯管壳", spec: "89*50", surface: "铁灰氧化", unit: "个", quantity: 189, length: 5684, weightPerMeter: 0.227, weight: 243.861, unitPrice: 24.39, amount: 5947.77, remark: "" }, { id: "di30", productCode: "SM-252", productName: "灯管外壳", spec: "30*60", surface: "高光白", unit: "个", quantity: 148, length: 2485, weightPerMeter: 2.814, weight: 1034.933, unitPrice: 49.44, amount: 51167.09, remark: "" }, { id: "di31", productCode: "YL-167", productName: "铝槽", spec: "64*22", surface: "喷涂砂黑", unit: "米", quantity: 97, length: 2796, weightPerMeter: 0.239, weight: 64.82, unitPrice: 19.65, amount: 1273.71, remark: "" }], totalWeight: 1343.614, totalAmount: 58388.57, reconcileStatus: "已对帐", remark: "", createdAt: "2025-04-16T08:00:00.000Z", updatedAt: "2025-04-16T08:00:00.000Z" },
-  { id: "dn11", orderNo: "BL-20250802-011", company: "佛山市质稳五金有限公司", customerId: "c11", customerName: "佛山市三水区西南街永盛铝材", customerAddress: "清远市工业区38栋14号", customerContact: "谢先生", customerPhone: "15870897765", orderDate: "2025-08-02", items: [{ id: "di32", productCode: "YL-187", productName: "LED灯体外壳", spec: "125*9", surface: "拉丝金色", unit: "支", quantity: 30, length: 5119, weightPerMeter: 1.8, weight: 276.426, unitPrice: 25.69, amount: 7101.38, remark: "" }, { id: "di33", productCode: "ZG-103", productName: "铝圆管", spec: "148*51", surface: "喷涂砂黑", unit: "支", quantity: 152, length: 4969, weightPerMeter: 1.483, weight: 1120.092, unitPrice: 19.45, amount: 21785.79, remark: "" }, { id: "di34", productCode: "ZG-093", productName: "导轨灯壳", spec: "108*66", surface: "电泳黑", unit: "个", quantity: 175, length: 5006, weightPerMeter: 2.966, weight: 2598.364, unitPrice: 19.36, amount: 50304.33, remark: "" }, { id: "di35", productCode: "HP-014", productName: "吊灯外壳", spec: "145*49", surface: "电泳金", unit: "米", quantity: 187, length: 4281, weightPerMeter: 2.341, weight: 1874.081, unitPrice: 29.03, amount: 54404.57, remark: "" }], totalWeight: 5868.963, totalAmount: 133596.07, reconcileStatus: "未对帐", remark: "", createdAt: "2025-08-02T08:00:00.000Z", updatedAt: "2025-08-02T08:00:00.000Z" },
-  { id: "dn12", orderNo: "BL-20250705-012", company: "佛山市碧利莱照明有限公司", customerId: "c12", customerName: "清远市清城区鑫源五金厂", customerAddress: "肇庆市科技路20栋12号", customerContact: "郑小姐", customerPhone: "15882394227", orderDate: "2025-07-05", items: [{ id: "di36", productCode: "LD-225", productName: "铝角码", spec: "35*96", surface: "坯料", unit: "个", quantity: 75, length: 1066, weightPerMeter: 0.825, weight: 65.959, unitPrice: 26.17, amount: 1726.15, remark: "" }, { id: "di37", productCode: "HS-420", productName: "固定座", spec: "47*7", surface: "银白氧化", unit: "个", quantity: 105, length: 4590, weightPerMeter: 1.991, weight: 959.562, unitPrice: 20.61, amount: 19776.57, remark: "" }], totalWeight: 1025.521, totalAmount: 21502.72, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-07-05T08:00:00.000Z", updatedAt: "2025-07-05T08:00:00.000Z" },
-  { id: "dn13", orderNo: "BL-20250209-013", company: "佛山市质稳五金有限公司", customerId: "c13", customerName: "肇庆市端州区华兴灯饰配件", customerAddress: "韶关市创业大道8栋8号", customerContact: "罗总", customerPhone: "13921496211", orderDate: "2025-02-09", items: [{ id: "di38", productCode: "HP-124", productName: "吊挂件", spec: "42*77", surface: "高光白", unit: "支", quantity: 65, length: 5895, weightPerMeter: 2.764, weight: 1059.096, unitPrice: 21.88, amount: 23173.02, remark: "" }, { id: "di39", productCode: "ZW-079", productName: "轨道灯壳", spec: "91*85", surface: "粉末喷涂", unit: "支", quantity: 184, length: 3966, weightPerMeter: 3.015, weight: 2200.178, unitPrice: 29.66, amount: 65257.28, remark: "" }, { id: "di40", productCode: "LD-405", productName: "橱柜灯壳", spec: "128*12", surface: "砂银氧化", unit: "个", quantity: 97, length: 1105, weightPerMeter: 1.088, weight: 116.617, unitPrice: 48.33, amount: 5636.1, remark: "" }], totalWeight: 3375.891, totalAmount: 94066.4, reconcileStatus: "已对帐", remark: "", createdAt: "2025-02-09T08:00:00.000Z", updatedAt: "2025-02-09T08:00:00.000Z" },
-  { id: "dn14", orderNo: "BL-20250429-014", company: "佛山市碧利莱照明有限公司", customerId: "c14", customerName: "韶关市武江区明辉五金店", customerAddress: "梅州市产业园78栋14号", customerContact: "韩经理", customerPhone: "15982383095", orderDate: "2025-04-29", items: [{ id: "di41", productCode: "ZW-299", productName: "堵头", spec: "125*36", surface: "拉丝金色", unit: "米", quantity: 103, length: 4877, weightPerMeter: 0.884, weight: 444.061, unitPrice: 14.98, amount: 6652.03, remark: "" }, { id: "di42", productCode: "HS-260", productName: "泛光灯壳", spec: "42*13", surface: "银白氧化", unit: "米", quantity: 178, length: 3926, weightPerMeter: 2.389, weight: 1669.5, unitPrice: 32.98, amount: 55060.11, remark: "" }, { id: "di43", productCode: "ZW-279", productName: "导轨灯壳", spec: "28*62", surface: "喷涂砂黑", unit: "个", quantity: 10, length: 3445, weightPerMeter: 0.304, weight: 10.473, unitPrice: 63.43, amount: 664.3, remark: "" }, { id: "di44", productCode: "HS-360", productName: "端盖", spec: "34*28", surface: "喷涂白", unit: "个", quantity: 138, length: 5364, weightPerMeter: 1.828, weight: 1353.144, unitPrice: 12.94, amount: 17509.68, remark: "" }], totalWeight: 3477.178, totalAmount: 79886.12, reconcileStatus: "未对帐", remark: "", createdAt: "2025-04-29T08:00:00.000Z", updatedAt: "2025-04-29T08:00:00.000Z" },
-  { id: "dn15", orderNo: "BL-20250617-015", company: "佛山市质稳五金有限公司", customerId: "c15", customerName: "梅州市梅县区恒通铝业", customerAddress: "阳江市经济开发区9栋11号", customerContact: "唐先生", customerPhone: "13888961459", orderDate: "2025-06-17", items: [{ id: "di45", productCode: "CT-056", productName: "反光杯", spec: "78*75", surface: "喷涂白", unit: "米", quantity: 197, length: 2533, weightPerMeter: 1.575, weight: 785.927, unitPrice: 10.94, amount: 8598.04, remark: "" }], totalWeight: 785.927, totalAmount: 8598.04, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-06-17T08:00:00.000Z", updatedAt: "2025-06-17T08:00:00.000Z" },
-  { id: "dn16", orderNo: "BL-20250622-016", company: "佛山市碧利莱照明有限公司", customerId: "c16", customerName: "阳江市江城区利达五金厂", customerAddress: "湛江市商贸城43栋3号", customerContact: "曹小姐", customerPhone: "15947376585", orderDate: "2025-06-22", items: [{ id: "di46", productCode: "CT-086", productName: "软灯条槽", spec: "56*26", surface: "铁灰氧化", unit: "米", quantity: 166, length: 5519, weightPerMeter: 1.883, weight: 1725.118, unitPrice: 40.26, amount: 69453.25, remark: "" }, { id: "di47", productCode: "ZG-023", productName: "硬灯条壳", spec: "135*18", surface: "喷涂砂黑", unit: "米", quantity: 145, length: 5784, weightPerMeter: 1.058, weight: 887.323, unitPrice: 61.81, amount: 54845.43, remark: "" }, { id: "di48", productCode: "YL-347", productName: "台灯外壳", spec: "131*66", surface: "拉丝金色", unit: "米", quantity: 166, length: 3773, weightPerMeter: 2.302, weight: 1441.784, unitPrice: 58.2, amount: 83911.83, remark: "" }], totalWeight: 4054.225, totalAmount: 208210.51, reconcileStatus: "已对帐", remark: "", createdAt: "2025-06-22T08:00:00.000Z", updatedAt: "2025-06-22T08:00:00.000Z" },
-  { id: "dn17", orderNo: "BL-20250716-017", company: "佛山市质稳五金有限公司", customerId: "c17", customerName: "湛江市赤坎区鑫隆铝材", customerAddress: "茂名市五金市场25栋4号", customerContact: "许总", customerPhone: "13998447167", orderDate: "2025-07-16", items: [{ id: "di49", productCode: "GZ-408", productName: "床头灯框", spec: "104*16", surface: "喷涂白", unit: "个", quantity: 111, length: 1367, weightPerMeter: 0.323, weight: 49.011, unitPrice: 33.64, amount: 1648.73, remark: "" }, { id: "di50", productCode: "CT-006", productName: "洗墙灯壳", spec: "128*77", surface: "铁灰氧化", unit: "个", quantity: 26, length: 2619, weightPerMeter: 3.092, weight: 210.547, unitPrice: 21.9, amount: 4610.98, remark: "" }, { id: "di51", productCode: "HP-114", productName: "密封条", spec: "136*19", surface: "阳极氧化", unit: "个", quantity: 131, length: 4749, weightPerMeter: 3.315, weight: 2062.324, unitPrice: 25.35, amount: 52279.91, remark: "" }], totalWeight: 2321.882, totalAmount: 58539.62, reconcileStatus: "未对帐", remark: "", createdAt: "2025-07-16T08:00:00.000Z", updatedAt: "2025-07-16T08:00:00.000Z" },
-  { id: "dn18", orderNo: "BL-20250527-018", company: "佛山市碧利莱照明有限公司", customerId: "c18", customerName: "茂名市茂南区光华五金店", customerAddress: "揭阳市铝材城14栋8号", customerContact: "邓经理", customerPhone: "15935529407", orderDate: "2025-05-27", items: [{ id: "di52", productCode: "ZW-229", productName: "铝槽", spec: "150*98", surface: "砂银氧化", unit: "支", quantity: 96, length: 3704, weightPerMeter: 0.933, weight: 331.76, unitPrice: 55.59, amount: 18442.54, remark: "" }, { id: "di53", productCode: "GZ-238", productName: "密封条", spec: "21*86", surface: "电泳金", unit: "支", quantity: 198, length: 5321, weightPerMeter: 0.12, weight: 126.427, unitPrice: 57.78, amount: 7304.95, remark: "" }], totalWeight: 458.187, totalAmount: 25747.49, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-05-27T08:00:00.000Z", updatedAt: "2025-05-27T08:00:00.000Z" },
-  { id: "dn19", orderNo: "BL-20250630-019", company: "佛山市质稳五金有限公司", customerId: "c19", customerName: "揭阳市榕城区东升五金厂", customerAddress: "潮州市灯饰广场71栋4号", customerContact: "萧先生", customerPhone: "13897529405", orderDate: "2025-06-30", items: [{ id: "di54", productCode: "YL-177", productName: "装饰盖", spec: "89*100", surface: "坯料", unit: "个", quantity: 7, length: 4454, weightPerMeter: 1.432, weight: 44.647, unitPrice: 12.48, amount: 557.19, remark: "" }, { id: "di55", productCode: "HP-054", productName: "转角件", spec: "115*11", surface: "铁灰氧化", unit: "个", quantity: 76, length: 3907, weightPerMeter: 2.319, weight: 688.585, unitPrice: 38.93, amount: 26806.61, remark: "" }], totalWeight: 733.232, totalAmount: 27363.8, reconcileStatus: "已对帐", remark: "", createdAt: "2025-06-30T08:00:00.000Z", updatedAt: "2025-06-30T08:00:00.000Z" },
-  { id: "dn20", orderNo: "BL-20250828-020", company: "佛山市碧利莱照明有限公司", customerId: "c20", customerName: "潮州市湘桥区永丰铝业", customerAddress: "河源市制造业基地8栋6号", customerContact: "宋小姐", customerPhone: "18810289289", orderDate: "2025-08-28", items: [{ id: "di56", productCode: "HS-060", productName: "感应器壳", spec: "39*64", surface: "高光白", unit: "个", quantity: 187, length: 1660, weightPerMeter: 0.825, weight: 256.096, unitPrice: 55.96, amount: 14331.13, remark: "" }], totalWeight: 256.096, totalAmount: 14331.13, reconcileStatus: "未对帐", remark: "", createdAt: "2025-08-28T08:00:00.000Z", updatedAt: "2025-08-28T08:00:00.000Z" },
-  { id: "dn21", orderNo: "BL-20250404-021", company: "佛山市质稳五金有限公司", customerId: "c21", customerName: "河源市源城区宏达五金", customerAddress: "佛山市南海区工业区28栋2号", customerContact: "张经理", customerPhone: "13852091325", orderDate: "2025-04-04", items: [{ id: "di57", productCode: "CT-176", productName: "密封条", spec: "121*80", surface: "氟碳喷涂", unit: "米", quantity: 117, length: 2194, weightPerMeter: 1.557, weight: 399.679, unitPrice: 14.03, amount: 5607.5, remark: "" }, { id: "di58", productCode: "YL-267", productName: "筒灯外壳", spec: "124*32", surface: "拉丝金色", unit: "个", quantity: 124, length: 3353, weightPerMeter: 0.456, weight: 189.592, unitPrice: 52.17, amount: 9891.01, remark: "" }, { id: "di59", productCode: "HP-244", productName: "接线盒", spec: "127*9", surface: "银白氧化", unit: "支", quantity: 25, length: 4089, weightPerMeter: 0.268, weight: 27.396, unitPrice: 52.24, amount: 1431.17, remark: "" }], totalWeight: 616.667, totalAmount: 16929.68, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-04-04T08:00:00.000Z", updatedAt: "2025-04-04T08:00:00.000Z" },
-  { id: "dn22", orderNo: "BL-20250708-022", company: "佛山市碧利莱照明有限公司", customerId: "c22", customerName: "汕尾市城区鑫盛五金店", customerAddress: "佛山市顺德区科技路24栋3号", customerContact: "李总", customerPhone: "13941568532", orderDate: "2025-07-08", items: [{ id: "di60", productCode: "HP-164", productName: "铝方管", spec: "39*49", surface: "银白氧化", unit: "米", quantity: 18, length: 2959, weightPerMeter: 0.992, weight: 52.836, unitPrice: 51.03, amount: 2696.22, remark: "" }, { id: "di61", productCode: "ZG-023", productName: "硬灯条壳", spec: "135*18", surface: "喷涂砂黑", unit: "米", quantity: 182, length: 1442, weightPerMeter: 1.058, weight: 277.666, unitPrice: 61.81, amount: 17162.54, remark: "" }, { id: "di62", productCode: "SM-012", productName: "泛光灯壳", spec: "124*7", surface: "高光白", unit: "个", quantity: 88, length: 5808, weightPerMeter: 1.693, weight: 865.299, unitPrice: 48.58, amount: 42036.23, remark: "" }, { id: "di63", productCode: "CT-056", productName: "反光杯", spec: "78*75", surface: "喷涂白", unit: "米", quantity: 174, length: 1846, weightPerMeter: 1.575, weight: 505.896, unitPrice: 10.94, amount: 5534.5, remark: "" }], totalWeight: 1701.697, totalAmount: 67429.49, reconcileStatus: "已对帐", remark: "", createdAt: "2025-07-08T08:00:00.000Z", updatedAt: "2025-07-08T08:00:00.000Z" },
-  { id: "dn23", orderNo: "BL-20250831-023", company: "佛山市质稳五金有限公司", customerId: "c23", customerName: "云浮市云城区恒丰铝材", customerAddress: "中山市创业大道85栋19号", customerContact: "王先生", customerPhone: "13744999379", orderDate: "2025-08-31", items: [{ id: "di64", productCode: "LD-265", productName: "轨道灯壳", spec: "39*8", surface: "拉丝亮银", unit: "支", quantity: 45, length: 5021, weightPerMeter: 2.291, weight: 517.64, unitPrice: 22.23, amount: 11507.14, remark: "" }, { id: "di65", productCode: "SM-082", productName: "格栅灯框", spec: "35*86", surface: "阳极氧化", unit: "支", quantity: 85, length: 5086, weightPerMeter: 2.626, weight: 1135.246, unitPrice: 32.74, amount: 37167.95, remark: "" }], totalWeight: 1652.886, totalAmount: 48675.09, reconcileStatus: "未对帐", remark: "", createdAt: "2025-08-31T08:00:00.000Z", updatedAt: "2025-08-31T08:00:00.000Z" },
-  { id: "dn24", orderNo: "BL-20250424-024", company: "佛山市碧利莱照明有限公司", customerId: "c24", customerName: "佛山市南海区丹灶镇五金城", customerAddress: "广州市产业园2栋15号", customerContact: "陈小姐", customerPhone: "13919832887", orderDate: "2025-04-24", items: [{ id: "di66", productCode: "ZW-119", productName: "灯座", spec: "123*61", surface: "喷涂砂黑", unit: "米", quantity: 104, length: 5658, weightPerMeter: 0.163, weight: 95.914, unitPrice: 29.12, amount: 2793.02, remark: "" }, { id: "di67", productCode: "LD-095", productName: "橱柜灯壳", spec: "15*89", surface: "粉末喷涂", unit: "米", quantity: 48, length: 5746, weightPerMeter: 1.071, weight: 295.39, unitPrice: 47.86, amount: 14137.37, remark: "" }, { id: "di68", productCode: "YL-337", productName: "天花灯框", spec: "107*55", surface: "坯料", unit: "支", quantity: 111, length: 3740, weightPerMeter: 0.47, weight: 195.116, unitPrice: 46.57, amount: 9086.55, remark: "" }, { id: "di69", productCode: "LD-015", productName: "吸顶灯框", spec: "94*50", surface: "粉末喷涂", unit: "个", quantity: 189, length: 5530, weightPerMeter: 1.518, weight: 1586.568, unitPrice: 50.52, amount: 80153.42, remark: "" }], totalWeight: 2172.988, totalAmount: 106170.36, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-04-24T08:00:00.000Z", updatedAt: "2025-04-24T08:00:00.000Z" },
-  { id: "dn25", orderNo: "BL-20250819-025", company: "佛山市质稳五金有限公司", customerId: "c25", customerName: "中山市小榄镇永盛灯饰", customerAddress: "深圳市经济开发区21栋15号", customerContact: "刘先生", customerPhone: "13692097999", orderDate: "2025-08-19", items: [{ id: "di70", productCode: "BL-231", productName: "铝基板", spec: "117*86", surface: "喷涂砂黑", unit: "个", quantity: 152, length: 4018, weightPerMeter: 1.089, weight: 665.092, unitPrice: 10.72, amount: 7129.79, remark: "" }, { id: "di71", productCode: "HS-200", productName: "吊灯外壳", spec: "99*44", surface: "喷涂白", unit: "米", quantity: 2, length: 2259, weightPerMeter: 0.331, weight: 1.495, unitPrice: 45.83, amount: 68.52, remark: "" }], totalWeight: 666.587, totalAmount: 7198.31, reconcileStatus: "已对帐", remark: "", createdAt: "2025-08-19T08:00:00.000Z", updatedAt: "2025-08-19T08:00:00.000Z" },
-  { id: "dn26", orderNo: "BL-20250226-026", company: "佛山市碧利莱照明有限公司", customerId: "c26", customerName: "广州市白云区太和镇铝材市场", customerAddress: "东莞市商贸城20栋9号", customerContact: "黄经理", customerPhone: "13691178885", orderDate: "2025-02-26", items: [{ id: "di72", productCode: "CT-386", productName: "吊灯外壳", spec: "55*73", surface: "阳极氧化", unit: "米", quantity: 181, length: 1012, weightPerMeter: 2.305, weight: 422.211, unitPrice: 27.82, amount: 11745.91, remark: "" }, { id: "di73", productCode: "CT-296", productName: "固定座", spec: "91*98", surface: "喷涂白", unit: "米", quantity: 27, length: 4898, weightPerMeter: 0.546, weight: 72.206, unitPrice: 57.1, amount: 4122.96, remark: "" }, { id: "di74", productCode: "CT-096", productName: "衣柜灯框", spec: "22*82", surface: "氟碳喷涂", unit: "个", quantity: 94, length: 3170, weightPerMeter: 1.416, weight: 421.94, unitPrice: 8.46, amount: 3569.61, remark: "" }], totalWeight: 916.357, totalAmount: 19438.48, reconcileStatus: "未对帐", remark: "", createdAt: "2025-02-26T08:00:00.000Z", updatedAt: "2025-02-26T08:00:00.000Z" },
-  { id: "dn27", orderNo: "BL-20250224-027", company: "佛山市质稳五金有限公司", customerId: "c27", customerName: "深圳市宝安新区鑫达五金", customerAddress: "江门市五金市场36栋2号", customerContact: "林先生", customerPhone: "13854769200", orderDate: "2025-02-24", items: [{ id: "di75", productCode: "ZW-059", productName: "驱动壳", spec: "114*16", surface: "拉丝金色", unit: "米", quantity: 68, length: 5994, weightPerMeter: 0.596, weight: 242.925, unitPrice: 39.4, amount: 9571.25, remark: "" }, { id: "di76", productCode: "SM-442", productName: "地埋灯壳", spec: "145*10", surface: "拉丝铁灰", unit: "支", quantity: 126, length: 4823, weightPerMeter: 3.422, weight: 2079.543, unitPrice: 63.51, amount: 132071.78, remark: "" }, { id: "di77", productCode: "GZ-328", productName: "面板灯框", spec: "130*99", surface: "喷涂白", unit: "支", quantity: 81, length: 5390, weightPerMeter: 2.432, weight: 1061.787, unitPrice: 31.39, amount: 33329.49, remark: "" }, { id: "di78", productCode: "ZW-199", productName: "壁灯外壳", spec: "48*47", surface: "喷涂砂黑", unit: "支", quantity: 157, length: 3715, weightPerMeter: 2.39, weight: 1393.979, unitPrice: 24.2, amount: 33734.29, remark: "" }], totalWeight: 4778.234, totalAmount: 208706.81, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-02-24T08:00:00.000Z", updatedAt: "2025-02-24T08:00:00.000Z" },
-  { id: "dn28", orderNo: "BL-20250604-028", company: "佛山市碧利莱照明有限公司", customerId: "c28", customerName: "东莞市常平镇光华铝材", customerAddress: "惠州市铝材城89栋5号", customerContact: "吴小姐", customerPhone: "13859555330", orderDate: "2025-06-04", items: [{ id: "di79", productCode: "ZW-179", productName: "透镜框", spec: "140*29", surface: "喷砂氧化", unit: "米", quantity: 91, length: 4250, weightPerMeter: 1.811, weight: 700.404, unitPrice: 14.5, amount: 10155.86, remark: "" }], totalWeight: 700.404, totalAmount: 10155.86, reconcileStatus: "已对帐", remark: "", createdAt: "2025-06-04T08:00:00.000Z", updatedAt: "2025-06-04T08:00:00.000Z" },
-  { id: "dn29", orderNo: "BL-20250612-029", company: "佛山市质稳五金有限公司", customerId: "c29", customerName: "佛山市高明区荷城五金厂", customerAddress: "珠海市灯饰广场27栋8号", customerContact: "何总", customerPhone: "13957469942", orderDate: "2025-06-12", items: [{ id: "di80", productCode: "YL-417", productName: "铝基板", spec: "102*70", surface: "坯料", unit: "个", quantity: 173, length: 2936, weightPerMeter: 2.288, weight: 1162.139, unitPrice: 25.58, amount: 29727.52, remark: "" }, { id: "di81", productCode: "LD-315", productName: "线条灯壳", spec: "131*71", surface: "拉丝金色", unit: "个", quantity: 152, length: 1194, weightPerMeter: 0.523, weight: 94.918, unitPrice: 26.98, amount: 2560.89, remark: "" }], totalWeight: 1257.057, totalAmount: 32288.41, reconcileStatus: "未对帐", remark: "", createdAt: "2025-06-12T08:00:00.000Z", updatedAt: "2025-06-12T08:00:00.000Z" },
-  { id: "dn30", orderNo: "BL-20250626-030", company: "佛山市碧利莱照明有限公司", customerId: "c30", customerName: "江门市新会区会城灯饰配件", customerAddress: "汕头市制造业基地95栋11号", customerContact: "梁经理", customerPhone: "18899913412", orderDate: "2025-06-26", items: [{ id: "di82", productCode: "BL-161", productName: "台灯外壳", spec: "49*25", surface: "坯料", unit: "米", quantity: 31, length: 2454, weightPerMeter: 2.107, weight: 160.288, unitPrice: 58.35, amount: 9352.8, remark: "" }, { id: "di83", productCode: "YL-157", productName: "橱柜灯壳", spec: "46*77", surface: "电泳黑", unit: "支", quantity: 30, length: 1999, weightPerMeter: 1.261, weight: 75.622, unitPrice: 18.34, amount: 1386.91, remark: "" }], totalWeight: 235.91, totalAmount: 10739.71, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-06-26T08:00:00.000Z", updatedAt: "2025-06-26T08:00:00.000Z" },
-  { id: "dn31", orderNo: "BL-20250410-031", company: "佛山市质稳五金有限公司", customerId: "c31", customerName: "惠州市仲恺高新区恒通五金", customerAddress: "清远市工业区45栋10号", customerContact: "谢先生", customerPhone: "15939920292", orderDate: "2025-04-10", items: [{ id: "di84", productCode: "SM-262", productName: "吊灯外壳", spec: "49*91", surface: "铁灰氧化", unit: "支", quantity: 100, length: 3926, weightPerMeter: 3.326, weight: 1305.788, unitPrice: 9.85, amount: 12862.01, remark: "" }, { id: "di85", productCode: "CT-306", productName: "接线盒", spec: "130*41", surface: "阳极氧化", unit: "个", quantity: 36, length: 5208, weightPerMeter: 0.224, weight: 41.997, unitPrice: 36.21, amount: 1520.71, remark: "" }], totalWeight: 1347.785, totalAmount: 14382.72, reconcileStatus: "已对帐", remark: "", createdAt: "2025-04-10T08:00:00.000Z", updatedAt: "2025-04-10T08:00:00.000Z" },
-  { id: "dn32", orderNo: "BL-20250413-032", company: "佛山市碧利莱照明有限公司", customerId: "c32", customerName: "珠海市金湾区精锐灯饰", customerAddress: "肇庆市科技路87栋18号", customerContact: "郑小姐", customerPhone: "13713704481", orderDate: "2025-04-13", items: [{ id: "di86", productCode: "CT-096", productName: "衣柜灯框", spec: "22*82", surface: "氟碳喷涂", unit: "个", quantity: 125, length: 5706, weightPerMeter: 1.416, weight: 1009.962, unitPrice: 8.46, amount: 8544.28, remark: "" }, { id: "di87", productCode: "CT-276", productName: "商照外壳", spec: "43*83", surface: "银白氧化", unit: "个", quantity: 178, length: 5785, weightPerMeter: 2.024, weight: 2084.174, unitPrice: 34.64, amount: 72195.79, remark: "" }, { id: "di88", productCode: "ZW-089", productName: "天花灯框", spec: "75*90", surface: "拉丝亮银", unit: "米", quantity: 143, length: 1866, weightPerMeter: 1.641, weight: 437.881, unitPrice: 22.48, amount: 9843.56, remark: "" }, { id: "di89", productCode: "BL-251", productName: "电源外壳", spec: "142*39", surface: "拉丝金色", unit: "米", quantity: 74, length: 1649, weightPerMeter: 1.762, weight: 215.01, unitPrice: 36.36, amount: 7817.76, remark: "" }], totalWeight: 3747.027, totalAmount: 98401.39, reconcileStatus: "未对帐", remark: "", createdAt: "2025-04-13T08:00:00.000Z", updatedAt: "2025-04-13T08:00:00.000Z" },
-  { id: "dn33", orderNo: "BL-20250221-033", company: "佛山市质稳五金有限公司", customerId: "c33", customerName: "汕头市澄海区金源五金厂", customerAddress: "韶关市创业大道94栋11号", customerContact: "罗总", customerPhone: "18891363974", orderDate: "2025-02-21", items: [{ id: "di90", productCode: "SM-432", productName: "感应器壳", spec: "147*41", surface: "氟碳喷涂", unit: "个", quantity: 116, length: 5574, weightPerMeter: 0.108, weight: 69.831, unitPrice: 49.16, amount: 3432.89, remark: "" }, { id: "di91", productCode: "GZ-028", productName: "商照外壳", spec: "87*15", surface: "高光白", unit: "支", quantity: 92, length: 578, weightPerMeter: 0.565, weight: 30.044, unitPrice: 40.08, amount: 1204.16, remark: "" }, { id: "di92", productCode: "ZW-249", productName: "LED灯体外壳", spec: "112*100", surface: "拉丝亮银", unit: "个", quantity: 35, length: 2098, weightPerMeter: 0.479, weight: 35.173, unitPrice: 28.98, amount: 1019.31, remark: "" }], totalWeight: 135.048, totalAmount: 5656.36, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-02-21T08:00:00.000Z", updatedAt: "2025-02-21T08:00:00.000Z" },
-  { id: "dn34", orderNo: "BL-20250801-034", company: "佛山市碧利莱照明有限公司", customerId: "c34", customerName: "佛山市南海区里水镇盛达铝材", customerAddress: "梅州市产业园69栋7号", customerContact: "韩经理", customerPhone: "13767887757", orderDate: "2025-08-01", items: [{ id: "di93", productCode: "GZ-288", productName: "铝方管", spec: "96*77", surface: "氟碳喷涂", unit: "个", quantity: 130, length: 5849, weightPerMeter: 2.323, weight: 1766.34, unitPrice: 49.08, amount: 86691.97, remark: "" }, { id: "di94", productCode: "HP-254", productName: "洗墙灯壳", spec: "85*44", surface: "电泳金", unit: "米", quantity: 105, length: 4528, weightPerMeter: 1.158, weight: 550.56, unitPrice: 12.56, amount: 6915.03, remark: "" }, { id: "di95", productCode: "ZG-213", productName: "天花灯框", spec: "124*34", surface: "砂银氧化", unit: "个", quantity: 182, length: 4136, weightPerMeter: 2.157, weight: 1623.686, unitPrice: 50.89, amount: 82629.38, remark: "" }, { id: "di96", productCode: "BL-251", productName: "电源外壳", spec: "142*39", surface: "拉丝金色", unit: "米", quantity: 43, length: 1177, weightPerMeter: 1.762, weight: 89.177, unitPrice: 36.36, amount: 3242.48, remark: "" }], totalWeight: 4029.763, totalAmount: 179478.86, reconcileStatus: "已对帐", remark: "", createdAt: "2025-08-01T08:00:00.000Z", updatedAt: "2025-08-01T08:00:00.000Z" },
-  { id: "dn35", orderNo: "BL-20250529-035", company: "佛山市质稳五金有限公司", customerId: "c35", customerName: "中山市横栏镇华艺灯饰配件", customerAddress: "阳江市经济开发区52栋10号", customerContact: "唐先生", customerPhone: "15835748341", orderDate: "2025-05-29", items: [{ id: "di97", productCode: "GZ-408", productName: "床头灯框", spec: "104*16", surface: "喷涂白", unit: "个", quantity: 195, length: 2306, weightPerMeter: 0.323, weight: 145.243, unitPrice: 33.64, amount: 4885.97, remark: "" }], totalWeight: 145.243, totalAmount: 4885.97, reconcileStatus: "未对帐", remark: "", createdAt: "2025-05-29T08:00:00.000Z", updatedAt: "2025-05-29T08:00:00.000Z" },
-  { id: "dn36", orderNo: "BL-20250320-036", company: "佛山市碧利莱照明有限公司", customerId: "c36", customerName: "广州市花都区新华五金店", customerAddress: "湛江市商贸城37栋7号", customerContact: "曹小姐", customerPhone: "18887844239", orderDate: "2025-03-20", items: [{ id: "di98", productCode: "BL-141", productName: "轨道灯壳", spec: "39*88", surface: "电泳黑", unit: "个", quantity: 58, length: 4904, weightPerMeter: 2.139, weight: 608.4, unitPrice: 13.65, amount: 8304.66, remark: "" }], totalWeight: 608.4, totalAmount: 8304.66, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-03-20T08:00:00.000Z", updatedAt: "2025-03-20T08:00:00.000Z" },
-  { id: "dn37", orderNo: "BL-20250319-037", company: "佛山市质稳五金有限公司", customerId: "c37", customerName: "深圳市光明新区鑫隆铝业", customerAddress: "茂名市五金市场37栋17号", customerContact: "许总", customerPhone: "13722534217", orderDate: "2025-03-19", items: [{ id: "di99", productCode: "HS-400", productName: "商照外壳", spec: "54*85", surface: "氟碳喷涂", unit: "支", quantity: 118, length: 5133, weightPerMeter: 1.477, weight: 894.61, unitPrice: 23.68, amount: 21184.36, remark: "" }, { id: "di100", productCode: "BL-381", productName: "水下灯壳", spec: "27*65", surface: "电泳黑", unit: "个", quantity: 198, length: 4557, weightPerMeter: 3.48, weight: 3139.955, unitPrice: 61.27, amount: 192385.04, remark: "" }], totalWeight: 4034.565, totalAmount: 213569.4, reconcileStatus: "已对帐", remark: "", createdAt: "2025-03-19T08:00:00.000Z", updatedAt: "2025-03-19T08:00:00.000Z" },
-  { id: "dn38", orderNo: "BL-20250525-038", company: "佛山市碧利莱照明有限公司", customerId: "c38", customerName: "东莞市长安镇永丰五金", customerAddress: "揭阳市铝材城99栋3号", customerContact: "邓经理", customerPhone: "18965625330", orderDate: "2025-05-25", items: [{ id: "di101", productCode: "HP-294", productName: "散热片", spec: "50*61", surface: "铁灰氧化", unit: "个", quantity: 30, length: 2694, weightPerMeter: 1.615, weight: 130.524, unitPrice: 47.25, amount: 6167.26, remark: "" }], totalWeight: 130.524, totalAmount: 6167.26, reconcileStatus: "未对帐", remark: "", createdAt: "2025-05-25T08:00:00.000Z", updatedAt: "2025-05-25T08:00:00.000Z" },
-  { id: "dn39", orderNo: "BL-20250722-039", company: "佛山市质稳五金有限公司", customerId: "c39", customerName: "佛山市顺德区容桂镇恒丰灯饰", customerAddress: "潮州市灯饰广场29栋6号", customerContact: "萧先生", customerPhone: "18916740197", orderDate: "2025-07-22", items: [{ id: "di102", productCode: "GZ-278", productName: "嵌入式灯框", spec: "114*78", surface: "铁灰氧化", unit: "米", quantity: 194, length: 840, weightPerMeter: 2.53, weight: 412.289, unitPrice: 37.96, amount: 15650.49, remark: "" }, { id: "di103", productCode: "HS-390", productName: "面板灯框", spec: "80*29", surface: "铁灰氧化", unit: "个", quantity: 185, length: 4115, weightPerMeter: 0.904, weight: 688.193, unitPrice: 27.73, amount: 19083.59, remark: "" }, { id: "di104", productCode: "HS-280", productName: "磁吸灯框", spec: "42*75", surface: "喷涂白", unit: "支", quantity: 56, length: 3982, weightPerMeter: 1.657, weight: 369.498, unitPrice: 37.49, amount: 13852.48, remark: "" }], totalWeight: 1469.98, totalAmount: 48586.56, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-07-22T08:00:00.000Z", updatedAt: "2025-07-22T08:00:00.000Z" },
-  { id: "dn40", orderNo: "BL-20250131-040", company: "佛山市碧利莱照明有限公司", customerId: "c40", customerName: "江门市鹤山市沙坪五金厂", customerAddress: "河源市制造业基地97栋15号", customerContact: "宋小姐", customerPhone: "18883534128", orderDate: "2025-01-31", items: [{ id: "di105", productCode: "ZG-153", productName: "明装灯框", spec: "67*59", surface: "拉丝亮银", unit: "个", quantity: 9, length: 4184, weightPerMeter: 1.318, weight: 49.631, unitPrice: 51.47, amount: 2554.51, remark: "" }, { id: "di106", productCode: "LD-135", productName: "路灯外壳", spec: "25*66", surface: "喷涂砂黑", unit: "个", quantity: 90, length: 1212, weightPerMeter: 1.63, weight: 177.8, unitPrice: 62.95, amount: 11192.51, remark: "" }], totalWeight: 227.431, totalAmount: 13747.02, reconcileStatus: "已对帐", remark: "", createdAt: "2025-01-31T08:00:00.000Z", updatedAt: "2025-01-31T08:00:00.000Z" },
-  { id: "dn41", orderNo: "BL-20250427-041", company: "佛山市质稳五金有限公司", customerId: "c41", customerName: "惠州市博罗县罗阳镇鑫源五金", customerAddress: "佛山市南海区工业区36栋15号", customerContact: "张经理", customerPhone: "13948349783", orderDate: "2025-04-27", items: [{ id: "di107", productCode: "GZ-398", productName: "T8灯管壳", spec: "92*35", surface: "电泳金", unit: "米", quantity: 61, length: 2219, weightPerMeter: 2.113, weight: 286.014, unitPrice: 46.33, amount: 13251.03, remark: "" }], totalWeight: 286.014, totalAmount: 13251.03, reconcileStatus: "未对帐", remark: "", createdAt: "2025-04-27T08:00:00.000Z", updatedAt: "2025-04-27T08:00:00.000Z" },
-  { id: "dn42", orderNo: "BL-20250731-042", company: "佛山市碧利莱照明有限公司", customerId: "c42", customerName: "珠海市斗门区井岸铝材店", customerAddress: "佛山市顺德区科技路89栋5号", customerContact: "李总", customerPhone: "15918620650", orderDate: "2025-07-31", items: [{ id: "di108", productCode: "BL-441", productName: "投光灯壳", spec: "94*77", surface: "拉丝亮银", unit: "个", quantity: 182, length: 5499, weightPerMeter: 2.966, weight: 2968.426, unitPrice: 44.76, amount: 132866.75, remark: "" }, { id: "di109", productCode: "HP-324", productName: "吊灯外壳", spec: "144*85", surface: "银白氧化", unit: "个", quantity: 110, length: 1859, weightPerMeter: 0.227, weight: 46.419, unitPrice: 35.39, amount: 1642.77, remark: "" }, { id: "di110", productCode: "CT-316", productName: "洗墙灯壳", spec: "141*22", surface: "高光白", unit: "支", quantity: 36, length: 2192, weightPerMeter: 1.627, weight: 128.39, unitPrice: 42.56, amount: 5464.28, remark: "" }], totalWeight: 3143.235, totalAmount: 139973.8, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-07-31T08:00:00.000Z", updatedAt: "2025-07-31T08:00:00.000Z" },
-  { id: "dn43", orderNo: "BL-20250801-043", company: "佛山市质稳五金有限公司", customerId: "c43", customerName: "汕头市潮南区陈店五金加工", customerAddress: "中山市创业大道99栋19号", customerContact: "王先生", customerPhone: "13887267850", orderDate: "2025-08-01", items: [{ id: "di111", productCode: "ZG-413", productName: "铝圆管", spec: "40*100", surface: "电泳黑", unit: "米", quantity: 16, length: 5170, weightPerMeter: 0.781, weight: 64.604, unitPrice: 18.83, amount: 1216.49, remark: "" }, { id: "di112", productCode: "HS-180", productName: "反光杯", spec: "47*35", surface: "银白氧化", unit: "个", quantity: 137, length: 2802, weightPerMeter: 3.175, weight: 1218.8, unitPrice: 27.91, amount: 34016.71, remark: "" }], totalWeight: 1283.404, totalAmount: 35233.2, reconcileStatus: "已对帐", remark: "", createdAt: "2025-08-01T08:00:00.000Z", updatedAt: "2025-08-01T08:00:00.000Z" },
-  { id: "dn44", orderNo: "BL-20250606-044", company: "佛山市碧利莱照明有限公司", customerId: "c44", customerName: "佛山市南海区狮山镇光华铝材", customerAddress: "广州市产业园29栋16号", customerContact: "陈小姐", customerPhone: "15946632757", orderDate: "2025-06-06", items: [{ id: "di113", productCode: "CT-166", productName: "铝扁条", spec: "111*81", surface: "铁灰氧化", unit: "支", quantity: 181, length: 2897, weightPerMeter: 2.352, weight: 1233.288, unitPrice: 10.59, amount: 13060.52, remark: "" }, { id: "di114", productCode: "ZW-149", productName: "T5灯管壳", spec: "118*97", surface: "砂银氧化", unit: "米", quantity: 147, length: 2690, weightPerMeter: 0.472, weight: 186.643, unitPrice: 28.16, amount: 5255.87, remark: "" }], totalWeight: 1419.931, totalAmount: 18316.39, reconcileStatus: "未对帐", remark: "", createdAt: "2025-06-06T08:00:00.000Z", updatedAt: "2025-06-06T08:00:00.000Z" },
-  { id: "dn45", orderNo: "BL-20250812-045", company: "佛山市质稳五金有限公司", customerId: "c45", customerName: "中山市东升镇利达灯饰", customerAddress: "深圳市经济开发区69栋1号", customerContact: "刘先生", customerPhone: "18889442503", orderDate: "2025-08-12", items: [{ id: "di115", productCode: "HS-070", productName: "地埋灯壳", spec: "108*34", surface: "铁灰氧化", unit: "支", quantity: 193, length: 3871, weightPerMeter: 3.434, weight: 2565.552, unitPrice: 21.61, amount: 55441.58, remark: "" }], totalWeight: 2565.552, totalAmount: 55441.58, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-08-12T08:00:00.000Z", updatedAt: "2025-08-12T08:00:00.000Z" },
-  { id: "dn46", orderNo: "BL-20250828-046", company: "佛山市碧利莱照明有限公司", customerId: "c46", customerName: "广州市增城区新塘五金店", customerAddress: "东莞市商贸城42栋7号", customerContact: "黄经理", customerPhone: "18953868501", orderDate: "2025-08-28", items: [{ id: "di116", productCode: "SM-142", productName: "面板灯框", spec: "65*60", surface: "电泳金", unit: "支", quantity: 168, length: 1539, weightPerMeter: 2.296, weight: 593.635, unitPrice: 51.83, amount: 30768.1, remark: "" }], totalWeight: 593.635, totalAmount: 30768.1, reconcileStatus: "已对帐", remark: "", createdAt: "2025-08-28T08:00:00.000Z", updatedAt: "2025-08-28T08:00:00.000Z" },
-  { id: "dn47", orderNo: "BL-20250703-047", company: "佛山市质稳五金有限公司", customerId: "c47", customerName: "深圳市坪山新区鑫盛铝业", customerAddress: "江门市五金市场45栋8号", customerContact: "林先生", customerPhone: "13997477029", orderDate: "2025-07-03", items: [{ id: "di117", productCode: "GZ-128", productName: "灯管外壳", spec: "54*19", surface: "氟碳喷涂", unit: "米", quantity: 38, length: 3138, weightPerMeter: 3.457, weight: 412.227, unitPrice: 38.79, amount: 15990.29, remark: "" }, { id: "di118", productCode: "LD-425", productName: "装饰盖", spec: "53*22", surface: "拉丝亮银", unit: "米", quantity: 64, length: 3717, weightPerMeter: 0.63, weight: 149.869, unitPrice: 53.31, amount: 7989.52, remark: "" }], totalWeight: 562.096, totalAmount: 23979.81, reconcileStatus: "未对帐", remark: "", createdAt: "2025-07-03T08:00:00.000Z", updatedAt: "2025-07-03T08:00:00.000Z" },
-  { id: "dn48", orderNo: "BL-20250510-048", company: "佛山市碧利莱照明有限公司", customerId: "c48", customerName: "东莞市寮步镇恒通五金厂", customerAddress: "惠州市铝材城86栋4号", customerContact: "吴小姐", customerPhone: "15972415804", orderDate: "2025-05-10", items: [{ id: "di119", productCode: "CT-296", productName: "固定座", spec: "91*98", surface: "喷涂白", unit: "米", quantity: 162, length: 2701, weightPerMeter: 0.546, weight: 238.909, unitPrice: 57.1, amount: 13641.7, remark: "" }, { id: "di120", productCode: "SM-322", productName: "泛光灯壳", spec: "16*81", surface: "阳极氧化", unit: "支", quantity: 107, length: 3573, weightPerMeter: 1.111, weight: 424.748, unitPrice: 59.23, amount: 25157.82, remark: "" }], totalWeight: 663.657, totalAmount: 38799.52, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-05-10T08:00:00.000Z", updatedAt: "2025-05-10T08:00:00.000Z" },
-  { id: "dn49", orderNo: "BL-20250430-049", company: "佛山市质稳五金有限公司", customerId: "c49", customerName: "佛山市南海区大沥镇永盛五金", customerAddress: "珠海市灯饰广场4栋10号", customerContact: "何总", customerPhone: "18863238057", orderDate: "2025-04-30", items: [{ id: "di121", productCode: "LD-325", productName: "吸顶灯框", spec: "107*23", surface: "砂银氧化", unit: "支", quantity: 197, length: 1262, weightPerMeter: 2.538, weight: 630.982, unitPrice: 52.15, amount: 32905.71, remark: "" }], totalWeight: 630.982, totalAmount: 32905.71, reconcileStatus: "已对帐", remark: "", createdAt: "2025-04-30T08:00:00.000Z", updatedAt: "2025-04-30T08:00:00.000Z" },
-  { id: "dn50", orderNo: "BL-20250418-050", company: "佛山市碧利莱照明有限公司", customerId: "c50", customerName: "江门市台山市台城灯饰配件", customerAddress: "汕头市制造业基地45栋18号", customerContact: "梁经理", customerPhone: "18898787891", orderDate: "2025-04-18", items: [{ id: "di122", productCode: "CT-356", productName: "散热片", spec: "94*25", surface: "银白氧化", unit: "米", quantity: 95, length: 4224, weightPerMeter: 0.991, weight: 397.668, unitPrice: 54.1, amount: 21513.84, remark: "" }, { id: "di123", productCode: "HS-250", productName: "散热器型材", spec: "96*28", surface: "拉丝铁灰", unit: "支", quantity: 84, length: 5267, weightPerMeter: 1.567, weight: 693.285, unitPrice: 62.52, amount: 43344.18, remark: "" }, { id: "di124", productCode: "SM-002", productName: "散热器型材", spec: "79*83", surface: "阳极氧化", unit: "米", quantity: 199, length: 1263, weightPerMeter: 0.658, weight: 165.38, unitPrice: 37.74, amount: 6241.44, remark: "" }], totalWeight: 1256.333, totalAmount: 71099.46, reconcileStatus: "未对帐", remark: "", createdAt: "2025-04-18T08:00:00.000Z", updatedAt: "2025-04-18T08:00:00.000Z" },
-  { id: "dn51", orderNo: "BL-20250711-051", company: "佛山市质稳五金有限公司", customerId: "c1", customerName: "佛山市南海区光明灯饰有限公司", customerAddress: "佛山市南海区工业区82栋4号", customerContact: "张经理", customerPhone: "13846913810", orderDate: "2025-07-11", items: [{ id: "di125", productCode: "CT-326", productName: "射灯外壳", spec: "38*29", surface: "铁灰氧化", unit: "米", quantity: 171, length: 3434, weightPerMeter: 2.885, weight: 1694.112, unitPrice: 21.81, amount: 36948.58, remark: "" }, { id: "di126", productCode: "CT-436", productName: "散热器型材", spec: "113*63", surface: "银白氧化", unit: "支", quantity: 17, length: 4878, weightPerMeter: 2.793, weight: 231.612, unitPrice: 12.5, amount: 2895.15, remark: "" }, { id: "di127", productCode: "HP-204", productName: "面板灯框", spec: "144*16", surface: "高光白", unit: "个", quantity: 56, length: 4019, weightPerMeter: 2.475, weight: 557.033, unitPrice: 61.99, amount: 34530.48, remark: "" }, { id: "di128", productCode: "ZG-423", productName: "堵头", spec: "96*37", surface: "喷涂砂黑", unit: "个", quantity: 55, length: 4552, weightPerMeter: 2.925, weight: 732.303, unitPrice: 36.46, amount: 26699.77, remark: "" }], totalWeight: 3215.06, totalAmount: 101073.98, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-07-11T08:00:00.000Z", updatedAt: "2025-07-11T08:00:00.000Z" },
-  { id: "dn52", orderNo: "BL-20250314-052", company: "佛山市碧利莱照明有限公司", customerId: "c2", customerName: "中山市古镇华艺照明电器厂", customerAddress: "佛山市顺德区科技路12栋7号", customerContact: "李总", customerPhone: "15977827638", orderDate: "2025-03-14", items: [{ id: "di129", productCode: "LD-425", productName: "装饰盖", spec: "53*22", surface: "拉丝亮银", unit: "米", quantity: 73, length: 3266, weightPerMeter: 0.63, weight: 150.203, unitPrice: 53.31, amount: 8007.32, remark: "" }, { id: "di130", productCode: "BL-281", productName: "橱柜灯壳", spec: "43*60", surface: "拉丝亮银", unit: "米", quantity: 148, length: 1569, weightPerMeter: 2.257, weight: 524.102, unitPrice: 18.37, amount: 9627.75, remark: "" }, { id: "di131", productCode: "HS-290", productName: "铝扁条", spec: "77*88", surface: "阳极氧化", unit: "米", quantity: 125, length: 3315, weightPerMeter: 3.322, weight: 1376.554, unitPrice: 51.95, amount: 71511.98, remark: "" }], totalWeight: 2050.859, totalAmount: 89147.05, reconcileStatus: "已对帐", remark: "", createdAt: "2025-03-14T08:00:00.000Z", updatedAt: "2025-03-14T08:00:00.000Z" },
-  { id: "dn53", orderNo: "BL-20250821-053", company: "佛山市质稳五金有限公司", customerId: "c3", customerName: "深圳市龙岗区盛达五金制品厂", customerAddress: "中山市创业大道1栋6号", customerContact: "王先生", customerPhone: "18855667651", orderDate: "2025-08-21", items: [{ id: "di132", productCode: "HP-024", productName: "软灯条槽", spec: "130*66", surface: "喷涂白", unit: "个", quantity: 26, length: 5629, weightPerMeter: 3.061, weight: 447.99, unitPrice: 40.72, amount: 18242.15, remark: "" }], totalWeight: 447.99, totalAmount: 18242.15, reconcileStatus: "未对帐", remark: "", createdAt: "2025-08-21T08:00:00.000Z", updatedAt: "2025-08-21T08:00:00.000Z" },
-  { id: "dn54", orderNo: "BL-20250724-054", company: "佛山市碧利莱照明有限公司", customerId: "c4", customerName: "广州市番禺区大石永丰铝材店", customerAddress: "广州市产业园78栋9号", customerContact: "陈小姐", customerPhone: "13871662963", orderDate: "2025-07-24", items: [{ id: "di133", productCode: "ZW-009", productName: "水下灯壳", spec: "80*76", surface: "拉丝亮银", unit: "个", quantity: 32, length: 1794, weightPerMeter: 2.803, weight: 160.915, unitPrice: 27.4, amount: 4409.07, remark: "" }, { id: "di134", productCode: "CT-226", productName: "铝方管", spec: "45*9", surface: "阳极氧化", unit: "支", quantity: 117, length: 505, weightPerMeter: 2.292, weight: 135.423, unitPrice: 53.11, amount: 7192.32, remark: "" }, { id: "di135", productCode: "HS-220", productName: "衣柜灯框", spec: "79*62", surface: "高光白", unit: "支", quantity: 52, length: 1580, weightPerMeter: 1.033, weight: 84.871, unitPrice: 51.5, amount: 4370.86, remark: "" }, { id: "di136", productCode: "SM-452", productName: "面板灯框", spec: "125*67", surface: "银白氧化", unit: "米", quantity: 167, length: 2972, weightPerMeter: 0.152, weight: 75.441, unitPrice: 23.58, amount: 1778.9, remark: "" }], totalWeight: 456.65, totalAmount: 17751.15, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-07-24T08:00:00.000Z", updatedAt: "2025-07-24T08:00:00.000Z" },
-  { id: "dn55", orderNo: "BL-20250214-055", company: "佛山市质稳五金有限公司", customerId: "c5", customerName: "东莞市石碣镇鑫达电子厂", customerAddress: "深圳市经济开发区91栋3号", customerContact: "刘先生", customerPhone: "13898753260", orderDate: "2025-02-14", items: [{ id: "di137", productCode: "GZ-048", productName: "固定座", spec: "135*16", surface: "氟碳喷涂", unit: "个", quantity: 168, length: 3452, weightPerMeter: 3.489, weight: 2023.397, unitPrice: 32.85, amount: 66468.59, remark: "" }, { id: "di138", productCode: "ZW-129", productName: "线条灯壳", spec: "13*50", surface: "坯料", unit: "个", quantity: 22, length: 3546, weightPerMeter: 2.331, weight: 181.846, unitPrice: 9.47, amount: 1722.08, remark: "" }, { id: "di139", productCode: "BL-341", productName: "导轨灯壳", spec: "79*22", surface: "砂银氧化", unit: "米", quantity: 167, length: 1855, weightPerMeter: 0.747, weight: 231.409, unitPrice: 38.7, amount: 8955.53, remark: "" }], totalWeight: 2436.652, totalAmount: 77146.2, reconcileStatus: "已对帐", remark: "", createdAt: "2025-02-14T08:00:00.000Z", updatedAt: "2025-02-14T08:00:00.000Z" },
-  { id: "dn56", orderNo: "BL-20250118-056", company: "佛山市碧利莱照明有限公司", customerId: "c6", customerName: "佛山市顺德区勒流镇恒丰五金厂", customerAddress: "东莞市商贸城48栋12号", customerContact: "黄经理", customerPhone: "15999949389", orderDate: "2025-01-18", items: [{ id: "di140", productCode: "BL-321", productName: "路灯外壳", spec: "116*79", surface: "坯料", unit: "个", quantity: 79, length: 2418, weightPerMeter: 1.193, weight: 227.889, unitPrice: 14.25, amount: 3247.42, remark: "" }, { id: "di141", productCode: "HS-220", productName: "衣柜灯框", spec: "79*62", surface: "高光白", unit: "支", quantity: 168, length: 1247, weightPerMeter: 1.033, weight: 216.409, unitPrice: 51.5, amount: 11145.06, remark: "" }, { id: "di142", productCode: "BL-361", productName: "堵头", spec: "73*5", surface: "拉丝亮银", unit: "支", quantity: 25, length: 508, weightPerMeter: 3.437, weight: 43.65, unitPrice: 35.21, amount: 1536.92, remark: "" }, { id: "di143", productCode: "HS-110", productName: "固定座", spec: "105*18", surface: "电泳金", unit: "米", quantity: 123, length: 1138, weightPerMeter: 1.365, weight: 191.065, unitPrice: 44.4, amount: 8483.29, remark: "" }], totalWeight: 679.013, totalAmount: 24412.69, reconcileStatus: "未对帐", remark: "", createdAt: "2025-01-18T08:00:00.000Z", updatedAt: "2025-01-18T08:00:00.000Z" },
-  { id: "dn57", orderNo: "BL-20250207-057", company: "佛山市质稳五金有限公司", customerId: "c7", customerName: "江门市蓬江区天河照明有限公司", customerAddress: "江门市五金市场82栋18号", customerContact: "林先生", customerPhone: "15953524491", orderDate: "2025-02-07", items: [{ id: "di144", productCode: "CT-266", productName: "面板灯框", spec: "109*76", surface: "拉丝铁灰", unit: "米", quantity: 175, length: 4145, weightPerMeter: 2.588, weight: 1877.27, unitPrice: 36.45, amount: 68426.49, remark: "" }, { id: "di145", productCode: "LD-005", productName: "线条灯壳", spec: "32*40", surface: "砂银氧化", unit: "米", quantity: 3, length: 3314, weightPerMeter: 2.988, weight: 29.707, unitPrice: 55.35, amount: 1644.28, remark: "" }], totalWeight: 1906.977, totalAmount: 70070.77, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-02-07T08:00:00.000Z", updatedAt: "2025-02-07T08:00:00.000Z" },
-  { id: "dn58", orderNo: "BL-20250802-058", company: "佛山市碧利莱照明有限公司", customerId: "c8", customerName: "惠州市惠城区宏达五金电器", customerAddress: "惠州市铝材城28栋16号", customerContact: "吴小姐", customerPhone: "18896282117", orderDate: "2025-08-02", items: [{ id: "di146", productCode: "BL-441", productName: "投光灯壳", spec: "94*77", surface: "拉丝亮银", unit: "个", quantity: 109, length: 1582, weightPerMeter: 2.966, weight: 511.451, unitPrice: 44.76, amount: 22892.55, remark: "" }], totalWeight: 511.451, totalAmount: 22892.55, reconcileStatus: "已对帐", remark: "", createdAt: "2025-08-02T08:00:00.000Z", updatedAt: "2025-08-02T08:00:00.000Z" },
-  { id: "dn59", orderNo: "BL-20250507-059", company: "佛山市质稳五金有限公司", customerId: "c9", customerName: "珠海市香洲区精锐铝业公司", customerAddress: "珠海市灯饰广场75栋13号", customerContact: "何总", customerPhone: "13739436733", orderDate: "2025-05-07", items: [{ id: "di147", productCode: "GZ-118", productName: "反光杯", spec: "114*40", surface: "铁灰氧化", unit: "支", quantity: 99, length: 1231, weightPerMeter: 0.392, weight: 47.773, unitPrice: 35.89, amount: 1714.57, remark: "" }], totalWeight: 47.773, totalAmount: 1714.57, reconcileStatus: "未对帐", remark: "", createdAt: "2025-05-07T08:00:00.000Z", updatedAt: "2025-05-07T08:00:00.000Z" },
-  { id: "dn60", orderNo: "BL-20250711-060", company: "佛山市碧利莱照明有限公司", customerId: "c10", customerName: "汕头市潮阳区金浦五金加工厂", customerAddress: "汕头市制造业基地9栋13号", customerContact: "梁经理", customerPhone: "18889978790", orderDate: "2025-07-11", items: [{ id: "di148", productCode: "ZG-053", productName: "装饰盖", spec: "141*5", surface: "砂银氧化", unit: "米", quantity: 81, length: 3511, weightPerMeter: 0.45, weight: 127.976, unitPrice: 52.04, amount: 6659.87, remark: "" }], totalWeight: 127.976, totalAmount: 6659.87, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-07-11T08:00:00.000Z", updatedAt: "2025-07-11T08:00:00.000Z" },
-  { id: "dn61", orderNo: "BL-20250818-061", company: "佛山市质稳五金有限公司", customerId: "c11", customerName: "佛山市三水区西南街永盛铝材", customerAddress: "清远市工业区38栋14号", customerContact: "谢先生", customerPhone: "15870897765", orderDate: "2025-08-18", items: [{ id: "di149", productCode: "BL-071", productName: "水下灯壳", spec: "91*100", surface: "喷涂砂黑", unit: "米", quantity: 98, length: 1590, weightPerMeter: 3.003, weight: 467.927, unitPrice: 31.41, amount: 14697.59, remark: "" }, { id: "di150", productCode: "ZW-329", productName: "筒灯外壳", spec: "142*31", surface: "拉丝亮银", unit: "米", quantity: 174, length: 1670, weightPerMeter: 2.56, weight: 743.885, unitPrice: 48.23, amount: 35877.57, remark: "" }, { id: "di151", productCode: "CT-036", productName: "床头灯框", spec: "82*94", surface: "银白氧化", unit: "个", quantity: 136, length: 5114, weightPerMeter: 0.163, weight: 113.367, unitPrice: 24.42, amount: 2768.42, remark: "" }], totalWeight: 1325.179, totalAmount: 53343.58, reconcileStatus: "已对帐", remark: "", createdAt: "2025-08-18T08:00:00.000Z", updatedAt: "2025-08-18T08:00:00.000Z" },
-  { id: "dn62", orderNo: "BL-20250107-062", company: "佛山市碧利莱照明有限公司", customerId: "c12", customerName: "清远市清城区鑫源五金厂", customerAddress: "肇庆市科技路20栋12号", customerContact: "郑小姐", customerPhone: "15882394227", orderDate: "2025-01-07", items: [{ id: "di152", productCode: "CT-226", productName: "铝方管", spec: "45*9", surface: "阳极氧化", unit: "支", quantity: 90, length: 2245, weightPerMeter: 2.292, weight: 463.099, unitPrice: 53.11, amount: 24595.19, remark: "" }, { id: "di153", productCode: "SM-322", productName: "泛光灯壳", spec: "16*81", surface: "阳极氧化", unit: "支", quantity: 192, length: 1740, weightPerMeter: 1.111, weight: 371.163, unitPrice: 59.23, amount: 21983.98, remark: "" }], totalWeight: 834.262, totalAmount: 46579.17, reconcileStatus: "未对帐", remark: "", createdAt: "2025-01-07T08:00:00.000Z", updatedAt: "2025-01-07T08:00:00.000Z" },
-  { id: "dn63", orderNo: "BL-20250828-063", company: "佛山市质稳五金有限公司", customerId: "c13", customerName: "肇庆市端州区华兴灯饰配件", customerAddress: "韶关市创业大道8栋8号", customerContact: "罗总", customerPhone: "13921496211", orderDate: "2025-08-28", items: [{ id: "di154", productCode: "CT-316", productName: "洗墙灯壳", spec: "141*22", surface: "高光白", unit: "支", quantity: 176, length: 4124, weightPerMeter: 1.627, weight: 1180.916, unitPrice: 42.56, amount: 50259.78, remark: "" }, { id: "di155", productCode: "BL-441", productName: "投光灯壳", spec: "94*77", surface: "拉丝亮银", unit: "个", quantity: 56, length: 1210, weightPerMeter: 2.966, weight: 200.976, unitPrice: 44.76, amount: 8995.69, remark: "" }, { id: "di156", productCode: "SM-052", productName: "密封条", spec: "74*46", surface: "银白氧化", unit: "支", quantity: 36, length: 1508, weightPerMeter: 0.177, weight: 9.609, unitPrice: 13.02, amount: 125.11, remark: "" }, { id: "di157", productCode: "SM-302", productName: "转角件", spec: "58*25", surface: "电泳金", unit: "米", quantity: 187, length: 3645, weightPerMeter: 3.271, weight: 2229.563, unitPrice: 49.1, amount: 109471.54, remark: "" }], totalWeight: 3621.064, totalAmount: 168852.12, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-08-28T08:00:00.000Z", updatedAt: "2025-08-28T08:00:00.000Z" },
-  { id: "dn64", orderNo: "BL-20250404-064", company: "佛山市碧利莱照明有限公司", customerId: "c14", customerName: "韶关市武江区明辉五金店", customerAddress: "梅州市产业园78栋14号", customerContact: "韩经理", customerPhone: "15982383095", orderDate: "2025-04-04", items: [{ id: "di158", productCode: "SM-162", productName: "落地灯框", spec: "30*39", surface: "阳极氧化", unit: "个", quantity: 36, length: 2529, weightPerMeter: 2.653, weight: 241.54, unitPrice: 10.84, amount: 2618.29, remark: "" }, { id: "di159", productCode: "SM-142", productName: "面板灯框", spec: "65*60", surface: "电泳金", unit: "支", quantity: 166, length: 1190, weightPerMeter: 2.296, weight: 453.552, unitPrice: 51.83, amount: 23507.6, remark: "" }, { id: "di160", productCode: "GZ-128", productName: "灯管外壳", spec: "54*19", surface: "氟碳喷涂", unit: "米", quantity: 142, length: 5423, weightPerMeter: 3.457, weight: 2662.118, unitPrice: 38.79, amount: 103263.56, remark: "" }, { id: "di161", productCode: "GZ-308", productName: "感应器壳", spec: "113*51", surface: "银白氧化", unit: "米", quantity: 185, length: 5477, weightPerMeter: 3.094, weight: 3134.98, unitPrice: 49.47, amount: 155087.46, remark: "" }], totalWeight: 6492.19, totalAmount: 284476.91, reconcileStatus: "已对帐", remark: "", createdAt: "2025-04-04T08:00:00.000Z", updatedAt: "2025-04-04T08:00:00.000Z" },
-  { id: "dn65", orderNo: "BL-20250318-065", company: "佛山市质稳五金有限公司", customerId: "c15", customerName: "梅州市梅县区恒通铝业", customerAddress: "阳江市经济开发区9栋11号", customerContact: "唐先生", customerPhone: "13888961459", orderDate: "2025-03-18", items: [{ id: "di162", productCode: "LD-435", productName: "LED灯体外壳", spec: "100*39", surface: "喷砂氧化", unit: "个", quantity: 169, length: 2971, weightPerMeter: 0.712, weight: 357.494, unitPrice: 38.01, amount: 13588.35, remark: "" }], totalWeight: 357.494, totalAmount: 13588.35, reconcileStatus: "未对帐", remark: "", createdAt: "2025-03-18T08:00:00.000Z", updatedAt: "2025-03-18T08:00:00.000Z" },
-  { id: "dn66", orderNo: "BL-20250226-066", company: "佛山市碧利莱照明有限公司", customerId: "c16", customerName: "阳江市江城区利达五金厂", customerAddress: "湛江市商贸城43栋3号", customerContact: "曹小姐", customerPhone: "15947376585", orderDate: "2025-02-26", items: [{ id: "di163", productCode: "ZG-383", productName: "路灯外壳", spec: "117*52", surface: "粉末喷涂", unit: "米", quantity: 101, length: 2921, weightPerMeter: 3.425, weight: 1010.447, unitPrice: 44.82, amount: 45288.23, remark: "" }, { id: "di164", productCode: "BL-331", productName: "灯带铝槽", spec: "127*73", surface: "拉丝金色", unit: "支", quantity: 14, length: 2460, weightPerMeter: 1.35, weight: 46.494, unitPrice: 62.53, amount: 2907.27, remark: "" }], totalWeight: 1056.941, totalAmount: 48195.5, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-02-26T08:00:00.000Z", updatedAt: "2025-02-26T08:00:00.000Z" },
-  { id: "dn67", orderNo: "BL-20250511-067", company: "佛山市质稳五金有限公司", customerId: "c17", customerName: "湛江市赤坎区鑫隆铝材", customerAddress: "茂名市五金市场25栋4号", customerContact: "许总", customerPhone: "13998447167", orderDate: "2025-05-11", items: [{ id: "di165", productCode: "GZ-058", productName: "接线盒", spec: "71*95", surface: "拉丝铁灰", unit: "支", quantity: 62, length: 4592, weightPerMeter: 0.15, weight: 42.706, unitPrice: 43.91, amount: 1875.22, remark: "" }, { id: "di166", productCode: "YL-327", productName: "轨道灯壳", spec: "48*57", surface: "喷涂砂黑", unit: "个", quantity: 153, length: 1081, weightPerMeter: 0.115, weight: 19.02, unitPrice: 25.88, amount: 492.24, remark: "" }, { id: "di167", productCode: "BL-271", productName: "硬灯条壳", spec: "98*95", surface: "粉末喷涂", unit: "支", quantity: 4, length: 3458, weightPerMeter: 3.388, weight: 46.863, unitPrice: 64.23, amount: 3010.01, remark: "" }, { id: "di168", productCode: "ZG-163", productName: "铝角码", spec: "123*58", surface: "喷砂氧化", unit: "支", quantity: 34, length: 3668, weightPerMeter: 1.579, weight: 196.92, unitPrice: 32.17, amount: 6334.92, remark: "" }], totalWeight: 305.509, totalAmount: 11712.39, reconcileStatus: "已对帐", remark: "", createdAt: "2025-05-11T08:00:00.000Z", updatedAt: "2025-05-11T08:00:00.000Z" },
-  { id: "dn68", orderNo: "BL-20250813-068", company: "佛山市碧利莱照明有限公司", customerId: "c18", customerName: "茂名市茂南区光华五金店", customerAddress: "揭阳市铝材城14栋8号", customerContact: "邓经理", customerPhone: "15935529407", orderDate: "2025-08-13", items: [{ id: "di169", productCode: "GZ-188", productName: "散热器型材", spec: "29*87", surface: "高光白", unit: "米", quantity: 140, length: 1915, weightPerMeter: 0.246, weight: 65.953, unitPrice: 55.41, amount: 3654.46, remark: "" }, { id: "di170", productCode: "BL-391", productName: "筒灯外壳", spec: "38*9", surface: "喷涂砂黑", unit: "支", quantity: 121, length: 1097, weightPerMeter: 3.284, weight: 435.908, unitPrice: 49.33, amount: 21503.34, remark: "" }, { id: "di171", productCode: "ZW-009", productName: "水下灯壳", spec: "80*76", surface: "拉丝亮银", unit: "个", quantity: 151, length: 1053, weightPerMeter: 2.803, weight: 445.685, unitPrice: 27.4, amount: 12211.77, remark: "" }, { id: "di172", productCode: "GZ-008", productName: "地埋灯壳", spec: "64*50", surface: "喷涂白", unit: "米", quantity: 68, length: 2267, weightPerMeter: 2.986, weight: 460.31, unitPrice: 18.36, amount: 8451.29, remark: "" }], totalWeight: 1407.856, totalAmount: 45820.86, reconcileStatus: "未对帐", remark: "", createdAt: "2025-08-13T08:00:00.000Z", updatedAt: "2025-08-13T08:00:00.000Z" },
-  { id: "dn69", orderNo: "BL-20250115-069", company: "佛山市质稳五金有限公司", customerId: "c19", customerName: "揭阳市榕城区东升五金厂", customerAddress: "潮州市灯饰广场71栋4号", customerContact: "萧先生", customerPhone: "13897529405", orderDate: "2025-01-15", items: [{ id: "di173", productCode: "LD-405", productName: "橱柜灯壳", spec: "128*12", surface: "砂银氧化", unit: "个", quantity: 102, length: 4650, weightPerMeter: 1.088, weight: 516.038, unitPrice: 48.33, amount: 24940.12, remark: "" }], totalWeight: 516.038, totalAmount: 24940.12, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-01-15T08:00:00.000Z", updatedAt: "2025-01-15T08:00:00.000Z" },
-  { id: "dn70", orderNo: "BL-20250319-070", company: "佛山市碧利莱照明有限公司", customerId: "c20", customerName: "潮州市湘桥区永丰铝业", customerAddress: "河源市制造业基地8栋6号", customerContact: "宋小姐", customerPhone: "18810289289", orderDate: "2025-03-19", items: [{ id: "di174", productCode: "YL-217", productName: "导轨灯壳", spec: "61*82", surface: "拉丝亮银", unit: "支", quantity: 180, length: 3795, weightPerMeter: 1.494, weight: 1020.551, unitPrice: 17.24, amount: 17594.3, remark: "" }, { id: "di175", productCode: "ZG-043", productName: "铝槽", spec: "30*81", surface: "拉丝金色", unit: "支", quantity: 164, length: 4895, weightPerMeter: 1.777, weight: 1426.54, unitPrice: 36.15, amount: 51569.42, remark: "" }, { id: "di176", productCode: "CT-276", productName: "商照外壳", spec: "43*83", surface: "银白氧化", unit: "个", quantity: 158, length: 1750, weightPerMeter: 2.024, weight: 559.636, unitPrice: 34.64, amount: 19385.79, remark: "" }, { id: "di177", productCode: "ZG-143", productName: "筒灯外壳", spec: "96*63", surface: "粉末喷涂", unit: "米", quantity: 22, length: 3038, weightPerMeter: 1.608, weight: 107.472, unitPrice: 21.02, amount: 2259.06, remark: "" }], totalWeight: 3114.199, totalAmount: 90808.57, reconcileStatus: "已对帐", remark: "", createdAt: "2025-03-19T08:00:00.000Z", updatedAt: "2025-03-19T08:00:00.000Z" },
-  { id: "dn71", orderNo: "BL-20250125-071", company: "佛山市质稳五金有限公司", customerId: "c21", customerName: "河源市源城区宏达五金", customerAddress: "佛山市南海区工业区28栋2号", customerContact: "张经理", customerPhone: "13852091325", orderDate: "2025-01-25", items: [{ id: "di178", productCode: "HP-414", productName: "铝扁条", spec: "72*94", surface: "电泳金", unit: "个", quantity: 40, length: 4894, weightPerMeter: 3.499, weight: 684.964, unitPrice: 35.3, amount: 24179.23, remark: "" }, { id: "di179", productCode: "GZ-168", productName: "铝工字材", spec: "40*5", surface: "喷涂白", unit: "个", quantity: 101, length: 5304, weightPerMeter: 2.686, weight: 1438.901, unitPrice: 24.5, amount: 35253.07, remark: "" }], totalWeight: 2123.865, totalAmount: 59432.3, reconcileStatus: "未对帐", remark: "", createdAt: "2025-01-25T08:00:00.000Z", updatedAt: "2025-01-25T08:00:00.000Z" },
-  { id: "dn72", orderNo: "BL-20250616-072", company: "佛山市碧利莱照明有限公司", customerId: "c22", customerName: "汕尾市城区鑫盛五金店", customerAddress: "佛山市顺德区科技路24栋3号", customerContact: "李总", customerPhone: "13941568532", orderDate: "2025-06-16", items: [{ id: "di180", productCode: "ZW-159", productName: "镜前灯壳", spec: "117*63", surface: "粉末喷涂", unit: "个", quantity: 179, length: 4083, weightPerMeter: 2.624, weight: 1917.769, unitPrice: 20.26, amount: 38854.0, remark: "" }], totalWeight: 1917.769, totalAmount: 38854.0, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-06-16T08:00:00.000Z", updatedAt: "2025-06-16T08:00:00.000Z" },
-  { id: "dn73", orderNo: "BL-20250710-073", company: "佛山市质稳五金有限公司", customerId: "c23", customerName: "云浮市云城区恒丰铝材", customerAddress: "中山市创业大道85栋19号", customerContact: "王先生", customerPhone: "13744999379", orderDate: "2025-07-10", items: [{ id: "di181", productCode: "HS-030", productName: "嵌入式灯框", spec: "143*53", surface: "电泳金", unit: "个", quantity: 63, length: 1206, weightPerMeter: 2.107, weight: 160.086, unitPrice: 43.25, amount: 6923.72, remark: "" }, { id: "di182", productCode: "ZG-223", productName: "台灯外壳", spec: "111*69", surface: "粉末喷涂", unit: "支", quantity: 30, length: 4214, weightPerMeter: 3.26, weight: 412.129, unitPrice: 31.65, amount: 13043.88, remark: "" }], totalWeight: 572.215, totalAmount: 19967.6, reconcileStatus: "已对帐", remark: "", createdAt: "2025-07-10T08:00:00.000Z", updatedAt: "2025-07-10T08:00:00.000Z" },
-  { id: "dn74", orderNo: "BL-20250610-074", company: "佛山市碧利莱照明有限公司", customerId: "c24", customerName: "佛山市南海区丹灶镇五金城", customerAddress: "广州市产业园2栋15号", customerContact: "陈小姐", customerPhone: "13919832887", orderDate: "2025-06-10", items: [{ id: "di183", productCode: "ZW-159", productName: "镜前灯壳", spec: "117*63", surface: "粉末喷涂", unit: "个", quantity: 171, length: 5890, weightPerMeter: 2.624, weight: 2642.867, unitPrice: 20.26, amount: 53544.49, remark: "" }], totalWeight: 2642.867, totalAmount: 53544.49, reconcileStatus: "未对帐", remark: "", createdAt: "2025-06-10T08:00:00.000Z", updatedAt: "2025-06-10T08:00:00.000Z" },
-  { id: "dn75", orderNo: "BL-20250713-075", company: "佛山市质稳五金有限公司", customerId: "c25", customerName: "中山市小榄镇永盛灯饰", customerAddress: "深圳市经济开发区21栋15号", customerContact: "刘先生", customerPhone: "13692097999", orderDate: "2025-07-13", items: [{ id: "di184", productCode: "SM-062", productName: "吊挂件", spec: "79*58", surface: "电泳金", unit: "米", quantity: 4, length: 1624, weightPerMeter: 3.268, weight: 21.229, unitPrice: 24.64, amount: 523.08, remark: "" }, { id: "di185", productCode: "HS-360", productName: "端盖", spec: "34*28", surface: "喷涂白", unit: "个", quantity: 3, length: 1842, weightPerMeter: 1.828, weight: 10.102, unitPrice: 12.94, amount: 130.72, remark: "" }], totalWeight: 31.331, totalAmount: 653.8, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-07-13T08:00:00.000Z", updatedAt: "2025-07-13T08:00:00.000Z" },
-  { id: "dn76", orderNo: "BL-20250512-076", company: "佛山市碧利莱照明有限公司", customerId: "c26", customerName: "广州市白云区太和镇铝材市场", customerAddress: "东莞市商贸城20栋9号", customerContact: "黄经理", customerPhone: "13691178885", orderDate: "2025-05-12", items: [{ id: "di186", productCode: "GZ-268", productName: "格栅灯框", spec: "135*30", surface: "高光白", unit: "支", quantity: 133, length: 2623, weightPerMeter: 3.487, weight: 1216.471, unitPrice: 24.28, amount: 29535.92, remark: "" }, { id: "di187", productCode: "CT-086", productName: "软灯条槽", spec: "56*26", surface: "铁灰氧化", unit: "米", quantity: 96, length: 1539, weightPerMeter: 1.883, weight: 278.202, unitPrice: 40.26, amount: 11200.41, remark: "" }, { id: "di188", productCode: "HP-384", productName: "泛光灯壳", spec: "106*53", surface: "氟碳喷涂", unit: "个", quantity: 200, length: 2701, weightPerMeter: 3.475, weight: 1877.195, unitPrice: 29.8, amount: 55940.41, remark: "" }], totalWeight: 3371.868, totalAmount: 96676.74, reconcileStatus: "已对帐", remark: "", createdAt: "2025-05-12T08:00:00.000Z", updatedAt: "2025-05-12T08:00:00.000Z" },
-  { id: "dn77", orderNo: "BL-20250711-077", company: "佛山市质稳五金有限公司", customerId: "c27", customerName: "深圳市宝安新区鑫达五金", customerAddress: "江门市五金市场36栋2号", customerContact: "林先生", customerPhone: "13854769200", orderDate: "2025-07-11", items: [{ id: "di189", productCode: "LD-395", productName: "硬灯条壳", spec: "69*74", surface: "拉丝金色", unit: "米", quantity: 8, length: 3244, weightPerMeter: 2.605, weight: 67.605, unitPrice: 30.93, amount: 2091.02, remark: "" }], totalWeight: 67.605, totalAmount: 2091.02, reconcileStatus: "未对帐", remark: "", createdAt: "2025-07-11T08:00:00.000Z", updatedAt: "2025-07-11T08:00:00.000Z" },
-  { id: "dn78", orderNo: "BL-20250730-078", company: "佛山市碧利莱照明有限公司", customerId: "c28", customerName: "东莞市常平镇光华铝材", customerAddress: "惠州市铝材城89栋5号", customerContact: "吴小姐", customerPhone: "13859555330", orderDate: "2025-07-30", items: [{ id: "di190", productCode: "HS-140", productName: "射灯外壳", spec: "126*69", surface: "高光白", unit: "米", quantity: 135, length: 1023, weightPerMeter: 3.481, weight: 480.744, unitPrice: 38.24, amount: 18383.65, remark: "" }, { id: "di191", productCode: "LD-135", productName: "路灯外壳", spec: "25*66", surface: "喷涂砂黑", unit: "个", quantity: 183, length: 5223, weightPerMeter: 1.63, weight: 1557.969, unitPrice: 62.95, amount: 98074.15, remark: "" }, { id: "di192", productCode: "SM-322", productName: "泛光灯壳", spec: "16*81", surface: "阳极氧化", unit: "支", quantity: 20, length: 4564, weightPerMeter: 1.111, weight: 101.412, unitPrice: 59.23, amount: 6006.63, remark: "" }, { id: "di193", productCode: "HP-234", productName: "固定座", spec: "119*5", surface: "拉丝铁灰", unit: "个", quantity: 131, length: 3450, weightPerMeter: 0.885, weight: 399.976, unitPrice: 16.18, amount: 6471.61, remark: "" }], totalWeight: 2540.101, totalAmount: 128936.04, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-07-30T08:00:00.000Z", updatedAt: "2025-07-30T08:00:00.000Z" },
-  { id: "dn79", orderNo: "BL-20250119-079", company: "佛山市质稳五金有限公司", customerId: "c29", customerName: "佛山市高明区荷城五金厂", customerAddress: "珠海市灯饰广场27栋8号", customerContact: "何总", customerPhone: "13957469942", orderDate: "2025-01-19", items: [{ id: "di194", productCode: "HS-440", productName: "洗墙灯壳", spec: "31*68", surface: "喷涂白", unit: "米", quantity: 146, length: 1867, weightPerMeter: 2.247, weight: 612.492, unitPrice: 48.06, amount: 29436.37, remark: "" }, { id: "di195", productCode: "ZW-189", productName: "电源外壳", spec: "139*54", surface: "电泳黑", unit: "个", quantity: 41, length: 2589, weightPerMeter: 3.032, weight: 321.844, unitPrice: 56.75, amount: 18264.65, remark: "" }, { id: "di196", productCode: "CT-396", productName: "软灯条槽", spec: "24*22", surface: "高光白", unit: "个", quantity: 27, length: 5201, weightPerMeter: 0.8, weight: 112.342, unitPrice: 57.23, amount: 6429.33, remark: "" }, { id: "di197", productCode: "CT-346", productName: "床头灯框", spec: "50*57", surface: "拉丝铁灰", unit: "支", quantity: 186, length: 1444, weightPerMeter: 3.378, weight: 907.277, unitPrice: 63.74, amount: 57829.84, remark: "" }], totalWeight: 1953.955, totalAmount: 111960.19, reconcileStatus: "已对帐", remark: "", createdAt: "2025-01-19T08:00:00.000Z", updatedAt: "2025-01-19T08:00:00.000Z" },
-  { id: "dn80", orderNo: "BL-20250304-080", company: "佛山市碧利莱照明有限公司", customerId: "c30", customerName: "江门市新会区会城灯饰配件", customerAddress: "汕头市制造业基地95栋11号", customerContact: "梁经理", customerPhone: "18899913412", orderDate: "2025-03-04", items: [{ id: "di198", productCode: "ZG-023", productName: "硬灯条壳", spec: "135*18", surface: "喷涂砂黑", unit: "米", quantity: 4, length: 2503, weightPerMeter: 1.058, weight: 10.593, unitPrice: 61.81, amount: 654.75, remark: "" }], totalWeight: 10.593, totalAmount: 654.75, reconcileStatus: "未对帐", remark: "", createdAt: "2025-03-04T08:00:00.000Z", updatedAt: "2025-03-04T08:00:00.000Z" },
-  { id: "dn81", orderNo: "BL-20250116-081", company: "佛山市质稳五金有限公司", customerId: "c31", customerName: "惠州市仲恺高新区恒通五金", customerAddress: "清远市工业区45栋10号", customerContact: "谢先生", customerPhone: "15939920292", orderDate: "2025-01-16", items: [{ id: "di199", productCode: "YL-187", productName: "LED灯体外壳", spec: "125*9", surface: "拉丝金色", unit: "支", quantity: 99, length: 1729, weightPerMeter: 1.8, weight: 308.108, unitPrice: 25.69, amount: 7915.29, remark: "" }, { id: "di200", productCode: "SM-092", productName: "嵌入式灯框", spec: "74*63", surface: "高光白", unit: "米", quantity: 10, length: 5029, weightPerMeter: 1.082, weight: 54.414, unitPrice: 62.84, amount: 3419.38, remark: "" }, { id: "di201", productCode: "SM-412", productName: "铝方管", spec: "87*6", surface: "高光白", unit: "支", quantity: 183, length: 5871, weightPerMeter: 0.771, weight: 828.357, unitPrice: 59.7, amount: 49452.91, remark: "" }, { id: "di202", productCode: "LD-215", productName: "明装灯框", spec: "122*64", surface: "喷涂砂黑", unit: "米", quantity: 58, length: 3136, weightPerMeter: 1.319, weight: 239.91, unitPrice: 61.99, amount: 14872.02, remark: "" }], totalWeight: 1430.789, totalAmount: 75659.6, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-01-16T08:00:00.000Z", updatedAt: "2025-01-16T08:00:00.000Z" },
-  { id: "dn82", orderNo: "BL-20250309-082", company: "佛山市碧利莱照明有限公司", customerId: "c32", customerName: "珠海市金湾区精锐灯饰", customerAddress: "肇庆市科技路87栋18号", customerContact: "郑小姐", customerPhone: "13713704481", orderDate: "2025-03-09", items: [{ id: "di203", productCode: "ZW-369", productName: "驱动壳", spec: "105*58", surface: "坯料", unit: "个", quantity: 82, length: 2722, weightPerMeter: 0.578, weight: 129.012, unitPrice: 50.62, amount: 6530.59, remark: "" }, { id: "di204", productCode: "ZG-423", productName: "堵头", spec: "96*37", surface: "喷涂砂黑", unit: "个", quantity: 20, length: 5182, weightPerMeter: 2.925, weight: 303.147, unitPrice: 36.46, amount: 11052.74, remark: "" }, { id: "di205", productCode: "BL-191", productName: "线条灯壳", spec: "58*46", surface: "粉末喷涂", unit: "米", quantity: 31, length: 4612, weightPerMeter: 3.186, weight: 455.509, unitPrice: 40.58, amount: 18484.56, remark: "" }, { id: "di206", productCode: "LD-345", productName: "镜前灯壳", spec: "45*5", surface: "拉丝亮银", unit: "个", quantity: 14, length: 1969, weightPerMeter: 1.68, weight: 46.311, unitPrice: 46.83, amount: 2168.74, remark: "" }], totalWeight: 933.979, totalAmount: 38236.63, reconcileStatus: "已对帐", remark: "", createdAt: "2025-03-09T08:00:00.000Z", updatedAt: "2025-03-09T08:00:00.000Z" },
-  { id: "dn83", orderNo: "BL-20250303-083", company: "佛山市质稳五金有限公司", customerId: "c33", customerName: "汕头市澄海区金源五金厂", customerAddress: "韶关市创业大道94栋11号", customerContact: "罗总", customerPhone: "18891363974", orderDate: "2025-03-03", items: [{ id: "di207", productCode: "CT-206", productName: "格栅灯框", spec: "64*48", surface: "电泳金", unit: "米", quantity: 18, length: 4310, weightPerMeter: 1.301, weight: 100.932, unitPrice: 18.27, amount: 1844.03, remark: "" }], totalWeight: 100.932, totalAmount: 1844.03, reconcileStatus: "未对帐", remark: "", createdAt: "2025-03-03T08:00:00.000Z", updatedAt: "2025-03-03T08:00:00.000Z" },
-  { id: "dn84", orderNo: "BL-20250814-084", company: "佛山市碧利莱照明有限公司", customerId: "c34", customerName: "佛山市南海区里水镇盛达铝材", customerAddress: "梅州市产业园69栋7号", customerContact: "韩经理", customerPhone: "13767887757", orderDate: "2025-08-14", items: [{ id: "di208", productCode: "YL-397", productName: "T5灯管壳", spec: "91*78", surface: "电泳黑", unit: "支", quantity: 80, length: 3181, weightPerMeter: 1.788, weight: 455.01, unitPrice: 24.49, amount: 11143.19, remark: "" }, { id: "di209", productCode: "LD-045", productName: "铝基板", spec: "15*91", surface: "电泳黑", unit: "个", quantity: 142, length: 4241, weightPerMeter: 0.914, weight: 550.431, unitPrice: 13.21, amount: 7271.19, remark: "" }, { id: "di210", productCode: "LD-005", productName: "线条灯壳", spec: "32*40", surface: "砂银氧化", unit: "米", quantity: 95, length: 2143, weightPerMeter: 2.988, weight: 608.312, unitPrice: 55.35, amount: 33670.07, remark: "" }], totalWeight: 1613.753, totalAmount: 52084.45, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-08-14T08:00:00.000Z", updatedAt: "2025-08-14T08:00:00.000Z" },
-  { id: "dn85", orderNo: "BL-20250320-085", company: "佛山市质稳五金有限公司", customerId: "c35", customerName: "中山市横栏镇华艺灯饰配件", customerAddress: "阳江市经济开发区52栋10号", customerContact: "唐先生", customerPhone: "15835748341", orderDate: "2025-03-20", items: [{ id: "di211", productCode: "ZW-379", productName: "投光灯壳", spec: "65*79", surface: "拉丝金色", unit: "支", quantity: 160, length: 2487, weightPerMeter: 0.928, weight: 369.27, unitPrice: 8.17, amount: 3016.94, remark: "" }, { id: "di212", productCode: "GZ-238", productName: "密封条", spec: "21*86", surface: "电泳金", unit: "支", quantity: 95, length: 5347, weightPerMeter: 0.12, weight: 60.956, unitPrice: 57.78, amount: 3522.04, remark: "" }, { id: "di213", productCode: "ZG-253", productName: "线条灯壳", spec: "149*42", surface: "电泳黑", unit: "支", quantity: 198, length: 2100, weightPerMeter: 2.128, weight: 884.822, unitPrice: 54.87, amount: 48550.18, remark: "" }], totalWeight: 1315.048, totalAmount: 55089.16, reconcileStatus: "已对帐", remark: "", createdAt: "2025-03-20T08:00:00.000Z", updatedAt: "2025-03-20T08:00:00.000Z" },
-  { id: "dn86", orderNo: "BL-20250711-086", company: "佛山市碧利莱照明有限公司", customerId: "c36", customerName: "广州市花都区新华五金店", customerAddress: "湛江市商贸城37栋7号", customerContact: "曹小姐", customerPhone: "18887844239", orderDate: "2025-07-11", items: [{ id: "di214", productCode: "GZ-078", productName: "射灯外壳", spec: "94*91", surface: "电泳金", unit: "个", quantity: 2, length: 3859, weightPerMeter: 2.44, weight: 18.832, unitPrice: 45.04, amount: 848.19, remark: "" }, { id: "di215", productCode: "ZG-013", productName: "壁灯外壳", spec: "72*44", surface: "电泳黑", unit: "支", quantity: 60, length: 4936, weightPerMeter: 0.371, weight: 109.875, unitPrice: 20.63, amount: 2266.72, remark: "" }], totalWeight: 128.707, totalAmount: 3114.91, reconcileStatus: "未对帐", remark: "", createdAt: "2025-07-11T08:00:00.000Z", updatedAt: "2025-07-11T08:00:00.000Z" },
-  { id: "dn87", orderNo: "BL-20250403-087", company: "佛山市质稳五金有限公司", customerId: "c37", customerName: "深圳市光明新区鑫隆铝业", customerAddress: "茂名市五金市场37栋17号", customerContact: "许总", customerPhone: "13722534217", orderDate: "2025-04-03", items: [{ id: "di216", productCode: "SM-172", productName: "固定座", spec: "90*78", surface: "高光白", unit: "支", quantity: 1, length: 5884, weightPerMeter: 1.636, weight: 9.626, unitPrice: 12.44, amount: 119.75, remark: "" }], totalWeight: 9.626, totalAmount: 119.75, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-04-03T08:00:00.000Z", updatedAt: "2025-04-03T08:00:00.000Z" },
-  { id: "dn88", orderNo: "BL-20250411-088", company: "佛山市碧利莱照明有限公司", customerId: "c38", customerName: "东莞市长安镇永丰五金", customerAddress: "揭阳市铝材城99栋3号", customerContact: "邓经理", customerPhone: "18965625330", orderDate: "2025-04-11", items: [{ id: "di217", productCode: "HP-054", productName: "转角件", spec: "115*11", surface: "铁灰氧化", unit: "个", quantity: 53, length: 4840, weightPerMeter: 2.319, weight: 594.87, unitPrice: 38.93, amount: 23158.29, remark: "" }, { id: "di218", productCode: "SM-122", productName: "感应器壳", spec: "41*63", surface: "拉丝铁灰", unit: "米", quantity: 108, length: 4530, weightPerMeter: 1.424, weight: 696.678, unitPrice: 18.82, amount: 13111.48, remark: "" }, { id: "di219", productCode: "BL-031", productName: "导轨灯壳", spec: "119*44", surface: "粉末喷涂", unit: "支", quantity: 37, length: 2792, weightPerMeter: 1.604, weight: 165.7, unitPrice: 33.24, amount: 5507.87, remark: "" }], totalWeight: 1457.248, totalAmount: 41777.64, reconcileStatus: "已对帐", remark: "", createdAt: "2025-04-11T08:00:00.000Z", updatedAt: "2025-04-11T08:00:00.000Z" },
-  { id: "dn89", orderNo: "BL-20250128-089", company: "佛山市质稳五金有限公司", customerId: "c39", customerName: "佛山市顺德区容桂镇恒丰灯饰", customerAddress: "潮州市灯饰广场29栋6号", customerContact: "萧先生", customerPhone: "18916740197", orderDate: "2025-01-28", items: [{ id: "di220", productCode: "ZW-119", productName: "灯座", spec: "123*61", surface: "喷涂砂黑", unit: "米", quantity: 134, length: 3883, weightPerMeter: 0.163, weight: 84.812, unitPrice: 29.12, amount: 2469.73, remark: "" }], totalWeight: 84.812, totalAmount: 2469.73, reconcileStatus: "未对帐", remark: "", createdAt: "2025-01-28T08:00:00.000Z", updatedAt: "2025-01-28T08:00:00.000Z" },
-  { id: "dn90", orderNo: "BL-20250703-090", company: "佛山市碧利莱照明有限公司", customerId: "c40", customerName: "江门市鹤山市沙坪五金厂", customerAddress: "河源市制造业基地97栋15号", customerContact: "宋小姐", customerPhone: "18883534128", orderDate: "2025-07-03", items: [{ id: "di221", productCode: "LD-235", productName: "连接件", spec: "116*28", surface: "拉丝金色", unit: "支", quantity: 192, length: 1195, weightPerMeter: 2.171, weight: 498.114, unitPrice: 21.71, amount: 10814.05, remark: "" }, { id: "di222", productCode: "GZ-298", productName: "端盖", spec: "37*45", surface: "拉丝铁灰", unit: "支", quantity: 25, length: 4640, weightPerMeter: 2.674, weight: 310.184, unitPrice: 37.35, amount: 11585.37, remark: "" }, { id: "di223", productCode: "ZW-069", productName: "投光灯壳", spec: "92*29", surface: "砂银氧化", unit: "个", quantity: 164, length: 3730, weightPerMeter: 2.682, weight: 1640.633, unitPrice: 29.5, amount: 48398.67, remark: "" }], totalWeight: 2448.931, totalAmount: 70798.09, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-07-03T08:00:00.000Z", updatedAt: "2025-07-03T08:00:00.000Z" },
-  { id: "dn91", orderNo: "BL-20250124-091", company: "佛山市质稳五金有限公司", customerId: "c41", customerName: "惠州市博罗县罗阳镇鑫源五金", customerAddress: "佛山市南海区工业区36栋15号", customerContact: "张经理", customerPhone: "13948349783", orderDate: "2025-01-24", items: [{ id: "di224", productCode: "ZG-223", productName: "台灯外壳", spec: "111*69", surface: "粉末喷涂", unit: "支", quantity: 170, length: 1570, weightPerMeter: 3.26, weight: 870.094, unitPrice: 31.65, amount: 27538.48, remark: "" }], totalWeight: 870.094, totalAmount: 27538.48, reconcileStatus: "已对帐", remark: "", createdAt: "2025-01-24T08:00:00.000Z", updatedAt: "2025-01-24T08:00:00.000Z" },
-  { id: "dn92", orderNo: "BL-20250306-092", company: "佛山市碧利莱照明有限公司", customerId: "c42", customerName: "珠海市斗门区井岸铝材店", customerAddress: "佛山市顺德区科技路89栋5号", customerContact: "李总", customerPhone: "15918620650", orderDate: "2025-03-06", items: [{ id: "di225", productCode: "HP-134", productName: "隧道灯壳", spec: "143*43", surface: "铁灰氧化", unit: "米", quantity: 81, length: 3719, weightPerMeter: 3.312, weight: 997.704, unitPrice: 10.47, amount: 10445.96, remark: "" }, { id: "di226", productCode: "ZW-359", productName: "连接件", spec: "113*59", surface: "喷涂砂黑", unit: "米", quantity: 189, length: 3172, weightPerMeter: 2.158, weight: 1293.738, unitPrice: 44.41, amount: 57454.9, remark: "" }, { id: "di227", productCode: "ZG-163", productName: "铝角码", spec: "123*58", surface: "喷砂氧化", unit: "支", quantity: 116, length: 2727, weightPerMeter: 1.579, weight: 499.488, unitPrice: 32.17, amount: 16068.53, remark: "" }], totalWeight: 2790.93, totalAmount: 83969.39, reconcileStatus: "未对帐", remark: "", createdAt: "2025-03-06T08:00:00.000Z", updatedAt: "2025-03-06T08:00:00.000Z" },
-  { id: "dn93", orderNo: "BL-20250305-093", company: "佛山市质稳五金有限公司", customerId: "c43", customerName: "汕头市潮南区陈店五金加工", customerAddress: "中山市创业大道99栋19号", customerContact: "王先生", customerPhone: "13887267850", orderDate: "2025-03-05", items: [{ id: "di228", productCode: "HP-104", productName: "铝扁条", spec: "52*37", surface: "喷涂白", unit: "米", quantity: 35, length: 5289, weightPerMeter: 1.881, weight: 348.201, unitPrice: 60.07, amount: 20916.43, remark: "" }], totalWeight: 348.201, totalAmount: 20916.43, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-03-05T08:00:00.000Z", updatedAt: "2025-03-05T08:00:00.000Z" },
-  { id: "dn94", orderNo: "BL-20250201-094", company: "佛山市碧利莱照明有限公司", customerId: "c44", customerName: "佛山市南海区狮山镇光华铝材", customerAddress: "广州市产业园29栋16号", customerContact: "陈小姐", customerPhone: "15946632757", orderDate: "2025-02-01", items: [{ id: "di229", productCode: "LD-055", productName: "透镜框", spec: "137*85", surface: "喷涂砂黑", unit: "支", quantity: 43, length: 4182, weightPerMeter: 0.697, weight: 125.339, unitPrice: 28.62, amount: 3587.2, remark: "" }, { id: "di230", productCode: "ZW-239", productName: "装饰盖", spec: "14*50", surface: "粉末喷涂", unit: "米", quantity: 81, length: 3830, weightPerMeter: 1.385, weight: 429.669, unitPrice: 29.28, amount: 12580.71, remark: "" }], totalWeight: 555.008, totalAmount: 16167.91, reconcileStatus: "已对帐", remark: "", createdAt: "2025-02-01T08:00:00.000Z", updatedAt: "2025-02-01T08:00:00.000Z" },
-  { id: "dn95", orderNo: "BL-20250204-095", company: "佛山市质稳五金有限公司", customerId: "c45", customerName: "中山市东升镇利达灯饰", customerAddress: "深圳市经济开发区69栋1号", customerContact: "刘先生", customerPhone: "18889442503", orderDate: "2025-02-04", items: [{ id: "di231", productCode: "LD-395", productName: "硬灯条壳", spec: "69*74", surface: "拉丝金色", unit: "米", quantity: 54, length: 4202, weightPerMeter: 2.605, weight: 591.095, unitPrice: 30.93, amount: 18282.57, remark: "" }, { id: "di232", productCode: "GZ-158", productName: "衣柜灯框", spec: "17*16", surface: "电泳金", unit: "米", quantity: 119, length: 2670, weightPerMeter: 2.318, weight: 736.498, unitPrice: 11.97, amount: 8815.88, remark: "" }, { id: "di233", productCode: "YL-437", productName: "电源外壳", spec: "67*43", surface: "砂银氧化", unit: "米", quantity: 31, length: 1240, weightPerMeter: 1.999, weight: 76.842, unitPrice: 64.44, amount: 4951.7, remark: "" }], totalWeight: 1404.435, totalAmount: 32050.15, reconcileStatus: "未对帐", remark: "", createdAt: "2025-02-04T08:00:00.000Z", updatedAt: "2025-02-04T08:00:00.000Z" },
-  { id: "dn96", orderNo: "BL-20250214-096", company: "佛山市碧利莱照明有限公司", customerId: "c46", customerName: "广州市增城区新塘五金店", customerAddress: "东莞市商贸城42栋7号", customerContact: "黄经理", customerPhone: "18953868501", orderDate: "2025-02-14", items: [{ id: "di234", productCode: "HP-424", productName: "密封条", spec: "135*63", surface: "喷涂白", unit: "支", quantity: 181, length: 5442, weightPerMeter: 2.684, weight: 2643.745, unitPrice: 35.85, amount: 94778.26, remark: "" }, { id: "di235", productCode: "BL-021", productName: "灯带铝槽", spec: "13*95", surface: "砂银氧化", unit: "个", quantity: 56, length: 3185, weightPerMeter: 0.835, weight: 148.931, unitPrice: 18.23, amount: 2715.01, remark: "" }, { id: "di236", productCode: "CT-076", productName: "吊灯外壳", spec: "49*14", surface: "高光白", unit: "支", quantity: 24, length: 2533, weightPerMeter: 0.103, weight: 6.262, unitPrice: 16.22, amount: 101.57, remark: "" }], totalWeight: 2798.938, totalAmount: 97594.84, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-02-14T08:00:00.000Z", updatedAt: "2025-02-14T08:00:00.000Z" },
-  { id: "dn97", orderNo: "BL-20250406-097", company: "佛山市质稳五金有限公司", customerId: "c47", customerName: "深圳市坪山新区鑫盛铝业", customerAddress: "江门市五金市场45栋8号", customerContact: "林先生", customerPhone: "13997477029", orderDate: "2025-04-06", items: [{ id: "di237", productCode: "ZG-263", productName: "吸顶灯框", spec: "123*14", surface: "喷涂砂黑", unit: "米", quantity: 13, length: 2948, weightPerMeter: 1.602, weight: 61.395, unitPrice: 29.14, amount: 1789.05, remark: "" }, { id: "di238", productCode: "HP-134", productName: "隧道灯壳", spec: "143*43", surface: "铁灰氧化", unit: "米", quantity: 45, length: 754, weightPerMeter: 3.312, weight: 112.376, unitPrice: 10.47, amount: 1176.58, remark: "" }, { id: "di239", productCode: "GZ-208", productName: "灯条外壳", spec: "35*69", surface: "氟碳喷涂", unit: "支", quantity: 116, length: 5054, weightPerMeter: 0.585, weight: 342.964, unitPrice: 24.86, amount: 8526.09, remark: "" }, { id: "di240", productCode: "HP-384", productName: "泛光灯壳", spec: "106*53", surface: "氟碳喷涂", unit: "个", quantity: 141, length: 2546, weightPerMeter: 3.475, weight: 1247.476, unitPrice: 29.8, amount: 37174.78, remark: "" }], totalWeight: 1764.211, totalAmount: 48666.5, reconcileStatus: "已对帐", remark: "", createdAt: "2025-04-06T08:00:00.000Z", updatedAt: "2025-04-06T08:00:00.000Z" },
-  { id: "dn98", orderNo: "BL-20250129-098", company: "佛山市碧利莱照明有限公司", customerId: "c48", customerName: "东莞市寮步镇恒通五金厂", customerAddress: "惠州市铝材城86栋4号", customerContact: "吴小姐", customerPhone: "15972415804", orderDate: "2025-01-29", items: [{ id: "di241", productCode: "ZG-053", productName: "装饰盖", spec: "141*5", surface: "砂银氧化", unit: "米", quantity: 36, length: 1494, weightPerMeter: 0.45, weight: 24.203, unitPrice: 52.04, amount: 1259.52, remark: "" }, { id: "di242", productCode: "YL-007", productName: "投光灯壳", spec: "17*68", surface: "喷涂砂黑", unit: "支", quantity: 16, length: 2320, weightPerMeter: 2.156, weight: 80.031, unitPrice: 29.6, amount: 2368.92, remark: "" }, { id: "di243", productCode: "YL-067", productName: "线条灯壳", spec: "135*24", surface: "喷砂氧化", unit: "支", quantity: 51, length: 3781, weightPerMeter: 1.026, weight: 197.845, unitPrice: 25.02, amount: 4950.08, remark: "" }, { id: "di244", productCode: "BL-191", productName: "线条灯壳", spec: "58*46", surface: "粉末喷涂", unit: "米", quantity: 176, length: 5663, weightPerMeter: 3.186, weight: 3175.448, unitPrice: 40.58, amount: 128859.68, remark: "" }], totalWeight: 3477.527, totalAmount: 137438.2, reconcileStatus: "未对帐", remark: "", createdAt: "2025-01-29T08:00:00.000Z", updatedAt: "2025-01-29T08:00:00.000Z" },
-  { id: "dn99", orderNo: "BL-20250902-099", company: "佛山市质稳五金有限公司", customerId: "c49", customerName: "佛山市南海区大沥镇永盛五金", customerAddress: "珠海市灯饰广场4栋10号", customerContact: "何总", customerPhone: "18863238057", orderDate: "2025-09-02", items: [{ id: "di245", productCode: "ZW-299", productName: "堵头", spec: "125*36", surface: "拉丝金色", unit: "米", quantity: 151, length: 2620, weightPerMeter: 0.884, weight: 349.728, unitPrice: 14.98, amount: 5238.93, remark: "" }], totalWeight: 349.728, totalAmount: 5238.93, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-09-02T08:00:00.000Z", updatedAt: "2025-09-02T08:00:00.000Z" },
-  { id: "dn100", orderNo: "BL-20250827-100", company: "佛山市碧利莱照明有限公司", customerId: "c50", customerName: "江门市台山市台城灯饰配件", customerAddress: "汕头市制造业基地45栋18号", customerContact: "梁经理", customerPhone: "18898787891", orderDate: "2025-08-27", items: [{ id: "di246", productCode: "SM-012", productName: "泛光灯壳", spec: "124*7", surface: "高光白", unit: "个", quantity: 17, length: 2119, weightPerMeter: 1.693, weight: 60.987, unitPrice: 48.58, amount: 2962.75, remark: "" }], totalWeight: 60.987, totalAmount: 2962.75, reconcileStatus: "已对帐", remark: "", createdAt: "2025-08-27T08:00:00.000Z", updatedAt: "2025-08-27T08:00:00.000Z" },
-  { id: "dn101", orderNo: "BL-20250824-101", company: "佛山市质稳五金有限公司", customerId: "c1", customerName: "佛山市南海区光明灯饰有限公司", customerAddress: "佛山市南海区工业区82栋4号", customerContact: "张经理", customerPhone: "13846913810", orderDate: "2025-08-24", items: [{ id: "di247", productCode: "LD-415", productName: "铝槽", spec: "71*75", surface: "粉末喷涂", unit: "支", quantity: 33, length: 1253, weightPerMeter: 2.135, weight: 88.28, unitPrice: 19.66, amount: 1735.58, remark: "" }, { id: "di248", productCode: "HP-434", productName: "吊挂件", spec: "48*35", surface: "阳极氧化", unit: "米", quantity: 85, length: 1503, weightPerMeter: 0.419, weight: 53.529, unitPrice: 13.49, amount: 722.11, remark: "" }, { id: "di249", productCode: "SM-022", productName: "灯条外壳", spec: "23*75", surface: "铁灰氧化", unit: "支", quantity: 119, length: 914, weightPerMeter: 1.893, weight: 205.894, unitPrice: 23.64, amount: 4867.33, remark: "" }, { id: "di250", productCode: "YL-087", productName: "T5灯管壳", spec: "107*84", surface: "喷涂砂黑", unit: "个", quantity: 147, length: 4048, weightPerMeter: 0.654, weight: 389.167, unitPrice: 42.74, amount: 16633.0, remark: "" }], totalWeight: 736.87, totalAmount: 23958.02, reconcileStatus: "未对帐", remark: "", createdAt: "2025-08-24T08:00:00.000Z", updatedAt: "2025-08-24T08:00:00.000Z" },
-  { id: "dn102", orderNo: "BL-20250803-102", company: "佛山市碧利莱照明有限公司", customerId: "c2", customerName: "中山市古镇华艺照明电器厂", customerAddress: "佛山市顺德区科技路12栋7号", customerContact: "李总", customerPhone: "15977827638", orderDate: "2025-08-03", items: [{ id: "di251", productCode: "LD-255", productName: "投光灯壳", spec: "52*93", surface: "粉末喷涂", unit: "个", quantity: 8, length: 3635, weightPerMeter: 1.588, weight: 46.179, unitPrice: 48.91, amount: 2258.61, remark: "" }, { id: "di252", productCode: "HS-350", productName: "铝方管", spec: "19*27", surface: "电泳金", unit: "米", quantity: 110, length: 1915, weightPerMeter: 2.031, weight: 427.83, unitPrice: 38.5, amount: 16471.45, remark: "" }, { id: "di253", productCode: "SM-182", productName: "接线盒", spec: "29*27", surface: "铁灰氧化", unit: "米", quantity: 55, length: 2033, weightPerMeter: 0.577, weight: 64.517, unitPrice: 51.27, amount: 3307.79, remark: "" }, { id: "di254", productCode: "BL-141", productName: "轨道灯壳", spec: "39*88", surface: "电泳黑", unit: "个", quantity: 72, length: 4153, weightPerMeter: 2.139, weight: 639.595, unitPrice: 13.65, amount: 8730.47, remark: "" }], totalWeight: 1178.121, totalAmount: 30768.32, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-08-03T08:00:00.000Z", updatedAt: "2025-08-03T08:00:00.000Z" },
-  { id: "dn103", orderNo: "BL-20250819-103", company: "佛山市质稳五金有限公司", customerId: "c3", customerName: "深圳市龙岗区盛达五金制品厂", customerAddress: "中山市创业大道1栋6号", customerContact: "王先生", customerPhone: "18855667651", orderDate: "2025-08-19", items: [{ id: "di255", productCode: "GZ-018", productName: "面板灯框", spec: "57*29", surface: "阳极氧化", unit: "个", quantity: 158, length: 5572, weightPerMeter: 1.899, weight: 1671.834, unitPrice: 51.44, amount: 85999.14, remark: "" }, { id: "di256", productCode: "CT-316", productName: "洗墙灯壳", spec: "141*22", surface: "高光白", unit: "支", quantity: 63, length: 5802, weightPerMeter: 1.627, weight: 594.711, unitPrice: 42.56, amount: 25310.9, remark: "" }], totalWeight: 2266.545, totalAmount: 111310.04, reconcileStatus: "已对帐", remark: "", createdAt: "2025-08-19T08:00:00.000Z", updatedAt: "2025-08-19T08:00:00.000Z" },
-  { id: "dn104", orderNo: "BL-20250321-104", company: "佛山市碧利莱照明有限公司", customerId: "c4", customerName: "广州市番禺区大石永丰铝材店", customerAddress: "广州市产业园78栋9号", customerContact: "陈小姐", customerPhone: "13871662963", orderDate: "2025-03-21", items: [{ id: "di257", productCode: "BL-211", productName: "T5灯管壳", spec: "52*97", surface: "喷砂氧化", unit: "支", quantity: 141, length: 4424, weightPerMeter: 1.35, weight: 842.108, unitPrice: 17.25, amount: 14526.36, remark: "" }, { id: "di258", productCode: "SM-032", productName: "磁吸灯框", spec: "35*31", surface: "氟碳喷涂", unit: "米", quantity: 23, length: 2791, weightPerMeter: 2.012, weight: 129.156, unitPrice: 11.43, amount: 1476.25, remark: "" }, { id: "di259", productCode: "YL-197", productName: "路灯外壳", spec: "23*85", surface: "砂银氧化", unit: "米", quantity: 36, length: 3934, weightPerMeter: 1.46, weight: 206.771, unitPrice: 27.29, amount: 5642.78, remark: "" }, { id: "di260", productCode: "ZG-103", productName: "铝圆管", spec: "148*51", surface: "喷涂砂黑", unit: "支", quantity: 165, length: 4807, weightPerMeter: 1.483, weight: 1176.249, unitPrice: 19.45, amount: 22878.04, remark: "" }], totalWeight: 2354.284, totalAmount: 44523.43, reconcileStatus: "未对帐", remark: "", createdAt: "2025-03-21T08:00:00.000Z", updatedAt: "2025-03-21T08:00:00.000Z" },
-  { id: "dn105", orderNo: "BL-20250309-105", company: "佛山市质稳五金有限公司", customerId: "c5", customerName: "东莞市石碣镇鑫达电子厂", customerAddress: "深圳市经济开发区91栋3号", customerContact: "刘先生", customerPhone: "13898753260", orderDate: "2025-03-09", items: [{ id: "di261", productCode: "CT-196", productName: "隧道灯壳", spec: "82*54", surface: "银白氧化", unit: "支", quantity: 183, length: 3441, weightPerMeter: 2.154, weight: 1356.38, unitPrice: 28.74, amount: 38982.36, remark: "" }], totalWeight: 1356.38, totalAmount: 38982.36, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-03-09T08:00:00.000Z", updatedAt: "2025-03-09T08:00:00.000Z" },
-  { id: "dn106", orderNo: "BL-20250507-106", company: "佛山市碧利莱照明有限公司", customerId: "c6", customerName: "佛山市顺德区勒流镇恒丰五金厂", customerAddress: "东莞市商贸城48栋12号", customerContact: "黄经理", customerPhone: "15999949389", orderDate: "2025-05-07", items: [{ id: "di262", productCode: "YL-177", productName: "装饰盖", spec: "89*100", surface: "坯料", unit: "个", quantity: 145, length: 4615, weightPerMeter: 1.432, weight: 958.259, unitPrice: 12.48, amount: 11959.07, remark: "" }, { id: "di263", productCode: "LD-165", productName: "铝圆管", spec: "134*72", surface: "砂银氧化", unit: "个", quantity: 100, length: 2715, weightPerMeter: 1.533, weight: 416.209, unitPrice: 24.15, amount: 10051.45, remark: "" }, { id: "di264", productCode: "ZG-093", productName: "导轨灯壳", spec: "108*66", surface: "电泳黑", unit: "个", quantity: 7, length: 3112, weightPerMeter: 2.966, weight: 64.611, unitPrice: 19.36, amount: 1250.87, remark: "" }, { id: "di265", productCode: "CT-306", productName: "接线盒", spec: "130*41", surface: "阳极氧化", unit: "个", quantity: 57, length: 740, weightPerMeter: 0.224, weight: 9.448, unitPrice: 36.21, amount: 342.11, remark: "" }], totalWeight: 1448.527, totalAmount: 23603.5, reconcileStatus: "已对帐", remark: "", createdAt: "2025-05-07T08:00:00.000Z", updatedAt: "2025-05-07T08:00:00.000Z" },
-  { id: "dn107", orderNo: "BL-20250822-107", company: "佛山市质稳五金有限公司", customerId: "c7", customerName: "江门市蓬江区天河照明有限公司", customerAddress: "江门市五金市场82栋18号", customerContact: "林先生", customerPhone: "15953524491", orderDate: "2025-08-22", items: [{ id: "di266", productCode: "HS-030", productName: "嵌入式灯框", spec: "143*53", surface: "电泳金", unit: "个", quantity: 121, length: 4837, weightPerMeter: 2.107, weight: 1233.179, unitPrice: 43.25, amount: 53334.99, remark: "" }, { id: "di267", productCode: "HP-184", productName: "感应器壳", spec: "92*85", surface: "喷涂白", unit: "支", quantity: 197, length: 5284, weightPerMeter: 2.672, weight: 2781.413, unitPrice: 33.59, amount: 93427.66, remark: "" }, { id: "di268", productCode: "HS-120", productName: "接线盒", spec: "35*92", surface: "喷涂白", unit: "个", quantity: 41, length: 1320, weightPerMeter: 3.329, weight: 180.165, unitPrice: 56.76, amount: 10226.17, remark: "" }], totalWeight: 4194.757, totalAmount: 156988.82, reconcileStatus: "未对帐", remark: "", createdAt: "2025-08-22T08:00:00.000Z", updatedAt: "2025-08-22T08:00:00.000Z" },
-  { id: "dn108", orderNo: "BL-20250309-108", company: "佛山市碧利莱照明有限公司", customerId: "c8", customerName: "惠州市惠城区宏达五金电器", customerAddress: "惠州市铝材城28栋16号", customerContact: "吴小姐", customerPhone: "18896282117", orderDate: "2025-03-09", items: [{ id: "di269", productCode: "YL-137", productName: "壁灯外壳", spec: "30*46", surface: "拉丝亮银", unit: "米", quantity: 137, length: 958, weightPerMeter: 2.508, weight: 329.165, unitPrice: 33.28, amount: 10954.61, remark: "" }, { id: "di270", productCode: "SM-392", productName: "格栅灯框", spec: "14*35", surface: "喷涂白", unit: "米", quantity: 57, length: 5216, weightPerMeter: 2.843, weight: 845.258, unitPrice: 31.9, amount: 26963.73, remark: "" }], totalWeight: 1174.423, totalAmount: 37918.34, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-03-09T08:00:00.000Z", updatedAt: "2025-03-09T08:00:00.000Z" },
-  { id: "dn109", orderNo: "BL-20250809-109", company: "佛山市质稳五金有限公司", customerId: "c9", customerName: "珠海市香洲区精锐铝业公司", customerAddress: "珠海市灯饰广场75栋13号", customerContact: "何总", customerPhone: "13739436733", orderDate: "2025-08-09", items: [{ id: "di271", productCode: "SM-182", productName: "接线盒", spec: "29*27", surface: "铁灰氧化", unit: "米", quantity: 45, length: 1942, weightPerMeter: 0.577, weight: 50.424, unitPrice: 51.27, amount: 2585.24, remark: "" }, { id: "di272", productCode: "SM-122", productName: "感应器壳", spec: "41*63", surface: "拉丝铁灰", unit: "米", quantity: 152, length: 3105, weightPerMeter: 1.424, weight: 672.071, unitPrice: 18.82, amount: 12648.38, remark: "" }, { id: "di273", productCode: "ZG-413", productName: "铝圆管", spec: "40*100", surface: "电泳黑", unit: "米", quantity: 189, length: 3439, weightPerMeter: 0.781, weight: 507.627, unitPrice: 18.83, amount: 9558.62, remark: "" }, { id: "di274", productCode: "ZG-303", productName: "透镜框", spec: "137*44", surface: "粉末喷涂", unit: "个", quantity: 8, length: 3380, weightPerMeter: 1.769, weight: 47.834, unitPrice: 37.34, amount: 1786.12, remark: "" }], totalWeight: 1277.956, totalAmount: 26578.36, reconcileStatus: "已对帐", remark: "", createdAt: "2025-08-09T08:00:00.000Z", updatedAt: "2025-08-09T08:00:00.000Z" },
-  { id: "dn110", orderNo: "BL-20250530-110", company: "佛山市碧利莱照明有限公司", customerId: "c10", customerName: "汕头市潮阳区金浦五金加工厂", customerAddress: "汕头市制造业基地9栋13号", customerContact: "梁经理", customerPhone: "18889978790", orderDate: "2025-05-30", items: [{ id: "di275", productCode: "ZW-289", productName: "铝圆管", spec: "30*10", surface: "坯料", unit: "支", quantity: 49, length: 4532, weightPerMeter: 0.192, weight: 42.637, unitPrice: 57.24, amount: 2440.54, remark: "" }, { id: "di276", productCode: "GZ-278", productName: "嵌入式灯框", spec: "114*78", surface: "铁灰氧化", unit: "米", quantity: 80, length: 1938, weightPerMeter: 2.53, weight: 392.251, unitPrice: 37.96, amount: 14889.85, remark: "" }], totalWeight: 434.888, totalAmount: 17330.39, reconcileStatus: "未对帐", remark: "", createdAt: "2025-05-30T08:00:00.000Z", updatedAt: "2025-05-30T08:00:00.000Z" },
-  { id: "dn111", orderNo: "BL-20250510-111", company: "佛山市质稳五金有限公司", customerId: "c11", customerName: "佛山市三水区西南街永盛铝材", customerAddress: "清远市工业区38栋14号", customerContact: "谢先生", customerPhone: "15870897765", orderDate: "2025-05-10", items: [{ id: "di277", productCode: "YL-047", productName: "安装支架", spec: "81*28", surface: "粉末喷涂", unit: "米", quantity: 15, length: 2405, weightPerMeter: 1.84, weight: 66.378, unitPrice: 33.21, amount: 2204.41, remark: "" }], totalWeight: 66.378, totalAmount: 2204.41, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-05-10T08:00:00.000Z", updatedAt: "2025-05-10T08:00:00.000Z" },
-  { id: "dn112", orderNo: "BL-20250608-112", company: "佛山市碧利莱照明有限公司", customerId: "c12", customerName: "清远市清城区鑫源五金厂", customerAddress: "肇庆市科技路20栋12号", customerContact: "郑小姐", customerPhone: "15882394227", orderDate: "2025-06-08", items: [{ id: "di278", productCode: "BL-011", productName: "路灯外壳", spec: "71*93", surface: "拉丝金色", unit: "米", quantity: 135, length: 4415, weightPerMeter: 2.534, weight: 1510.327, unitPrice: 35.85, amount: 54145.22, remark: "" }, { id: "di279", productCode: "BL-001", productName: "LED灯体外壳", spec: "49*60", surface: "坯料", unit: "支", quantity: 85, length: 5530, weightPerMeter: 2.243, weight: 1054.322, unitPrice: 55.24, amount: 58240.75, remark: "" }], totalWeight: 2564.649, totalAmount: 112385.97, reconcileStatus: "已对帐", remark: "", createdAt: "2025-06-08T08:00:00.000Z", updatedAt: "2025-06-08T08:00:00.000Z" },
-  { id: "dn113", orderNo: "BL-20250225-113", company: "佛山市质稳五金有限公司", customerId: "c13", customerName: "肇庆市端州区华兴灯饰配件", customerAddress: "韶关市创业大道8栋8号", customerContact: "罗总", customerPhone: "13921496211", orderDate: "2025-02-25", items: [{ id: "di280", productCode: "LD-175", productName: "堵头", spec: "102*16", surface: "粉末喷涂", unit: "支", quantity: 184, length: 1953, weightPerMeter: 2.815, weight: 1011.576, unitPrice: 43.23, amount: 43730.43, remark: "" }, { id: "di281", productCode: "BL-411", productName: "铝角码", spec: "65*66", surface: "拉丝金色", unit: "个", quantity: 83, length: 987, weightPerMeter: 0.699, weight: 57.263, unitPrice: 51.42, amount: 2944.46, remark: "" }], totalWeight: 1068.839, totalAmount: 46674.89, reconcileStatus: "未对帐", remark: "", createdAt: "2025-02-25T08:00:00.000Z", updatedAt: "2025-02-25T08:00:00.000Z" },
-  { id: "dn114", orderNo: "BL-20250110-114", company: "佛山市碧利莱照明有限公司", customerId: "c14", customerName: "韶关市武江区明辉五金店", customerAddress: "梅州市产业园78栋14号", customerContact: "韩经理", customerPhone: "15982383095", orderDate: "2025-01-10", items: [{ id: "di282", productCode: "BL-301", productName: "装饰盖", spec: "50*46", surface: "电泳黑", unit: "支", quantity: 181, length: 1660, weightPerMeter: 1.493, weight: 448.587, unitPrice: 62.87, amount: 28202.66, remark: "" }, { id: "di283", productCode: "YL-397", productName: "T5灯管壳", spec: "91*78", surface: "电泳黑", unit: "支", quantity: 29, length: 4811, weightPerMeter: 1.788, weight: 249.46, unitPrice: 24.49, amount: 6109.28, remark: "" }], totalWeight: 698.047, totalAmount: 34311.94, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-01-10T08:00:00.000Z", updatedAt: "2025-01-10T08:00:00.000Z" },
-  { id: "dn115", orderNo: "BL-20250813-115", company: "佛山市质稳五金有限公司", customerId: "c15", customerName: "梅州市梅县区恒通铝业", customerAddress: "阳江市经济开发区9栋11号", customerContact: "唐先生", customerPhone: "13888961459", orderDate: "2025-08-13", items: [{ id: "di284", productCode: "GZ-038", productName: "落地灯框", spec: "60*59", surface: "铁灰氧化", unit: "米", quantity: 96, length: 5924, weightPerMeter: 2.768, weight: 1574.173, unitPrice: 43.63, amount: 68681.17, remark: "" }, { id: "di285", productCode: "ZG-203", productName: "轨道灯壳", spec: "42*90", surface: "拉丝金色", unit: "米", quantity: 151, length: 1327, weightPerMeter: 1.35, weight: 270.509, unitPrice: 53.12, amount: 14369.44, remark: "" }, { id: "di286", productCode: "ZG-173", productName: "连接件", spec: "116*42", surface: "电泳黑", unit: "米", quantity: 78, length: 3142, weightPerMeter: 1.531, weight: 375.211, unitPrice: 31.05, amount: 11650.3, remark: "" }], totalWeight: 2219.893, totalAmount: 94700.91, reconcileStatus: "已对帐", remark: "", createdAt: "2025-08-13T08:00:00.000Z", updatedAt: "2025-08-13T08:00:00.000Z" },
-  { id: "dn116", orderNo: "BL-20250208-116", company: "佛山市碧利莱照明有限公司", customerId: "c16", customerName: "阳江市江城区利达五金厂", customerAddress: "湛江市商贸城43栋3号", customerContact: "曹小姐", customerPhone: "15947376585", orderDate: "2025-02-08", items: [{ id: "di287", productCode: "LD-375", productName: "电源外壳", spec: "135*16", surface: "喷涂砂黑", unit: "个", quantity: 112, length: 5736, weightPerMeter: 1.574, weight: 1011.188, unitPrice: 46.78, amount: 47303.37, remark: "" }, { id: "di288", productCode: "HS-250", productName: "散热器型材", spec: "96*28", surface: "拉丝铁灰", unit: "支", quantity: 167, length: 3099, weightPerMeter: 1.567, weight: 810.974, unitPrice: 62.52, amount: 50702.09, remark: "" }], totalWeight: 1822.162, totalAmount: 98005.46, reconcileStatus: "未对帐", remark: "", createdAt: "2025-02-08T08:00:00.000Z", updatedAt: "2025-02-08T08:00:00.000Z" },
-  { id: "dn117", orderNo: "BL-20250218-117", company: "佛山市质稳五金有限公司", customerId: "c17", customerName: "湛江市赤坎区鑫隆铝材", customerAddress: "茂名市五金市场25栋4号", customerContact: "许总", customerPhone: "13998447167", orderDate: "2025-02-18", items: [{ id: "di289", productCode: "LD-115", productName: "装饰盖", spec: "44*54", surface: "喷砂氧化", unit: "支", quantity: 171, length: 5324, weightPerMeter: 0.385, weight: 350.506, unitPrice: 58.57, amount: 20529.14, remark: "" }, { id: "di290", productCode: "GZ-418", productName: "散热片", spec: "130*45", surface: "阳极氧化", unit: "支", quantity: 45, length: 3599, weightPerMeter: 3.096, weight: 501.413, unitPrice: 34.56, amount: 17328.83, remark: "" }, { id: "di291", productCode: "GZ-158", productName: "衣柜灯框", spec: "17*16", surface: "电泳金", unit: "米", quantity: 188, length: 2912, weightPerMeter: 2.318, weight: 1269.003, unitPrice: 11.97, amount: 15189.97, remark: "" }], totalWeight: 2120.922, totalAmount: 53047.94, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-02-18T08:00:00.000Z", updatedAt: "2025-02-18T08:00:00.000Z" },
-  { id: "dn118", orderNo: "BL-20250206-118", company: "佛山市碧利莱照明有限公司", customerId: "c18", customerName: "茂名市茂南区光华五金店", customerAddress: "揭阳市铝材城14栋8号", customerContact: "邓经理", customerPhone: "15935529407", orderDate: "2025-02-06", items: [{ id: "di292", productCode: "HP-374", productName: "散热器型材", spec: "93*71", surface: "铁灰氧化", unit: "米", quantity: 1, length: 5192, weightPerMeter: 2.026, weight: 10.519, unitPrice: 16.54, amount: 173.98, remark: "" }, { id: "di293", productCode: "BL-201", productName: "吸顶灯框", spec: "110*21", surface: "拉丝亮银", unit: "个", quantity: 198, length: 5148, weightPerMeter: 3.389, weight: 3454.421, unitPrice: 47.81, amount: 165155.87, remark: "" }], totalWeight: 3464.94, totalAmount: 165329.85, reconcileStatus: "已对帐", remark: "", createdAt: "2025-02-06T08:00:00.000Z", updatedAt: "2025-02-06T08:00:00.000Z" },
-  { id: "dn119", orderNo: "BL-20250113-119", company: "佛山市质稳五金有限公司", customerId: "c19", customerName: "揭阳市榕城区东升五金厂", customerAddress: "潮州市灯饰广场71栋4号", customerContact: "萧先生", customerPhone: "13897529405", orderDate: "2025-01-13", items: [{ id: "di294", productCode: "ZW-309", productName: "防水盖", spec: "59*51", surface: "砂银氧化", unit: "个", quantity: 82, length: 5508, weightPerMeter: 0.206, weight: 93.041, unitPrice: 10.92, amount: 1016.01, remark: "" }, { id: "di295", productCode: "HP-114", productName: "密封条", spec: "136*19", surface: "阳极氧化", unit: "个", quantity: 164, length: 5132, weightPerMeter: 3.315, weight: 2790.063, unitPrice: 25.35, amount: 70728.1, remark: "" }], totalWeight: 2883.104, totalAmount: 71744.11, reconcileStatus: "未对帐", remark: "", createdAt: "2025-01-13T08:00:00.000Z", updatedAt: "2025-01-13T08:00:00.000Z" },
-  { id: "dn120", orderNo: "BL-20250131-120", company: "佛山市碧利莱照明有限公司", customerId: "c20", customerName: "潮州市湘桥区永丰铝业", customerAddress: "河源市制造业基地8栋6号", customerContact: "宋小姐", customerPhone: "18810289289", orderDate: "2025-01-31", items: [{ id: "di296", productCode: "ZG-073", productName: "路灯外壳", spec: "48*68", surface: "拉丝亮银", unit: "支", quantity: 85, length: 1137, weightPerMeter: 3.46, weight: 334.392, unitPrice: 53.17, amount: 17779.62, remark: "" }, { id: "di297", productCode: "SM-122", productName: "感应器壳", spec: "41*63", surface: "拉丝铁灰", unit: "米", quantity: 89, length: 3117, weightPerMeter: 1.424, weight: 395.036, unitPrice: 18.82, amount: 7434.58, remark: "" }, { id: "di298", productCode: "CT-086", productName: "软灯条槽", spec: "56*26", surface: "铁灰氧化", unit: "米", quantity: 163, length: 1226, weightPerMeter: 1.883, weight: 376.295, unitPrice: 40.26, amount: 15149.64, remark: "" }, { id: "di299", productCode: "BL-421", productName: "连接件", spec: "116*42", surface: "砂银氧化", unit: "支", quantity: 182, length: 5988, weightPerMeter: 0.95, weight: 1035.325, unitPrice: 61.28, amount: 63444.72, remark: "" }], totalWeight: 2141.048, totalAmount: 103808.56, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-01-31T08:00:00.000Z", updatedAt: "2025-01-31T08:00:00.000Z" },
-  { id: "dn121", orderNo: "BL-20250617-121", company: "佛山市质稳五金有限公司", customerId: "c21", customerName: "河源市源城区宏达五金", customerAddress: "佛山市南海区工业区28栋2号", customerContact: "张经理", customerPhone: "13852091325", orderDate: "2025-06-17", items: [{ id: "di300", productCode: "ZW-229", productName: "铝槽", spec: "150*98", surface: "砂银氧化", unit: "支", quantity: 3, length: 2672, weightPerMeter: 0.933, weight: 7.479, unitPrice: 55.59, amount: 415.76, remark: "" }, { id: "di301", productCode: "GZ-108", productName: "散热片", spec: "13*38", surface: "高光白", unit: "个", quantity: 64, length: 1055, weightPerMeter: 1.312, weight: 88.586, unitPrice: 53.07, amount: 4701.26, remark: "" }, { id: "di302", productCode: "HS-180", productName: "反光杯", spec: "47*35", surface: "银白氧化", unit: "个", quantity: 66, length: 1385, weightPerMeter: 3.175, weight: 290.227, unitPrice: 27.91, amount: 8100.24, remark: "" }], totalWeight: 386.292, totalAmount: 13217.26, reconcileStatus: "已对帐", remark: "", createdAt: "2025-06-17T08:00:00.000Z", updatedAt: "2025-06-17T08:00:00.000Z" },
-  { id: "dn122", orderNo: "BL-20250708-122", company: "佛山市碧利莱照明有限公司", customerId: "c22", customerName: "汕尾市城区鑫盛五金店", customerAddress: "佛山市顺德区科技路24栋3号", customerContact: "李总", customerPhone: "13941568532", orderDate: "2025-07-08", items: [{ id: "di303", productCode: "LD-025", productName: "T5灯管壳", spec: "23*37", surface: "拉丝亮银", unit: "支", quantity: 99, length: 4089, weightPerMeter: 1.57, weight: 635.553, unitPrice: 18.51, amount: 11764.09, remark: "" }], totalWeight: 635.553, totalAmount: 11764.09, reconcileStatus: "未对帐", remark: "", createdAt: "2025-07-08T08:00:00.000Z", updatedAt: "2025-07-08T08:00:00.000Z" },
-  { id: "dn123", orderNo: "BL-20250711-123", company: "佛山市质稳五金有限公司", customerId: "c23", customerName: "云浮市云城区恒丰铝材", customerAddress: "中山市创业大道85栋19号", customerContact: "王先生", customerPhone: "13744999379", orderDate: "2025-07-11", items: [{ id: "di304", productCode: "CT-086", productName: "软灯条槽", spec: "56*26", surface: "铁灰氧化", unit: "米", quantity: 106, length: 4539, weightPerMeter: 1.883, weight: 905.975, unitPrice: 40.26, amount: 36474.55, remark: "" }, { id: "di305", productCode: "SM-452", productName: "面板灯框", spec: "125*67", surface: "银白氧化", unit: "米", quantity: 97, length: 3377, weightPerMeter: 0.152, weight: 49.79, unitPrice: 23.58, amount: 1174.05, remark: "" }, { id: "di306", productCode: "HS-280", productName: "磁吸灯框", spec: "42*75", surface: "喷涂白", unit: "支", quantity: 97, length: 1330, weightPerMeter: 1.657, weight: 213.77, unitPrice: 37.49, amount: 8014.24, remark: "" }, { id: "di307", productCode: "LD-425", productName: "装饰盖", spec: "53*22", surface: "拉丝亮银", unit: "米", quantity: 123, length: 5235, weightPerMeter: 0.63, weight: 405.66, unitPrice: 53.31, amount: 21625.73, remark: "" }], totalWeight: 1575.195, totalAmount: 67288.57, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-07-11T08:00:00.000Z", updatedAt: "2025-07-11T08:00:00.000Z" },
-  { id: "dn124", orderNo: "BL-20250620-124", company: "佛山市碧利莱照明有限公司", customerId: "c24", customerName: "佛山市南海区丹灶镇五金城", customerAddress: "广州市产业园2栋15号", customerContact: "陈小姐", customerPhone: "13919832887", orderDate: "2025-06-20", items: [{ id: "di308", productCode: "HP-084", productName: "灯条外壳", spec: "93*12", surface: "银白氧化", unit: "个", quantity: 116, length: 1103, weightPerMeter: 1.083, weight: 138.568, unitPrice: 9.65, amount: 1337.18, remark: "" }, { id: "di309", productCode: "HS-410", productName: "落地灯框", spec: "20*14", surface: "拉丝铁灰", unit: "米", quantity: 9, length: 2915, weightPerMeter: 1.351, weight: 35.443, unitPrice: 42.48, amount: 1505.62, remark: "" }], totalWeight: 174.011, totalAmount: 2842.8, reconcileStatus: "已对帐", remark: "", createdAt: "2025-06-20T08:00:00.000Z", updatedAt: "2025-06-20T08:00:00.000Z" },
-  { id: "dn125", orderNo: "BL-20250110-125", company: "佛山市质稳五金有限公司", customerId: "c25", customerName: "中山市小榄镇永盛灯饰", customerAddress: "深圳市经济开发区21栋15号", customerContact: "刘先生", customerPhone: "13692097999", orderDate: "2025-01-10", items: [{ id: "di310", productCode: "HP-134", productName: "隧道灯壳", spec: "143*43", surface: "铁灰氧化", unit: "米", quantity: 27, length: 1107, weightPerMeter: 3.312, weight: 98.992, unitPrice: 10.47, amount: 1036.45, remark: "" }, { id: "di311", productCode: "CT-176", productName: "密封条", spec: "121*80", surface: "氟碳喷涂", unit: "米", quantity: 44, length: 3575, weightPerMeter: 1.557, weight: 244.916, unitPrice: 14.03, amount: 3436.17, remark: "" }, { id: "di312", productCode: "ZG-083", productName: "灯带铝槽", spec: "52*93", surface: "喷砂氧化", unit: "米", quantity: 188, length: 1114, weightPerMeter: 2.478, weight: 518.972, unitPrice: 13.73, amount: 7125.49, remark: "" }], totalWeight: 862.88, totalAmount: 11598.11, reconcileStatus: "未对帐", remark: "", createdAt: "2025-01-10T08:00:00.000Z", updatedAt: "2025-01-10T08:00:00.000Z" },
-  { id: "dn126", orderNo: "BL-20250525-126", company: "佛山市碧利莱照明有限公司", customerId: "c26", customerName: "广州市白云区太和镇铝材市场", customerAddress: "东莞市商贸城20栋9号", customerContact: "黄经理", customerPhone: "13691178885", orderDate: "2025-05-25", items: [{ id: "di313", productCode: "HP-174", productName: "端盖", spec: "93*26", surface: "电泳金", unit: "个", quantity: 153, length: 5526, weightPerMeter: 0.447, weight: 377.929, unitPrice: 9.19, amount: 3473.17, remark: "" }], totalWeight: 377.929, totalAmount: 3473.17, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-05-25T08:00:00.000Z", updatedAt: "2025-05-25T08:00:00.000Z" },
-  { id: "dn127", orderNo: "BL-20250821-127", company: "佛山市质稳五金有限公司", customerId: "c27", customerName: "深圳市宝安新区鑫达五金", customerAddress: "江门市五金市场36栋2号", customerContact: "林先生", customerPhone: "13854769200", orderDate: "2025-08-21", items: [{ id: "di314", productCode: "BL-361", productName: "堵头", spec: "73*5", surface: "拉丝亮银", unit: "支", quantity: 8, length: 4033, weightPerMeter: 3.437, weight: 110.891, unitPrice: 35.21, amount: 3904.47, remark: "" }, { id: "di315", productCode: "LD-335", productName: "T5灯管壳", spec: "135*45", surface: "粉末喷涂", unit: "米", quantity: 43, length: 5475, weightPerMeter: 2.482, weight: 584.325, unitPrice: 47.34, amount: 27661.95, remark: "" }, { id: "di316", productCode: "ZG-223", productName: "台灯外壳", spec: "111*69", surface: "粉末喷涂", unit: "支", quantity: 41, length: 938, weightPerMeter: 3.26, weight: 125.373, unitPrice: 31.65, amount: 3968.06, remark: "" }, { id: "di317", productCode: "SM-052", productName: "密封条", spec: "74*46", surface: "银白氧化", unit: "支", quantity: 85, length: 2183, weightPerMeter: 0.177, weight: 32.843, unitPrice: 13.02, amount: 427.62, remark: "" }], totalWeight: 853.432, totalAmount: 35962.1, reconcileStatus: "已对帐", remark: "", createdAt: "2025-08-21T08:00:00.000Z", updatedAt: "2025-08-21T08:00:00.000Z" },
-  { id: "dn128", orderNo: "BL-20250222-128", company: "佛山市碧利莱照明有限公司", customerId: "c28", customerName: "东莞市常平镇光华铝材", customerAddress: "惠州市铝材城89栋5号", customerContact: "吴小姐", customerPhone: "13859555330", orderDate: "2025-02-22", items: [{ id: "di318", productCode: "YL-357", productName: "安装支架", spec: "57*6", surface: "砂银氧化", unit: "个", quantity: 142, length: 4924, weightPerMeter: 2.572, weight: 1798.363, unitPrice: 44.95, amount: 80836.42, remark: "" }, { id: "di319", productCode: "CT-136", productName: "泛光灯壳", spec: "37*67", surface: "喷涂白", unit: "支", quantity: 170, length: 2806, weightPerMeter: 2.973, weight: 1418.18, unitPrice: 32.3, amount: 45807.21, remark: "" }, { id: "di320", productCode: "ZG-153", productName: "明装灯框", spec: "67*59", surface: "拉丝亮银", unit: "个", quantity: 61, length: 1285, weightPerMeter: 1.318, weight: 103.311, unitPrice: 51.47, amount: 5317.42, remark: "" }, { id: "di321", productCode: "CT-026", productName: "T8灯管壳", spec: "26*56", surface: "拉丝铁灰", unit: "米", quantity: 101, length: 5183, weightPerMeter: 3.297, weight: 1725.923, unitPrice: 35.23, amount: 60804.27, remark: "" }], totalWeight: 5045.777, totalAmount: 192765.32, reconcileStatus: "未对帐", remark: "", createdAt: "2025-02-22T08:00:00.000Z", updatedAt: "2025-02-22T08:00:00.000Z" },
-  { id: "dn129", orderNo: "BL-20250525-129", company: "佛山市质稳五金有限公司", customerId: "c29", customerName: "佛山市高明区荷城五金厂", customerAddress: "珠海市灯饰广场27栋8号", customerContact: "何总", customerPhone: "13957469942", orderDate: "2025-05-25", items: [{ id: "di322", productCode: "ZW-079", productName: "轨道灯壳", spec: "91*85", surface: "粉末喷涂", unit: "支", quantity: 14, length: 3455, weightPerMeter: 3.015, weight: 145.836, unitPrice: 29.66, amount: 4325.5, remark: "" }, { id: "di323", productCode: "SM-002", productName: "散热器型材", spec: "79*83", surface: "阳极氧化", unit: "米", quantity: 110, length: 1217, weightPerMeter: 0.658, weight: 88.086, unitPrice: 37.74, amount: 3324.37, remark: "" }, { id: "di324", productCode: "BL-151", productName: "天花灯框", spec: "49*89", surface: "喷涂砂黑", unit: "支", quantity: 170, length: 5620, weightPerMeter: 0.407, weight: 388.848, unitPrice: 36.92, amount: 14356.27, remark: "" }, { id: "di325", productCode: "GZ-308", productName: "感应器壳", spec: "113*51", surface: "银白氧化", unit: "米", quantity: 123, length: 2135, weightPerMeter: 3.094, weight: 812.5, unitPrice: 49.47, amount: 40194.38, remark: "" }], totalWeight: 1435.27, totalAmount: 62200.52, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-05-25T08:00:00.000Z", updatedAt: "2025-05-25T08:00:00.000Z" },
-  { id: "dn130", orderNo: "BL-20250129-130", company: "佛山市碧利莱照明有限公司", customerId: "c30", customerName: "江门市新会区会城灯饰配件", customerAddress: "汕头市制造业基地95栋11号", customerContact: "梁经理", customerPhone: "18899913412", orderDate: "2025-01-29", items: [{ id: "di326", productCode: "CT-106", productName: "铝工字材", spec: "129*14", surface: "拉丝铁灰", unit: "支", quantity: 44, length: 5728, weightPerMeter: 3.053, weight: 769.454, unitPrice: 53.84, amount: 41427.4, remark: "" }], totalWeight: 769.454, totalAmount: 41427.4, reconcileStatus: "已对帐", remark: "", createdAt: "2025-01-29T08:00:00.000Z", updatedAt: "2025-01-29T08:00:00.000Z" },
-  { id: "dn131", orderNo: "BL-20250320-131", company: "佛山市质稳五金有限公司", customerId: "c31", customerName: "惠州市仲恺高新区恒通五金", customerAddress: "清远市工业区45栋10号", customerContact: "谢先生", customerPhone: "15939920292", orderDate: "2025-03-20", items: [{ id: "di327", productCode: "ZG-243", productName: "灯座", spec: "56*22", surface: "喷砂氧化", unit: "个", quantity: 30, length: 3026, weightPerMeter: 1.653, weight: 150.059, unitPrice: 47.64, amount: 7148.81, remark: "" }], totalWeight: 150.059, totalAmount: 7148.81, reconcileStatus: "未对帐", remark: "", createdAt: "2025-03-20T08:00:00.000Z", updatedAt: "2025-03-20T08:00:00.000Z" },
-  { id: "dn132", orderNo: "BL-20250724-132", company: "佛山市碧利莱照明有限公司", customerId: "c32", customerName: "珠海市金湾区精锐灯饰", customerAddress: "肇庆市科技路87栋18号", customerContact: "郑小姐", customerPhone: "13713704481", orderDate: "2025-07-24", items: [{ id: "di328", productCode: "SM-242", productName: "反光杯", spec: "54*92", surface: "阳极氧化", unit: "米", quantity: 126, length: 5915, weightPerMeter: 1.934, weight: 1441.391, unitPrice: 54.37, amount: 78368.43, remark: "" }, { id: "di329", productCode: "CT-136", productName: "泛光灯壳", spec: "37*67", surface: "喷涂白", unit: "支", quantity: 24, length: 5758, weightPerMeter: 2.973, weight: 410.845, unitPrice: 32.3, amount: 13270.29, remark: "" }, { id: "di330", productCode: "ZW-279", productName: "导轨灯壳", spec: "28*62", surface: "喷涂砂黑", unit: "个", quantity: 100, length: 2014, weightPerMeter: 0.304, weight: 61.226, unitPrice: 63.43, amount: 3883.57, remark: "" }, { id: "di331", productCode: "HS-190", productName: "灯管外壳", spec: "20*62", surface: "电泳金", unit: "支", quantity: 98, length: 3526, weightPerMeter: 1.646, weight: 568.772, unitPrice: 39.6, amount: 22523.37, remark: "" }], totalWeight: 2482.234, totalAmount: 118045.66, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-07-24T08:00:00.000Z", updatedAt: "2025-07-24T08:00:00.000Z" },
-  { id: "dn133", orderNo: "BL-20250221-133", company: "佛山市质稳五金有限公司", customerId: "c33", customerName: "汕头市澄海区金源五金厂", customerAddress: "韶关市创业大道94栋11号", customerContact: "罗总", customerPhone: "18891363974", orderDate: "2025-02-21", items: [{ id: "di332", productCode: "ZG-023", productName: "硬灯条壳", spec: "135*18", surface: "喷涂砂黑", unit: "米", quantity: 68, length: 4102, weightPerMeter: 1.058, weight: 295.114, unitPrice: 61.81, amount: 18241.0, remark: "" }, { id: "di333", productCode: "ZW-239", productName: "装饰盖", spec: "14*50", surface: "粉末喷涂", unit: "米", quantity: 68, length: 2353, weightPerMeter: 1.385, weight: 221.606, unitPrice: 29.28, amount: 6488.62, remark: "" }], totalWeight: 516.72, totalAmount: 24729.62, reconcileStatus: "已对帐", remark: "", createdAt: "2025-02-21T08:00:00.000Z", updatedAt: "2025-02-21T08:00:00.000Z" },
-  { id: "dn134", orderNo: "BL-20250807-134", company: "佛山市碧利莱照明有限公司", customerId: "c34", customerName: "佛山市南海区里水镇盛达铝材", customerAddress: "梅州市产业园69栋7号", customerContact: "韩经理", customerPhone: "13767887757", orderDate: "2025-08-07", items: [{ id: "di334", productCode: "ZW-289", productName: "铝圆管", spec: "30*10", surface: "坯料", unit: "支", quantity: 16, length: 1738, weightPerMeter: 0.192, weight: 5.339, unitPrice: 57.24, amount: 305.6, remark: "" }, { id: "di335", productCode: "CT-386", productName: "吊灯外壳", spec: "55*73", surface: "阳极氧化", unit: "米", quantity: 179, length: 5967, weightPerMeter: 2.305, weight: 2461.954, unitPrice: 27.82, amount: 68491.56, remark: "" }], totalWeight: 2467.293, totalAmount: 68797.16, reconcileStatus: "未对帐", remark: "", createdAt: "2025-08-07T08:00:00.000Z", updatedAt: "2025-08-07T08:00:00.000Z" },
-  { id: "dn135", orderNo: "BL-20250129-135", company: "佛山市质稳五金有限公司", customerId: "c35", customerName: "中山市横栏镇华艺灯饰配件", customerAddress: "阳江市经济开发区52栋10号", customerContact: "唐先生", customerPhone: "15835748341", orderDate: "2025-01-29", items: [{ id: "di336", productCode: "ZG-343", productName: "橱柜灯壳", spec: "67*86", surface: "喷涂砂黑", unit: "支", quantity: 89, length: 4935, weightPerMeter: 0.225, weight: 98.823, unitPrice: 59.6, amount: 5889.85, remark: "" }], totalWeight: 98.823, totalAmount: 5889.85, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-01-29T08:00:00.000Z", updatedAt: "2025-01-29T08:00:00.000Z" },
-  { id: "dn136", orderNo: "BL-20250420-136", company: "佛山市碧利莱照明有限公司", customerId: "c36", customerName: "广州市花都区新华五金店", customerAddress: "湛江市商贸城37栋7号", customerContact: "曹小姐", customerPhone: "18887844239", orderDate: "2025-04-20", items: [{ id: "di337", productCode: "HP-284", productName: "床头灯框", spec: "142*41", surface: "高光白", unit: "米", quantity: 16, length: 3671, weightPerMeter: 0.828, weight: 48.633, unitPrice: 62.01, amount: 3015.73, remark: "" }], totalWeight: 48.633, totalAmount: 3015.73, reconcileStatus: "已对帐", remark: "", createdAt: "2025-04-20T08:00:00.000Z", updatedAt: "2025-04-20T08:00:00.000Z" },
-  { id: "dn137", orderNo: "BL-20250802-137", company: "佛山市质稳五金有限公司", customerId: "c37", customerName: "深圳市光明新区鑫隆铝业", customerAddress: "茂名市五金市场37栋17号", customerContact: "许总", customerPhone: "13722534217", orderDate: "2025-08-02", items: [{ id: "di338", productCode: "LD-275", productName: "天花灯框", spec: "102*75", surface: "喷砂氧化", unit: "米", quantity: 176, length: 4389, weightPerMeter: 0.867, weight: 669.726, unitPrice: 36.16, amount: 24217.29, remark: "" }, { id: "di339", productCode: "HP-294", productName: "散热片", spec: "50*61", surface: "铁灰氧化", unit: "个", quantity: 61, length: 4401, weightPerMeter: 1.615, weight: 433.565, unitPrice: 47.25, amount: 20485.95, remark: "" }], totalWeight: 1103.291, totalAmount: 44703.24, reconcileStatus: "未对帐", remark: "", createdAt: "2025-08-02T08:00:00.000Z", updatedAt: "2025-08-02T08:00:00.000Z" },
-  { id: "dn138", orderNo: "BL-20250322-138", company: "佛山市碧利莱照明有限公司", customerId: "c38", customerName: "东莞市长安镇永丰五金", customerAddress: "揭阳市铝材城99栋3号", customerContact: "邓经理", customerPhone: "18965625330", orderDate: "2025-03-22", items: [{ id: "di340", productCode: "ZG-203", productName: "轨道灯壳", spec: "42*90", surface: "拉丝金色", unit: "米", quantity: 183, length: 784, weightPerMeter: 1.35, weight: 193.687, unitPrice: 53.12, amount: 10288.65, remark: "" }], totalWeight: 193.687, totalAmount: 10288.65, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-03-22T08:00:00.000Z", updatedAt: "2025-03-22T08:00:00.000Z" },
-  { id: "dn139", orderNo: "BL-20250513-139", company: "佛山市质稳五金有限公司", customerId: "c39", customerName: "佛山市顺德区容桂镇恒丰灯饰", customerAddress: "潮州市灯饰广场29栋6号", customerContact: "萧先生", customerPhone: "18916740197", orderDate: "2025-05-13", items: [{ id: "di341", productCode: "ZG-293", productName: "铝基板", spec: "113*43", surface: "砂银氧化", unit: "米", quantity: 133, length: 5181, weightPerMeter: 0.895, weight: 616.72, unitPrice: 54.02, amount: 33315.21, remark: "" }], totalWeight: 616.72, totalAmount: 33315.21, reconcileStatus: "已对帐", remark: "", createdAt: "2025-05-13T08:00:00.000Z", updatedAt: "2025-05-13T08:00:00.000Z" },
-  { id: "dn140", orderNo: "BL-20250627-140", company: "佛山市碧利莱照明有限公司", customerId: "c40", customerName: "江门市鹤山市沙坪五金厂", customerAddress: "河源市制造业基地97栋15号", customerContact: "宋小姐", customerPhone: "18883534128", orderDate: "2025-06-27", items: [{ id: "di342", productCode: "GZ-318", productName: "地埋灯壳", spec: "86*80", surface: "电泳金", unit: "个", quantity: 38, length: 1485, weightPerMeter: 3.468, weight: 195.699, unitPrice: 50.14, amount: 9812.35, remark: "" }], totalWeight: 195.699, totalAmount: 9812.35, reconcileStatus: "未对帐", remark: "", createdAt: "2025-06-27T08:00:00.000Z", updatedAt: "2025-06-27T08:00:00.000Z" },
-  { id: "dn141", orderNo: "BL-20250717-141", company: "佛山市质稳五金有限公司", customerId: "c41", customerName: "惠州市博罗县罗阳镇鑫源五金", customerAddress: "佛山市南海区工业区36栋15号", customerContact: "张经理", customerPhone: "13948349783", orderDate: "2025-07-17", items: [{ id: "di343", productCode: "HS-230", productName: "铝工字材", spec: "83*35", surface: "铁灰氧化", unit: "米", quantity: 45, length: 1869, weightPerMeter: 2.151, weight: 180.91, unitPrice: 32.13, amount: 5812.64, remark: "" }], totalWeight: 180.91, totalAmount: 5812.64, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-07-17T08:00:00.000Z", updatedAt: "2025-07-17T08:00:00.000Z" },
-  { id: "dn142", orderNo: "BL-20250228-142", company: "佛山市碧利莱照明有限公司", customerId: "c42", customerName: "珠海市斗门区井岸铝材店", customerAddress: "佛山市顺德区科技路89栋5号", customerContact: "李总", customerPhone: "15918620650", orderDate: "2025-02-28", items: [{ id: "di344", productCode: "HP-414", productName: "铝扁条", spec: "72*94", surface: "电泳金", unit: "个", quantity: 50, length: 1533, weightPerMeter: 3.499, weight: 268.198, unitPrice: 35.3, amount: 9467.39, remark: "" }], totalWeight: 268.198, totalAmount: 9467.39, reconcileStatus: "已对帐", remark: "", createdAt: "2025-02-28T08:00:00.000Z", updatedAt: "2025-02-28T08:00:00.000Z" },
-  { id: "dn143", orderNo: "BL-20250115-143", company: "佛山市质稳五金有限公司", customerId: "c43", customerName: "汕头市潮南区陈店五金加工", customerAddress: "中山市创业大道99栋19号", customerContact: "王先生", customerPhone: "13887267850", orderDate: "2025-01-15", items: [{ id: "di345", productCode: "YL-217", productName: "导轨灯壳", spec: "61*82", surface: "拉丝亮银", unit: "支", quantity: 21, length: 4066, weightPerMeter: 1.494, weight: 127.567, unitPrice: 17.24, amount: 2199.26, remark: "" }], totalWeight: 127.567, totalAmount: 2199.26, reconcileStatus: "未对帐", remark: "", createdAt: "2025-01-15T08:00:00.000Z", updatedAt: "2025-01-15T08:00:00.000Z" },
-  { id: "dn144", orderNo: "BL-20250225-144", company: "佛山市碧利莱照明有限公司", customerId: "c44", customerName: "佛山市南海区狮山镇光华铝材", customerAddress: "广州市产业园29栋16号", customerContact: "陈小姐", customerPhone: "15946632757", orderDate: "2025-02-25", items: [{ id: "di346", productCode: "SM-422", productName: "端盖", spec: "107*77", surface: "铁灰氧化", unit: "米", quantity: 161, length: 1711, weightPerMeter: 0.576, weight: 158.671, unitPrice: 26.8, amount: 4252.38, remark: "" }], totalWeight: 158.671, totalAmount: 4252.38, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-02-25T08:00:00.000Z", updatedAt: "2025-02-25T08:00:00.000Z" },
-  { id: "dn145", orderNo: "BL-20250806-145", company: "佛山市质稳五金有限公司", customerId: "c45", customerName: "中山市东升镇利达灯饰", customerAddress: "深圳市经济开发区69栋1号", customerContact: "刘先生", customerPhone: "18889442503", orderDate: "2025-08-06", items: [], totalWeight: 0, totalAmount: 0, reconcileStatus: "已对帐", remark: "", createdAt: "2025-08-06T08:00:00.000Z", updatedAt: "2025-08-06T08:00:00.000Z" },
-  { id: "dn146", orderNo: "BL-20250606-146", company: "佛山市碧利莱照明有限公司", customerId: "c46", customerName: "广州市增城区新塘五金店", customerAddress: "东莞市商贸城42栋7号", customerContact: "黄经理", customerPhone: "18953868501", orderDate: "2025-06-06", items: [], totalWeight: 0, totalAmount: 0, reconcileStatus: "未对帐", remark: "", createdAt: "2025-06-06T08:00:00.000Z", updatedAt: "2025-06-06T08:00:00.000Z" },
-  { id: "dn147", orderNo: "BL-20250312-147", company: "佛山市质稳五金有限公司", customerId: "c47", customerName: "深圳市坪山新区鑫盛铝业", customerAddress: "江门市五金市场45栋8号", customerContact: "林先生", customerPhone: "13997477029", orderDate: "2025-03-12", items: [], totalWeight: 0, totalAmount: 0, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-03-12T08:00:00.000Z", updatedAt: "2025-03-12T08:00:00.000Z" },
-  { id: "dn148", orderNo: "BL-20250327-148", company: "佛山市碧利莱照明有限公司", customerId: "c48", customerName: "东莞市寮步镇恒通五金厂", customerAddress: "惠州市铝材城86栋4号", customerContact: "吴小姐", customerPhone: "15972415804", orderDate: "2025-03-27", items: [], totalWeight: 0, totalAmount: 0, reconcileStatus: "已对帐", remark: "", createdAt: "2025-03-27T08:00:00.000Z", updatedAt: "2025-03-27T08:00:00.000Z" },
-  { id: "dn149", orderNo: "BL-20250826-149", company: "佛山市质稳五金有限公司", customerId: "c49", customerName: "佛山市南海区大沥镇永盛五金", customerAddress: "珠海市灯饰广场4栋10号", customerContact: "何总", customerPhone: "18863238057", orderDate: "2025-08-26", items: [], totalWeight: 0, totalAmount: 0, reconcileStatus: "未对帐", remark: "", createdAt: "2025-08-26T08:00:00.000Z", updatedAt: "2025-08-26T08:00:00.000Z" },
-  { id: "dn150", orderNo: "BL-20250710-150", company: "佛山市碧利莱照明有限公司", customerId: "c50", customerName: "江门市台山市台城灯饰配件", customerAddress: "汕头市制造业基地45栋18号", customerContact: "梁经理", customerPhone: "18898787891", orderDate: "2025-07-10", items: [], totalWeight: 0, totalAmount: 0, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-07-10T08:00:00.000Z", updatedAt: "2025-07-10T08:00:00.000Z" },
-  { id: "dn151", orderNo: "BL-20250827-151", company: "佛山市质稳五金有限公司", customerId: "c1", customerName: "佛山市南海区光明灯饰有限公司", customerAddress: "佛山市南海区工业区82栋4号", customerContact: "张经理", customerPhone: "13846913810", orderDate: "2025-08-27", items: [], totalWeight: 0, totalAmount: 0, reconcileStatus: "已对帐", remark: "", createdAt: "2025-08-27T08:00:00.000Z", updatedAt: "2025-08-27T08:00:00.000Z" },
-  { id: "dn152", orderNo: "BL-20250730-152", company: "佛山市碧利莱照明有限公司", customerId: "c2", customerName: "中山市古镇华艺照明电器厂", customerAddress: "佛山市顺德区科技路12栋7号", customerContact: "李总", customerPhone: "15977827638", orderDate: "2025-07-30", items: [], totalWeight: 0, totalAmount: 0, reconcileStatus: "未对帐", remark: "", createdAt: "2025-07-30T08:00:00.000Z", updatedAt: "2025-07-30T08:00:00.000Z" },
-  { id: "dn153", orderNo: "BL-20250122-153", company: "佛山市质稳五金有限公司", customerId: "c3", customerName: "深圳市龙岗区盛达五金制品厂", customerAddress: "中山市创业大道1栋6号", customerContact: "王先生", customerPhone: "18855667651", orderDate: "2025-01-22", items: [], totalWeight: 0, totalAmount: 0, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-01-22T08:00:00.000Z", updatedAt: "2025-01-22T08:00:00.000Z" },
-  { id: "dn154", orderNo: "BL-20250127-154", company: "佛山市碧利莱照明有限公司", customerId: "c4", customerName: "广州市番禺区大石永丰铝材店", customerAddress: "广州市产业园78栋9号", customerContact: "陈小姐", customerPhone: "13871662963", orderDate: "2025-01-27", items: [], totalWeight: 0, totalAmount: 0, reconcileStatus: "已对帐", remark: "", createdAt: "2025-01-27T08:00:00.000Z", updatedAt: "2025-01-27T08:00:00.000Z" },
-  { id: "dn155", orderNo: "BL-20250414-155", company: "佛山市质稳五金有限公司", customerId: "c5", customerName: "东莞市石碣镇鑫达电子厂", customerAddress: "深圳市经济开发区91栋3号", customerContact: "刘先生", customerPhone: "13898753260", orderDate: "2025-04-14", items: [], totalWeight: 0, totalAmount: 0, reconcileStatus: "未对帐", remark: "", createdAt: "2025-04-14T08:00:00.000Z", updatedAt: "2025-04-14T08:00:00.000Z" },
-  { id: "dn156", orderNo: "BL-20250527-156", company: "佛山市碧利莱照明有限公司", customerId: "c6", customerName: "佛山市顺德区勒流镇恒丰五金厂", customerAddress: "东莞市商贸城48栋12号", customerContact: "黄经理", customerPhone: "15999949389", orderDate: "2025-05-27", items: [], totalWeight: 0, totalAmount: 0, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-05-27T08:00:00.000Z", updatedAt: "2025-05-27T08:00:00.000Z" },
-  { id: "dn157", orderNo: "BL-20250416-157", company: "佛山市质稳五金有限公司", customerId: "c7", customerName: "江门市蓬江区天河照明有限公司", customerAddress: "江门市五金市场82栋18号", customerContact: "林先生", customerPhone: "15953524491", orderDate: "2025-04-16", items: [], totalWeight: 0, totalAmount: 0, reconcileStatus: "已对帐", remark: "", createdAt: "2025-04-16T08:00:00.000Z", updatedAt: "2025-04-16T08:00:00.000Z" },
-  { id: "dn158", orderNo: "BL-20250526-158", company: "佛山市碧利莱照明有限公司", customerId: "c8", customerName: "惠州市惠城区宏达五金电器", customerAddress: "惠州市铝材城28栋16号", customerContact: "吴小姐", customerPhone: "18896282117", orderDate: "2025-05-26", items: [], totalWeight: 0, totalAmount: 0, reconcileStatus: "未对帐", remark: "", createdAt: "2025-05-26T08:00:00.000Z", updatedAt: "2025-05-26T08:00:00.000Z" },
-  { id: "dn159", orderNo: "BL-20250329-159", company: "佛山市质稳五金有限公司", customerId: "c9", customerName: "珠海市香洲区精锐铝业公司", customerAddress: "珠海市灯饰广场75栋13号", customerContact: "何总", customerPhone: "13739436733", orderDate: "2025-03-29", items: [], totalWeight: 0, totalAmount: 0, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-03-29T08:00:00.000Z", updatedAt: "2025-03-29T08:00:00.000Z" },
-  { id: "dn160", orderNo: "BL-20250812-160", company: "佛山市碧利莱照明有限公司", customerId: "c10", customerName: "汕头市潮阳区金浦五金加工厂", customerAddress: "汕头市制造业基地9栋13号", customerContact: "梁经理", customerPhone: "18889978790", orderDate: "2025-08-12", items: [], totalWeight: 0, totalAmount: 0, reconcileStatus: "已对帐", remark: "", createdAt: "2025-08-12T08:00:00.000Z", updatedAt: "2025-08-12T08:00:00.000Z" },
-  { id: "dn161", orderNo: "BL-20250316-161", company: "佛山市质稳五金有限公司", customerId: "c11", customerName: "佛山市三水区西南街永盛铝材", customerAddress: "清远市工业区38栋14号", customerContact: "谢先生", customerPhone: "15870897765", orderDate: "2025-03-16", items: [], totalWeight: 0, totalAmount: 0, reconcileStatus: "未对帐", remark: "", createdAt: "2025-03-16T08:00:00.000Z", updatedAt: "2025-03-16T08:00:00.000Z" },
-  { id: "dn162", orderNo: "BL-20250518-162", company: "佛山市碧利莱照明有限公司", customerId: "c12", customerName: "清远市清城区鑫源五金厂", customerAddress: "肇庆市科技路20栋12号", customerContact: "郑小姐", customerPhone: "15882394227", orderDate: "2025-05-18", items: [], totalWeight: 0, totalAmount: 0, reconcileStatus: "部分对帐", remark: "", createdAt: "2025-05-18T08:00:00.000Z", updatedAt: "2025-05-18T08:00:00.000Z" },
-  { id: "dn163", orderNo: "BL-20250502-163", company: "佛山市质稳五金有限公司", customerId: "c13", customerName: "肇庆市端州区华兴灯饰配件", customerAddress: "韶关市创业大道8栋8号", customerContact: "罗总", customerPhone: "13921496211", orderDate: "2025-05-02", items: [], totalWeight: 0, totalAmount: 0, reconcileStatus: "已对帐", remark: "", createdAt: "2025-05-02T08:00:00.000Z", updatedAt: "2025-05-02T08:00:00.000Z" },
-  { id: "dn164", orderNo: "BL-20250827-164", company: "佛山市碧利莱照明有限公司", customerId: "c14", customerName: "韶关市武江区明辉五金店", customerAddress: "梅州市产业园78栋14号", customerContact: "韩经理", customerPhone: "15982383095", orderDate: "2025-08-27", items: [], totalWeight: 0, totalAmount: 0, reconcileStatus: "未对帐", remark: "", createdAt: "2025-08-27T08:00:00.000Z", updatedAt: "2025-08-27T08:00:00.000Z" },
+export const deliveryNotes: DeliveryNote[] = [
+  { id: 'dn1', noteNo: 'BL45670003', date: '2025-01-13', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di1', materialCode: 'YG25.3*1.15', productName: '铝管6063', spec: '25.3*23*4000', unit: 'kg', qty: 841, surface: '本色', unitPrice: 32, amount: 26912, remark: '' }
+  ]},
+  { id: 'dn2', noteNo: 'BL45670004', date: '2025-01-13', customer: '深圳市凯明节能设备有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di2', materialCode: 'YL-014-95', productName: '电源外壳', spec: '71.5*41.7*95', unit: 'pcs', qty: 1155, surface: '铁灰', unitPrice: 6, amount: 6930, remark: '' }
+  ]},
+  { id: 'dn3', noteNo: 'BL45668005', date: '2025-01-11', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di3', materialCode: 'YL-054-160', productName: '电源外壳', spec: '28.8*20.1*160', unit: 'pcs', qty: 400, surface: '铁灰', unitPrice: 1.3, amount: 520, remark: '' }
+  ]},
+  { id: 'dn4', noteNo: 'BL45671006', date: '2025-01-14', customer: '深圳市乐家乐建筑材料有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di4', materialCode: '弯角BL-006-2380', productName: '弯角', spec: '80*80*2380', unit: 'kg', qty: 1841.4535, surface: '', unitPrice: 25.66, amount: 47251.69681, remark: '84*10+1' },
+    { id: 'di5', materialCode: '弯角BL-006-2600', productName: '弯角', spec: '80*80*2600', unit: '', qty: 0, surface: '', unitPrice: 0, amount: 0, remark: '1*5' },
+    { id: 'di6', materialCode: '弯角BL-006-2450', productName: '弯角', spec: '80*80*2450', unit: '', qty: 0, surface: '', unitPrice: 0, amount: 0, remark: '1*6' }
+  ]},
+  { id: 'dn5', noteNo: 'BL45672009', date: '2025-01-15', customer: '深圳华唐锐照明电器有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di7', materialCode: '1.04.01.0135', productName: 'TODAY 40W端盖', spec: '47X29X13mmΦ10', unit: 'pcs', qty: 660, surface: '氧化黑色', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di8', materialCode: '1.04.01.0136', productName: 'TODAY 40W端盖', spec: '47X29X13mmΦ7.4', unit: 'pcs', qty: 660, surface: '氧化黑色', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di9', materialCode: '1.04.01.0159. 0001', productName: 'today 30W电源壳体', spec: '46.6X29X102.5mm', unit: 'pcs', qty: 261, surface: '氧化黑色', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn6', noteNo: 'BL456750012', date: '2025-01-18', customer: '深圳华唐锐照明电器有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di10', materialCode: '1.04.01.0135', productName: 'TODAY 40W端盖', spec: '47X29X13mmΦ10', unit: 'pcs', qty: 719, surface: '氧化黑色', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di11', materialCode: '1.04.01.0136', productName: 'TODAY 40W端盖', spec: '47X29X13mmΦ7.4', unit: 'pcs', qty: 428, surface: '氧化黑色', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di12', materialCode: '1.04.01.0159. 0001', productName: 'today 30W电源壳体', spec: '46.6X29X102.5mm', unit: 'pcs', qty: 768, surface: '氧化黑色', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn7', noteNo: 'BL456750015', date: '2025-01-18', customer: '深圳华唐锐照明电器有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di13', materialCode: '1.04.01.1112.0002', productName: 'TURBO-40-1200-型材', spec: 'ø37X21.5X1140mm', unit: 'pcs', qty: 68, surface: '银白', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di14', materialCode: '1.04.01.1116.0002', productName: 'TURBO-75-1200-型材', spec: 'ø71X34.3X1140mm', unit: 'pcs', qty: 118, surface: '银白', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di15', materialCode: '1.04.01.1334.0001', productName: 'TURBO-75-1200-小角度-型材', spec: 'ø71X34.3X1112mm', unit: 'pcs', qty: 120, surface: '银白', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di16', materialCode: '1.04.01.1108.5302', productName: 'TURBO-40-左-免螺丝端盖', spec: 'ø40.3X30.2mm', unit: 'pcs', qty: 60, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di17', materialCode: '1.04.01.1109.5302', productName: 'TURBO-40-右端盖', spec: 'ø40.3X30.2mm', unit: 'pcs', qty: 65, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn8', noteNo: 'BL456750020', date: '2025-01-18', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di18', materialCode: 'BL-126-140', productName: '底板', spec: '52*1.5*140mm', unit: 'pcs', qty: 5548, surface: '氧化雾银', unitPrice: 1.2, amount: 6657.6, remark: '' }
+  ]},
+  { id: 'dn9', noteNo: 'BL457070021', date: '2025-02-19', customer: '广东中为导光科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di19', materialCode: '5.5.000233', productName: 'ZWLF420x130x3BW 铝条', spec: '129.7*21*9mm', unit: 'pcs', qty: 3400, surface: '本色', unitPrice: 0.2, amount: 680, remark: '' },
+    { id: 'di20', materialCode: '车费', productName: '', spec: '', unit: '趟', qty: 1, surface: '', unitPrice: 58, amount: 58, remark: '' }
+  ]},
+  { id: 'dn10', noteNo: 'BL457150023', date: '2025-02-27', customer: '深圳华唐锐照明电器有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di21', materialCode: '1.04.01.1099. 9903', productName: '', spec: '', unit: 'pcs', qty: 100, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di22', materialCode: '1.04.01.1100. 9903', productName: '', spec: '', unit: 'pcs', qty: 100, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di23', materialCode: '1.04.01.1128. 9903', productName: 'IGUASSU单灯主体端盖-1', spec: '42.4*99.5*2.0', unit: 'pcs', qty: 100, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di24', materialCode: '1.04.01.1129. 9903', productName: 'IGUASSU单灯主体端盖-2', spec: '42.4*99.5*2.0', unit: 'pcs', qty: 100, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn11', noteNo: 'BL457160027', date: '2025-02-28', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di25', materialCode: 'YG25.3*1.15', productName: '铝管6063', spec: '25.3*23*4000', unit: 'KG', qty: 543, surface: '本色', unitPrice: 32, amount: 17376, remark: '516支' }
+  ]},
+  { id: 'dn12', noteNo: 'BL457200028', date: '2025-03-04', customer: '深圳市卓仪光电科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di26', materialCode: 'YL-054-160', productName: '电源外壳', spec: '28.8*20.1*160', unit: 'pcs', qty: 971, surface: '氧化雾银', unitPrice: 1.3, amount: 1262.3, remark: '' }
+  ]},
+  { id: 'dn13', noteNo: 'BL457200029', date: '2025-03-04', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di27', materialCode: '550186-A00', productName: '散热片上盖', spec: '107.4*57.8*29', unit: 'pcs', qty: 2976, surface: '砂白', unitPrice: 1.6, amount: 4761.6, remark: '' }
+  ]},
+  { id: 'dn14', noteNo: 'BL457200030', date: '2025-03-04', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di28', materialCode: '550188', productName: '', spec: '', unit: 'pcs', qty: 1000, surface: '砂白', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di29', materialCode: '550189', productName: '', spec: '', unit: 'pcs', qty: 1000, surface: '砂白', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn15', noteNo: 'BL457210032', date: '2025-03-05', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di30', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: 'pcs', qty: 2244, surface: '铁灰', unitPrice: 1, amount: 2244, remark: '' }
+  ]},
+  { id: 'dn16', noteNo: 'BL457230033', date: '2025-03-07', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di31', materialCode: 'YL-054-160', productName: '电源外壳', spec: '28.8*20.1*160', unit: 'pcs', qty: 885, surface: '铁灰', unitPrice: 1.3, amount: 1150.5, remark: '' }
+  ]},
+  { id: 'dn17', noteNo: 'BL457250034', date: '2025-03-09', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di32', materialCode: 'YL-054-130', productName: '电源外壳', spec: '28.8*20.1*130', unit: 'pcs', qty: 655, surface: '铁灰', unitPrice: 1, amount: 655, remark: '' }
+  ]},
+  { id: 'dn18', noteNo: 'BL457280035', date: '2025-03-12', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di33', materialCode: '550188', productName: '', spec: '', unit: 'pcs', qty: 1835, surface: '砂白', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di34', materialCode: '550189', productName: '', spec: '', unit: 'pcs', qty: 1056, surface: '砂白', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn19', noteNo: 'BL457280037', date: '2025-03-12', customer: '深圳市卓仪光电科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di35', materialCode: 'YL-054-160', productName: '电源外壳', spec: '28.8*20.1*160', unit: 'pcs', qty: 1000, surface: '铁灰', unitPrice: 1.3, amount: 1300, remark: '' }
+  ]},
+  { id: 'dn20', noteNo: 'BL457290038', date: '2025-03-13', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di36', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: 'pcs', qty: 5984, surface: '铁灰', unitPrice: 1, amount: 5984, remark: '' },
+    { id: 'di37', materialCode: 'YL-054-160', productName: '电源外壳', spec: '28.8*20.1*160', unit: 'pcs', qty: 1593, surface: '铁灰', unitPrice: 1.3, amount: 2070.9, remark: '' }
+  ]},
+  { id: 'dn21', noteNo: 'BL457330040', date: '2025-03-17', customer: '深圳富达金技术有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di38', materialCode: '9150-1136', productName: '半圆型材', spec: '40*24.5*2450', unit: 'kg', qty: 285, surface: '本色', unitPrice: 0, amount: 0, remark: '391支' },
+    { id: 'di39', materialCode: '9150-1140', productName: '主体型材', spec: '61*25*2450', unit: 'kg', qty: 331, surface: '本色', unitPrice: 0, amount: 0, remark: '275支' },
+    { id: 'di40', materialCode: '9150-1144', productName: '电气仓盖型材', spec: '47.5*5.06*2450', unit: 'kg', qty: 135, surface: '本色', unitPrice: 0, amount: 0, remark: '318支' }
+  ]},
+  { id: 'dn22', noteNo: 'BL457330043', date: '2025-03-17', customer: '深圳富达金技术有限公司', orderNo: 'PO925030021', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di41', materialCode: 'D8150-0814', productName: '铝型材上机费', spec: '', unit: '次', qty: 1, surface: '', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn23', noteNo: 'BL457340044', date: '2025-03-18', customer: '江苏镭科照明科技有限公司', orderNo: '002090/002136/002168', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di42', materialCode: 'LZ-001-00', productName: '铝支撑', spec: '500*80*160', unit: '套', qty: 1480, surface: '本色', unitPrice: 32, amount: 47360, remark: '20个*74箱' },
+    { id: 'di43', materialCode: 'LZ-002', productName: 'L型特殊铝块', spec: '70*70*20.4', unit: 'pcs', qty: 12740, surface: '本色', unitPrice: 3.17, amount: 40385.8, remark: '196个*65箱' },
+    { id: 'di44', materialCode: 'LZ-003', productName: '铝板3.0mm', spec: '180*80*3.0', unit: 'pcs', qty: 7400, surface: '本色', unitPrice: 4.23, amount: 31302, remark: '200个*37箱' },
+    { id: 'di45', materialCode: 'LZ-004', productName: '方铝片2.3mm', spec: '178*82*2.3', unit: 'pcs', qty: 2870, surface: '本色', unitPrice: 3.82, amount: 10963.4, remark: '200个*19箱' },
+    { id: 'di46', materialCode: 'LZ-004', productName: '方铝片2.3mm', spec: '178*82*2.3', unit: 'pcs', qty: 930, surface: '本色', unitPrice: 3.2, amount: 2976, remark: '' },
+    { id: 'di47', materialCode: 'LZ-004', productName: '方铝片2.3mm', spec: '178*82*2.3', unit: 'pcs', qty: -101, surface: '本色', unitPrice: 3.2, amount: -323.2, remark: '25*25方管磅差' }
+  ]},
+  { id: 'dn24', noteNo: 'BL457340050', date: '2025-03-18', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di48', materialCode: '405-00731', productName: '铝管6063', spec: 'ø32.7*ø29.5*4000', unit: 'kg', qty: 525, surface: '本色', unitPrice: 32, amount: 16800, remark: '' }
+  ]},
+  { id: 'dn25', noteNo: 'BL457350051', date: '2025-03-19', customer: '深圳华唐锐照明电器有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di49', materialCode: '1.04.01.0158.0001', productName: 'today 30W电源壳体', spec: '46.6X29X102.5mm', unit: 'pcs', qty: 2730, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn26', noteNo: 'BL457350052', date: '2025-03-19', customer: '东方一号电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di50', materialCode: 'yl-270-230', productName: '电源主体', spec: '40*22*230', unit: 'pcs', qty: 1050, surface: '氧化雾银', unitPrice: 2.1, amount: 2205, remark: '' }
+  ]},
+  { id: 'dn27', noteNo: 'BL457370053', date: '2025-03-21', customer: '深圳市乐家乐建筑材料有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di51', materialCode: '100*100*R50*3500', productName: '100*100*R50弯角', spec: '100*100*R50*3500', unit: '支', qty: 1, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di52', materialCode: '100*100*R50*3400', productName: '100*100*R50弯角', spec: '100*100*R50*3400', unit: '支', qty: 5, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di53', materialCode: '100*100*R50*3300', productName: '100*100*R50弯角', spec: '100*100*R50*3300', unit: '支', qty: 26, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di54', materialCode: '100*100*R50*3200', productName: '100*100弯角', spec: '100*100*R50*3200', unit: '支', qty: 4, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di55', materialCode: '100*100*R50*3050', productName: '100*100弯角', spec: '100*100*R50*3050', unit: '支', qty: 3, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di56', materialCode: '100*100*R50*3000', productName: '100*100弯角', spec: '100*100*R50*3000', unit: '支', qty: 3, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di57', materialCode: '100*100*R50*2900', productName: '100*100*R50弯角', spec: '100*100*R50*2900', unit: '支', qty: 13, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di58', materialCode: '100*100*R50*2850', productName: '100*100弯角', spec: '100*100*R50*2850', unit: '支', qty: 5, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di59', materialCode: '100*100*R50*2700', productName: '100*100*R50弯角', spec: '100*100*R50*2700', unit: '支', qty: 14, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di60', materialCode: '100*100*R50*2650', productName: '100*100*R50弯角', spec: '100*100*R50*2650', unit: '支', qty: 5, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di61', materialCode: '100*100*R50*2600', productName: '100*100*R50弯角', spec: '100*100*R50*2600', unit: '支', qty: 7, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di62', materialCode: '80*80*R28*2380', productName: '80*80*R28弯角', spec: '80*80*R28*2380', unit: '支', qty: 328, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di63', materialCode: '80*80*R28*3850', productName: '80*80*R28弯角', spec: '80*80*R28*3850', unit: '支', qty: 30, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di64', materialCode: '80*80*R28*4050', productName: '80*80*R28弯角', spec: '80*80*R28*4050', unit: '支', qty: 1, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di65', materialCode: '80*80*R28*5050', productName: '80*80*R28弯角', spec: '80*80*R28*5050', unit: '支', qty: 7, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di66', materialCode: '80*80*R28*3500', productName: '80*80*R28弯角', spec: '80*80*R28*3500', unit: '支', qty: 20, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di67', materialCode: '80*80*R28*2550', productName: '80*80*R28弯角', spec: '80*80*R28*2550', unit: '支', qty: 4, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di68', materialCode: '80*80*R28*2450', productName: '80*80*R28弯角', spec: '80*80*R28*2450', unit: '支', qty: 6, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di69', materialCode: '100*100*R50*2800', productName: '100*100*R50弯角', spec: '100*100*R50*2800', unit: '支', qty: 53, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di70', materialCode: '100*100*R50*3100', productName: '100*100*R50弯角', spec: '100*100*R50*3100', unit: '支', qty: 46, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di71', materialCode: '100*100*R50*4000', productName: '', spec: '', unit: '支', qty: 1, surface: '', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn28', noteNo: 'BL457370074', date: '2025-03-21', customer: '深圳市乐家乐建筑材料有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di72', materialCode: '80*80*R28*3000', productName: '80*80*R28弯角', spec: '80*80*R28*3000', unit: '支', qty: 22, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di73', materialCode: '80*80*R28*1250', productName: '80*80*R28弯角', spec: '80*80*R28*1250', unit: '支', qty: 172, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di74', materialCode: '80*80*R28*1350', productName: '80*80*R28弯角', spec: '80*80*R28*1350', unit: '支', qty: 2, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di75', materialCode: '80*80*R28*1450', productName: '80*80*R28弯角', spec: '80*80*R28*1450', unit: '支', qty: 6, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di76', materialCode: '80*80*R28*1650', productName: '80*80*R28弯角', spec: '80*80*R28*1650', unit: '支', qty: 144, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di77', materialCode: '80*80*R28*1750', productName: '80*80*R28弯角', spec: '80*80*R28*1750', unit: '支', qty: 27, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di78', materialCode: '80*80*R28*1950', productName: '80*80*R28弯角', spec: '80*80*R28*1950', unit: '支', qty: 26, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di79', materialCode: '80*80*R28*2150', productName: '80*80*R28弯角', spec: '80*80*R28*2150', unit: '支', qty: 3, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di80', materialCode: '80*80*R28*2250', productName: '80*80*R28弯角', spec: '80*80*R28*2250', unit: '支', qty: 8, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di81', materialCode: '80*80*R28*2350', productName: '80*80*R28弯角', spec: '80*80*R28*2350', unit: '支', qty: 2, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di82', materialCode: '80*80*R28*2550', productName: '80*80*R28弯角', spec: '80*80*R28*2550', unit: '支', qty: 25, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di83', materialCode: '80*80*R28*4450', productName: '80*80*R28弯角', spec: '80*80*R28*4450', unit: '支', qty: 2, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di84', materialCode: '100*100*R50*3500', productName: '100*100*R50弯角', spec: '100*100*R50*3500', unit: '支', qty: 42, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di85', materialCode: '100*100*R50*3400', productName: '100*100*R50弯角', spec: '100*100*R50*3400', unit: '支', qty: 3, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di86', materialCode: '100*100*R50*3300', productName: '100*100*R50弯角', spec: '100*100*R50*3300', unit: '支', qty: 21, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di87', materialCode: '100*100*R50*3100', productName: '100*100*R50弯角', spec: '100*100*R50*3100', unit: '支', qty: 1, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di88', materialCode: '100*100*R50*2950', productName: '100*100*R50弯角', spec: '100*100*R50*2950', unit: '支', qty: 112, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di89', materialCode: '100*100*R50*2900', productName: '100*100*R50弯角', spec: '100*100*R50*2900', unit: '支', qty: 125, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di90', materialCode: '100*100*R50*2800', productName: '100*100*R50弯角', spec: '100*100*R50*2800', unit: '支', qty: 3, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di91', materialCode: '100*100*R50*2750', productName: '100*100*R50弯角', spec: '100*100*R50*2750', unit: '支', qty: 41, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di92', materialCode: '100*100*R50*2700', productName: '100*100*R50弯角', spec: '100*100*R50*2700', unit: '支', qty: 70, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di93', materialCode: '100*100*R50*2650', productName: '100*100*R50弯角', spec: '100*100*R50*2650', unit: '支', qty: 3, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di94', materialCode: '100*100*R50*2600', productName: '100*100*R50弯角', spec: '100*100*R50*2600', unit: '支', qty: 18, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di95', materialCode: '100*100*R50*2800', productName: '100*100*R50弯角', spec: '100*100*R50*2800', unit: '支', qty: 96, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di96', materialCode: '100*100*R50*3100', productName: '100*100*R50弯角', spec: '100*100*R50*3100', unit: '支', qty: 195, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di97', materialCode: '100*100*R50*2800', productName: '100*100*R50弯角', spec: '100*100*R50*2800', unit: '支', qty: 9, surface: '', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn29', noteNo: 'BL4573700100', date: '2025-03-21', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di98', materialCode: '550188', productName: '散热片A', spec: '116*25*3', unit: 'pcs', qty: 1500, surface: '砂白', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di99', materialCode: '550189', productName: '散热片B', spec: '116*25*3', unit: 'pcs', qty: 1500, surface: '砂白', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn30', noteNo: 'BL4572100102', date: '2025-03-05', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di100', materialCode: 'yl-270堵头', productName: '堵头', spec: '40*22*20', unit: 'pcs', qty: 20000, surface: '白色', unitPrice: 0.1, amount: 2000, remark: '' }
+  ]},
+  { id: 'dn31', noteNo: 'BL4574600103', date: '2025-03-30', customer: '深圳美因联电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di101', materialCode: 'YL-079-85', productName: '', spec: '', unit: '套', qty: 1200, surface: '氧化黑色', unitPrice: 3.7, amount: 4440, remark: '' }
+  ]},
+  { id: 'dn32', noteNo: 'BL4574100104', date: '2025-03-25', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di102', materialCode: 'yl-270-100', productName: '电源外壳', spec: '40*22*100', unit: 'pcs', qty: 883, surface: '铁灰', unitPrice: 0.9, amount: 794.7, remark: '' }
+  ]},
+  { id: 'dn33', noteNo: 'BL4574100105', date: '2025-03-25', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di103', materialCode: '550188', productName: '散热片A', spec: '116*25*3', unit: 'pcs', qty: 1200, surface: '砂白', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di104', materialCode: '550189', productName: '散热片B', spec: '116*25*3', unit: 'pcs', qty: 450, surface: '砂白', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn34', noteNo: 'BL4574500107', date: '2025-03-29', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di105', materialCode: 'JG-Φ31.25×Φ27.95', productName: '铝管6063', spec: 'Φ31.25*Φ27.95*4000', unit: 'kg', qty: 303, surface: '本色', unitPrice: 32, amount: 9696, remark: '195支' }
+  ]},
+  { id: 'dn35', noteNo: 'BL4574400108', date: '2025-03-28', customer: '广东中为导光科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di106', materialCode: '5.5.000164', productName: 'ZWL500*100x33ARGB', spec: '100*33*500', unit: 'pcs', qty: 4, surface: '氧化雾银', unitPrice: 5.4, amount: 21.6, remark: '' },
+    { id: 'di107', materialCode: '5.5.000158', productName: 'ZWL600*100x33ARGB', spec: '100*33*600', unit: 'pcs', qty: 32, surface: '氧化雾银', unitPrice: 5.4, amount: 172.8, remark: '' },
+    { id: 'di108', materialCode: '5.5.000210', productName: 'ZWLP400x100x33ARGB', spec: '400*100*33mm', unit: 'pcs', qty: 4, surface: '氧化雾银', unitPrice: 5.4, amount: 21.6, remark: '' }
+  ]},
+  { id: 'dn36', noteNo: 'BL4574700111', date: '2025-03-31', customer: '深圳市凯明节能设备有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di109', materialCode: 'YL-014-95', productName: '电源外壳', spec: '71.5*41.7*95', unit: 'pcs', qty: 1000, surface: '铁灰', unitPrice: 6, amount: 6000, remark: '欠档板' }
+  ]},
+  { id: 'dn37', noteNo: 'BL4574700112', date: '2025-03-31', customer: '深圳市巨磁王科技有限责任公司', orderNo: 'PO20250320007', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di110', materialCode: '4130131', productName: '外壳', spec: 'L184*40*22mm', unit: '套', qty: 100, surface: '氧化雾银', unitPrice: 2.2, amount: 220, remark: '' }
+  ]},
+  { id: 'dn38', noteNo: 'BL4574900113', date: '2025-04-02', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di111', materialCode: 'LZ-001-00', productName: '铝支撑', spec: '500*80*160', unit: '套', qty: 1520, surface: '本色', unitPrice: 32, amount: 48640, remark: '' },
+    { id: 'di112', materialCode: 'LZ-002', productName: 'L型特殊铝块', spec: '70*70*20.4', unit: 'pcs', qty: 12260, surface: '本色', unitPrice: 3.17, amount: 38864.2, remark: '' },
+    { id: 'di113', materialCode: 'LZ-003', productName: '铝板3.0mm', spec: '180*80*3.0', unit: 'pcs', qty: 7590, surface: '本色', unitPrice: 4.23, amount: 32105.7, remark: '' }
+  ]},
+  { id: 'dn39', noteNo: 'BL00116', date: '', customer: '', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di114', materialCode: 'LZ-004', productName: '方铝片2.3mm', spec: '178*82*2.3', unit: 'pcs', qty: 160, surface: '本色', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn40', noteNo: 'BL00117', date: '', customer: '', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di115', materialCode: 'LZ-005', productName: 'U型铝', spec: '70*36*30', unit: 'pcs', qty: 5000, surface: '本色', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn41', noteNo: 'BL4575700118', date: '2025-04-10', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di116', materialCode: 'BL-126-144', productName: '底板', spec: '55*1.5*144mm', unit: 'pcs', qty: 3000, surface: '砂白', unitPrice: 1.2, amount: 3600, remark: '' }
+  ]},
+  { id: 'dn42', noteNo: 'BL4575700119', date: '2025-04-10', customer: '丁先生', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di117', materialCode: 'YL-014-200', productName: '电源外壳', spec: '71.5*41.7*200', unit: 'pcs', qty: 122, surface: '铁灰', unitPrice: 7, amount: 854, remark: '' }
+  ]},
+  { id: 'dn43', noteNo: 'BL4575800120', date: '2025-04-11', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di118', materialCode: 'YG25.3*1.15', productName: '铝管6063', spec: '25.3*23*4000', unit: 'kg', qty: 854.5, surface: '本色', unitPrice: 32, amount: 27344, remark: '' }
+  ]},
+  { id: 'dn44', noteNo: 'BL4576500121', date: '2025-04-18', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di119', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: 'pcs', qty: 4465, surface: '氧化雾银', unitPrice: 1.1, amount: 4911.5, remark: '' }
+  ]},
+  { id: 'dn45', noteNo: 'BL4576500122', date: '2025-04-18', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di120', materialCode: 'LZ-005', productName: 'U型铝', spec: '70*36*30', unit: 'pcs', qty: 5000, surface: '本色', unitPrice: 2.9, amount: 14500, remark: '' },
+    { id: 'di121', materialCode: 'LZ-004', productName: '方铝片2.3mm', spec: '178*82*2.3', unit: 'pcs', qty: 190, surface: '本色', unitPrice: 3.2, amount: 608, remark: '' }
+  ]},
+  { id: 'dn46', noteNo: 'BL4576600124', date: '2025-04-19', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di122', materialCode: 'BL-126-140', productName: '底板', spec: '52*1.5*140mm', unit: 'pcs', qty: 2660, surface: '氧化雾银', unitPrice: 1.5, amount: 3990, remark: '' }
+  ]},
+  { id: 'dn47', noteNo: 'BL4589700125', date: '2025-08-28', customer: '深圳市凯明节能设备有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di123', materialCode: 'YL-014-95', productName: '电源外壳', spec: '71.5*41.7*95', unit: '套', qty: 2000, surface: '铁灰', unitPrice: 5.5, amount: 11000, remark: '' }
+  ]},
+  { id: 'dn48', noteNo: 'BL4575700126', date: '2025-04-10', customer: '和鸿电气股份有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di124', materialCode: '25*3*45', productName: '散热片', spec: '25*3*45', unit: 'pcs', qty: 20, surface: '本色', unitPrice: 2.5, amount: 50, remark: '' },
+    { id: 'di125', materialCode: '25*3*55', productName: '散热片', spec: '25*3*55', unit: 'pcs', qty: 20, surface: '本色', unitPrice: 3.5, amount: 70, remark: '' },
+    { id: 'di126', materialCode: '25*3*65', productName: '散热片', spec: '25*3*65', unit: 'pcs', qty: 20, surface: '本色', unitPrice: 4, amount: 80, remark: '' }
+  ]},
+  { id: 'dn49', noteNo: 'BL4577200129', date: '2025-04-25', customer: '东方一号电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di127', materialCode: 'YL-054-280', productName: '电源外壳', spec: '28.8*20.1*280', unit: 'pcs', qty: 273, surface: '白色', unitPrice: 2.1, amount: 573.3, remark: '' }
+  ]},
+  { id: 'dn50', noteNo: 'BL4577200130', date: '2025-04-25', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di128', materialCode: 'BL-126-140', productName: '底板', spec: '52*1.5*140mm', unit: 'pcs', qty: 250, surface: '砂白', unitPrice: 1.5, amount: 375, remark: '' }
+  ]},
+  { id: 'dn51', noteNo: 'BL4577200131', date: '2025-04-25', customer: '广东中为导光科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di129', materialCode: '5.5.000229', productName: '铝合金', spec: '34.8*0.9*580', unit: 'pcs', qty: 155, surface: '本色', unitPrice: 3, amount: 465, remark: '' },
+    { id: 'di130', materialCode: '运费', productName: '', spec: '', unit: '趟', qty: 1, surface: '', unitPrice: 62, amount: 62, remark: '' }
+  ]},
+  { id: 'dn52', noteNo: 'BL4577600133', date: '2025-04-29', customer: '佛山市三水弘美电器配件有限公司', orderNo: 'HM202503310003', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di131', materialCode: '405-00731', productName: '铝管6063', spec: 'ø32.7*ø29.5*4000', unit: 'kg', qty: 320, surface: '本色', unitPrice: 32, amount: 10240, remark: '' }
+  ]},
+  { id: 'dn53', noteNo: 'BL4578300134', date: '2025-05-06', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di132', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: 'pcs', qty: 2254, surface: '氧化雾银', unitPrice: 1.1, amount: 2479.4, remark: '' }
+  ]},
+  { id: 'dn54', noteNo: 'BL4578700135', date: '2025-05-10', customer: '深圳华唐锐照明电器有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di133', materialCode: '1.04.01.1260. 9901', productName: '滑轨', spec: '60x23x6.3mm', unit: 'pcs', qty: 2000, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn55', noteNo: 'BL4578900136', date: '2025-05-12', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di134', materialCode: 'BL-126-140', productName: '底板', spec: '52*1.5*140mm', unit: 'pcs', qty: 3652, surface: '氧化雾银', unitPrice: 1.5, amount: 5478, remark: '' }
+  ]},
+  { id: 'dn56', noteNo: 'BL4576900137', date: '2025-04-22', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di135', materialCode: 'BL-126-144', productName: '底板', spec: '55*1.5*144mm', unit: 'pcs', qty: -270, surface: '', unitPrice: 1.2, amount: -324, remark: '' }
+  ]},
+  { id: 'dn57', noteNo: 'BL4579500139', date: '2025-05-18', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di136', materialCode: 'YL-054-160', productName: '电源外壳', spec: '28.8*20.1*160', unit: 'pcs', qty: 2097, surface: '铁灰', unitPrice: 1.3, amount: 2726.1, remark: '' }
+  ]},
+  { id: 'dn58', noteNo: 'BL4579500140', date: '2025-05-18', customer: '深圳市卓仪光电科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di137', materialCode: 'YL-054-160', productName: '电源外壳', spec: '28.8*20.1*160', unit: 'pcs', qty: 1025, surface: '氧化雾银', unitPrice: 1.3, amount: 1332.5, remark: '' }
+  ]},
+  { id: 'dn59', noteNo: 'BL4580200141', date: '2025-05-25', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di138', materialCode: 'YL-054堵头6.2', productName: '', spec: '28.8*20.1*10', unit: 'pcs', qty: 8000, surface: '白色', unitPrice: 0.08, amount: 640, remark: '' },
+    { id: 'di139', materialCode: 'YL-054-130', productName: '电源外壳', spec: '28.8*20.1*130', unit: 'pcs', qty: 2000, surface: '铁灰', unitPrice: 1, amount: 2000, remark: '' }
+  ]},
+  { id: 'dn60', noteNo: 'BL4611200143', date: '2026-03-31', customer: '深圳市凯明节能设备有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di140', materialCode: 'YL-014-95', productName: '电源外壳', spec: '71.5*41.7*95', unit: '套', qty: 808, surface: '铁灰', unitPrice: 5.7, amount: 4605.6, remark: '' }
+  ]},
+  { id: 'dn61', noteNo: 'BL4579500144', date: '2025-05-18', customer: '盛世', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di141', materialCode: 'ZW-849', productName: '', spec: '80*80*4050', unit: 'kg', qty: 578.5, surface: '本色', unitPrice: 21.98, amount: 12715.43, remark: '38支' },
+    { id: 'di142', materialCode: 'ZW-849', productName: '', spec: '80*80*4050', unit: 'kg', qty: -552.6, surface: '本色', unitPrice: 21.98, amount: -12146.148, remark: '36支' }
+  ]},
+  { id: 'dn62', noteNo: 'BL4581500146', date: '2025-06-07', customer: '广东中为导光科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di143', materialCode: '5.5.000158', productName: 'ZWL600*100x33ARGB', spec: '100*33*600', unit: 'pcs', qty: 28, surface: '氧化雾银', unitPrice: 30, amount: 840, remark: '' },
+    { id: 'di144', materialCode: '5.5.000210', productName: 'ZWLP400x100x33ARGB', spec: '400*100*33mm', unit: 'pcs', qty: 3, surface: '氧化雾银', unitPrice: 22, amount: 66, remark: '' }
+  ]},
+  { id: 'dn63', noteNo: 'BL4582600148', date: '2025-06-18', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di145', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: 'pcs', qty: 1400, surface: '铁灰', unitPrice: 1, amount: 1400, remark: '' }
+  ]},
+  { id: 'dn64', noteNo: 'BL4583000149', date: '2025-06-22', customer: '深圳华唐锐照明电器有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di146', materialCode: '1.04.01.0096', productName: 'Q2-45W端盖', spec: '47X29X13mm，Φ10', unit: 'pcs', qty: 1800, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di147', materialCode: '1.04.01.0097', productName: 'Q2-45W端盖', spec: '47X29X13mm，Φ7.4', unit: 'pcs', qty: 275, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn65', noteNo: 'BL4583000151', date: '2025-06-22', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di148', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: 'pcs', qty: 4150, surface: '铁灰', unitPrice: 1, amount: 4150, remark: '' }
+  ]},
+  { id: 'dn66', noteNo: 'BL4580300152', date: '2025-05-26', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di149', materialCode: 'BL-126-140', productName: '底板', spec: '52*1.5*140mm', unit: 'pcs', qty: -1845, surface: '', unitPrice: 1.5, amount: -2767.5, remark: '' }
+  ]},
+  { id: 'dn67', noteNo: 'BL4586600153', date: '2025-07-28', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di150', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: 'pcs', qty: 3035, surface: '银白', unitPrice: 1.1, amount: 3338.5, remark: '' }
+  ]},
+  { id: 'dn68', noteNo: 'BL4586600154', date: '2025-07-28', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di151', materialCode: 'BL-126-144', productName: '底板', spec: '55*1.5*144mm', unit: 'pcs', qty: 2100, surface: '银白', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn69', noteNo: 'BL4586600155', date: '2025-07-28', customer: '东方一号电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di152', materialCode: 'yl-270-230', productName: '电源主体', spec: '40*22*230', unit: 'pcs', qty: 1000, surface: '银白', unitPrice: 2.1, amount: 2100, remark: '' },
+    { id: 'di153', materialCode: 'yl-270-230', productName: '电源主体', spec: '40*22*230', unit: 'pcs', qty: 380, surface: '银白', unitPrice: 2.1, amount: 798, remark: '' },
+    { id: 'di154', materialCode: 'YL-054-280', productName: '电源外壳', spec: '28.8*20.1*280', unit: 'pcs', qty: -42, surface: '银白', unitPrice: 2.1, amount: -88.2, remark: '' }
+  ]},
+  { id: 'dn70', noteNo: 'BL4587300158', date: '2025-08-04', customer: '深圳市科普睿电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di155', materialCode: 'YL-054-97', productName: '电源外壳', spec: '28.8*20.1*97', unit: 'pcs', qty: 1050, surface: '银白', unitPrice: 0.88, amount: 924, remark: '' }
+  ]},
+  { id: 'dn71', noteNo: 'BL4587400159', date: '2025-08-05', customer: '珠海市明庆电子有限分司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di156', materialCode: 'YL-054-48', productName: '电源外壳', spec: '28.8*20.1*48', unit: 'pcs', qty: 10000, surface: '银白', unitPrice: 0.36, amount: 3600, remark: '' }
+  ]},
+  { id: 'dn72', noteNo: 'BL4588300160', date: '2025-08-14', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di157', materialCode: '405-00731', productName: '铝管6063', spec: 'ø32.7*ø29.5*4000', unit: 'kg', qty: 580, surface: '本色', unitPrice: 32, amount: 18560, remark: '' }
+  ]},
+  { id: 'dn73', noteNo: 'BL4588400161', date: '2025-08-15', customer: '凯明智汇科技（东莞）有限公司', orderNo: 'CG20250731048', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di158', materialCode: 'YL-014-95', productName: '电源外壳', spec: '71.5*41.7*95', unit: '套', qty: 1000, surface: '铁灰', unitPrice: 5.5, amount: 5500, remark: '' }
+  ]},
+  { id: 'dn74', noteNo: 'BL4589000162', date: '2025-08-21', customer: '东方一号电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di159', materialCode: 'yl-270-230', productName: '电源主体', spec: '40*22*230', unit: '套', qty: 640, surface: '白色', unitPrice: 2.1, amount: 1344, remark: '8/17发320' }
+  ]},
+  { id: 'dn75', noteNo: 'BL4588900163', date: '2025-08-20', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di160', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: '套', qty: 1012, surface: '铁灰', unitPrice: 1.1, amount: 1113.2, remark: '' },
+    { id: 'di161', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: '套', qty: 2968, surface: '银白', unitPrice: 1.1, amount: 3264.8, remark: '' }
+  ]},
+  { id: 'dn76', noteNo: 'BL458890165', date: '2025-08-20', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di162', materialCode: 'yl-270-100', productName: '电源外壳', spec: '', unit: 'pcs', qty: 2000, surface: '铁灰', unitPrice: 0.9, amount: 1800, remark: '' },
+    { id: 'di163', materialCode: 'yl-270堵头', productName: '堵头', spec: '40*22*20', unit: 'pcs', qty: 5000, surface: '白色', unitPrice: 0.1, amount: 500, remark: 'ø5.7' },
+    { id: 'di164', materialCode: 'yl-270堵头', productName: '堵头', spec: '40*22*20', unit: 'pcs', qty: 10000, surface: '白色', unitPrice: 0.1, amount: 1000, remark: 'ø6.1' },
+    { id: 'di165', materialCode: 'yl-270堵头', productName: '堵头', spec: '40*22*20', unit: 'pcs', qty: 3900, surface: '白色', unitPrice: 0.1, amount: 390, remark: 'ø4.7' }
+  ]},
+  { id: 'dn77', noteNo: 'BL459070169', date: '2025-09-07', customer: '惠州市子阳光电照明有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di166', materialCode: '2400626', productName: 'F0铝支架0623', spec: '36.9*10.5', unit: '次', qty: 1, surface: '氧化黑色', unitPrice: 600, amount: 600, remark: '样品' }
+  ]},
+  { id: 'dn78', noteNo: 'BL459130170', date: '2025-09-13', customer: '东方一号电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di167', materialCode: 'yl-270-230', productName: '电源主体', spec: '40*22*230', unit: 'pcs', qty: 1000, surface: '氧化雾银', unitPrice: 2.1, amount: 2100, remark: '' }
+  ]},
+  { id: 'dn79', noteNo: 'BL459170171', date: '2025-09-17', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di168', materialCode: 'JG-Φ31.25×Φ27.95', productName: '铝管6063', spec: 'Φ31.25*Φ27.95*4000', unit: 'kg', qty: 344, surface: '本色', unitPrice: 32, amount: 11008, remark: '222支' },
+    { id: 'di169', materialCode: 'YG25.3*1.15', productName: '铝管6063', spec: '25.3*23*4000', unit: 'kg', qty: 432, surface: '本色', unitPrice: 32, amount: 13824, remark: '423支' }
+  ]},
+  { id: 'dn80', noteNo: 'BL458960173', date: '2025-08-27', customer: '和鸿电气股份有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di170', materialCode: '45*22*4', productName: '散热片', spec: '45*22*4', unit: 'pcs', qty: 80, surface: '本色', unitPrice: 1.5, amount: 120, remark: '' },
+    { id: 'di171', materialCode: '85*25*4', productName: '散热片', spec: '85*25*4', unit: 'pcs', qty: 80, surface: '本色', unitPrice: 2, amount: 160, remark: '' }
+  ]},
+  { id: 'dn81', noteNo: 'BL459260175', date: '2025-09-26', customer: '深圳市卓仪光电科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di172', materialCode: 'YL-054-160', productName: '电源外壳', spec: '28.8*20.1*160', unit: 'pcs', qty: 1000, surface: '氧化雾银', unitPrice: 1.3, amount: 1300, remark: '' }
+  ]},
+  { id: 'dn82', noteNo: 'BL459260176', date: '2025-09-26', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di173', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: '套', qty: 1586, surface: '氧化雾银', unitPrice: 1.1, amount: 1744.6, remark: '' }
+  ]},
+  { id: 'dn83', noteNo: 'BL459270177', date: '2025-09-27', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di174', materialCode: '550186-A00', productName: '散热片上盖', spec: '107.4*57.8*29', unit: 'pcs', qty: 5000, surface: '氧化雾银', unitPrice: 1.8, amount: 9000, remark: '' }
+  ]},
+  { id: 'dn84', noteNo: 'BL459280178', date: '2025-09-28', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di175', materialCode: 'YL-107-260', productName: '电源外壳', spec: '95*50*260mm', unit: 'pcs', qty: 323, surface: '铁灰', unitPrice: 26, amount: 8398, remark: '' }
+  ]},
+  { id: 'dn85', noteNo: 'BL459440179', date: '2025-10-14', customer: '开普勒灯具', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di176', materialCode: 'yl-270-95', productName: '电源外壳', spec: '40*22*95', unit: 'pcs', qty: 500, surface: '铁灰', unitPrice: 1.2, amount: 600, remark: '' }
+  ]},
+  { id: 'dn86', noteNo: 'BL459530180', date: '2025-10-23', customer: '珠海市明庆电子有限分司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di177', materialCode: 'YL-054-48', productName: '电源外壳', spec: '28.8*20.1*48', unit: 'pcs', qty: 9980, surface: '氧化雾银', unitPrice: 0.36, amount: 3592.8, remark: '' }
+  ]},
+  { id: 'dn87', noteNo: 'BL459530181', date: '2025-10-23', customer: '东莞市百川慧通科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di178', materialCode: 'BL-003', productName: '小边框', spec: '51.8*11.1*3000', unit: '支', qty: 1701, surface: '砂纹白', unitPrice: 12.5, amount: 21262.5, remark: '' },
+    { id: 'di179', materialCode: '预付款', productName: '', spec: '', unit: '', qty: 1, surface: '', unitPrice: -3000, amount: -3000, remark: '' }
+  ]},
+  { id: 'dn88', noteNo: 'BL459540183', date: '2025-10-24', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di180', materialCode: 'YG25.3*1.15', productName: '铝管6063', spec: '25.3*23*4000', unit: 'kg', qty: 190, surface: '本色', unitPrice: 32, amount: 6080, remark: '' },
+    { id: 'di181', materialCode: '405-00731', productName: '铝管6063', spec: 'ø32.7*ø29.5*4000', unit: 'kg', qty: 535, surface: '本色', unitPrice: 32, amount: 17120, remark: '' }
+  ]},
+  { id: 'dn89', noteNo: 'BL459800185', date: '2025-11-19', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di182', materialCode: '1.04.01.0136', productName: 'TODAY 40W端盖', spec: '47X29X13mmΦ7.4', unit: 'pcs', qty: 1000, surface: '氧化黑色', unitPrice: 0.7, amount: 700, remark: '' },
+    { id: 'di183', materialCode: '1.04.01.0159. 0001', productName: 'today 30W电源壳体', spec: '46.6X29X102.5mm', unit: 'pcs', qty: 1000, surface: '氧化黑色', unitPrice: 2.8, amount: 2800, remark: '' },
+    { id: 'di184', materialCode: '1.04.01.0097', productName: 'Q2-45W端盖', spec: '47X29X13mm，Φ7.4', unit: 'pcs', qty: 1150, surface: '银白', unitPrice: 0.7, amount: 805, remark: '' },
+    { id: 'di185', materialCode: '1.04.01.0158.0001', productName: 'today 30W电源壳体', spec: '46.6X29X102.5mm', unit: 'pcs', qty: 1250, surface: '银白', unitPrice: 2, amount: 2500, remark: '' }
+  ]},
+  { id: 'dn90', noteNo: 'BL459800189', date: '2025-11-19', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di186', materialCode: '1.04.01.0136', productName: 'TODAY 40W端盖', spec: '47X29X13mmΦ7.4', unit: 'pcs', qty: 324, surface: '氧化黑色', unitPrice: 0.7, amount: 226.8, remark: '' },
+    { id: 'di187', materialCode: '1.04.01.0159. 0001', productName: 'today 30W电源壳体', spec: '46.6X29X102.5mm', unit: 'pcs', qty: 351, surface: '氧化黑色', unitPrice: 2.8, amount: 982.8, remark: '' },
+    { id: 'di188', materialCode: '1.04.01.0097', productName: 'Q2-45W端盖', spec: '47X29X13mm，Φ7.4', unit: 'pcs', qty: 450, surface: '银白', unitPrice: 0.7, amount: 315, remark: '' },
+    { id: 'di189', materialCode: '1.04.01.0158.0001', productName: 'today 30W电源壳体', spec: '46.6X29X102.5mm', unit: 'pcs', qty: 763, surface: '银白', unitPrice: 2, amount: 1526, remark: '' }
+  ]},
+  { id: 'dn91', noteNo: 'BL459790193', date: '2025-11-18', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di190', materialCode: 'JG-Φ31.25×Φ27.95', productName: '铝管6063', spec: 'Φ31.25*Φ27.95*4000', unit: 'kg', qty: 205.5, surface: '', unitPrice: 32, amount: 6576, remark: '' },
+    { id: 'di191', materialCode: 'YG25.3*1.15', productName: '铝管6063', spec: '25.3*23*4000', unit: 'kg', qty: 278.5, surface: '', unitPrice: 32, amount: 8912, remark: '' }
+  ]},
+  { id: 'dn92', noteNo: 'BL459810195', date: '2025-11-20', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di192', materialCode: 'YL-054-75', productName: '电源外壳', spec: '28.8*20.1*75', unit: 'pcs', qty: 220, surface: '', unitPrice: 0.5, amount: 110, remark: '' },
+    { id: 'di193', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: '套', qty: 2399, surface: '', unitPrice: 1.1, amount: 2638.9, remark: '' },
+    { id: 'di194', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: '套', qty: 604, surface: '', unitPrice: 1.1, amount: 664.4, remark: '补11-16单' }
+  ]},
+  { id: 'dn93', noteNo: 'BL459810198', date: '2025-11-20', customer: '玖嘉久电子科技', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di195', materialCode: 'YL-869-1', productName: '上盖板', spec: '116*22.9*174.5', unit: '', qty: 109, surface: '', unitPrice: 35.54, amount: 3873.86, remark: '' },
+    { id: 'di196', materialCode: 'YL-869-2', productName: '下盖板', spec: '107*6.2*173.4', unit: '', qty: 109, surface: '', unitPrice: 31.33, amount: 3414.97, remark: '' },
+    { id: 'di197', materialCode: 'YL-869-3', productName: '按键', spec: '4*3*26.4', unit: '', qty: 109, surface: '', unitPrice: 2.98, amount: 324.82, remark: '' }
+  ]},
+  { id: 'dn94', noteNo: 'BL459850201', date: '2025-11-24', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di198', materialCode: 'JG-Φ31.25×Φ27.95', productName: '铝管6063', spec: 'Φ31.25*Φ27.95*4000', unit: 'kg', qty: 0, surface: '', unitPrice: 32, amount: 0, remark: '' }
+  ]},
+  { id: 'dn95', noteNo: 'BL459840202', date: '2025-11-23', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di199', materialCode: '1.04.01.0096', productName: 'Q2-45W端盖', spec: '47X29X13mm，Φ10', unit: 'pcs', qty: 1000, surface: '银白', unitPrice: 2, amount: 2000, remark: '' }
+  ]},
+  { id: 'dn96', noteNo: 'BL459880203', date: '2025-11-27', customer: '东方一号电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di200', materialCode: 'yl-270-230', productName: '电源主体', spec: '40*22*230', unit: 'pcs', qty: 1650, surface: '氧化雾银', unitPrice: 2.1, amount: 3465, remark: '' }
+  ]},
+  { id: 'dn97', noteNo: 'BL459880204', date: '2025-11-27', customer: '和鸿电气股份有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di201', materialCode: '1021772', productName: 'D7散热片', spec: '56*25*4mm', unit: 'pcs', qty: 200, surface: '本色', unitPrice: 0.95, amount: 190, remark: '' },
+    { id: 'di202', materialCode: '1021773', productName: 'MOS散热片', spec: '52*25*4mm', unit: 'pcs', qty: 200, surface: '本色', unitPrice: 0.85, amount: 170, remark: '' }
+  ]},
+  { id: 'dn98', noteNo: 'BL460030206', date: '2025-12-12', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di203', materialCode: 'JG-Φ31.25×Φ27.95', productName: '铝管6063', spec: 'Φ31.25*Φ27.95*4000', unit: 'kg', qty: 990, surface: '本色', unitPrice: 35, amount: 34650, remark: '' }
+  ]},
+  { id: 'dn99', noteNo: 'BL460100207', date: '2025-12-19', customer: '深圳市卓仪光电科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di204', materialCode: 'YL-054-160', productName: '电源外壳', spec: '28.8*20.1*160', unit: '套', qty: 1000, surface: '银白', unitPrice: 1.3, amount: 1300, remark: '' },
+    { id: 'di205', materialCode: 'YL-054-95', productName: '电源外壳', spec: '28.8*20.1*95', unit: '套', qty: 300, surface: '银白', unitPrice: 1, amount: 300, remark: '' }
+  ]},
+  { id: 'dn100', noteNo: 'BL460000209', date: '2025-12-09', customer: '东方一号电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di206', materialCode: 'YL-054-198', productName: '电源外壳', spec: '28.8*20.1*198', unit: 'pcs', qty: 529, surface: '银白', unitPrice: 1, amount: 529, remark: '' },
+    { id: 'di207', materialCode: '模具费', productName: '', spec: '', unit: '套', qty: 1, surface: '', unitPrice: 1000, amount: 1000, remark: '' }
+  ]},
+  { id: 'dn101', noteNo: 'BL460210211', date: '2025-12-30', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di208', materialCode: '405-00731', productName: '铝管6063', spec: 'ø32.7*ø29.5*4000', unit: 'kg', qty: 540, surface: '', unitPrice: 35, amount: 18900, remark: '' }
+  ]},
+  { id: 'dn102', noteNo: 'BL460340212', date: '2026-01-12', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di209', materialCode: '405-00731', productName: '铝管6063', spec: 'ø32.7*ø29.5*4000', unit: 'kg', qty: 495, surface: '', unitPrice: 35, amount: 17325, remark: '' },
+    { id: 'di210', materialCode: 'YG25.3*1.15', productName: '铝管6063', spec: '25.3*23*4000', unit: 'kg', qty: 685, surface: '', unitPrice: 35, amount: 23975, remark: '' }
+  ]},
+  { id: 'dn103', noteNo: 'BL460380214', date: '2026-01-16', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di211', materialCode: '方铝管25*25*2.0', productName: '铝管6063', spec: '25*25*4040', unit: 'kg', qty: 2436, surface: '本色', unitPrice: 28.4, amount: 69182.4, remark: '1256支' }
+  ]},
+  { id: 'dn104', noteNo: 'BL460400215', date: '2026-01-18', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di212', materialCode: '1.04.01.0096', productName: 'Q2-45W端盖', spec: '47X29X13mm，Φ10', unit: 'pcs', qty: 1000, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn105', noteNo: 'BL460420216', date: '2026-01-20', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di213', materialCode: 'YL-054-45', productName: '电源外壳', spec: '28.8*20.1*45', unit: 'pcs', qty: 5000, surface: '银白', unitPrice: 0.32, amount: 1600, remark: '' },
+    { id: 'di214', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: 'pcs', qty: 470, surface: '银白', unitPrice: 1.1, amount: 517, remark: '' }
+  ]},
+  { id: 'dn106', noteNo: 'BL460430218', date: '2026-01-21', customer: '凯明智汇科技（东莞）有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di215', materialCode: 'YL-014-95', productName: '电源外壳', spec: '71.5*41.7*95', unit: '套', qty: 1000, surface: '铁灰', unitPrice: 5.5, amount: 5500, remark: '' }
+  ]},
+  { id: 'dn107', noteNo: 'BL460460219', date: '2026-01-24', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di216', materialCode: '51.04.01.1418.0002', productName: 'Reach型材', spec: '18*3.4*1122.6', unit: '支', qty: 32, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di217', materialCode: '51.04.01.1480.0001', productName: 'LIRO光源支架', spec: '1080.7X67X6.9', unit: '支', qty: 36, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di218', materialCode: '上机费', productName: '', spec: '', unit: '次', qty: 2, surface: '', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn108', noteNo: 'BL460460222', date: '2026-01-24', customer: '深圳美因联电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di219', materialCode: 'YL-079-80', productName: '电源外壳', spec: '', unit: '套', qty: 1000, surface: '', unitPrice: 3.9, amount: 3900, remark: '' }
+  ]},
+  { id: 'dn109', noteNo: 'XK-1-T-2026-2-5-12', date: '2026-02-05', customer: '佛山市奕旺照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市碧利莱照明有限公司', items: [
+    { id: 'di220', materialCode: '304 -16不锈钢', productName: '十字圆头半牙螺钉', spec: 'M5X 16', unit: 'pcs', qty: 50578, surface: '', unitPrice: 0.14, amount: 7080.92, remark: '' },
+    { id: 'di221', materialCode: '304 -17不锈钢', productName: '十字圆头半牙螺钉', spec: 'M5X 17', unit: 'pcs', qty: 51969, surface: '', unitPrice: 0.14, amount: 7275.66, remark: '' }
+  ]},
+  { id: 'dn110', noteNo: 'BL460590225', date: '2026-02-06', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di222', materialCode: 'LZ-001-00', productName: '铝支撑', spec: '500*80*160', unit: '', qty: 2000, surface: '', unitPrice: 35, amount: 70000, remark: '' },
+    { id: 'di223', materialCode: 'LZ-002', productName: 'L型特殊铝块', spec: '70*70*20.4', unit: '', qty: 25000, surface: '', unitPrice: 3.17, amount: 79250, remark: '' },
+    { id: 'di224', materialCode: 'LZ-003', productName: '铝板3.0mm', spec: '180*80*3.0', unit: '', qty: 2000, surface: '', unitPrice: 4.23, amount: 8460, remark: '' },
+    { id: 'di225', materialCode: 'LZ-004', productName: '方铝片2.3mm', spec: '178*82*2.3', unit: '', qty: 2150, surface: '', unitPrice: 3.2, amount: 6880, remark: '' }
+  ]},
+  { id: 'dn111', noteNo: 'BL0229', date: '', customer: '刘先生', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di226', materialCode: '48*35', productName: '', spec: '', unit: '', qty: 400, surface: '', unitPrice: 9, amount: 3600, remark: '' },
+    { id: 'di227', materialCode: '48*58', productName: '', spec: '', unit: '', qty: 400, surface: '', unitPrice: 9.5, amount: 3800, remark: '' },
+    { id: 'di228', materialCode: '48*60', productName: '', spec: '', unit: '', qty: 2000, surface: '', unitPrice: 10, amount: 20000, remark: '' },
+    { id: 'di229', materialCode: '31*58', productName: '', spec: '', unit: '', qty: 300, surface: '', unitPrice: 7, amount: 2100, remark: '' },
+    { id: 'di230', materialCode: '31*55', productName: '', spec: '', unit: '', qty: 1800, surface: '', unitPrice: 7, amount: 12600, remark: '' },
+    { id: 'di231', materialCode: '31*35', productName: '', spec: '', unit: '', qty: 300, surface: '', unitPrice: 7, amount: 2100, remark: '' },
+    { id: 'di232', materialCode: '36*21', productName: '', spec: '', unit: '', qty: 500, surface: '', unitPrice: 3, amount: 1500, remark: '' },
+    { id: 'di233', materialCode: '33.8*78.1', productName: '', spec: '', unit: '', qty: 500, surface: '', unitPrice: 11, amount: 5500, remark: '' },
+    { id: 'di234', materialCode: '36*52', productName: '', spec: '', unit: '', qty: 100, surface: '', unitPrice: 6.5, amount: 650, remark: '' },
+    { id: 'di235', materialCode: '27.8*78.1样品', productName: '', spec: '', unit: '', qty: 10, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di236', materialCode: '36*21样品', productName: '', spec: '', unit: '', qty: 10, surface: '', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn112', noteNo: 'BL0240', date: '', customer: '', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di237', materialCode: '48*35', productName: '', spec: '', unit: '', qty: 400, surface: '', unitPrice: 9, amount: 3600, remark: '' },
+    { id: 'di238', materialCode: '48*58', productName: '', spec: '', unit: '', qty: 400, surface: '', unitPrice: 6.8, amount: 2720, remark: '' },
+    { id: 'di239', materialCode: '48*60', productName: '', spec: '', unit: '', qty: 2000, surface: '', unitPrice: 9, amount: 18000, remark: '' },
+    { id: 'di240', materialCode: '31*58', productName: '', spec: '', unit: '', qty: 300, surface: '', unitPrice: 5.5, amount: 1650, remark: '' },
+    { id: 'di241', materialCode: '31*55', productName: '', spec: '', unit: '', qty: 1800, surface: '', unitPrice: 6.5, amount: 11700, remark: '' },
+    { id: 'di242', materialCode: '31*35', productName: '', spec: '', unit: '', qty: 300, surface: '', unitPrice: 8, amount: 2400, remark: '' },
+    { id: 'di243', materialCode: '36*21', productName: '', spec: '', unit: '', qty: 500, surface: '', unitPrice: 3, amount: 1500, remark: '' },
+    { id: 'di244', materialCode: '33.8*78.1', productName: '', spec: '', unit: '', qty: 500, surface: '', unitPrice: 10.5, amount: 5250, remark: '' },
+    { id: 'di245', materialCode: '36*52', productName: '', spec: '', unit: '', qty: 100, surface: '', unitPrice: 6, amount: 600, remark: '' }
+  ]},
+  { id: 'dn113', noteNo: 'BL460970249', date: '2026-03-16', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di246', materialCode: 'LZ-001-00', productName: '铝支撑', spec: '500*80*160', unit: 'pcs', qty: 2000, surface: '', unitPrice: 0, amount: 0, remark: '3月12日发100个' },
+    { id: 'di247', materialCode: 'LZ-002', productName: 'L型特殊铝块', spec: '70*70*20.4', unit: 'pcs', qty: 25000, surface: '', unitPrice: 0, amount: 0, remark: '3月12日发200个' },
+    { id: 'di248', materialCode: 'LZ-003', productName: '铝板3.0mm', spec: '180*80*3.0', unit: 'pcs', qty: 2000, surface: '', unitPrice: 0, amount: 0, remark: '3月12日发200个' }
+  ]},
+  { id: 'dn114', noteNo: 'BL0252', date: '', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di249', materialCode: 'LZ-004', productName: '方铝片2.3mm', spec: '178*82*2.3', unit: 'pcs', qty: 2150, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di250', materialCode: 'yl-872', productName: '带挂钩的铝块', spec: '20.4*20.2*99.6', unit: '', qty: 100, surface: '拉丝', unitPrice: 4.98, amount: 498, remark: '' }
+  ]},
+  { id: 'dn115', noteNo: 'BL460980254', date: '2026-03-17', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di251', materialCode: 'YG25.3*1.15', productName: '铝管6063', spec: '25.3*23*4000', unit: '', qty: 440, surface: '', unitPrice: 35, amount: 15400, remark: '' }
+  ]},
+  { id: 'dn116', noteNo: 'BL460970255', date: '2026-03-16', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di252', materialCode: 'YL-036-151', productName: '电源外壳', spec: '69.8*42.6*151', unit: '', qty: 100, surface: '氧化雾银', unitPrice: 11, amount: 1100, remark: '' }
+  ]},
+  { id: 'dn117', noteNo: 'BL460990256', date: '2026-03-18', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di253', materialCode: '1.04.01.1099. 9902', productName: 'IGUASSU支架端盖-1', spec: '42.4*47.9*2.0', unit: '个', qty: 100, surface: '砂白', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di254', materialCode: '1.04.01.1100. 9902', productName: 'IGUASSU支架端盖-2', spec: '42.4*47.9*2.0', unit: '个', qty: 100, surface: '砂白', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn118', noteNo: 'BL461060258', date: '2026-03-25', customer: '珠海市明庆电子有限分司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di255', materialCode: 'YL-054-48', productName: '电源外壳', spec: '28.8*20.1*48', unit: '个', qty: 3032, surface: '', unitPrice: 0.41, amount: 1243.12, remark: '2026/3/24发848' }
+  ]},
+  { id: 'dn119', noteNo: 'BL461070259', date: '2026-03-26', customer: '深圳市卓仪光电科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di256', materialCode: 'YL-054-160', productName: '电源外壳', spec: '28.8*20.1*160', unit: '套', qty: 1000, surface: '铁灰', unitPrice: 1.4, amount: 1400, remark: '' },
+    { id: 'di257', materialCode: 'YL-054-160', productName: '电源外壳', spec: '28.8*20.1*160', unit: '套', qty: 1000, surface: '氧化雾银', unitPrice: 1.4, amount: 1400, remark: '' }
+  ]},
+  { id: 'dn120', noteNo: 'BL461140261', date: '2026-04-02', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di258', materialCode: 'yl-872', productName: '带挂钩的铝块', spec: '20.4*20.2*99.6', unit: '套', qty: 100, surface: '拉丝', unitPrice: 4.98, amount: 498, remark: '' },
+    { id: 'di259', materialCode: 'YL-036-151', productName: '电源外壳', spec: '69.8*42.6*151', unit: '套', qty: 100, surface: '氧化雾银', unitPrice: 11, amount: 1100, remark: '' },
+    { id: 'di260', materialCode: 'LZ-012', productName: '卡箍用卡扣', spec: '42*20.8*10', unit: '套', qty: 150, surface: '镀白锌', unitPrice: 125, amount: 18750, remark: '' },
+    { id: 'di261', materialCode: 'YL-874', productName: '只型铝板', spec: '70*49.4*100.2', unit: 'pcs', qty: 3000, surface: '', unitPrice: 9.6, amount: 28800, remark: '' },
+    { id: 'di262', materialCode: 'YL-874-46', productName: '铝支架', spec: '70*49.4*46', unit: 'pcs', qty: 200, surface: '', unitPrice: 9.25, amount: 1850, remark: '' },
+    { id: 'di263', materialCode: 'LZ-010', productName: 'U型制动钳', spec: '33.3*8.3*18', unit: 'pcs', qty: 15000, surface: '镀彩锌', unitPrice: 0.7, amount: 10500, remark: '' },
+    { id: 'di264', materialCode: 'LZ-002', productName: 'L型特殊铝块', spec: '70*70*20.4', unit: 'pcs', qty: 5000, surface: '', unitPrice: 3.17, amount: 15850, remark: '' }
+  ]},
+  { id: 'dn121', noteNo: 'BL461120268', date: '2026-03-31', customer: '凯明智汇科技（东莞）有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di265', materialCode: 'YL-014-95', productName: '电源外壳', spec: '71.5*41.7*95', unit: '套', qty: 808, surface: '铁灰', unitPrice: 5.7, amount: 4605.6, remark: '欠主体192个' },
+    { id: 'di266', materialCode: 'YL-014-95', productName: '主体', spec: '71.5*41.7*95', unit: 'pcs', qty: 808, surface: '铁灰', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di267', materialCode: 'yl-015-95', productName: '盖板', spec: '62.7*1.5*95', unit: 'pcs', qty: 1035, surface: '铁灰', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di268', materialCode: 'yl-014-13地线孔', productName: '堵头', spec: '72*42*13', unit: 'pcs', qty: 1079, surface: '铁灰', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di269', materialCode: 'yl-014-13', productName: '堵头', spec: '72*42*13', unit: 'pcs', qty: 1022, surface: '铁灰', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn122', noteNo: 'BL461140273', date: '2026-04-02', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di270', materialCode: 'BL-126-144', productName: '底板', spec: '55*1.5*144mm', unit: 'pcs', qty: 800, surface: '银白', unitPrice: 2.3, amount: 1840, remark: '' }
+  ]},
+  { id: 'dn123', noteNo: 'BL461130274', date: '2026-04-01', customer: '珠海市明庆电子有限分司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di271', materialCode: 'YL-054-48', productName: '电源外壳', spec: '28.8*20.1*48', unit: 'pcs', qty: 4368, surface: '氧化雾银', unitPrice: 0.41, amount: 1790.88, remark: '' }
+  ]},
+  { id: 'dn124', noteNo: 'BL461140275', date: '2026-04-02', customer: '珠海市明庆电子有限分司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di272', materialCode: 'YL-054-48', productName: '电源外壳', spec: '28.8*20.1*48', unit: 'pcs', qty: 2184, surface: '氧化雾银', unitPrice: 0.41, amount: 895.44, remark: '' }
+  ]},
+  { id: 'dn125', noteNo: 'BL461160276', date: '2026-04-04', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di273', materialCode: 'LZ-010', productName: 'U型制动钳', spec: '33.3*8.3*18', unit: 'pcs', qty: 15000, surface: '镀彩锌', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di274', materialCode: 'YL-874', productName: '只型铝板', spec: '70*49.4*100.2', unit: 'pcs', qty: 3000, surface: '', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di275', materialCode: 'YL-036-151', productName: '电源外壳', spec: '69.8*42.6*151', unit: '套', qty: 100, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di276', materialCode: 'YL-872', productName: '带挂钩的铝块', spec: '20.4*20.2*99.6', unit: '套', qty: 100, surface: '拉丝', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di277', materialCode: 'LZ-002', productName: 'L型特殊铝块', spec: '70*70*20.4', unit: 'pcs', qty: 5000, surface: '', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn126', noteNo: 'BL461200281', date: '2026-04-08', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di278', materialCode: 'YL-054-95', productName: '电源外壳', spec: '28.8*20.1*95', unit: 'pcs', qty: 1020, surface: '氧化雾银', unitPrice: 0.6, amount: 612, remark: '' }
+  ]},
+  { id: 'dn127', noteNo: 'BL461260282', date: '2026-04-14', customer: '珠海市明庆电子有限分司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di279', materialCode: 'YL-054-48', productName: '电源外壳', spec: '28.8*20.1*48', unit: 'pcs', qty: 10586, surface: '氧化雾银', unitPrice: 0.41, amount: 4340.26, remark: '' }
+  ]},
+  { id: 'dn128', noteNo: 'BL0283', date: '', customer: '东莞市百川慧通科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di280', materialCode: 'BL-003-2000', productName: '小边框', spec: '51.8*11.1*2000', unit: '支', qty: 3095, surface: '喷涂', unitPrice: 10, amount: 30950, remark: '' }
+  ]},
+  { id: 'dn129', noteNo: 'BL461330284', date: '2026-04-21', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di281', materialCode: 'YL-107-260', productName: '电源外壳', spec: '95*50*260mm', unit: 'pcs', qty: 255, surface: '铁灰', unitPrice: 28, amount: 7140, remark: '' },
+    { id: 'di282', materialCode: 'YL-107-1', productName: '堵头+地线孔', spec: '95*13*50', unit: 'pcs', qty: 153, surface: '铁灰', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di283', materialCode: 'YL-107-2', productName: '堵头', spec: '95*13*50', unit: 'pcs', qty: 153, surface: '铁灰', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di284', materialCode: 'YL-108-260', productName: '盖板', spec: '260*80*3', unit: 'pcs', qty: 233, surface: '铁灰', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn130', noteNo: 'BL461350288', date: '2026-04-23', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di285', materialCode: '方铝管25*25*2.0', productName: '铝管6063', spec: '25*25*4040', unit: 'KG', qty: 1514, surface: '本色', unitPrice: 29.15, amount: 44133.1, remark: '' }
+  ]},
+  { id: 'dn131', noteNo: 'BL461350289', date: '2026-04-23', customer: '廖先生', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di286', materialCode: '外径46.80*59.30（7.8内孔）', productName: '碗', spec: 'ø46.8*59.3', unit: '', qty: 20, surface: '', unitPrice: 11, amount: 220, remark: '4月19日发' },
+    { id: 'di287', materialCode: '外径46.80*59.30（7.8内孔）', productName: '碗', spec: 'ø46.8*59.3', unit: '', qty: 1680, surface: '', unitPrice: 11, amount: 18480, remark: '' },
+    { id: 'di288', materialCode: '外径31*21', productName: '堵头', spec: 'ø31*21', unit: '', qty: 1007, surface: '', unitPrice: 3.5, amount: 3524.5, remark: '' }
+  ]},
+  { id: 'dn132', noteNo: 'BL461370292', date: '2026-04-25', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di289', materialCode: 'BL-126-144', productName: '底板', spec: '55*1.5*144mm', unit: 'pcs', qty: 5920, surface: '', unitPrice: 1.5, amount: 8880, remark: '' }
+  ]},
+  { id: 'dn133', noteNo: 'BL461420293', date: '2026-04-30', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di290', materialCode: '405-00731', productName: '铝管6063', spec: 'ø32.7*ø29.5*4000', unit: 'kg', qty: 525, surface: '', unitPrice: 35, amount: 18375, remark: '' }
+  ]},
+  { id: 'dn134', noteNo: 'BL461480294', date: '2026-05-06', customer: '廖先生', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di291', materialCode: '外径46.80*59.30（7.8内孔）', productName: '碗', spec: 'ø46.8*59.3', unit: '', qty: 700, surface: '', unitPrice: 11, amount: 7700, remark: '' },
+    { id: 'di292', materialCode: '外径46.80*59.30（9.0内孔）', productName: '碗', spec: 'ø46.8*59.3', unit: '', qty: 750, surface: '', unitPrice: 11, amount: 8250, remark: '' }
+  ]},
+  { id: 'dn135', noteNo: 'BL461480298', date: '2026-05-06', customer: '江门深华港湾照明有限公司', orderNo: '5PO-2026-03-0246', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di293', materialCode: '1.04.01.1099. 9902', productName: 'IGUASSU支架端盖-1', spec: '42.4*47.9*2.0', unit: 'pcs', qty: 500, surface: '砂白', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di294', materialCode: '1.04.01.1100. 9902', productName: 'IGUASSU支架端盖-2', spec: '42.4*47.9*2.0', unit: 'pcs', qty: 500, surface: '砂白', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di295', materialCode: '1.04.01.1128. 9903', productName: 'IGUASSU单灯主体端盖-1', spec: '42.4*99.5*2.0', unit: 'pcs', qty: 400, surface: '砂白', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di296', materialCode: '1.04.01.1129. 9903', productName: 'IGUASSU单灯主体端盖-2', spec: '42.4*99.5*2.0', unit: 'pcs', qty: 400, surface: '砂白', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn136', noteNo: 'BL461500302', date: '2026-05-08', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di297', materialCode: '51.04.01.1524.0001', productName: '黄灯管-铝型材', spec: '1135x23.8x11', unit: 'pcs', qty: 80, surface: '本色', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn137', noteNo: 'BL461540303', date: '2026-05-12', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di298', materialCode: 'LZ-006', productName: '铝架配件', spec: '54.5*27.3*50', unit: 'pcs', qty: 2330, surface: '', unitPrice: 2.8, amount: 6524, remark: '' }
+  ]},
+  { id: 'dn138', noteNo: 'BL457930304', date: '2025-05-16', customer: '东莞市希迈精密制造有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di299', materialCode: 'LZ-006', productName: '铝架配件', spec: '54.5*27.3*50', unit: 'pcs', qty: 800, surface: '本色', unitPrice: 2.8, amount: 2240, remark: '' }
+  ]},
+  { id: 'dn139', noteNo: 'BL461550306', date: '2026-05-13', customer: '廖先生', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di300', materialCode: '外径50*127.5', productName: '短管', spec: '', unit: 'pcs', qty: 204, surface: '', unitPrice: 18, amount: 3672, remark: '' },
+    { id: 'di301', materialCode: '外径28.9*67', productName: '接头', spec: '', unit: 'pcs', qty: 500, surface: '', unitPrice: 13, amount: 6500, remark: '旧款6槽' },
+    { id: 'di302', materialCode: '外径50*147.5', productName: '长管', spec: '', unit: 'pcs', qty: 150, surface: '', unitPrice: 19, amount: 2850, remark: '' },
+    { id: 'di303', materialCode: '外径50*13', productName: '大接头', spec: 'ø50*13', unit: 'pcs', qty: 750, surface: '', unitPrice: 8.6, amount: 6450, remark: '' }
+  ]},
+  { id: 'dn140', noteNo: 'BL461590310', date: '2026-05-17', customer: '廖先生', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di304', materialCode: '外径50*40（7.8孔）', productName: '碗', spec: 'ø50*40', unit: 'pcs', qty: 114, surface: '', unitPrice: 14.6, amount: 1664.4, remark: '' },
+    { id: 'di305', materialCode: '外径28.9*59', productName: '接头', spec: '', unit: 'pcs', qty: 500, surface: '', unitPrice: 13, amount: 6500, remark: '' },
+    { id: 'di306', materialCode: '外径42*13', productName: '小接头', spec: '', unit: 'pcs', qty: 600, surface: '', unitPrice: 7.5, amount: 4500, remark: '' }
+  ]},
+  { id: 'dn141', noteNo: 'BL461600313', date: '2026-05-18', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di307', materialCode: 'YG25.3*1.15', productName: '铝管6063', spec: '25.3*23*4000', unit: 'kg', qty: 463, surface: '', unitPrice: 35, amount: 16205, remark: '' }
+  ]},
+  { id: 'dn142', noteNo: 'BL461600314', date: '2026-05-18', customer: '珠海市启阳电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di308', materialCode: 'YL-871-200', productName: '电源外壳', spec: '39.6*21.33*200', unit: 'pcs', qty: 232, surface: '氧化雾银', unitPrice: 1.91, amount: 443.12, remark: '' },
+    { id: 'di309', materialCode: 'YL-054-65', productName: '电源外壳', spec: '20.3*29.3*65', unit: 'pcs', qty: 1238, surface: '氧化雾银', unitPrice: 0.59, amount: 730.42, remark: '' }
+  ]},
+  { id: 'dn143', noteNo: 'BL461630316', date: '2026-05-21', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di310', materialCode: '51.04.01.1522.0001', productName: 'LIFA-4OW滑轨', spec: '60x23x7.2mm,', unit: 'pcs', qty: 991, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di311', materialCode: '51.04.01.1523.0001', productName: 'LIFA一15OW滑轨', spec: '80x23x7.2mm,', unit: 'pcs', qty: 1000, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn144', noteNo: 'BL461650318', date: '2026-05-23', customer: '廖先生', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di312', materialCode: '外径50*127.5', productName: '短管', spec: '', unit: 'pcs', qty: 183, surface: '', unitPrice: 0, amount: 0, remark: '补退货' },
+    { id: 'di313', materialCode: '外径39*59.30（7.8内孔）', productName: '碗', spec: '', unit: 'pcs', qty: 384, surface: '', unitPrice: 10, amount: 3840, remark: '' },
+    { id: 'di314', materialCode: '外径42*145.70', productName: '小长管', spec: '', unit: 'pcs', qty: 600, surface: '', unitPrice: 16, amount: 9600, remark: '' },
+    { id: 'di315', materialCode: '外径42*40（7.8孔）', productName: '', spec: '', unit: 'pcs', qty: 600, surface: '', unitPrice: 13.4, amount: 8040, remark: '' },
+    { id: 'di316', materialCode: '外径50*40（7.8孔）', productName: '碗', spec: 'ø50*40', unit: 'pcs', qty: 600, surface: '', unitPrice: 14.6, amount: 8760, remark: '' },
+    { id: 'di317', materialCode: '外径50*40（9.0孔）', productName: '碗', spec: 'ø50*40', unit: 'pcs', qty: 150, surface: '', unitPrice: 14.6, amount: 2190, remark: '' }
+  ]},
+  { id: 'dn145', noteNo: 'BL461750324', date: '2026-06-02', customer: '凯明智汇科技（东莞）有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di318', materialCode: 'YL-014-95', productName: '电源外壳', spec: '71.5*41.7*95', unit: '套', qty: 1192, surface: '铁灰', unitPrice: 5.7, amount: 6794.4, remark: '' },
+    { id: 'di319', materialCode: 'YL-014-123', productName: '电源外壳', spec: '71.5*41.7*123', unit: '套', qty: 500, surface: '铁灰', unitPrice: 7.5, amount: 3750, remark: '' }
+  ]},
+  { id: 'dn146', noteNo: 'BL461740326', date: '2026-06-01', customer: '廖先生', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di320', materialCode: '外径39*59.30（7.8内孔）', productName: '碗', spec: '', unit: '', qty: 2632, surface: '', unitPrice: 10, amount: 26320, remark: '' }
+  ]},
+  { id: 'dn147', noteNo: 'BL461530327', date: '2026-05-11', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di321', materialCode: '550186-A00', productName: '散热片上盖', spec: '107.4*57.8*29', unit: 'pcs', qty: 2000, surface: '砂白', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn148', noteNo: 'BL461780328', date: '2026-06-05', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di322', materialCode: '550186-A00', productName: '散热片上盖', spec: '107.4*57.8*29', unit: 'pcs', qty: 1936, surface: '砂白', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn149', noteNo: 'BL461830329', date: '2026-06-10', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di323', materialCode: '550186-A00', productName: '散热片上盖', spec: '107.4*57.8*29', unit: 'pcs', qty: 3048, surface: '砂白', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn150', noteNo: 'BL461830330', date: '2026-06-10', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di324', materialCode: 'YG25.3*1.15', productName: '铝管6063', spec: '25.3*23*4000', unit: 'pcs', qty: 650, surface: '', unitPrice: 35, amount: 22750, remark: '' }
+  ]},
+  { id: 'dn151', noteNo: 'BL461830331', date: '2026-06-10', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di325', materialCode: '51.04.01.1524.0001', productName: '黄灯管-铝型材', spec: '1135x23.8x11', unit: '支', qty: 1050, surface: '本色', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di326', materialCode: '51.04.01.1524.0001', productName: '黄灯管-铝型材', spec: '1135x23.8x11', unit: '支', qty: 75, surface: '本色', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn152', noteNo: 'BL461830333', date: '2026-06-10', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di327', materialCode: 'BL-126-140', productName: '底板', spec: '52*1.5*140mm', unit: 'pcs', qty: -673, surface: '氧化雾银', unitPrice: 1.5, amount: -1009.5, remark: '2846364' }
+  ]},
+  { id: 'dn153', noteNo: 'BL461840334', date: '2026-06-11', customer: '江门深华港湾照明有限公司', orderNo: '5PO-2026-04-0175', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di328', materialCode: '1.04.01.0097', productName: 'Q2-45W端盖', spec: '47X29X13mm，Φ7.4', unit: 'pcs', qty: 1000, surface: '氧化雾银', unitPrice: 0.7, amount: 700, remark: '' },
+    { id: 'di329', materialCode: '1.04.01.0135', productName: 'TODAY 40W端盖', spec: '47X29X13mmΦ10', unit: 'pcs', qty: 1000, surface: '氧化黑色', unitPrice: 0.7, amount: 700, remark: '' }
+  ]},
+  { id: 'dn154', noteNo: 'BL461910336', date: '2026-06-18', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di330', materialCode: '405-00731', productName: '铝管6063', spec: 'ø32.7*ø29.5*4000', unit: 'kg', qty: 495.5, surface: '本色', unitPrice: 35, amount: 17342.5, remark: '' }
+  ]},
+  { id: 'dn155', noteNo: 'BL461780337', date: '2026-06-05', customer: '合肥智测电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di331', materialCode: 'yl-424', productName: '散热器', spec: '130.7*38.4*219', unit: 'pcs', qty: 100, surface: '砂银', unitPrice: 97.5, amount: 9750, remark: '' }
+  ]},
+  { id: 'dn156', noteNo: 'BL461550338', date: '2026-05-13', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di332', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: 'pcs', qty: 3116, surface: '氧化雾银', unitPrice: 1.1, amount: 3427.6, remark: '' }
+  ]},
+  { id: 'dn157', noteNo: 'BL462090339', date: '2026-07-06', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di333', materialCode: 'YL-107-260', productName: '电源外壳', spec: '95*50*260mm', unit: 'pcs', qty: 599, surface: '铁灰', unitPrice: 28, amount: 16772, remark: '' },
+    { id: 'di334', materialCode: 'YL-108-260', productName: '盖板', spec: '260*80*3', unit: 'pcs', qty: 506, surface: '铁灰', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di335', materialCode: 'YL-107-1', productName: '堵头+地线孔', spec: '95*13*50', unit: 'pcs', qty: 722, surface: '铁灰', unitPrice: 0, amount: 0, remark: '' },
+    { id: 'di336', materialCode: 'YL-107-2', productName: '堵头', spec: '95*13*50', unit: 'pcs', qty: 696, surface: '铁灰', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn158', noteNo: 'BL462260343', date: '2026-07-23', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di337', materialCode: '51.04.01.1480.0001', productName: 'LIRO光源支架', spec: '1080.7X67X6.9', unit: '条', qty: 555, surface: '本色', unitPrice: 8.5, amount: 4717.5, remark: '' }
+  ]},
+  { id: 'dn159', noteNo: 'BL462280344', date: '2026-07-25', customer: '东方一号电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di338', materialCode: 'yl-270-230', productName: '电源主体', spec: '40*22*230', unit: '套', qty: 1620, surface: '本色', unitPrice: 2.1, amount: 3402, remark: '' }
+  ]},
+  { id: 'dn160', noteNo: 'BL462450345', date: '2026-08-11', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di339', materialCode: 'YL-054-117', productName: '电源外壳', spec: '28.8*20.1*117', unit: 'pcs', qty: 6047, surface: '氧化雾银', unitPrice: 0.75, amount: 4535.25, remark: '' }
+  ]},
+  { id: 'dn161', noteNo: 'BL462510346', date: '2026-08-17', customer: '东方一号电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di340', materialCode: 'YL-054-280', productName: '电源外壳', spec: '28.8*20.1*280', unit: 'pcs', qty: 274, surface: '氧化雾银', unitPrice: 2.1, amount: 575.4, remark: '' }
+  ]},
+  { id: 'dn162', noteNo: 'BL462530347', date: '2026-08-19', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di341', materialCode: 'YL-054-220', productName: '电源外壳', spec: '20.3*29.3*220', unit: 'pcs', qty: 102, surface: '氧化黑色', unitPrice: 3, amount: 306, remark: '' },
+    { id: 'di342', materialCode: 'YL-108-260', productName: '盖板', spec: '260*80*3', unit: 'pcs', qty: 219, surface: '铁灰', unitPrice: 0, amount: 0, remark: '' }
+  ]},
+  { id: 'dn163', noteNo: 'BL462610349', date: '2026-08-27', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di343', materialCode: '405-00731', productName: '铝管6063', spec: 'ø32.7*ø29.5*4000', unit: 'KG', qty: 347, surface: '', unitPrice: 35, amount: 12145, remark: '' },
+    { id: 'di344', materialCode: '405-00731', productName: '铝管6063', spec: 'ø32.7*ø29.5*4000', unit: 'KG', qty: -45, surface: '', unitPrice: 35, amount: -1575, remark: '' }
+  ]},
+  { id: 'dn164', noteNo: 'BL462610352', date: '2026-08-27', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+    { id: 'di345', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: '套', qty: 1006, surface: '氧化雾银', unitPrice: 1.1, amount: 1106.6, remark: '' },
+    { id: 'di346', materialCode: '1.04.01.1260. 9901', productName: '', spec: '', unit: 'pcs', qty: 2000, surface: '氧化雾银', unitPrice: 2000, amount: 0, remark: '' }
+  ]},
 ];
 
 // 发货公司
