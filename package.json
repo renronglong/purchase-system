@@ -3,9 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "bash ./scripts/build.sh",
+    "build": "next build",
     "dev": "bash ./scripts/dev.sh",
-    "preinstall": "npx only-allow pnpm",
     "lint": "eslint",
     "lint:build": "eslint . --quiet",
     "lint:style": "stylelint \"src/**/*.css\"",
@@ -77,15 +76,15 @@
     "@react-dev-inspector/middleware": "^2.0.1",
     "tailwindcss": "^4",
     "tsup": "^8.3.5",
-    "tsx": "^4.19.2"
-  },
-  "devDependencies": {
+    "tsx": "^4.19.2",
     "@types/node": "^20",
     "@types/pg": "^8.16.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.1.1",
+    "eslint-config-next": "16.1.1"
+  },
+  "devDependencies": {
     "only-allow": "^1.2.2",
     "shadcn": "latest",
     "stylelint": "^16.4.0",
