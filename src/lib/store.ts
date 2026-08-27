@@ -70,26 +70,40 @@ export interface OutsourcingOrder {
   updatedAt: string;
 }
 
+// 种子数据版本号：每次更新 seed-data 时升此值，强制覆盖旧缓存
+const STORAGE_VERSION = "v3";
+
 // 存储键名
 const KEYS = {
   PRODUCTS: "aluminum_products",
   SUPPLIERS: "aluminum_suppliers",
   PURCHASE_ORDERS: "aluminum_purchase_orders",
   OUTSOURCING_ORDERS: "aluminum_outsourcing_orders",
-  INITIALIZED: "aluminum_data_initialized_v2",
+  STORAGE_VERSION: "aluminum_storage_version",
 };
 
 // 初始化数据
 function initializeData(): void {
   if (typeof window === "undefined") return;
-  const initialized = localStorage.getItem(KEYS.INITIALIZED);
-  if (initialized) return;
 
-  localStorage.setItem(KEYS.PRODUCTS, JSON.stringify(seedProducts));
-  localStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(seedSuppliers));
-  localStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([]));
-  localStorage.setItem(KEYS.OUTSOURCING_ORDERS, JSON.stringify([]));
-  localStorage.setItem(KEYS.INITIALIZED, "true");
+  const currentVersion = localStorage.getItem(KEYS.STORAGE_VERSION);
+
+  // 首次访问：写入全部初始数据
+  if (currentVersion === null) {
+    localStorage.setItem(KEYS.PRODUCTS, JSON.stringify(seedProducts));
+    localStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(seedSuppliers));
+    localStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([]));
+    localStorage.setItem(KEYS.OUTSOURCING_ORDERS, JSON.stringify([]));
+    localStorage.setItem(KEYS.STORAGE_VERSION, STORAGE_VERSION);
+    return;
+  }
+
+  // 版本号不匹配：强制用最新种子数据覆盖产品和供应商，保留订单数据
+  if (currentVersion !== STORAGE_VERSION) {
+    localStorage.setItem(KEYS.PRODUCTS, JSON.stringify(seedProducts));
+    localStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(seedSuppliers));
+    localStorage.setItem(KEYS.STORAGE_VERSION, STORAGE_VERSION);
+  }
 }
 
 // 通用 CRUD
