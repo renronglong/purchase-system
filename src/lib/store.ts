@@ -76,7 +76,7 @@ const KEYS = {
   SUPPLIERS: "aluminum_suppliers",
   PURCHASE_ORDERS: "aluminum_purchase_orders",
   OUTSOURCING_ORDERS: "aluminum_outsourcing_orders",
-  INITIALIZED: "aluminum_data_initialized",
+  INITIALIZED: "aluminum_data_initialized_v2",
 };
 
 // 初始化数据
