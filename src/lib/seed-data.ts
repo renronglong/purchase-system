@@ -275,7 +275,7 @@ export const seedProducts: Product[] = [
   { id: "LY-428", name: "圆管", spec: "ø35*1.8", weightPerMeter: 0.516, material: "", defaultSupplier: "盛世源通" },
   { id: "yl-436", name: "电源盒", spec: "32.8*48.4", weightPerMeter: 0.53, material: "", defaultSupplier: "" },
   { id: "YL-437", name: "垂直安装壁装支架", spec: "23.9*100", weightPerMeter: 0.86, material: "", defaultSupplier: "" },
-  { id: "YL-438", name: "垂直安装灯体支架", spec: "58.1*59.16", weightPerMeter: 0.86, material: "", defaultSupplier: "0.5815908" },
+  { id: "YL-438", name: "垂直安装灯体支架", spec: "58.1*59.16", weightPerMeter: 0.86, material: "", defaultSupplier: "" },
   { id: "YL-439", name: "D0180盖板", spec: "36.5*3.13", weightPerMeter: 0.088, material: "", defaultSupplier: "" },
   { id: "YL-440", name: "255盖板", spec: "51.5*4.38", weightPerMeter: 0.157666666666667, material: "", defaultSupplier: "" },
   { id: "YL-441", name: "铝条", spec: "9*10", weightPerMeter: 0.0841, material: "", defaultSupplier: "" },
