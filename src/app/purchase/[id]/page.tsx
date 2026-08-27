@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter, useParams } from "next/navigation";
 import {
-  purchaseOrderStore, supplierStore,
+  purchaseOrderStore, supplierStore, previewPurchaseOrderNo,
   type PurchaseOrder, type PurchaseOrderItem,
 } from "@/lib/store";
 import { purchasingCompanies, surfaceTreatments } from "@/lib/seed-data";
@@ -41,6 +41,7 @@ export default function PurchaseOrderFormPage() {
   const orderId = params.id as string;
 
   const [company, setCompany] = useState(purchasingCompanies[0]);
+  const [orderNo, setOrderNo] = useState("");
   const [supplierId, setSupplierId] = useState("");
   const [supplierName, setSupplierName] = useState("");
   const [contact, setContact] = useState("");
@@ -56,6 +57,7 @@ export default function PurchaseOrderFormPage() {
     const order = purchaseOrderStore.getById(orderId);
     if (!order) return;
     setCompany(order.company);
+    setOrderNo(order.orderNo);
     setSupplierId(order.supplierId);
     setSupplierName(order.supplierName);
     setContact(order.contact);
@@ -68,6 +70,12 @@ export default function PurchaseOrderFormPage() {
   useEffect(() => {
     loadOrder();
   }, [loadOrder]);
+
+  useEffect(() => {
+    if (!isEdit) {
+      setOrderNo(previewPurchaseOrderNo());
+    }
+  }, [isEdit]);
 
   const handleSupplierChange = (sid: string) => {
     setSupplierId(sid);
@@ -176,6 +184,15 @@ export default function PurchaseOrderFormPage() {
       {/* 头部信息 */}
       <div className="bg-white rounded-lg border border-slate-200 p-5 mb-4">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-xs text-slate-500 mb-1">订单编号</label>
+            <input
+              type="text"
+              value={orderNo}
+              readOnly
+              className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md bg-slate-50 font-mono text-blue-600 font-medium"
+            />
+          </div>
           <div>
             <label className="block text-xs text-slate-500 mb-1">采购公司</label>
             <select

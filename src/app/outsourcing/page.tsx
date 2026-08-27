@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { outsourcingOrderStore, supplierStore, productStore, type OutsourcingOrder, type OutsourcingItem } from "@/lib/store";
+import { outsourcingOrderStore, supplierStore, productStore, previewOutsourcingOrderNo, type OutsourcingOrder, type OutsourcingItem } from "@/lib/store";
 
 function generateItemId(): string {
   return Math.random().toString(36).slice(2, 10);
@@ -31,6 +31,7 @@ export default function OutsourcingPage() {
 
   // 新建表单状态
   const [showForm, setShowForm] = useState(false);
+  const [outsourcingOrderNo, setOutsourcingOrderNo] = useState("");
   const [company, setCompany] = useState("佛山市质稳五金有限公司");
   const [supplierId, setSupplierId] = useState("");
   const [supplierName, setSupplierName] = useState("");
@@ -145,7 +146,7 @@ export default function OutsourcingPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl font-bold text-slate-900">委外加工单管理</h1>
         <button
-          onClick={() => setShowForm(!showForm)}
+          onClick={() => { if (!showForm) setOutsourcingOrderNo(previewOutsourcingOrderNo()); setShowForm(!showForm); }}
           className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -160,6 +161,11 @@ export default function OutsourcingPage() {
         <div className="bg-white rounded-lg border border-blue-200 p-5 mb-4">
           <h3 className="text-sm font-medium text-slate-700 mb-3">新建委外加工单</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+            <div>
+              <label className="block text-xs text-slate-500 mb-1">单号</label>
+              <input type="text" value={outsourcingOrderNo} readOnly
+                className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md bg-slate-50 font-mono text-blue-600 font-medium" />
+            </div>
             <div>
               <label className="block text-xs text-slate-500 mb-1">公司</label>
               <select

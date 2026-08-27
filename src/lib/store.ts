@@ -122,17 +122,35 @@ function generateId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 }
 
-function generateOrderNo(prefix: string): string {
+function generateOrderNo(prefix: string, storageKey: string): string {
   const now = new Date();
   const dateStr = now.getFullYear().toString() +
     String(now.getMonth() + 1).padStart(2, "0") +
     String(now.getDate()).padStart(2, "0");
-  const orders = getAll<PurchaseOrder | OutsourcingOrder>(
-    prefix === "CG" ? KEYS.PURCHASE_ORDERS : KEYS.OUTSOURCING_ORDERS
-  );
-  const todayOrders = orders.filter(o => o.orderNo.startsWith(prefix + dateStr));
-  const seq = String(todayOrders.length + 1).padStart(3, "0");
-  return prefix + dateStr + seq;
+  const dayPrefix = `${prefix}-${dateStr}-`;
+  const orders = getAll<PurchaseOrder | OutsourcingOrder>(storageKey);
+  let maxSeq = 0;
+  for (const o of orders) {
+    if (o.orderNo.startsWith(dayPrefix)) {
+      const seqStr = o.orderNo.slice(dayPrefix.length);
+      const seq = parseInt(seqStr, 10);
+      if (!isNaN(seq) && seq > maxSeq) maxSeq = seq;
+    }
+  }
+  const seq = String(maxSeq + 1).padStart(3, "0");
+  return `${dayPrefix}${seq}`;
+}
+
+// 预览下一个采购单号（新建表单展示用）
+export function previewPurchaseOrderNo(): string {
+  if (typeof window === "undefined") return "";
+  return generateOrderNo("CG", KEYS.PURCHASE_ORDERS);
+}
+
+// 预览下一个委外加工单号
+export function previewOutsourcingOrderNo(): string {
+  if (typeof window === "undefined") return "";
+  return generateOrderNo("WO", KEYS.OUTSOURCING_ORDERS);
 }
 
 // 产品管理
@@ -221,7 +239,7 @@ export const purchaseOrderStore = {
     const newOrder: PurchaseOrder = {
       ...order,
       id: generateId(),
-      orderNo: generateOrderNo("CG"),
+      orderNo: generateOrderNo("CG", KEYS.PURCHASE_ORDERS),
       createdAt: now,
       updatedAt: now,
     };
@@ -260,7 +278,7 @@ export const outsourcingOrderStore = {
     const newOrder: OutsourcingOrder = {
       ...order,
       id: generateId(),
-      orderNo: generateOrderNo("WO"),
+      orderNo: generateOrderNo("WO", KEYS.OUTSOURCING_ORDERS),
       createdAt: now,
       updatedAt: now,
     };
