@@ -206,7 +206,6 @@ export const seedProducts: Product[] = [
   { id: "YL-351", name: "洗墙灯盖板", spec: "30*25", weightPerMeter: 0.0, material: "", defaultSupplier: "" },
   { id: "YL-352", name: "洗墙灯堵头", spec: "30*20.5", weightPerMeter: 0.0, material: "", defaultSupplier: "" },
   { id: "YL-353", name: "盖板", spec: "68.1*5.5", weightPerMeter: 0.25, material: "", defaultSupplier: "" },
-  { id: "YL-354", name: "", spec: "", weightPerMeter: 0.0, material: "", defaultSupplier: "" },
   { id: "YL-355", name: "电源主体", spec: "68.7*71.9", weightPerMeter: 1.14, material: "", defaultSupplier: "" },
   { id: "YL-356", name: "黑板灯主体", spec: "99.16*32.2", weightPerMeter: 1.0611, material: "6063-T5", defaultSupplier: "" },
   { id: "YL-356-1", name: "黑板灯左挡板", spec: "104.5*37.9*9.5", weightPerMeter: 1.66666666666667, material: "ABS灰色", defaultSupplier: "" },
