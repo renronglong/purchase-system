@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import {
   deliveryNoteStore, deliveryCustomerStore, deliveryProductStore, previewDeliveryOrderNo,
@@ -12,6 +12,109 @@ function genItemId(): string { return Math.random().toString(36).slice(2, 10); }
 
 function emptyItem(): DeliveryItem {
   return { id: genItemId(), materialCode: "", productName: "", spec: "", unit: "", qty: 0, surface: "", unitPrice: 0, amount: 0, remark: "" };
+}
+
+// ---------- 物料编号搜索下拉组件 ----------
+interface MaterialCodeInputProps {
+  value: string;
+  onChange: (code: string) => void;
+  onSelect: (code: string) => void;
+}
+
+function MaterialCodeInput({ value, onChange, onSelect }: MaterialCodeInputProps) {
+  const [keyword, setKeyword] = useState(value);
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Sync external value changes (e.g. when form resets)
+  useEffect(() => { setKeyword(value); }, [value]);
+
+  // Search products by code (fuzzy match)
+  const results = keyword.trim().length > 0
+    ? deliveryProductStore.getAll()
+        .filter(p => p.code.toLowerCase().includes(keyword.toLowerCase()))
+        .slice(0, 20)
+    : [];
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setKeyword(val);
+    onChange(val);
+    setIsOpen(val.trim().length > 0);
+    setSelectedIndex(0);
+  };
+
+  const handleSelect = (code: string) => {
+    setKeyword(code);
+    setIsOpen(false);
+    onSelect(code);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!isOpen || results.length === 0) return;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setSelectedIndex(prev => Math.min(prev + 1, results.length - 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setSelectedIndex(prev => Math.max(prev - 1, 0));
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      handleSelect(results[selectedIndex].code);
+    } else if (e.key === "Escape") {
+      setIsOpen(false);
+    }
+  };
+
+  return (
+    <div ref={wrapperRef} className="relative">
+      <input
+        ref={inputRef}
+        type="text"
+        value={keyword}
+        onChange={handleInputChange}
+        onFocus={() => { if (keyword.trim().length > 0) setIsOpen(true); }}
+        onKeyDown={handleKeyDown}
+        className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded"
+        placeholder="输入编号搜索"
+        autoComplete="off"
+      />
+      {isOpen && results.length > 0 && (
+        <div className="absolute z-50 left-0 top-full mt-0.5 w-80 max-h-48 overflow-y-auto bg-white border border-slate-200 rounded shadow-lg">
+          {results.map((p, idx) => (
+            <div
+              key={p.id}
+              className={`px-2 py-1 cursor-pointer text-xs border-b border-slate-50 last:border-0 ${idx === selectedIndex ? "bg-blue-50" : "hover:bg-slate-50"}`}
+              onMouseDown={(e) => { e.preventDefault(); handleSelect(p.code); }}
+              onMouseEnter={() => setSelectedIndex(idx)}
+            >
+              <span className="font-medium text-blue-700">{p.code}</span>
+              <span className="ml-2 text-slate-700">{p.name}</span>
+              {p.spec && <span className="ml-2 text-slate-400">{p.spec}</span>}
+            </div>
+          ))}
+        </div>
+      )}
+      {isOpen && keyword.trim().length > 0 && results.length === 0 && (
+        <div className="absolute z-50 left-0 top-full mt-0.5 w-48 bg-white border border-slate-200 rounded shadow-lg px-2 py-1.5 text-xs text-slate-400">
+          未找到匹配产品
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default function DeliveryPage() {
@@ -158,7 +261,7 @@ export default function DeliveryPage() {
                 {items.map((item, idx) => (
                   <tr key={item.id} className="border-b border-slate-100">
                     <td className="px-2 py-1 text-center text-slate-500">{idx + 1}</td>
-                    <td className="px-2 py-1"><input type="text" value={item.materialCode} onChange={(e) => updateItem(idx, "materialCode", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" placeholder="物料编号" /></td>
+                    <td className="px-2 py-1"><MaterialCodeInput value={item.materialCode} onChange={(code) => updateItem(idx, "materialCode", code)} onSelect={(code) => updateItem(idx, "materialCode", code)} /></td>
                     <td className="px-2 py-1"><input type="text" value={item.productName} onChange={(e) => updateItem(idx, "productName", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
                     <td className="px-2 py-1"><input type="text" value={item.spec} onChange={(e) => updateItem(idx, "spec", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
                     <td className="px-2 py-1"><input type="text" value={item.surface} onChange={(e) => updateItem(idx, "surface", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
