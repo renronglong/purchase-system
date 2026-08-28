@@ -150,15 +150,15 @@ export default function PrintDeliveryPage() {
       <div id="print-area" className="mx-auto bg-white" style={{ width: "241mm", height: "140mm", display: "flex", flexDirection: "column", overflow: "hidden", boxSizing: "border-box", padding: "3mm" }}>
         {/* 内层容器 - 无边框，高度134mm，左边距2mm */}
         <div style={{ width: CONTENT_WIDTH, height: "134mm", display: "flex", flexDirection: "column", boxSizing: "border-box", marginLeft: "2mm" }}>
-          {/* 标题区域 - 横排居中，固定高度 10mm */}
-          <div className="flex items-center justify-center" style={{ height: "10mm", borderBottom: `2px solid ${BORDER_COLOR}`, flexShrink: 0 }}>
+          {/* 标题区域 - 横排居中，固定高度 10mm，无下边框 */}
+          <div className="flex items-center justify-center" style={{ height: "10mm", flexShrink: 0 }}>
             <h1 style={{ fontSize: "20px", fontWeight: "bold", margin: 0, letterSpacing: "2px" }}>
               {order.company}送货单
             </h1>
           </div>
 
-          {/* 表头信息区域 - 左右两列布局，固定高度18mm（4行×4.5mm） */}
-          <div style={{ fontSize: "13px", lineHeight: "1.3", padding: "0.5mm 2mm", borderBottom: `2px solid ${BORDER_COLOR}`, flexShrink: 0, height: "18mm", boxSizing: "border-box", overflow: "hidden" }}>
+          {/* 表头信息区域 - 左右两列布局，固定高度18mm（4行×4.5mm），底部留1mm间距 */}
+          <div style={{ fontSize: "13px", lineHeight: "1.3", padding: "0.5mm 2mm", borderBottom: `2px solid ${BORDER_COLOR}`, flexShrink: 0, height: "18mm", boxSizing: "border-box", overflow: "hidden", marginBottom: "1mm" }}>
             <div className="flex">
               <span style={{ flex: "1" }}><span className="font-bold">客户名称：</span>{order.customer}</span>
               <span style={{ flex: "1", marginLeft: "30mm" }}><span className="font-bold">NO：</span><span className="font-mono font-bold" style={{ fontSize: "13px" }}>{order.noteNo}</span></span>
