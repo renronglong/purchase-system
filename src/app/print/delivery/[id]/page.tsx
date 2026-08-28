@@ -43,7 +43,7 @@ const FIXED_ROWS = 6;
 const ROW_HEIGHT = "8mm"; // 每行8mm，6行共48mm
 // 内容宽度：190mm（右边距加大20mm，防止针式打印机裁切右侧内容）
 const CONTENT_WIDTH = "190mm";
-// 高度分配：标题10mm + 表头16mm + 表格53mm(5+48) + 合计6mm + 底部14mm = 99mm < 134mm
+// 高度分配：标题10mm + 表头18mm + 表格53mm(5+48) + 合计6mm + 底部14mm = 101mm < 134mm
 
 export default function PrintDeliveryPage() {
   const params = useParams();
@@ -148,8 +148,8 @@ export default function PrintDeliveryPage() {
 
       {/* 打印区域 - 内容宽度190mm，左右各留5mm边距，高度134mm（140mm-2*3mm padding） */}
       <div id="print-area" className="mx-auto bg-white" style={{ width: "241mm", height: "140mm", display: "flex", flexDirection: "column", overflow: "hidden", boxSizing: "border-box", padding: "3mm" }}>
-        {/* 内层容器 - 带边框，高度134mm（140mm-2*3mm padding） */}
-        <div style={{ width: CONTENT_WIDTH, height: "134mm", border: `2px solid ${BORDER_COLOR}`, display: "flex", flexDirection: "column", boxSizing: "border-box", margin: "0 auto" }}>
+        {/* 内层容器 - 无边框，高度134mm，左边距2mm */}
+        <div style={{ width: CONTENT_WIDTH, height: "134mm", display: "flex", flexDirection: "column", boxSizing: "border-box", marginLeft: "2mm" }}>
           {/* 标题区域 - 横排居中，固定高度 10mm */}
           <div className="flex items-center justify-center" style={{ height: "10mm", borderBottom: `2px solid ${BORDER_COLOR}`, flexShrink: 0 }}>
             <h1 style={{ fontSize: "20px", fontWeight: "bold", margin: 0, letterSpacing: "2px" }}>
@@ -157,8 +157,8 @@ export default function PrintDeliveryPage() {
             </h1>
           </div>
 
-          {/* 表头信息区域 - 左右两列布局，固定高度16mm（4行×4mm） */}
-          <div style={{ fontSize: "13px", lineHeight: "1.3", padding: "0.5mm 2mm", borderBottom: `2px solid ${BORDER_COLOR}`, flexShrink: 0, height: "16mm", boxSizing: "border-box", overflow: "hidden" }}>
+          {/* 表头信息区域 - 左右两列布局，固定高度18mm（4行×4.5mm） */}
+          <div style={{ fontSize: "13px", lineHeight: "1.3", padding: "0.5mm 2mm", borderBottom: `2px solid ${BORDER_COLOR}`, flexShrink: 0, height: "18mm", boxSizing: "border-box", overflow: "hidden" }}>
             <div className="flex">
               <span style={{ flex: "1" }}><span className="font-bold">客户名称：</span>{order.customer}</span>
               <span style={{ flex: "1", marginLeft: "30mm" }}><span className="font-bold">NO：</span><span className="font-mono font-bold" style={{ fontSize: "13px" }}>{order.noteNo}</span></span>
@@ -181,16 +181,16 @@ export default function PrintDeliveryPage() {
           <table className="w-full border-collapse" style={{ fontSize: "12px", tableLayout: "fixed", flexShrink: 0 }}>
             <colgroup>
               <col style={{ width: "7mm" }} />   {/* 序号 */}
-              <col style={{ width: "22mm" }} />  {/* 产品编号 */}
-              <col style={{ width: "24mm" }} />  {/* 名称 +2mm */}
-              <col style={{ width: "30mm" }} />  {/* 型号规格mm +2mm */}
+              <col style={{ width: "26mm" }} />  {/* 产品编号 +4mm */}
+              <col style={{ width: "24mm" }} />  {/* 名称 */}
+              <col style={{ width: "30mm" }} />  {/* 型号规格mm */}
               <col style={{ width: "14mm" }} />  {/* 颜色 */}
               <col style={{ width: "10mm" }} />  {/* 数量 */}
               <col style={{ width: "9mm" }} />   {/* 单位 */}
-              <col style={{ width: "16mm" }} />  {/* 单价 +2mm */}
-              <col style={{ width: "18mm" }} />  {/* 金额 +2mm */}
-              <col style={{ width: "40mm" }} />  {/* 备注 -28mm */}
-              {/* 总计: 7+22+24+30+14+10+9+16+18+40 = 190mm */}
+              <col style={{ width: "16mm" }} />  {/* 单价 */}
+              <col style={{ width: "20mm" }} />  {/* 金额 +2mm */}
+              <col style={{ width: "34mm" }} />  {/* 备注 -6mm */}
+              {/* 总计: 7+26+24+30+14+10+9+16+20+34 = 190mm */}
             </colgroup>
             <thead>
               <tr style={{ height: "5mm" }}>
