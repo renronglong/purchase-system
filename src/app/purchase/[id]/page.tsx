@@ -48,6 +48,7 @@ export default function PurchaseOrderFormPage() {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [orderDate, setOrderDate] = useState(new Date().toISOString().slice(0, 10));
+  const [maker, setMaker] = useState("");
   const [items, setItems] = useState<PurchaseOrderItem[]>([createEmptyItem()]);
 
   const suppliers = supplierStore.getAll();
@@ -64,6 +65,7 @@ export default function PurchaseOrderFormPage() {
     setPhone(order.phone);
     setAddress(order.address);
     setOrderDate(order.orderDate);
+    setMaker(order.maker || "");
     setItems(order.items.length > 0 ? order.items : [createEmptyItem()]);
   }, [isEdit, orderId]);
 
@@ -146,10 +148,21 @@ export default function PurchaseOrderFormPage() {
       phone,
       address,
       orderDate,
+      maker,
       items: validItems,
       totalQuantity,
       totalWeight,
     };
+
+    // 保存制单人到历史记录
+    if (maker) {
+      try {
+        const history = JSON.parse(localStorage.getItem("print_maker_names") || "[]") as string[];
+        const filtered = history.filter(n => n !== maker);
+        filtered.unshift(maker);
+        localStorage.setItem("print_maker_names", JSON.stringify(filtered.slice(0, 20)));
+      } catch { /* ignore */ }
+    }
 
     if (isEdit) {
       purchaseOrderStore.update(orderId, orderData);
@@ -213,6 +226,25 @@ export default function PurchaseOrderFormPage() {
               onChange={(e) => setOrderDate(e.target.value)}
               className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
             />
+          </div>
+          <div>
+            <label className="block text-xs text-slate-500 mb-1">制单人</label>
+            <input
+              type="text"
+              value={maker}
+              onChange={(e) => setMaker(e.target.value)}
+              list="maker-history-list"
+              placeholder="输入制单人姓名"
+              className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+            />
+            <datalist id="maker-history-list">
+              {(() => {
+                try {
+                  const names = JSON.parse(localStorage.getItem("print_maker_names") || "[]") as string[];
+                  return names.map(n => <option key={n} value={n} />);
+                } catch { return null; }
+              })()}
+            </datalist>
           </div>
           <div>
             <label className="block text-xs text-slate-500 mb-1">供应商 <span className="text-red-500">*</span></label>

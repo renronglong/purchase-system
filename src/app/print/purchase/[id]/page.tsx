@@ -4,27 +4,10 @@ import { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { purchaseOrderStore, type PurchaseOrder } from "@/lib/store";
 
-const MAKER_STORAGE_KEY = "print_maker_names";
-
-function getMakerHistory(): string[] {
-  if (typeof window === "undefined") return [];
-  try { return JSON.parse(localStorage.getItem(MAKER_STORAGE_KEY) || "[]"); } catch { return []; }
-}
-
-function saveMakerName(name: string) {
-  if (!name.trim()) return;
-  const list = getMakerHistory();
-  const filtered = list.filter(n => n !== name.trim());
-  filtered.unshift(name.trim());
-  localStorage.setItem(MAKER_STORAGE_KEY, JSON.stringify(filtered.slice(0, 20)));
-}
-
 export default function PrintPurchasePage() {
   const params = useParams();
   const orderId = params.id as string;
   const [order, setOrder] = useState<PurchaseOrder | null>(null);
-  const [makerName, setMakerName] = useState("");
-  const [makerHistory, setMakerHistory] = useState<string[]>([]);
 
   const loadOrder = useCallback(() => {
     const found = purchaseOrderStore.getById(orderId);
@@ -33,7 +16,6 @@ export default function PrintPurchasePage() {
 
   useEffect(() => {
     loadOrder();
-    setMakerHistory(getMakerHistory());
   }, [loadOrder]);
 
   useEffect(() => {
@@ -44,11 +26,6 @@ export default function PrintPurchasePage() {
       return () => clearTimeout(timer);
     }
   }, [order]);
-
-  const handleMakerChange = (val: string) => {
-    setMakerName(val);
-    if (val.trim()) saveMakerName(val.trim());
-  };
 
   if (!order) {
     return <div className="p-6 text-center text-slate-400">加载中...</div>;
@@ -141,8 +118,7 @@ export default function PrintPurchasePage() {
         <div className="flex justify-between items-end text-[10px] mt-4">
           <div className="flex items-center gap-2">
             <span className="font-medium">制单人：</span>
-            <input type="text" value={makerName} onChange={e => handleMakerChange(e.target.value)} list="maker-name-list" placeholder="点击输入姓名" className="bg-white border border-gray-300 rounded px-1.5 py-0.5 outline-none text-[10px] w-28 focus:border-blue-500 print:border-black print:bg-white" />
-            <datalist id="maker-name-list">{makerHistory.map(n => <option key={n} value={n} />)}</datalist>
+            <span className="inline-block border-b border-black w-28 text-center">{order.maker || ""}</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="font-medium">供应商回签：</span>
