@@ -27,6 +27,8 @@ export interface ReconciliationOrder {
   id: string;
   orderNo: string;
   customer: string;
+  company?: string;
+  maker?: string;
   startDate: string;
   endDate: string;
   status: string;

@@ -111,15 +111,33 @@ export default function PrintReconciliationPage() {
       <div id="print-area" className="px-4 py-3 mx-auto bg-white" style={{ width: "233mm", fontSize: "13px" }}>
         {/* 标题行 */}
         <div className="text-center border-b-2 border-black pb-1.5 mb-2">
-          <h1 className="font-bold text-[16px] tracking-wide">对 帐 单</h1>
+          <h1 className="font-bold text-[22px] tracking-wide">{order.company || "佛山市质稳五金有限公司"}对帐单</h1>
         </div>
 
-        {/* 基本信息 - 横向排列 */}
-        <div className="grid grid-cols-4 gap-x-6 gap-y-0.5 mb-2 text-[13px] border-b border-black pb-2">
-          <div className="flex"><span className="font-medium w-16 shrink-0">对帐单编号：</span><span className="font-mono">{order.orderNo}</span></div>
-          <div className="flex"><span className="font-medium w-16 shrink-0">客户名称：</span><span>{order.customer}</span></div>
-          <div className="flex"><span className="font-medium w-16 shrink-0">起始日期：</span><span>{order.startDate}</span></div>
-          <div className="flex"><span className="font-medium w-16 shrink-0">截止日期：</span><span>{order.endDate}</span></div>
+        {/* 基本信息 - 重新布局 */}
+        <div className="mb-2 text-[13px] border-b border-black pb-2">
+          <div className="flex mb-1">
+            <div className="flex" style={{ whiteSpace: "nowrap" }}>
+              <span className="font-medium">对帐单编号：</span>
+              <span className="font-mono">{order.orderNo}</span>
+            </div>
+          </div>
+          <div className="flex mb-1">
+            <div className="flex" style={{ whiteSpace: "nowrap" }}>
+              <span className="font-medium">客户名称：</span>
+              <span>{order.customer}</span>
+            </div>
+          </div>
+          <div className="flex">
+            <div className="flex mr-8" style={{ whiteSpace: "nowrap" }}>
+              <span className="font-medium">起始日期：</span>
+              <span>{order.startDate}</span>
+            </div>
+            <div className="flex" style={{ whiteSpace: "nowrap" }}>
+              <span className="font-medium">截止日期：</span>
+              <span>{order.endDate}</span>
+            </div>
+          </div>
         </div>
 
         {/* 明细表格 */}
@@ -177,8 +195,7 @@ export default function PrintReconciliationPage() {
         <div className="flex justify-between items-end text-[12px] mt-4">
           <div className="flex items-center gap-2">
             <span className="font-medium">制单人：</span>
-            <input type="text" value={makerName} onChange={e => handleMakerChange(e.target.value)} list="maker-name-list" placeholder="点击输入姓名" className="bg-white border border-gray-300 rounded px-1.5 py-0.5 outline-none text-[10px] w-28 focus:border-blue-500 print:border-black print:bg-white" />
-            <datalist id="maker-name-list">{makerHistory.map(n => <option key={n} value={n} />)}</datalist>
+            <span>{order.maker || "易金兰"}</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="font-medium">客户确认签字：</span>
