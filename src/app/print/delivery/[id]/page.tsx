@@ -68,8 +68,6 @@ export default function PrintDeliveryPage() {
   if (!order) return <div className="p-6 text-center text-slate-400">加载中...</div>;
 
   const totalAmount = order.items.reduce((s, i) => s + i.amount, 0);
-  // 制单人默认值 - 确保空字符串也使用默认值
-  const makerName = (order.maker && order.maker.trim()) || "易金兰";
 
   return (
     <>
@@ -81,9 +79,13 @@ export default function PrintDeliveryPage() {
           #print-area, #print-area * { visibility: visible; }
           #print-area { position: absolute; left: 5mm; top: 3mm; width: 231mm; height: 134mm; }
           .no-print { display: none !important; }
+          /* 隐藏侧边栏 */
+          aside, nav, [class*="sidebar"] { display: none !important; }
         }
         @media screen {
           body { background: #e2e8f0; }
+          /* 屏幕预览时也隐藏侧边栏 */
+          aside, nav, [class*="sidebar"] { display: none !important; }
         }
       `}</style>
 
@@ -93,32 +95,30 @@ export default function PrintDeliveryPage() {
       </div>
 
       <div id="print-area" className="mx-auto bg-white" style={{ width: "231mm", height: "134mm", padding: "0", display: "flex", flexDirection: "column", border: `2px solid ${BORDER_COLOR}`, overflow: "hidden" }}>
-        {/* 顶部区域：左侧信息 + 右侧竖排标题 */}
-        <div className="flex" style={{ height: "24mm", borderBottom: `2px solid ${BORDER_COLOR}`, flexShrink: 0 }}>
-          {/* 左侧表头信息 */}
-          <div className="flex-1 flex flex-col justify-center" style={{ fontSize: "12px", lineHeight: "1.4", padding: "1mm 2mm" }}>
-            <div className="flex">
-              <span style={{ width: "95mm" }}><span className="font-bold">客户名称：</span>{order.customer}</span>
-              <span><span className="font-bold">NO：</span><span className="font-mono font-bold" style={{ fontSize: "13px" }}>{order.noteNo}</span></span>
-            </div>
-            <div className="flex">
-              <span style={{ width: "95mm" }}><span className="font-bold">客户地址：</span>{customer?.address || ""}</span>
-              <span><span className="font-bold">送货日期：</span>{order.date}</span>
-            </div>
-            <div className="flex">
-              <span style={{ width: "95mm" }}><span className="font-bold">联系电话：</span>{customer?.phone || ""}</span>
-              <span><span className="font-bold">订单号：</span>{order.orderNo || ""}</span>
-            </div>
-            <div className="flex">
-              <span style={{ width: "95mm" }}><span className="font-bold">联系人：</span>{customer?.contact || ""}</span>
-              <span><span className="font-bold">付款方式：</span>{customer?.paymentTerms || ""}</span>
-            </div>
+        {/* 标题区域 - 横排居中 */}
+        <div className="flex items-center justify-center" style={{ height: "12mm", borderBottom: `2px solid ${BORDER_COLOR}`, flexShrink: 0 }}>
+          <h1 style={{ fontSize: "18px", fontWeight: "bold", margin: 0, letterSpacing: "2px" }}>
+            {order.company}送货单
+          </h1>
+        </div>
+
+        {/* 表头信息区域 */}
+        <div style={{ fontSize: "12px", lineHeight: "1.4", padding: "1mm 2mm", borderBottom: `2px solid ${BORDER_COLOR}`, flexShrink: 0 }}>
+          <div className="flex">
+            <span style={{ width: "95mm" }}><span className="font-bold">客户名称：</span>{order.customer}</span>
+            <span><span className="font-bold">NO：</span><span className="font-mono font-bold" style={{ fontSize: "13px" }}>{order.noteNo}</span></span>
           </div>
-          {/* 右侧竖排标题 - 简化布局，只用 writing-mode */}
-          <div className="flex items-center justify-center" style={{ width: "28mm", borderLeft: `2px solid ${BORDER_COLOR}` }}>
-            <div style={{ writingMode: "vertical-rl", textOrientation: "upright", letterSpacing: "4px", fontSize: "16px", fontWeight: "bold", whiteSpace: "nowrap" }}>
-              {order.company}送货单
-            </div>
+          <div className="flex">
+            <span style={{ width: "95mm" }}><span className="font-bold">客户地址：</span>{customer?.address || ""}</span>
+            <span><span className="font-bold">送货日期：</span>{order.date}</span>
+          </div>
+          <div className="flex">
+            <span style={{ width: "95mm" }}><span className="font-bold">联系电话：</span>{customer?.phone || ""}</span>
+            <span><span className="font-bold">订单号：</span>{order.orderNo || ""}</span>
+          </div>
+          <div className="flex">
+            <span style={{ width: "95mm" }}><span className="font-bold">联系人：</span>{customer?.contact || ""}</span>
+            <span><span className="font-bold">付款方式：</span>{customer?.paymentTerms || ""}</span>
           </div>
         </div>
 
@@ -185,11 +185,11 @@ export default function PrintDeliveryPage() {
           <div style={{ marginBottom: "0.5mm" }}>
             公司地址：佛山市南海区大沥镇
           </div>
-          {/* 签字栏 - 确保制单人名字显示 */}
+          {/* 签字栏 - 直接显示制单人名字 */}
           <div className="flex justify-between" style={{ fontSize: "11px" }}>
             <div>
               <span className="font-bold">制单：</span>
-              <span style={{ fontWeight: "normal" }}>{makerName}</span>
+              <span>{order.maker || "易金兰"}</span>
             </div>
             <div>
               <span className="font-bold">客户签收：</span>
