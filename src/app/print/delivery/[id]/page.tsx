@@ -40,9 +40,10 @@ function numToCN(n: number): string {
 
 const BORDER_COLOR = "#2563eb";
 const FIXED_ROWS = 6;
-const ROW_HEIGHT = "10mm";
+const ROW_HEIGHT = "12mm"; // 每行12mm，6行共72mm
 // 内容宽度：210mm（考虑针式打印机两边打孔区域各约12mm不可打印）
 const CONTENT_WIDTH = "210mm";
+// 高度分配：标题10mm + 表头20mm + 表格78mm(6+72) + 合计6mm + 底部14mm = 128mm < 134mm
 
 export default function PrintDeliveryPage() {
   const params = useParams();
@@ -107,7 +108,7 @@ export default function PrintDeliveryPage() {
             left: 5mm;
             top: 5mm;
             width: ${CONTENT_WIDTH};
-            height: 130mm;
+            height: 134mm;
           }
           .no-print {
             display: none !important;
@@ -131,8 +132,8 @@ export default function PrintDeliveryPage() {
         <button onClick={() => window.close()} className="px-4 py-2 bg-slate-500 text-white text-sm rounded-md hover:bg-slate-600 shadow-lg">关闭</button>
       </div>
 
-      {/* 打印区域 - 内容宽度210mm，左右各留5mm边距 */}
-      <div id="print-area" className="mx-auto bg-white" style={{ width: CONTENT_WIDTH, height: "130mm", display: "flex", flexDirection: "column", overflow: "hidden", boxSizing: "border-box" }}>
+      {/* 打印区域 - 内容宽度210mm，左右各留5mm边距，高度134mm */}
+      <div id="print-area" className="mx-auto bg-white" style={{ width: CONTENT_WIDTH, height: "134mm", display: "flex", flexDirection: "column", overflow: "hidden", boxSizing: "border-box" }}>
         {/* 内层容器 - 带边框 */}
         <div style={{ width: "100%", height: "100%", border: `2px solid ${BORDER_COLOR}`, display: "flex", flexDirection: "column", boxSizing: "border-box" }}>
           {/* 标题区域 - 横排居中，固定高度 10mm */}
@@ -142,8 +143,8 @@ export default function PrintDeliveryPage() {
             </h1>
           </div>
 
-          {/* 表头信息区域 - 左右两列布局 */}
-          <div style={{ fontSize: "11px", lineHeight: "1.3", padding: "0.5mm 2mm", borderBottom: `2px solid ${BORDER_COLOR}`, flexShrink: 0 }}>
+          {/* 表头信息区域 - 左右两列布局，固定高度20mm（4行×5mm） */}
+          <div style={{ fontSize: "11px", lineHeight: "1.3", padding: "0.5mm 2mm", borderBottom: `2px solid ${BORDER_COLOR}`, flexShrink: 0, height: "20mm", boxSizing: "border-box", overflow: "hidden" }}>
             <div className="flex">
               <span style={{ flex: "1" }}><span className="font-bold">客户名称：</span>{order.customer}</span>
               <span style={{ flexShrink: 0, marginLeft: "5mm" }}><span className="font-bold">NO：</span><span className="font-mono font-bold" style={{ fontSize: "13px" }}>{order.noteNo}</span></span>
@@ -223,8 +224,8 @@ export default function PrintDeliveryPage() {
             </tfoot>
           </table>
 
-          {/* 底部区域 - 备注、公司地址、签字栏 */}
-          <div style={{ fontSize: "11px", padding: "0.5mm 2mm", flexShrink: 0 }}>
+          {/* 底部区域 - 备注、公司地址、签字栏，固定高度14mm */}
+          <div style={{ fontSize: "11px", padding: "0.5mm 2mm", flexShrink: 0, height: "14mm", boxSizing: "border-box", overflow: "hidden" }}>
             <div style={{ marginBottom: "0.3mm" }}>
               <span style={{ fontWeight: "bold" }}>合计人民币：</span>
               <span style={{ marginLeft: "2mm" }}>{numToCN(totalAmount)}</span>
