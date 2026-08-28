@@ -157,8 +157,8 @@ export default function PrintDeliveryPage() {
             </h1>
           </div>
 
-          {/* 表头信息区域 - 左右两列布局，固定高度18mm（4行×4.5mm），底部留2mm间距 */}
-          <div style={{ fontSize: "13px", lineHeight: "1.3", padding: "0.5mm 2mm 2mm 2mm", flexShrink: 0, height: "18mm", boxSizing: "border-box", overflow: "visible", marginBottom: "0" }}>
+          {/* 表头信息区域 - 左右两列布局，固定高度26mm（4行×6.5mm），底部留2mm间距 */}
+          <div style={{ fontSize: "13px", lineHeight: "1.3", padding: "0.5mm 2mm 2mm 2mm", flexShrink: 0, height: "26mm", boxSizing: "border-box", overflow: "visible", marginBottom: "2mm" }}>
             <div className="flex">
               <span style={{ flex: "1" }}><span className="font-bold">客户名称：</span>{order.customer}</span>
               <span style={{ flex: "1", marginLeft: "30mm" }}><span className="font-bold">NO：</span><span className="font-mono font-bold" style={{ fontSize: "13px" }}>{order.noteNo}</span></span>
@@ -181,16 +181,16 @@ export default function PrintDeliveryPage() {
           <table className="w-full border-collapse" style={{ fontSize: "12px", tableLayout: "fixed", flexShrink: 0, border: "none" }}>
             <colgroup>
               <col style={{ width: "7mm" }} />   {/* 序号 */}
-              <col style={{ width: "26mm" }} />  {/* 产品编号 +4mm */}
-              <col style={{ width: "24mm" }} />  {/* 名称 */}
+              <col style={{ width: "30mm" }} />  {/* 产品编号 +4mm，自动适应长编号 */}
+              <col style={{ width: "22mm" }} />  {/* 名称 -2mm */}
               <col style={{ width: "30mm" }} />  {/* 型号规格mm */}
               <col style={{ width: "14mm" }} />  {/* 颜色 */}
               <col style={{ width: "10mm" }} />  {/* 数量 */}
               <col style={{ width: "9mm" }} />   {/* 单位 */}
               <col style={{ width: "16mm" }} />  {/* 单价 */}
-              <col style={{ width: "20mm" }} />  {/* 金额 +2mm */}
-              <col style={{ width: "34mm" }} />  {/* 备注 -6mm */}
-              {/* 总计: 7+26+24+30+14+10+9+16+20+34 = 190mm */}
+              <col style={{ width: "20mm" }} />  {/* 金额 */}
+              <col style={{ width: "32mm" }} />  {/* 备注 -2mm */}
+              {/* 总计: 7+30+22+30+14+10+9+16+20+32 = 190mm */}
             </colgroup>
             <thead>
               <tr style={{ height: "5mm", borderTop: "none" }}>
@@ -210,7 +210,7 @@ export default function PrintDeliveryPage() {
               {tableRows.map((item, idx) => (
                 <tr key={item.id} style={{ height: ROW_HEIGHT }}>
                   <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "center", verticalAlign: "middle", padding: "1px 0", fontSize: "12px" }}>{item.isEmpty ? "" : idx + 1}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", wordBreak: "break-all", fontSize: "12px" }}>{item.materialCode}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", whiteSpace: "nowrap", overflow: "visible", fontSize: "12px" }}>{item.materialCode}</td>
                   <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: "12px" }}>{item.productName}</td>
                   <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: "12px" }}>{item.spec}</td>
                   <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: "12px" }}>{item.surface}</td>
