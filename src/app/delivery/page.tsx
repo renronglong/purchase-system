@@ -71,9 +71,18 @@ export default function DeliveryPage() {
     setItems(prev => {
       const next = [...prev];
       const item = { ...next[idx], [field]: value };
-      if (field === "materialCode" && typeof value === "string") {
-        const prod = deliveryProductStore.getAll().find(p => p.code === value || p.id === value);
-        if (prod) { item.productName = prod.name; item.spec = prod.spec; item.surface = prod.surface; item.unit = prod.unit; item.unitPrice = prod.unitPrice; }
+      const products = deliveryProductStore.getAll();
+      if (typeof value === "string") {
+        if (field === "materialCode") {
+          const prod = products.find(p => p.code === value);
+          if (prod) { item.productName = prod.name; item.spec = prod.spec; item.surface = prod.surface; item.unit = prod.unit; item.unitPrice = prod.unitPrice; }
+        } else if (field === "productName") {
+          const prod = products.find(p => p.name === value);
+          if (prod) { item.materialCode = prod.code; item.spec = prod.spec; item.surface = prod.surface; item.unit = prod.unit; item.unitPrice = prod.unitPrice; }
+        } else if (field === "spec") {
+          const prod = products.find(p => p.spec === value);
+          if (prod) { item.materialCode = prod.code; item.productName = prod.name; item.surface = prod.surface; item.unit = prod.unit; item.unitPrice = prod.unitPrice; }
+        }
       }
       if (field === "qty" || field === "unitPrice" || field === "materialCode") {
         item.amount = Math.round(item.qty * item.unitPrice * 100) / 100;
@@ -142,6 +151,16 @@ export default function DeliveryPage() {
               <option key={p.id} value={p.code} label={`${p.name} ${p.spec || ""}`} />
             ))}
           </datalist>
+          <datalist id="delivery-product-name-list">
+            {Array.from(new Set(deliveryProductStore.getAll().map(p => p.name))).map(n => (
+              <option key={n} value={n} />
+            ))}
+          </datalist>
+          <datalist id="delivery-product-spec-list">
+            {Array.from(new Set(deliveryProductStore.getAll().map(p => p.spec).filter(Boolean))).map(s => (
+              <option key={s} value={s} />
+            ))}
+          </datalist>
           <datalist id="surface-treatment-list">
             {["本色", "氧化雾银", "氧化砂银",
               ...Array.from(new Set(deliveryProductStore.getAll().map(p => p.surface).filter(Boolean)))
@@ -173,8 +192,8 @@ export default function DeliveryPage() {
                   <tr key={item.id} className="border-b border-slate-100">
                     <td className="px-2 py-1 text-center text-slate-500">{idx + 1}</td>
                     <td className="px-2 py-1"><input type="text" value={item.materialCode} onChange={(e) => updateItem(idx, "materialCode", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" placeholder="物料编号" list="delivery-product-list" /></td>
-                    <td className="px-2 py-1"><input type="text" value={item.productName} onChange={(e) => updateItem(idx, "productName", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
-                    <td className="px-2 py-1"><input type="text" value={item.spec} onChange={(e) => updateItem(idx, "spec", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
+                    <td className="px-2 py-1"><input type="text" value={item.productName} onChange={(e) => updateItem(idx, "productName", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" list="delivery-product-name-list" /></td>
+                    <td className="px-2 py-1"><input type="text" value={item.spec} onChange={(e) => updateItem(idx, "spec", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" list="delivery-product-spec-list" /></td>
                     <td className="px-2 py-1"><input type="text" value={item.surface} onChange={(e) => updateItem(idx, "surface", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" list="surface-treatment-list" /></td>
                     <td className="px-2 py-1"><input type="text" value={item.unit} onChange={(e) => updateItem(idx, "unit", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" list="unit-list" /></td>
                     <td className="px-2 py-1"><input type="number" value={item.qty || ""} onChange={(e) => updateItem(idx, "qty", Number(e.target.value))} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
