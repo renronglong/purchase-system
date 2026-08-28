@@ -71,7 +71,7 @@ export default function PrintDeliveryPage() {
 
   return (
     <>
-      <style jsx global>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @media print {
           @page { size: 241mm 140mm; margin: 3mm 5mm; }
           html, body { width: 241mm; height: 140mm; margin: 0; padding: 0; }
@@ -79,15 +79,13 @@ export default function PrintDeliveryPage() {
           #print-area, #print-area * { visibility: visible; }
           #print-area { position: absolute; left: 5mm; top: 3mm; width: 231mm; height: 134mm; }
           .no-print { display: none !important; }
-          /* 隐藏侧边栏 */
-          aside, nav, [class*="sidebar"] { display: none !important; }
+          aside, nav, [class*="sidebar"], .w-60, .bg-slate-900 { display: none !important; }
         }
         @media screen {
           body { background: #e2e8f0; }
-          /* 屏幕预览时也隐藏侧边栏 */
-          aside, nav, [class*="sidebar"] { display: none !important; }
+          aside, nav, [class*="sidebar"], .w-60, .bg-slate-900 { display: none !important; }
         }
-      `}</style>
+      `}} />
 
       <div className="no-print fixed top-4 right-4 z-50 flex gap-2">
         <button onClick={() => window.print()} className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 shadow-lg">打印 / 导出PDF</button>
