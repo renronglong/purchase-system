@@ -40,10 +40,10 @@ function numToCN(n: number): string {
 
 const BORDER_COLOR = "#2563eb";
 const FIXED_ROWS = 6;
-const ROW_HEIGHT = "9mm"; // 每行9mm，6行共54mm
+const ROW_HEIGHT = "8mm"; // 每行8mm，6行共48mm
 // 内容宽度：190mm（右边距加大20mm，防止针式打印机裁切右侧内容）
 const CONTENT_WIDTH = "190mm";
-// 高度分配：标题10mm + 表头18mm + 表格59mm(5+54) + 合计6mm + 底部12mm = 105mm < 134mm
+// 高度分配：标题10mm + 表头16mm + 表格53mm(5+48) + 合计6mm + 底部14mm = 99mm < 134mm
 
 export default function PrintDeliveryPage() {
   const params = useParams();
@@ -99,7 +99,7 @@ export default function PrintDeliveryPage() {
       <style dangerouslySetInnerHTML={{ __html: `
         @page {
           size: 241mm 140mm;
-          margin: 5mm;
+          margin: 0;
         }
         @media print {
           html, body {
@@ -117,10 +117,12 @@ export default function PrintDeliveryPage() {
           }
           #print-area {
             position: absolute;
-            left: 5mm;
-            top: 5mm;
-            width: ${CONTENT_WIDTH};
-            height: 134mm;
+            left: 0;
+            top: 0;
+            width: 241mm;
+            height: 140mm;
+            padding: 3mm;
+            box-sizing: border-box;
           }
           .no-print {
             display: none !important;
@@ -144,10 +146,10 @@ export default function PrintDeliveryPage() {
         <button onClick={() => window.close()} className="px-4 py-2 bg-slate-500 text-white text-sm rounded-md hover:bg-slate-600 shadow-lg">关闭</button>
       </div>
 
-      {/* 打印区域 - 内容宽度210mm，左右各留5mm边距，高度134mm */}
-      <div id="print-area" className="mx-auto bg-white" style={{ width: CONTENT_WIDTH, height: "134mm", display: "flex", flexDirection: "column", overflow: "hidden", boxSizing: "border-box" }}>
-        {/* 内层容器 - 带边框 */}
-        <div style={{ width: "100%", height: "100%", border: `2px solid ${BORDER_COLOR}`, display: "flex", flexDirection: "column", boxSizing: "border-box" }}>
+      {/* 打印区域 - 内容宽度190mm，左右各留5mm边距，高度134mm（140mm-2*3mm padding） */}
+      <div id="print-area" className="mx-auto bg-white" style={{ width: "241mm", height: "140mm", display: "flex", flexDirection: "column", overflow: "hidden", boxSizing: "border-box", padding: "3mm" }}>
+        {/* 内层容器 - 带边框，高度134mm（140mm-2*3mm padding） */}
+        <div style={{ width: CONTENT_WIDTH, height: "134mm", border: `2px solid ${BORDER_COLOR}`, display: "flex", flexDirection: "column", boxSizing: "border-box", margin: "0 auto" }}>
           {/* 标题区域 - 横排居中，固定高度 10mm */}
           <div className="flex items-center justify-center" style={{ height: "10mm", borderBottom: `2px solid ${BORDER_COLOR}`, flexShrink: 0 }}>
             <h1 style={{ fontSize: "20px", fontWeight: "bold", margin: 0, letterSpacing: "2px" }}>
@@ -155,14 +157,14 @@ export default function PrintDeliveryPage() {
             </h1>
           </div>
 
-          {/* 表头信息区域 - 左右两列布局，固定高度18mm（4行×4.5mm） */}
-          <div style={{ fontSize: "13px", lineHeight: "1.3", padding: "0.5mm 2mm", borderBottom: `2px solid ${BORDER_COLOR}`, flexShrink: 0, height: "18mm", boxSizing: "border-box", overflow: "hidden" }}>
+          {/* 表头信息区域 - 左右两列布局，固定高度16mm（4行×4mm） */}
+          <div style={{ fontSize: "13px", lineHeight: "1.3", padding: "0.5mm 2mm", borderBottom: `2px solid ${BORDER_COLOR}`, flexShrink: 0, height: "16mm", boxSizing: "border-box", overflow: "hidden" }}>
             <div className="flex">
               <span style={{ flex: "1" }}><span className="font-bold">客户名称：</span>{order.customer}</span>
               <span style={{ flex: "1", marginLeft: "30mm" }}><span className="font-bold">NO：</span><span className="font-mono font-bold" style={{ fontSize: "13px" }}>{order.noteNo}</span></span>
             </div>
             <div className="flex">
-              <span style={{ flex: "1" }}><span className="font-bold">客户地址：</span>{customer?.address || ""}</span>
+              <span style={{ flex: "1", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}><span className="font-bold">客户地址：</span>{customer?.address || ""}</span>
               <span style={{ flex: "1", marginLeft: "30mm" }}><span className="font-bold">送货日期：</span>{order.date}</span>
             </div>
             <div className="flex">
@@ -234,15 +236,15 @@ export default function PrintDeliveryPage() {
             </tfoot>
           </table>
 
-          {/* 底部区域 - 备注、公司地址、签字栏，固定高度12mm */}
-          <div style={{ fontSize: "11px", padding: "0.5mm 2mm", flexShrink: 0, height: "12mm", boxSizing: "border-box", overflow: "hidden" }}>
+          {/* 底部区域 - 备注、公司地址、签字栏，固定高度14mm */}
+          <div style={{ fontSize: "11px", padding: "1mm 2mm", flexShrink: 0, height: "14mm", boxSizing: "border-box", overflow: "visible" }}>
             <div style={{ marginBottom: "0.3mm", fontSize: "11px", color: "#333" }}>
               备注：请仔细核对货物品质、型号和数量，如果有误请于3个工作日内提出，并出具证明，协商解决。
             </div>
             <div style={{ marginBottom: "0.5mm", fontSize: "11px" }}>
               公司地址：{companyAddress}
             </div>
-            <div className="flex justify-between" style={{ fontSize: "11px" }}>
+            <div className="flex justify-between" style={{ fontSize: "11px", paddingTop: "0.5mm" }}>
               <span><span className="font-bold">制单：</span>{order.maker || "易金兰"}</span>
               <span>
                 <span className="font-bold">客户签收：</span>
