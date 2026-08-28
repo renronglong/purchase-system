@@ -210,27 +210,18 @@ export default function PrintDeliveryPage() {
             </tbody>
             <tfoot>
               <tr style={{ height: "6mm" }}>
-                <td colSpan={5} style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "center", verticalAlign: "middle", fontWeight: "bold" }}>合计</td>
-                <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 2px", verticalAlign: "middle", fontWeight: "bold" }}>
-                  {order.items.reduce((s, i) => s + i.qty, 0) || ""}
+                <td colSpan={10} style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 2mm", verticalAlign: "middle" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span style={{ fontWeight: "bold" }}>合计人民币（大写）：{numToCN(totalAmount)}</span>
+                    <span style={{ fontWeight: "bold" }}>¥{totalAmount > 0 ? totalAmount.toFixed(2) : "0.00"}</span>
+                  </div>
                 </td>
-                <td style={{ border: `1px solid ${BORDER_COLOR}`, verticalAlign: "middle" }}></td>
-                <td style={{ border: `1px solid ${BORDER_COLOR}`, verticalAlign: "middle" }}></td>
-                <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 2px", verticalAlign: "middle", fontWeight: "bold" }}>
-                  {totalAmount > 0 ? totalAmount.toFixed(2) : ""}
-                </td>
-                <td style={{ border: `1px solid ${BORDER_COLOR}`, verticalAlign: "middle" }}></td>
               </tr>
             </tfoot>
           </table>
 
           {/* 底部区域 - 备注、公司地址、签字栏，固定高度14mm */}
           <div style={{ fontSize: "11px", padding: "0.5mm 2mm", flexShrink: 0, height: "14mm", boxSizing: "border-box", overflow: "hidden" }}>
-            <div style={{ marginBottom: "0.3mm" }}>
-              <span style={{ fontWeight: "bold" }}>合计人民币：</span>
-              <span style={{ marginLeft: "2mm" }}>{numToCN(totalAmount)}</span>
-              <span style={{ marginLeft: "5mm" }}>¥{totalAmount.toFixed(2)}</span>
-            </div>
             <div style={{ marginBottom: "0.3mm", fontSize: "10px", color: "#333" }}>
               备注：请仔细核对货物品质、型号和数量，如果有误请于3个工作日内提出，并出具证明，协商解决。
             </div>
