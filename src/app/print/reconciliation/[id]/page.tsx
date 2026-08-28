@@ -108,14 +108,14 @@ export default function PrintReconciliationPage() {
       </div>
 
       {/* 打印区域 - 针式打印机连续纸 241mm x 140mm 横向 */}
-      <div id="print-area" className="px-4 py-3 mx-auto bg-white" style={{ width: "233mm", fontSize: "10px" }}>
+      <div id="print-area" className="px-4 py-3 mx-auto bg-white" style={{ width: "233mm", fontSize: "13px" }}>
         {/* 标题行 */}
         <div className="text-center border-b-2 border-black pb-1.5 mb-2">
-          <h1 className="font-bold text-lg tracking-wide">对 帐 单</h1>
+          <h1 className="font-bold text-[16px] tracking-wide">对 帐 单</h1>
         </div>
 
         {/* 基本信息 - 横向排列 */}
-        <div className="grid grid-cols-4 gap-x-6 gap-y-0.5 mb-2 text-[10px] border-b border-black pb-2">
+        <div className="grid grid-cols-4 gap-x-6 gap-y-0.5 mb-2 text-[13px] border-b border-black pb-2">
           <div className="flex"><span className="font-medium w-16 shrink-0">对帐单编号：</span><span className="font-mono">{order.orderNo}</span></div>
           <div className="flex"><span className="font-medium w-16 shrink-0">客户名称：</span><span>{order.customer}</span></div>
           <div className="flex"><span className="font-medium w-16 shrink-0">起始日期：</span><span>{order.startDate}</span></div>
@@ -123,7 +123,7 @@ export default function PrintReconciliationPage() {
         </div>
 
         {/* 明细表格 */}
-        <table className="w-full border-collapse mb-2" style={{ fontSize: "9px" }}>
+        <table className="w-full border-collapse mb-2" style={{ fontSize: "12px" }}>
           <thead>
             <tr>
               <th className="border border-black px-1 py-1 font-medium">序号</th>
@@ -167,14 +167,14 @@ export default function PrintReconciliationPage() {
         </table>
 
         {/* 金额 + 备注 横向排列 */}
-        <div className="flex gap-8 mb-2 text-[10px]">
+        <div className="flex gap-8 mb-2 text-[12px]">
           <div className="flex"><span className="font-medium shrink-0">合计金额(大写)：</span><span className="tracking-wider">{amountToChinese(totalAmount)}</span></div>
           <div className="flex"><span className="font-medium shrink-0">(小写)：</span><span className="font-mono">¥ {totalAmount.toFixed(2)}</span></div>
           {order.remark && <div className="flex"><span className="font-medium shrink-0">备注：</span><span>{order.remark}</span></div>}
         </div>
 
         {/* 签字栏 - 底部横向 */}
-        <div className="flex justify-between items-end text-[10px] mt-4">
+        <div className="flex justify-between items-end text-[12px] mt-4">
           <div className="flex items-center gap-2">
             <span className="font-medium">制单人：</span>
             <input type="text" value={makerName} onChange={e => handleMakerChange(e.target.value)} list="maker-name-list" placeholder="点击输入姓名" className="bg-white border border-gray-300 rounded px-1.5 py-0.5 outline-none text-[10px] w-28 focus:border-blue-500 print:border-black print:bg-white" />

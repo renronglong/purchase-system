@@ -50,27 +50,27 @@ export default function PrintPurchasePage() {
       </div>
 
       {/* 打印区域 - 针式打印机连续纸 241mm x 140mm 横向 */}
-      <div id="print-area" className="px-4 py-3 mx-auto bg-white" style={{ width: "233mm", fontSize: "10px" }}>
+      <div id="print-area" className="px-4 py-3 mx-auto bg-white" style={{ width: "233mm", fontSize: "13px" }}>
         {/* 标题行 */}
         <div className="flex items-center justify-between border-b-2 border-black pb-1.5 mb-2">
-          <h1 className="font-bold text-sm tracking-wider">{order.company}</h1>
-          <h2 className="font-bold text-lg tracking-wide">采 购 单</h2>
-          <div className="text-[10px]">
+          <h1 className="font-bold text-base tracking-wider">{order.company}</h1>
+          <h2 className="font-bold text-[16px] tracking-wide">采 购 单</h2>
+          <div className="text-[13px]">
             <span className="font-medium">编号：</span><span className="font-mono">{order.orderNo}</span>
           </div>
         </div>
 
         {/* 基本信息 - 横向多列 */}
-        <div className="grid grid-cols-3 gap-x-6 gap-y-0.5 mb-2 text-[10px]">
-          <div className="flex"><span className="font-medium w-14 shrink-0">供应商：</span><span>{order.supplierName}</span></div>
-          <div className="flex"><span className="font-medium w-14 shrink-0">联系人：</span><span>{order.contact}</span></div>
-          <div className="flex"><span className="font-medium w-14 shrink-0">电话：</span><span>{order.phone}</span></div>
-          <div className="flex"><span className="font-medium w-14 shrink-0">制单日期：</span><span>{order.orderDate}</span></div>
-          {order.address && <div className="flex col-span-2"><span className="font-medium w-14 shrink-0">地址：</span><span>{order.address}</span></div>}
+        <div className="grid grid-cols-3 gap-x-6 gap-y-0.5 mb-2 text-[13px]">
+          <div className="flex"><span className="font-medium w-16 shrink-0">供应商：</span><span>{order.supplierName}</span></div>
+          <div className="flex"><span className="font-medium w-16 shrink-0">联系人：</span><span>{order.contact}</span></div>
+          <div className="flex"><span className="font-medium w-16 shrink-0">电话：</span><span>{order.phone}</span></div>
+          <div className="flex"><span className="font-medium w-16 shrink-0">制单日期：</span><span>{order.orderDate}</span></div>
+          {order.address && <div className="flex col-span-2"><span className="font-medium w-16 shrink-0">地址：</span><span>{order.address}</span></div>}
         </div>
 
         {/* 明细表格 */}
-        <table className="w-full border-collapse mb-2" style={{ fontSize: "9px" }}>
+        <table className="w-full border-collapse mb-2" style={{ fontSize: "12px" }}>
           <thead>
             <tr>
               <th className="border border-black px-1 py-1 font-medium">序号</th>
@@ -115,7 +115,7 @@ export default function PrintPurchasePage() {
         </table>
 
         {/* 签收栏 - 底部横向 */}
-        <div className="flex justify-between items-end text-[10px] mt-4">
+        <div className="flex justify-between items-end text-[12px] mt-4">
           <div className="flex items-center gap-2">
             <span className="font-medium">制单人：</span>
             <span className="inline-block border-b border-black w-28 text-center">{order.maker || ""}</span>
