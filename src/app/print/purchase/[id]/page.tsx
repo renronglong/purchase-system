@@ -164,7 +164,7 @@ export default function PrintPurchasePage() {
         </table>
 
         {/* 签收栏 */}
-        <div className="mt-8 grid grid-cols-3 gap-8 text-sm">
+        <div className="mt-8 grid grid-cols-2 gap-8 text-sm">
           <div>
             <p className="font-medium mb-2">制单人：</p>
             <input type="text" value={makerName} onChange={e => handleMakerChange(e.target.value)} list="maker-name-list" placeholder="" className="w-full bg-transparent border-b border-black outline-none text-sm py-0.5 print:border-b print:bg-transparent" style={{ WebkitPrintColorAdjust: 'exact' }} />
@@ -172,10 +172,6 @@ export default function PrintPurchasePage() {
           </div>
           <div>
             <p className="font-medium mb-6">供应商回签：</p>
-            <div className="border-b border-black"></div>
-          </div>
-          <div>
-            <p className="font-medium mb-6">验收人：</p>
             <div className="border-b border-black"></div>
           </div>
         </div>
