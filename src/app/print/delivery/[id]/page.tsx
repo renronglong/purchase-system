@@ -41,8 +41,8 @@ function numToCN(n: number): string {
 const BORDER_COLOR = "#2563eb";
 const FIXED_ROWS = 6;
 const ROW_HEIGHT = "12mm"; // 每行12mm，6行共72mm
-// 内容宽度：210mm（考虑针式打印机两边打孔区域各约12mm不可打印）
-const CONTENT_WIDTH = "210mm";
+// 内容宽度：190mm（右边距加大20mm，防止针式打印机裁切右侧内容）
+const CONTENT_WIDTH = "190mm";
 // 高度分配：标题10mm + 表头20mm + 表格78mm(6+72) + 合计6mm + 底部14mm = 128mm < 134mm
 
 export default function PrintDeliveryPage() {
@@ -168,15 +168,15 @@ export default function PrintDeliveryPage() {
             <colgroup>
               <col style={{ width: "7mm" }} />   {/* 序号 */}
               <col style={{ width: "22mm" }} />  {/* 产品编号 */}
-              <col style={{ width: "22mm" }} />  {/* 名称 */}
-              <col style={{ width: "28mm" }} />  {/* 型号规格mm */}
+              <col style={{ width: "24mm" }} />  {/* 名称 +2mm */}
+              <col style={{ width: "30mm" }} />  {/* 型号规格mm +2mm */}
               <col style={{ width: "14mm" }} />  {/* 颜色 */}
               <col style={{ width: "10mm" }} />  {/* 数量 */}
               <col style={{ width: "9mm" }} />   {/* 单位 */}
-              <col style={{ width: "14mm" }} />  {/* 单价 */}
-              <col style={{ width: "16mm" }} />  {/* 金额 */}
-              <col style={{ width: "68mm" }} />  {/* 备注 */}
-              {/* 总计: 7+22+22+28+14+10+9+14+16+68 = 210mm */}
+              <col style={{ width: "16mm" }} />  {/* 单价 +2mm */}
+              <col style={{ width: "18mm" }} />  {/* 金额 +2mm */}
+              <col style={{ width: "40mm" }} />  {/* 备注 -28mm */}
+              {/* 总计: 7+22+24+30+14+10+9+16+18+40 = 190mm */}
             </colgroup>
             <thead>
               <tr style={{ height: "6mm" }}>
