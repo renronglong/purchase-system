@@ -96,9 +96,9 @@ export default function PrintReconciliationPage() {
         @media print {
           body * { visibility: hidden; }
           #print-area, #print-area * { visibility: visible; }
-          #print-area { position: absolute; left: 0; top: 0; width: 172mm; }
+          #print-area { position: absolute; left: 0; top: 0; width: 233mm; }
           .no-print { display: none !important; }
-          @page { size: 180mm 100mm; margin: 4mm; }
+          @page { size: 241mm 140mm; margin: 4mm 6mm; }
         }
       `}</style>
 
@@ -107,86 +107,84 @@ export default function PrintReconciliationPage() {
         <button onClick={() => window.close()} className="ml-2 px-4 py-2 bg-slate-500 text-white text-sm rounded-md hover:bg-slate-600 shadow-lg">关闭</button>
       </div>
 
-      {/* 打印区域 - 顺丰热敏标签 横向 180mm x 100mm */}
-      <div id="print-area" className="px-3 py-2 mx-auto bg-white" style={{ width: "172mm", fontSize: "9px" }}>
+      {/* 打印区域 - 针式打印机连续纸 241mm x 140mm 横向 */}
+      <div id="print-area" className="px-4 py-3 mx-auto bg-white" style={{ width: "233mm", fontSize: "10px" }}>
         {/* 标题行 */}
-        <div className="text-center border-b border-black pb-1 mb-1.5">
-          <h1 className="font-bold text-[16px] tracking-wide">对 帐 单</h1>
+        <div className="text-center border-b-2 border-black pb-1.5 mb-2">
+          <h1 className="font-bold text-lg tracking-wide">对 帐 单</h1>
         </div>
 
         {/* 基本信息 - 横向排列 */}
-        <div className="grid grid-cols-4 gap-x-4 gap-y-0.5 mb-1.5 text-[9px] border-b border-black pb-1.5">
+        <div className="grid grid-cols-4 gap-x-6 gap-y-0.5 mb-2 text-[10px] border-b border-black pb-2">
           <div className="flex"><span className="font-medium w-16 shrink-0">对帐单编号：</span><span className="font-mono">{order.orderNo}</span></div>
           <div className="flex"><span className="font-medium w-16 shrink-0">客户名称：</span><span>{order.customer}</span></div>
-          <div className="flex"><span className="font-medium w-16 shrink-0">对帐日期：</span><span>{order.startDate} ~ {order.endDate}</span></div>
-          <div className="flex"><span className="font-medium w-16 shrink-0">状态：</span><span>{order.status}</span></div>
+          <div className="flex"><span className="font-medium w-16 shrink-0">起始日期：</span><span>{order.startDate}</span></div>
+          <div className="flex"><span className="font-medium w-16 shrink-0">截止日期：</span><span>{order.endDate}</span></div>
         </div>
 
         {/* 明细表格 */}
-        <table className="w-full border-collapse mb-1.5" style={{ fontSize: "8px" }}>
+        <table className="w-full border-collapse mb-2" style={{ fontSize: "9px" }}>
           <thead>
             <tr>
-              <th className="border border-black px-0.5 py-0.5 font-medium">序</th>
-              <th className="border border-black px-0.5 py-0.5 font-medium">送货单号</th>
-              <th className="border border-black px-0.5 py-0.5 font-medium">日期</th>
-              <th className="border border-black px-0.5 py-0.5 font-medium">物料编号</th>
-              <th className="border border-black px-0.5 py-0.5 font-medium">产品名称</th>
-              <th className="border border-black px-0.5 py-0.5 font-medium">规格</th>
-              <th className="border border-black px-0.5 py-0.5 font-medium">表面</th>
-              <th className="border border-black px-0.5 py-0.5 font-medium">单位</th>
-              <th className="border border-black px-0.5 py-0.5 font-medium">数量</th>
-              <th className="border border-black px-0.5 py-0.5 font-medium">单价</th>
-              <th className="border border-black px-0.5 py-0.5 font-medium">金额</th>
+              <th className="border border-black px-1 py-1 font-medium">序号</th>
+              <th className="border border-black px-1 py-1 font-medium">送货单号</th>
+              <th className="border border-black px-1 py-1 font-medium">送货日期</th>
+              <th className="border border-black px-1 py-1 font-medium">物料编号</th>
+              <th className="border border-black px-1 py-1 font-medium">产品名称</th>
+              <th className="border border-black px-1 py-1 font-medium">规格</th>
+              <th className="border border-black px-1 py-1 font-medium">表面处理</th>
+              <th className="border border-black px-1 py-1 font-medium">单位</th>
+              <th className="border border-black px-1 py-1 font-medium">数量</th>
+              <th className="border border-black px-1 py-1 font-medium">单价</th>
+              <th className="border border-black px-1 py-1 font-medium">金额</th>
             </tr>
           </thead>
           <tbody>
             {order.items.map((item, idx) => (
               <tr key={item.id}>
-                <td className="border border-black px-0.5 py-0.5 text-center">{idx + 1}</td>
-                <td className="border border-black px-0.5 py-0.5 font-mono">{item.deliveryNoteNo}</td>
-                <td className="border border-black px-0.5 py-0.5">{item.deliveryDate}</td>
-                <td className="border border-black px-0.5 py-0.5 font-mono" style={{ wordBreak: "break-all" }}>{item.materialCode}</td>
-                <td className="border border-black px-0.5 py-0.5">{item.productName}</td>
-                <td className="border border-black px-0.5 py-0.5">{item.spec}</td>
-                <td className="border border-black px-0.5 py-0.5">{item.surface}</td>
-                <td className="border border-black px-0.5 py-0.5 text-center">{item.unit}</td>
-                <td className="border border-black px-0.5 py-0.5 text-right">{item.qty}</td>
-                <td className="border border-black px-0.5 py-0.5 text-right font-mono">{item.unitPrice.toFixed(2)}</td>
-                <td className="border border-black px-0.5 py-0.5 text-right font-mono">{item.amount.toFixed(2)}</td>
+                <td className="border border-black px-1 py-0.5 text-center">{idx + 1}</td>
+                <td className="border border-black px-1 py-0.5 font-mono">{item.deliveryNoteNo}</td>
+                <td className="border border-black px-1 py-0.5">{item.deliveryDate}</td>
+                <td className="border border-black px-1 py-0.5 font-mono" style={{ wordBreak: "break-all" }}>{item.materialCode}</td>
+                <td className="border border-black px-1 py-0.5">{item.productName}</td>
+                <td className="border border-black px-1 py-0.5">{item.spec}</td>
+                <td className="border border-black px-1 py-0.5">{item.surface}</td>
+                <td className="border border-black px-1 py-0.5 text-center">{item.unit}</td>
+                <td className="border border-black px-1 py-0.5 text-right">{item.qty}</td>
+                <td className="border border-black px-1 py-0.5 text-right font-mono">{item.unitPrice.toFixed(2)}</td>
+                <td className="border border-black px-1 py-0.5 text-right font-mono">{item.amount.toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
           <tfoot>
             <tr className="font-bold">
-              <td colSpan={8} className="border border-black px-0.5 py-0.5 text-right">合计</td>
-              <td className="border border-black px-0.5 py-0.5 text-right font-mono">{totalQty}</td>
-              <td className="border border-black px-0.5 py-0.5"></td>
-              <td className="border border-black px-0.5 py-0.5 text-right font-mono">{totalAmount.toFixed(2)}</td>
+              <td colSpan={8} className="border border-black px-1 py-1 text-right">合计</td>
+              <td className="border border-black px-1 py-1 text-right font-mono">{totalQty}</td>
+              <td className="border border-black px-1 py-1"></td>
+              <td className="border border-black px-1 py-1 text-right font-mono">{totalAmount.toFixed(2)}</td>
             </tr>
           </tfoot>
         </table>
 
         {/* 金额 + 备注 横向排列 */}
-        <div className="flex gap-6 mb-1.5 text-[9px]">
-          <div className="flex"><span className="font-medium shrink-0">金额(大写)：</span><span className="tracking-wider">{amountToChinese(totalAmount)}</span></div>
-          <div className="flex"><span className="font-medium shrink-0">金额(小写)：</span><span className="font-mono">¥ {totalAmount.toFixed(2)}</span></div>
+        <div className="flex gap-8 mb-2 text-[10px]">
+          <div className="flex"><span className="font-medium shrink-0">合计金额(大写)：</span><span className="tracking-wider">{amountToChinese(totalAmount)}</span></div>
+          <div className="flex"><span className="font-medium shrink-0">(小写)：</span><span className="font-mono">¥ {totalAmount.toFixed(2)}</span></div>
           {order.remark && <div className="flex"><span className="font-medium shrink-0">备注：</span><span>{order.remark}</span></div>}
         </div>
 
         {/* 签字栏 - 底部横向 */}
-        <div className="grid grid-cols-3 gap-4 text-[9px]">
-          <div>
+        <div className="flex justify-between items-end text-[10px] mt-4">
+          <div className="flex items-center gap-2">
             <span className="font-medium">制单人：</span>
-            <input type="text" value={makerName} onChange={e => handleMakerChange(e.target.value)} list="maker-name-list" placeholder="" className="bg-transparent border-b border-black outline-none text-[9px] py-0.5 w-24" />
+            <input type="text" value={makerName} onChange={e => handleMakerChange(e.target.value)} list="maker-name-list" placeholder="" className="bg-transparent border-b border-black outline-none text-[10px] py-0.5 w-28" />
             <datalist id="maker-name-list">{makerHistory.map(n => <option key={n} value={n} />)}</datalist>
           </div>
-          <div>
-            <span className="font-medium">客户确认：</span>
-            <span className="inline-block border-b border-black w-24"></span>
+          <div className="flex items-center gap-2">
+            <span className="font-medium">客户确认签字：</span>
+            <span className="inline-block border-b border-black w-28"></span>
           </div>
-          <div className="text-right text-[8px] text-gray-500 self-end">
-            本对帐单一式两份，供需双方各执一份
-          </div>
+          <div className="text-[9px] text-gray-500">本对帐单一式两份，供需双方各执一份</div>
         </div>
       </div>
     </>
