@@ -159,21 +159,21 @@ export default function PrintDeliveryPage() {
 
           {/* 表头信息区域 - 左右两列布局，固定高度26mm（4行×6.5mm），底部无间距 */}
           <div style={{ fontSize: "15px", lineHeight: "1.3", padding: "0 2mm", flexShrink: 0, height: "26mm", boxSizing: "border-box", overflow: "visible", marginBottom: "0" }}>
-            <div className="flex">
-              <span style={{ flex: "2", whiteSpace: "nowrap", overflow: "visible" }}><span className="font-bold">客户名称：</span>{order.customer}</span>
-              <span style={{ flex: "1", marginLeft: "10mm", whiteSpace: "nowrap" }}><span className="font-bold">NO：</span><span className="font-mono font-bold" style={{ fontSize: "15px" }}>{order.noteNo}</span></span>
-            </div>
-            <div className="flex">
-              <span style={{ flex: "2", whiteSpace: "nowrap", overflow: "visible" }}><span className="font-bold">客户地址：</span>{customer?.address || ""}</span>
-              <span style={{ flex: "1", marginLeft: "10mm", whiteSpace: "nowrap" }}><span className="font-bold">送货日期：</span>{order.date}</span>
-            </div>
-            <div className="flex">
-              <span style={{ flex: "2", whiteSpace: "nowrap", overflow: "visible" }}><span className="font-bold">联系电话：</span>{customer?.phone || ""}</span>
-              <span style={{ flex: "1", marginLeft: "10mm", whiteSpace: "nowrap" }}><span className="font-bold">订单号：</span>{order.orderNo || ""}</span>
-            </div>
-            <div className="flex">
-              <span style={{ flex: "2", whiteSpace: "nowrap", overflow: "visible" }}><span className="font-bold">联系人：</span>{customer?.contact || ""}</span>
-              <span style={{ flex: "1", marginLeft: "10mm", whiteSpace: "nowrap" }}><span className="font-bold">付款方式：</span>{customer?.paymentTerms || ""}</span>
+            <div className="flex" style={{ alignItems: "stretch" }}>
+              {/* 左侧列：客户信息 */}
+              <div style={{ flex: "1", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                <div><span className="font-bold">客户名称：</span>{order.customer}</div>
+                <div style={{ whiteSpace: "nowrap", overflow: "visible" }}><span className="font-bold">客户地址：</span>{customer?.address || ""}</div>
+                <div><span className="font-bold">联系电话：</span>{customer?.phone || ""}</div>
+                <div><span className="font-bold">联系人：</span>{customer?.contact || ""}</div>
+              </div>
+              {/* 右侧列：固定宽度，所有字段从同一位置开始 */}
+              <div style={{ width: "45%", display: "flex", flexDirection: "column", justifyContent: "space-between", paddingLeft: "5mm" }}>
+                <div style={{ whiteSpace: "nowrap" }}><span className="font-bold">NO：</span><span className="font-mono font-bold" style={{ fontSize: "15px" }}>{order.noteNo}</span></div>
+                <div style={{ whiteSpace: "nowrap" }}><span className="font-bold">送货日期：</span>{order.date}</div>
+                <div style={{ whiteSpace: "nowrap" }}><span className="font-bold">订单号：</span>{order.orderNo || ""}</div>
+                <div style={{ whiteSpace: "nowrap" }}><span className="font-bold">付款方式：</span>{customer?.paymentTerms || ""}</div>
+              </div>
             </div>
           </div>
 
