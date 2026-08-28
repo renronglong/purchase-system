@@ -48,7 +48,7 @@ export default function PurchaseOrderFormPage() {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [orderDate, setOrderDate] = useState(new Date().toISOString().slice(0, 10));
-  const [maker, setMaker] = useState("");
+  const [maker, setMaker] = useState("易金兰");
   const [items, setItems] = useState<PurchaseOrderItem[]>([createEmptyItem()]);
 
   const suppliers = supplierStore.getAll();

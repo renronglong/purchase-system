@@ -29,7 +29,7 @@ export default function DeliveryPage() {
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [items, setItems] = useState<DeliveryItem[]>([emptyItem()]);
   const [reconciled, setReconciled] = useState("");
-  const [maker, setMaker] = useState("");
+  const [maker, setMaker] = useState("易金兰");
 
   const customers = deliveryCustomerStore.getAll();
 
