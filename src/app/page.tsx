@@ -125,7 +125,7 @@ export default function PurchaseOrderListPage() {
                         查看
                       </Link>
                       <Link
-                        href={`/purchase/${order.id}/edit`}
+                        href={`/purchase/${order.id}`}
                         className="text-amber-600 hover:text-amber-800 text-xs"
                       >
                         编辑
