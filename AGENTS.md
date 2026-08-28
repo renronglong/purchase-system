@@ -1,7 +1,7 @@
 # AGENTS.md - 铝型材采购管理系统
 
 ## 项目概览
-铝型材采购管理 Web 系统，用于管理铝型材产品的采购订单、产品库、供应商、委外加工单和送货单。纯前端应用，数据存储在 localStorage。
+铝型材采购管理 Web 系统，用于管理铝型材产品的采购订单、产品库、供应商、委外加工单、送货单和对帐单。纯前端应用，数据存储在 localStorage。
 
 ## 技术栈
 - Next.js 16 (App Router) + React 19 + TypeScript 5
@@ -22,10 +22,12 @@ src/
 │   ├── suppliers/page.tsx      # 供应商管理
 │   ├── outsourcing/page.tsx    # 委外加工单管理
 │   ├── delivery/page.tsx       # 送货单管理
+│   ├── reconciliation/page.tsx # 对帐单管理
 │   ├── customers/page.tsx      # 客户管理
 │   └── print/
 │       ├── purchase/[id]/page.tsx  # 采购单打印页
-│       └── delivery/[id]/page.tsx  # 送货单打印页
+│       ├── delivery/[id]/page.tsx  # 送货单打印页
+│       └── reconciliation/[id]/page.tsx  # 对帐单打印页
 ├── components/
 │   ├── sidebar.tsx             # 侧边栏导航
 │   ├── product-search-select.tsx  # 产品搜索下拉组件
@@ -43,18 +45,19 @@ src/
 3. **供应商管理**：12家预置供应商，支持增删改查
 4. **委外加工单**：类似采购单结构，含工序和单价字段
 5. **送货单管理**：新建/编辑/删除/打印送货单，支持按客户/日期/对帐状态搜索
-6. **客户管理**：50家预置客户，支持增删改查
-7. **打印功能**：A4格式采购单/送货单打印，含公司抬头和签收栏
+6. **对帐单管理**：按客户汇总送货单明细，支持拉取明细/手动添加/打印，含金额大写转换
+7. **客户管理**：50家预置客户，支持增删改查
+8. **打印功能**：A4格式采购单/送货单/对帐单打印，含公司抬头和签收栏
 
 ## 关键文件
-- `src/lib/store.ts` - 数据模型定义和 localStorage CRUD 操作（含版本号机制）
+- `src/lib/store.ts` - 数据模型定义和 localStorage CRUD 操作（含版本号机制），包含 reconciliationStore
 - `src/lib/seed-data.ts` - 预置采购产品/供应商数据
 - `src/lib/delivery-seed-data.ts` - 预置送货模块数据（客户/产品/送货单）
 - `src/components/product-search-select.tsx` - 产品搜索下拉组件（支持键盘导航）
 
 ## 数据版本管理
 - localStorage 使用版本号机制（STORAGE_VERSION），升级版本号可强制刷新所有用户缓存
-- 当前版本：v6
+- 当前版本：v8
 
 ## 开发命令
 - `pnpm dev` - 启动开发服务

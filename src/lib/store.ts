@@ -7,6 +7,37 @@ import {
 export type { Product, Supplier };
 export type { DeliveryCustomer, DeliveryProduct, DeliveryNote, DeliveryItem };
 
+// 对帐单明细
+export interface ReconciliationItem {
+  id: string;
+  deliveryNoteNo: string;
+  deliveryDate: string;
+  materialCode: string;
+  productName: string;
+  spec: string;
+  surface: string;
+  unit: string;
+  qty: number;
+  unitPrice: number;
+  amount: number;
+}
+
+// 对帐单
+export interface ReconciliationOrder {
+  id: string;
+  orderNo: string;
+  customer: string;
+  startDate: string;
+  endDate: string;
+  status: string;
+  remark: string;
+  items: ReconciliationItem[];
+  totalQty: number;
+  totalAmount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 // 采购单明细
 export interface PurchaseOrderItem {
   id: string;
@@ -76,7 +107,7 @@ export interface OutsourcingOrder {
 }
 
 // 种子数据版本号：每次更新 seed-data 时升此值，强制覆盖旧缓存
-const STORAGE_VERSION = "v7";
+const STORAGE_VERSION = "v8";
 
 // 存储键名
 const KEYS = {
@@ -87,6 +118,7 @@ const KEYS = {
   DELIVERY_CUSTOMERS: "delivery_customers",
   DELIVERY_PRODUCTS: "delivery_products",
   DELIVERY_NOTES: "delivery_notes",
+  RECONCILIATION_ORDERS: "reconciliation_orders",
   STORAGE_VERSION: "aluminum_storage_version",
 };
 
@@ -211,6 +243,51 @@ export const deliveryNoteStore = {
   },
 };
 
+// 预览下一个对帐单号
+export function previewReconciliationOrderNo(): string {
+  if (typeof window === "undefined") return "";
+  return generateOrderNo("DZ", KEYS.RECONCILIATION_ORDERS);
+}
+
+// 对帐单管理
+export const reconciliationStore = {
+  getAll(): ReconciliationOrder[] {
+    return getAll<ReconciliationOrder>(KEYS.RECONCILIATION_ORDERS);
+  },
+  getById(id: string): ReconciliationOrder | undefined {
+    return this.getAll().find(o => o.id === id);
+  },
+  add(order: Omit<ReconciliationOrder, "id" | "orderNo" | "createdAt" | "updatedAt">): ReconciliationOrder {
+    const list = this.getAll();
+    const now = new Date().toISOString();
+    const newOrder: ReconciliationOrder = {
+      ...order,
+      id: generateId(),
+      orderNo: generateOrderNo("DZ", KEYS.RECONCILIATION_ORDERS),
+      createdAt: now,
+      updatedAt: now,
+    };
+    list.push(newOrder);
+    saveAll(KEYS.RECONCILIATION_ORDERS, list);
+    return newOrder;
+  },
+  update(id: string, data: Partial<ReconciliationOrder>): ReconciliationOrder | undefined {
+    const list = this.getAll();
+    const idx = list.findIndex(o => o.id === id);
+    if (idx === -1) return undefined;
+    list[idx] = { ...list[idx], ...data, updatedAt: new Date().toISOString() };
+    saveAll(KEYS.RECONCILIATION_ORDERS, list);
+    return list[idx];
+  },
+  remove(id: string): boolean {
+    const list = this.getAll();
+    const filtered = list.filter(o => o.id !== id);
+    if (filtered.length === list.length) return false;
+    saveAll(KEYS.RECONCILIATION_ORDERS, filtered);
+    return true;
+  },
+};
+
 // 初始化数据
 function initializeData(): void {
   if (typeof window === "undefined") return;
@@ -226,6 +303,7 @@ function initializeData(): void {
     localStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify(deliveryCustomers));
     localStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify(deliveryProducts));
     localStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify(deliveryNotes));
+    localStorage.setItem(KEYS.RECONCILIATION_ORDERS, JSON.stringify([]));
     localStorage.setItem(KEYS.STORAGE_VERSION, STORAGE_VERSION);
     return;
   }
@@ -237,6 +315,10 @@ function initializeData(): void {
     localStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify(deliveryCustomers));
     localStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify(deliveryProducts));
     localStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify(deliveryNotes));
+    // 对帐单保留用户数据，不覆盖
+    if (!localStorage.getItem(KEYS.RECONCILIATION_ORDERS)) {
+      localStorage.setItem(KEYS.RECONCILIATION_ORDERS, JSON.stringify([]));
+    }
     localStorage.setItem(KEYS.STORAGE_VERSION, STORAGE_VERSION);
   }
 }
