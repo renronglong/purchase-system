@@ -82,6 +82,18 @@ export default function PrintDeliveryPage() {
     return { id: `empty-${idx}`, materialCode: "", productName: "", spec: "", surface: "", qty: 0, unit: "", unitPrice: 0, amount: 0, remark: "", isEmpty: true };
   });
 
+  // 根据公司名称自动匹配地址
+  const getCompanyAddress = (companyName: string) => {
+    if (companyName.includes("质稳")) {
+      return "广东省佛山市南海区狮山招大小坑尾坑尾园";
+    } else if (companyName.includes("碧利莱")) {
+      return "佛山市南海区狮山镇松岗办事处显纲村委会厦边村口首层";
+    }
+    return "";
+  };
+
+  const companyAddress = getCompanyAddress(order.company);
+
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: `
@@ -228,7 +240,7 @@ export default function PrintDeliveryPage() {
               备注：请仔细核对货物品质、型号和数量，如果有误请于3个工作日内提出，并出具证明，协商解决。
             </div>
             <div style={{ marginBottom: "0.5mm", fontSize: "11px" }}>
-              公司地址：佛山市三水区碧利莱金属制品有限公司
+              公司地址：{companyAddress}
             </div>
             <div className="flex justify-between" style={{ fontSize: "11px" }}>
               <span><span className="font-bold">制单：</span>{order.maker || "易金兰"}</span>
