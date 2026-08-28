@@ -158,7 +158,7 @@ export default function PrintDeliveryPage() {
           </div>
 
           {/* 表头信息区域 - 左右两列布局，固定高度18mm（4行×4.5mm），底部留1mm间距 */}
-          <div style={{ fontSize: "13px", lineHeight: "1.3", padding: "0.5mm 2mm", borderBottom: `2px solid ${BORDER_COLOR}`, flexShrink: 0, height: "18mm", boxSizing: "border-box", overflow: "hidden", marginBottom: "1mm" }}>
+          <div style={{ fontSize: "13px", lineHeight: "1.3", padding: "0.5mm 2mm", flexShrink: 0, height: "18mm", boxSizing: "border-box", overflow: "hidden", marginBottom: "1mm" }}>
             <div className="flex">
               <span style={{ flex: "1" }}><span className="font-bold">客户名称：</span>{order.customer}</span>
               <span style={{ flex: "1", marginLeft: "30mm" }}><span className="font-bold">NO：</span><span className="font-mono font-bold" style={{ fontSize: "13px" }}>{order.noteNo}</span></span>
