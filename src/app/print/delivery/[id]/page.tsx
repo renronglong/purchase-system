@@ -157,8 +157,8 @@ export default function PrintDeliveryPage() {
             </h1>
           </div>
 
-          {/* 表头信息区域 - 左右两列布局，固定高度18mm（4行×4.5mm），底部留1mm间距 */}
-          <div style={{ fontSize: "13px", lineHeight: "1.3", padding: "0.5mm 2mm", flexShrink: 0, height: "18mm", boxSizing: "border-box", overflow: "hidden", marginBottom: "1mm" }}>
+          {/* 表头信息区域 - 左右两列布局，固定高度18mm（4行×4.5mm），底部留2mm间距 */}
+          <div style={{ fontSize: "13px", lineHeight: "1.3", padding: "0.5mm 2mm 2mm 2mm", flexShrink: 0, height: "18mm", boxSizing: "border-box", overflow: "visible", marginBottom: "0" }}>
             <div className="flex">
               <span style={{ flex: "1" }}><span className="font-bold">客户名称：</span>{order.customer}</span>
               <span style={{ flex: "1", marginLeft: "30mm" }}><span className="font-bold">NO：</span><span className="font-mono font-bold" style={{ fontSize: "13px" }}>{order.noteNo}</span></span>
@@ -177,8 +177,8 @@ export default function PrintDeliveryPage() {
             </div>
           </div>
 
-          {/* 明细表格 - 固定6行，每行9mm，总宽度190mm */}
-          <table className="w-full border-collapse" style={{ fontSize: "12px", tableLayout: "fixed", flexShrink: 0 }}>
+          {/* 明细表格 - 固定6行，每行9mm，总宽度190mm，只有单元格有边框 */}
+          <table className="w-full border-collapse" style={{ fontSize: "12px", tableLayout: "fixed", flexShrink: 0, border: "none" }}>
             <colgroup>
               <col style={{ width: "7mm" }} />   {/* 序号 */}
               <col style={{ width: "26mm" }} />  {/* 产品编号 +4mm */}
@@ -193,7 +193,7 @@ export default function PrintDeliveryPage() {
               {/* 总计: 7+26+24+30+14+10+9+16+20+34 = 190mm */}
             </colgroup>
             <thead>
-              <tr style={{ height: "5mm" }}>
+              <tr style={{ height: "5mm", borderTop: "none" }}>
                 <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "12px" }}>序号</th>
                 <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "12px" }}>产品编号</th>
                 <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "12px" }}>名称</th>
