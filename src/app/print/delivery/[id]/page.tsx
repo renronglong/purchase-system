@@ -73,11 +73,11 @@ export default function PrintDeliveryPage() {
     <>
       <style dangerouslySetInnerHTML={{ __html: `
         @media print {
-          @page { size: 241mm 140mm; margin: 3mm 5mm; }
+          @page { size: 241mm 140mm; margin: 0; }
           html, body { width: 241mm; height: 140mm; margin: 0; padding: 0; }
           body * { visibility: hidden; }
           #print-area, #print-area * { visibility: visible; }
-          #print-area { position: absolute; left: 5mm; top: 3mm; width: 231mm; height: 134mm; }
+          #print-area { position: absolute; left: 0; top: 0; width: 241mm; height: 140mm; }
           .no-print { display: none !important; }
           aside, nav, [class*="sidebar"], .w-60, .bg-slate-900 { display: none !important; }
         }
@@ -92,16 +92,16 @@ export default function PrintDeliveryPage() {
         <button onClick={() => window.close()} className="px-4 py-2 bg-slate-500 text-white text-sm rounded-md hover:bg-slate-600 shadow-lg">关闭</button>
       </div>
 
-      <div id="print-area" className="mx-auto bg-white" style={{ width: "231mm", height: "134mm", padding: "0", display: "flex", flexDirection: "column", border: `2px solid ${BORDER_COLOR}`, overflow: "hidden" }}>
+      <div id="print-area" className="mx-auto bg-white" style={{ width: "241mm", height: "140mm", padding: "0", display: "flex", flexDirection: "column", border: `2px solid ${BORDER_COLOR}`, overflow: "hidden", boxSizing: "border-box" }}>
         {/* 标题区域 - 横排居中 */}
-        <div className="flex items-center justify-center" style={{ height: "12mm", borderBottom: `2px solid ${BORDER_COLOR}`, flexShrink: 0 }}>
+        <div className="flex items-center justify-center" style={{ height: "10mm", borderBottom: `2px solid ${BORDER_COLOR}`, flexShrink: 0 }}>
           <h1 style={{ fontSize: "18px", fontWeight: "bold", margin: 0, letterSpacing: "2px" }}>
             {order.company}送货单
           </h1>
         </div>
 
         {/* 表头信息区域 */}
-        <div style={{ fontSize: "12px", lineHeight: "1.4", padding: "1mm 2mm", borderBottom: `2px solid ${BORDER_COLOR}`, flexShrink: 0 }}>
+        <div style={{ fontSize: "11px", lineHeight: "1.3", padding: "0.5mm 2mm", borderBottom: `2px solid ${BORDER_COLOR}`, flexShrink: 0 }}>
           <div className="flex">
             <span style={{ width: "95mm" }}><span className="font-bold">客户名称：</span>{order.customer}</span>
             <span><span className="font-bold">NO：</span><span className="font-mono font-bold" style={{ fontSize: "13px" }}>{order.noteNo}</span></span>
@@ -150,7 +150,7 @@ export default function PrintDeliveryPage() {
           </thead>
           <tbody>
             {order.items.map((item, idx) => (
-              <tr key={item.id} style={{ height: "auto", minHeight: "12mm" }}>
+              <tr key={item.id} style={{ height: "auto", minHeight: "8mm" }}>
                 <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "center", verticalAlign: "middle", padding: "1px 0" }}>{idx + 1}</td>
                 <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", wordBreak: "break-all", fontSize: "10px" }}>{item.materialCode}</td>
                 <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis" }}>{item.productName}</td>
@@ -174,9 +174,9 @@ export default function PrintDeliveryPage() {
         </table>
 
         {/* 底部区域 */}
-        <div style={{ borderTop: `2px solid ${BORDER_COLOR}`, padding: "1mm 2mm", fontSize: "10px", flexShrink: 0 }}>
+        <div style={{ borderTop: `2px solid ${BORDER_COLOR}`, padding: "0.5mm 2mm", fontSize: "10px", flexShrink: 0 }}>
           {/* 备注说明 */}
-          <div style={{ marginBottom: "0.5mm", fontSize: "9px" }}>
+          <div style={{ marginBottom: "0.3mm", fontSize: "9px" }}>
             请仔细核对货物品质、型号和数量，如果有误请于3个工作日内提出，并出具证明，协商解决
           </div>
           {/* 公司地址 */}
