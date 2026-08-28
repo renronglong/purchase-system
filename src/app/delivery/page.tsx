@@ -29,6 +29,7 @@ export default function DeliveryPage() {
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [items, setItems] = useState<DeliveryItem[]>([emptyItem()]);
   const [reconciled, setReconciled] = useState("");
+  const [maker, setMaker] = useState("");
 
   const customers = deliveryCustomerStore.getAll();
 
@@ -51,7 +52,7 @@ export default function DeliveryPage() {
     setNoteNo(previewDeliveryOrderNo());
     setCompany(deliveryCompanies[0]);
     setCustomer(""); setOrderNo(""); setDate(new Date().toISOString().slice(0, 10));
-    setItems([emptyItem()]); setReconciled("");
+    setItems([emptyItem()]); setReconciled(""); setMaker("");
     setShowForm(true);
   };
 
@@ -64,6 +65,7 @@ export default function DeliveryPage() {
     setDate(order.date);
     setItems(order.items.length > 0 ? order.items : [emptyItem()]);
     setReconciled(order.reconciled);
+    setMaker(order.maker || "");
     setShowForm(true);
   };
 
@@ -101,7 +103,14 @@ export default function DeliveryPage() {
     if (!customer) { alert("请填写客户名称"); return; }
     const valid = items.filter(i => i.materialCode || i.productName);
     if (valid.length === 0) { alert("请至少添加一条明细"); return; }
-    const data = { company, customer, orderNo, date, items: valid, reconciled };
+    // 保存制单人到历史记录
+    if (maker.trim()) {
+      const history = JSON.parse(localStorage.getItem("delivery_maker_names") || "[]");
+      const names = history.filter((n: string) => n !== maker.trim());
+      names.unshift(maker.trim());
+      localStorage.setItem("delivery_maker_names", JSON.stringify(names.slice(0, 20)));
+    }
+    const data = { company, customer, orderNo, date, items: valid, reconciled, maker: maker.trim() };
     if (editId) { deliveryNoteStore.update(editId, data); } else { deliveryNoteStore.add(data); }
     setShowForm(false); load();
   };
@@ -144,6 +153,12 @@ export default function DeliveryPage() {
               <select value={reconciled} onChange={(e) => setReconciled(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md">
                 <option value="">未对帐</option><option value="已对帐">已对帐</option><option value="部分对帐">部分对帐</option>
               </select></div>
+            <div><label className="block text-xs text-slate-500 mb-1">制单人</label>
+              <input type="text" value={maker} onChange={(e) => setMaker(e.target.value)}
+                className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" placeholder="填写制单人姓名" list="delivery-maker-list" />
+              <datalist id="delivery-maker-list">
+                {(JSON.parse(localStorage.getItem("delivery_maker_names") || "[]") as string[]).map((n: string) => <option key={n} value={n} />)}
+              </datalist></div>
           </div>
 
           <datalist id="delivery-product-list">

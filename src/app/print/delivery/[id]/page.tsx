@@ -181,7 +181,7 @@ export default function PrintDeliveryPage() {
         <div className="flex justify-between items-end" style={{ fontSize: "11px" }}>
           <div>
             <span className="font-medium">制单：</span>
-            <span className="inline-block border-b border-black" style={{ width: "60px" }}>&nbsp;</span>
+            <span className="inline-block border-b border-black" style={{ width: "60px" }}>{order.maker || ""}</span>
           </div>
           <div>
             <span className="font-medium">客户签收：</span>

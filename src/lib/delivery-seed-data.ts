@@ -560,6 +560,7 @@ export interface DeliveryNote {
   items: DeliveryItem[];
   reconciled: string;
   company: string;
+  maker?: string;
 }
 
 export const deliveryNotes: DeliveryNote[] = [

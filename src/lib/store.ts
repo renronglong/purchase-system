@@ -108,7 +108,7 @@ export interface OutsourcingOrder {
 }
 
 // 种子数据版本号：每次更新 seed-data 时升此值，强制覆盖旧缓存
-const STORAGE_VERSION = "v9";
+const STORAGE_VERSION = "v10";
 
 // 存储键名
 const KEYS = {
