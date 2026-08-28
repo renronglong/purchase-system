@@ -168,12 +168,12 @@ export default function PrintDeliveryPage() {
               <span style={{ flex: "1", marginLeft: "10mm", whiteSpace: "nowrap" }}><span className="font-bold">送货日期：</span>{order.date}</span>
             </div>
             <div className="flex">
-              <span style={{ flex: "1" }}><span className="font-bold">联系电话：</span>{customer?.phone || ""}</span>
-              <span style={{ flex: "1", marginLeft: "30mm" }}><span className="font-bold">订单号：</span>{order.orderNo || ""}</span>
+              <span style={{ flex: "2", whiteSpace: "nowrap", overflow: "visible" }}><span className="font-bold">联系电话：</span>{customer?.phone || ""}</span>
+              <span style={{ flex: "1", marginLeft: "10mm", whiteSpace: "nowrap" }}><span className="font-bold">订单号：</span>{order.orderNo || ""}</span>
             </div>
             <div className="flex">
-              <span style={{ flex: "1" }}><span className="font-bold">联系人：</span>{customer?.contact || ""}</span>
-              <span style={{ flex: "1", marginLeft: "30mm" }}><span className="font-bold">付款方式：</span>{customer?.paymentTerms || ""}</span>
+              <span style={{ flex: "2", whiteSpace: "nowrap", overflow: "visible" }}><span className="font-bold">联系人：</span>{customer?.contact || ""}</span>
+              <span style={{ flex: "1", marginLeft: "10mm", whiteSpace: "nowrap" }}><span className="font-bold">付款方式：</span>{customer?.paymentTerms || ""}</span>
             </div>
           </div>
 
