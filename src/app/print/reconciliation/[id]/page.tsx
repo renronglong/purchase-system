@@ -96,9 +96,9 @@ export default function PrintReconciliationPage() {
         @media print {
           body * { visibility: hidden; }
           #print-area, #print-area * { visibility: visible; }
-          #print-area { position: absolute; left: 0; top: 0; width: 100%; }
+          #print-area { position: absolute; left: 0; top: 0; width: 100mm; }
           .no-print { display: none !important; }
-          @page { size: A4; margin: 15mm; }
+          @page { size: 100mm 180mm; margin: 4mm; }
         }
       `}</style>
 
@@ -107,83 +107,80 @@ export default function PrintReconciliationPage() {
         <button onClick={() => window.close()} className="ml-2 px-4 py-2 bg-slate-500 text-white text-sm rounded-md hover:bg-slate-600 shadow-lg">关闭</button>
       </div>
 
-      <div id="print-area" className="p-8 max-w-[210mm] mx-auto bg-white">
-        <div className="text-center mb-6">
-          <h1 className="text-2xl font-bold tracking-wider">对 帐 单</h1>
+      {/* 打印区域 - 顺丰热敏标签 100mm x 180mm */}
+      <div id="print-area" className="p-2 mx-auto bg-white" style={{ width: "100mm", minHeight: "172mm", fontSize: "9px" }}>
+        <div className="text-center mb-2 border-b border-black pb-1.5">
+          <h1 className="font-bold text-[15px] tracking-wide">对 帐 单</h1>
         </div>
 
-        <div className="grid grid-cols-2 gap-x-8 gap-y-1 text-sm mb-4 border-b border-black pb-3">
-          <div className="flex"><span className="font-medium w-24 shrink-0">对帐单编号：</span><span className="font-mono">{order.orderNo}</span></div>
-          <div className="flex"><span className="font-medium w-24 shrink-0">状态：</span><span>{order.status}</span></div>
-          <div className="flex"><span className="font-medium w-24 shrink-0">客户名称：</span><span>{order.customer}</span></div>
-          <div className="flex"><span className="font-medium w-24 shrink-0">对帐日期：</span><span>{order.startDate} ~ {order.endDate}</span></div>
+        <div className="text-[9px] leading-relaxed space-y-0.5 mb-2 border-b border-black pb-1.5">
+          <div className="flex"><span className="font-medium w-16 shrink-0">对帐单编号：</span><span className="font-mono">{order.orderNo}</span></div>
+          <div className="flex"><span className="font-medium w-16 shrink-0">客户名称：</span><span>{order.customer}</span></div>
+          <div className="flex"><span className="font-medium w-16 shrink-0">对帐日期：</span><span>{order.startDate} ~ {order.endDate}</span></div>
+          <div className="flex"><span className="font-medium w-16 shrink-0">状态：</span><span>{order.status}</span></div>
         </div>
 
-        <table className="w-full text-xs border-collapse mb-4">
+        <table className="w-full border-collapse mb-2" style={{ fontSize: "8px" }}>
           <thead>
-            <tr className="border-b-2 border-black">
-              <th className="border border-black px-1.5 py-1.5 font-medium w-8">序号</th>
-              <th className="border border-black px-1.5 py-1.5 font-medium">送货单号</th>
-              <th className="border border-black px-1.5 py-1.5 font-medium">送货日期</th>
-              <th className="border border-black px-1.5 py-1.5 font-medium">物料编号</th>
-              <th className="border border-black px-1.5 py-1.5 font-medium">产品名称</th>
-              <th className="border border-black px-1.5 py-1.5 font-medium">规格</th>
-              <th className="border border-black px-1.5 py-1.5 font-medium">表面处理</th>
-              <th className="border border-black px-1.5 py-1.5 font-medium">单位</th>
-              <th className="border border-black px-1.5 py-1.5 font-medium">数量</th>
-              <th className="border border-black px-1.5 py-1.5 font-medium">单价</th>
-              <th className="border border-black px-1.5 py-1.5 font-medium">金额</th>
+            <tr className="border-b border-black">
+              <th className="border border-black px-0.5 py-0.5 font-medium">序</th>
+              <th className="border border-black px-0.5 py-0.5 font-medium">送货单号</th>
+              <th className="border border-black px-0.5 py-0.5 font-medium">日期</th>
+              <th className="border border-black px-0.5 py-0.5 font-medium">物料编号</th>
+              <th className="border border-black px-0.5 py-0.5 font-medium">名称</th>
+              <th className="border border-black px-0.5 py-0.5 font-medium">规格</th>
+              <th className="border border-black px-0.5 py-0.5 font-medium">数</th>
+              <th className="border border-black px-0.5 py-0.5 font-medium">单价</th>
+              <th className="border border-black px-0.5 py-0.5 font-medium">金额</th>
             </tr>
           </thead>
           <tbody>
             {order.items.map((item, idx) => (
-              <tr key={item.id} className="border-b border-gray-300">
-                <td className="border border-black px-1.5 py-1 text-center">{idx + 1}</td>
-                <td className="border border-black px-1.5 py-1 font-mono">{item.deliveryNoteNo}</td>
-                <td className="border border-black px-1.5 py-1">{item.deliveryDate}</td>
-                <td className="border border-black px-1.5 py-1 font-mono">{item.materialCode}</td>
-                <td className="border border-black px-1.5 py-1">{item.productName}</td>
-                <td className="border border-black px-1.5 py-1">{item.spec}</td>
-                <td className="border border-black px-1.5 py-1">{item.surface}</td>
-                <td className="border border-black px-1.5 py-1 text-center">{item.unit}</td>
-                <td className="border border-black px-1.5 py-1 text-right">{item.qty}</td>
-                <td className="border border-black px-1.5 py-1 text-right font-mono">{item.unitPrice.toFixed(2)}</td>
-                <td className="border border-black px-1.5 py-1 text-right font-mono">{item.amount.toFixed(2)}</td>
+              <tr key={item.id}>
+                <td className="border border-black px-0.5 py-0.5 text-center">{idx + 1}</td>
+                <td className="border border-black px-0.5 py-0.5 font-mono">{item.deliveryNoteNo}</td>
+                <td className="border border-black px-0.5 py-0.5">{item.deliveryDate}</td>
+                <td className="border border-black px-0.5 py-0.5 font-mono" style={{ wordBreak: "break-all" }}>{item.materialCode}</td>
+                <td className="border border-black px-0.5 py-0.5">{item.productName}</td>
+                <td className="border border-black px-0.5 py-0.5">{item.spec}</td>
+                <td className="border border-black px-0.5 py-0.5 text-right">{item.qty}</td>
+                <td className="border border-black px-0.5 py-0.5 text-right font-mono">{item.unitPrice.toFixed(2)}</td>
+                <td className="border border-black px-0.5 py-0.5 text-right font-mono">{item.amount.toFixed(2)}</td>
               </tr>
             ))}
           </tbody>
           <tfoot>
-            <tr className="border-t-2 border-black font-bold">
-              <td colSpan={8} className="border border-black px-1.5 py-1.5 text-right">合计</td>
-              <td className="border border-black px-1.5 py-1.5 text-right font-mono">{totalQty}</td>
-              <td className="border border-black px-1.5 py-1.5"></td>
-              <td className="border border-black px-1.5 py-1.5 text-right font-mono">{totalAmount.toFixed(2)}</td>
+            <tr className="font-bold">
+              <td colSpan={6} className="border border-black px-0.5 py-0.5 text-right">合计</td>
+              <td className="border border-black px-0.5 py-0.5 text-right font-mono">{totalQty}</td>
+              <td className="border border-black px-0.5 py-0.5"></td>
+              <td className="border border-black px-0.5 py-0.5 text-right font-mono">{totalAmount.toFixed(2)}</td>
             </tr>
           </tfoot>
         </table>
 
-        <div className="text-sm mb-4 space-y-1">
-          <div className="flex"><span className="font-medium w-28 shrink-0">合计金额（大写）：</span><span className="tracking-wider">{amountToChinese(totalAmount)}</span></div>
-          <div className="flex"><span className="font-medium w-28 shrink-0">合计金额（小写）：</span><span className="font-mono">¥ {totalAmount.toFixed(2)}</span></div>
+        <div className="text-[9px] mb-2 space-y-0.5">
+          <div className="flex"><span className="font-medium w-16 shrink-0">金额(大写)：</span><span className="tracking-wider">{amountToChinese(totalAmount)}</span></div>
+          <div className="flex"><span className="font-medium w-16 shrink-0">金额(小写)：</span><span className="font-mono">¥ {totalAmount.toFixed(2)}</span></div>
         </div>
 
         {order.remark && (
-          <div className="text-sm mb-4">
+          <div className="text-[9px] mb-2">
             <span className="font-medium">备注：</span><span>{order.remark}</span>
           </div>
         )}
 
-        <div className="mt-10 grid grid-cols-3 gap-8 text-sm">
+        <div className="mt-3 grid grid-cols-2 gap-4 text-[9px]">
           <div>
-            <p className="font-medium mb-2">制单人：</p>
-            <input type="text" value={makerName} onChange={e => handleMakerChange(e.target.value)} list="maker-name-list" placeholder="" className="w-full bg-transparent border-b border-black outline-none text-sm py-0.5" />
+            <p className="font-medium mb-1">制单人：</p>
+            <input type="text" value={makerName} onChange={e => handleMakerChange(e.target.value)} list="maker-name-list" placeholder="" className="w-full bg-transparent border-b border-black outline-none text-[9px] py-0.5" />
             <datalist id="maker-name-list">{makerHistory.map(n => <option key={n} value={n} />)}</datalist>
           </div>
-          <div><p className="font-medium mb-6">客户确认签字：</p><div className="border-b border-black"></div></div>
-          <div><p className="font-medium mb-6">日期：</p><div className="border-b border-black"></div></div>
+          <div>
+            <p className="font-medium mb-3">客户确认：</p>
+            <div className="border-b border-black"></div>
+          </div>
         </div>
-
-        <div className="mt-6 text-xs text-gray-500 text-center">本对帐单一式两份，供需双方各执一份</div>
       </div>
     </>
   );
