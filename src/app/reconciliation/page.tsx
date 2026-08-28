@@ -20,6 +20,7 @@ export default function ReconciliationPage() {
 
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
+  const [orderNo, setOrderNo] = useState("");
   const [customer, setCustomer] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -41,6 +42,7 @@ export default function ReconciliationPage() {
 
   const resetForm = () => {
     setEditId(null);
+    setOrderNo("");
     setCustomer("");
     setStartDate("");
     setEndDate("");
@@ -56,6 +58,7 @@ export default function ReconciliationPage() {
 
   const openEdit = (order: ReconciliationOrder) => {
     setEditId(order.id);
+    setOrderNo(order.orderNo);
     setCustomer(order.customer);
     setStartDate(order.startDate);
     setEndDate(order.endDate);
@@ -246,7 +249,7 @@ export default function ReconciliationPage() {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
                   <label className="block text-xs text-slate-500 mb-1">对帐单编号</label>
-                  <input type="text" value={editId ? orders.find(o => o.id === editId)?.orderNo || "" : previewReconciliationOrderNo()} readOnly className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md bg-slate-50 text-slate-500" />
+                  <input type="text" value={editId ? orderNo : previewReconciliationOrderNo()} readOnly className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md bg-slate-50 text-slate-500" />
                 </div>
                 <div>
                   <label className="block text-xs text-slate-500 mb-1">客户 <span className="text-red-500">*</span></label>
