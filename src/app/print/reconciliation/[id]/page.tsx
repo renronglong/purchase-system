@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
-import { reconciliationStore, type ReconciliationOrder } from "@/lib/store";
+import { reconciliationStore, deliveryNoteStore, type ReconciliationOrder } from "@/lib/store";
 
 const MAKER_STORAGE_KEY = "print_maker_names";
 
@@ -52,6 +52,18 @@ export default function PrintReconciliationPage() {
 
   const totalAmount = order.totalAmount || order.items.reduce((s, i) => s + i.amount, 0);
   const totalQty = order.totalQty || order.items.reduce((s, i) => s + i.qty, 0);
+
+  // 从关联的送货单中获取公司名称
+  const getCompanyName = (): string => {
+    if (order.items.length > 0) {
+      const firstNoteNo = order.items[0].deliveryNoteNo;
+      const allNotes = deliveryNoteStore.getAll();
+      const note = allNotes.find(n => n.noteNo === firstNoteNo);
+      if (note?.company) return note.company;
+    }
+    return "佛山市质稳五金有限公司";
+  };
+  const companyName = getCompanyName();
 
   // 金额转大写
   const amountToChinese = (n: number): string => {
@@ -111,7 +123,7 @@ export default function PrintReconciliationPage() {
       <div id="print-area" className="px-4 py-3 mx-auto bg-white" style={{ width: "233mm", fontSize: "13px" }}>
         {/* 标题行 */}
         <div className="text-center border-b-2 border-black pb-1.5 mb-2">
-          <h1 className="font-bold text-[22px] tracking-wide">{order.company || "佛山市质稳五金有限公司"}对帐单</h1>
+          <h1 className="font-bold text-[22px] tracking-wide">{companyName}对帐单</h1>
         </div>
 
         {/* 基本信息 - 重新布局 */}
