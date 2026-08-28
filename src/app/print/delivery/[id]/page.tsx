@@ -68,8 +68,8 @@ export default function PrintDeliveryPage() {
   if (!order) return <div className="p-6 text-center text-slate-400">加载中...</div>;
 
   const totalAmount = order.items.reduce((s, i) => s + i.amount, 0);
-  // 制单人默认值
-  const makerName = order.maker || "易金兰";
+  // 制单人默认值 - 确保空字符串也使用默认值
+  const makerName = (order.maker && order.maker.trim()) || "易金兰";
 
   return (
     <>
@@ -114,11 +114,10 @@ export default function PrintDeliveryPage() {
               <span><span className="font-bold">付款方式：</span>{customer?.paymentTerms || ""}</span>
             </div>
           </div>
-          {/* 右侧竖排标题 */}
+          {/* 右侧竖排标题 - 简化布局，只用 writing-mode */}
           <div className="flex items-center justify-center" style={{ width: "28mm", borderLeft: `2px solid ${BORDER_COLOR}` }}>
-            <div style={{ writingMode: "vertical-rl", display: "flex", flexDirection: "column", alignItems: "center", gap: "2px" }}>
-              <span className="font-bold" style={{ fontSize: "16px", letterSpacing: "2px" }}>{order.company}</span>
-              <span className="font-bold" style={{ fontSize: "20px", letterSpacing: "3px", marginTop: "4px" }}>送货单</span>
+            <div style={{ writingMode: "vertical-rl", textOrientation: "upright", letterSpacing: "4px", fontSize: "16px", fontWeight: "bold", whiteSpace: "nowrap" }}>
+              {order.company}送货单
             </div>
           </div>
         </div>
@@ -153,7 +152,7 @@ export default function PrintDeliveryPage() {
           </thead>
           <tbody>
             {order.items.map((item, idx) => (
-              <tr key={item.id} style={{ height: "auto", minHeight: "6mm" }}>
+              <tr key={item.id} style={{ height: "auto", minHeight: "12mm" }}>
                 <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "center", verticalAlign: "middle", padding: "1px 0" }}>{idx + 1}</td>
                 <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", wordBreak: "break-all", fontSize: "10px" }}>{item.materialCode}</td>
                 <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis" }}>{item.productName}</td>
@@ -186,11 +185,11 @@ export default function PrintDeliveryPage() {
           <div style={{ marginBottom: "0.5mm" }}>
             公司地址：佛山市南海区大沥镇
           </div>
-          {/* 签字栏 */}
+          {/* 签字栏 - 确保制单人名字显示 */}
           <div className="flex justify-between" style={{ fontSize: "11px" }}>
             <div>
               <span className="font-bold">制单：</span>
-              <span>{makerName}</span>
+              <span style={{ fontWeight: "normal" }}>{makerName}</span>
             </div>
             <div>
               <span className="font-bold">客户签收：</span>
