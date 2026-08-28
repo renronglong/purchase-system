@@ -204,7 +204,7 @@ export default function PrintDeliveryPage() {
               </div>
               <div className="flex items-center">
                 <span className="font-bold">客户签收：</span>
-                <span style={{ display: "inline-block", width: "45mm", height: "4mm", marginLeft: "2px", borderBottom: "1px solid #999" }}></span>
+                <span style={{ display: "inline-block", width: "20mm", height: "4mm", marginLeft: "2px", borderBottom: "1px solid #999" }}></span>
               </div>
             </div>
           </div>
