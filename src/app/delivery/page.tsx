@@ -142,6 +142,14 @@ export default function DeliveryPage() {
               <option key={p.id} value={p.code} label={`${p.name} ${p.spec || ""}`} />
             ))}
           </datalist>
+          <datalist id="surface-treatment-list">
+            {["本色", "氧化雾银", "氧化砂银", "590", "650", "380", "180", "736.4", "520.4",
+              ...Array.from(new Set(deliveryProductStore.getAll().map(p => p.surface).filter(Boolean)))
+            ].map(s => <option key={s} value={s} />)}
+          </datalist>
+          <datalist id="unit-list">
+            {["pcs", "kg", "米", "套", "件"].map(u => <option key={u} value={u} />)}
+          </datalist>
 
           <div className="overflow-x-auto">
             <table className="w-full text-xs min-w-[1000px]">
@@ -167,8 +175,8 @@ export default function DeliveryPage() {
                     <td className="px-2 py-1"><input type="text" value={item.materialCode} onChange={(e) => updateItem(idx, "materialCode", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" placeholder="物料编号" list="delivery-product-list" /></td>
                     <td className="px-2 py-1"><input type="text" value={item.productName} onChange={(e) => updateItem(idx, "productName", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
                     <td className="px-2 py-1"><input type="text" value={item.spec} onChange={(e) => updateItem(idx, "spec", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
-                    <td className="px-2 py-1"><input type="text" value={item.surface} onChange={(e) => updateItem(idx, "surface", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
-                    <td className="px-2 py-1"><input type="text" value={item.unit} onChange={(e) => updateItem(idx, "unit", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
+                    <td className="px-2 py-1"><input type="text" value={item.surface} onChange={(e) => updateItem(idx, "surface", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" list="surface-treatment-list" /></td>
+                    <td className="px-2 py-1"><input type="text" value={item.unit} onChange={(e) => updateItem(idx, "unit", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" list="unit-list" /></td>
                     <td className="px-2 py-1"><input type="number" value={item.qty || ""} onChange={(e) => updateItem(idx, "qty", Number(e.target.value))} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
                     <td className="px-2 py-1"><input type="number" step="0.01" value={item.unitPrice || ""} onChange={(e) => updateItem(idx, "unitPrice", Number(e.target.value))} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
                     <td className="px-2 py-1 text-right font-mono font-medium">{item.amount.toFixed(2)}</td>
