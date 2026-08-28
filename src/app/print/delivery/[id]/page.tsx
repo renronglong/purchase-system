@@ -148,8 +148,8 @@ export default function PrintDeliveryPage() {
 
       {/* 打印区域 - 内容宽度190mm，左右各留5mm边距，高度134mm（140mm-2*3mm padding） */}
       <div id="print-area" className="mx-auto bg-white" style={{ width: "241mm", height: "140mm", display: "flex", flexDirection: "column", overflow: "hidden", boxSizing: "border-box", padding: "3mm" }}>
-        {/* 内层容器 - 无边框，高度134mm，左边距2mm */}
-        <div style={{ width: CONTENT_WIDTH, height: "134mm", display: "flex", flexDirection: "column", boxSizing: "border-box", marginLeft: "2mm" }}>
+        {/* 内层容器 - 无边框，高度134mm，左边距2mm，flex-start防止自动撑开 */}
+        <div style={{ width: CONTENT_WIDTH, height: "134mm", display: "flex", flexDirection: "column", justifyContent: "flex-start", boxSizing: "border-box", marginLeft: "2mm" }}>
           {/* 标题区域 - 横排居中，固定高度 10mm，无下边框，底部5mm间距 */}
           <div className="flex items-center justify-center" style={{ height: "10mm", flexShrink: 0, marginBottom: "5mm" }}>
             <h1 style={{ fontSize: "22px", fontWeight: "bold", margin: 0, letterSpacing: "2px" }}>
@@ -177,8 +177,8 @@ export default function PrintDeliveryPage() {
             </div>
           </div>
 
-          {/* 明细表格 - 固定6行，每行9mm，总宽度190mm，只有单元格有边框 */}
-          <table className="w-full border-collapse" style={{ fontSize: "14px", tableLayout: "fixed", flexShrink: 0, border: "none" }}>
+          {/* 明细表格 - 固定6行，每行9mm，总宽度190mm，只有单元格有边框，顶部0.5mm间距 */}
+          <table className="w-full border-collapse" style={{ fontSize: "14px", tableLayout: "fixed", flexShrink: 0, border: "none", marginTop: "0.5mm" }}>
             <colgroup>
               <col style={{ width: "7mm" }} />   {/* 序号 */}
               <col style={{ width: "30mm" }} />  {/* 产品编号 +4mm，自动适应长编号 */}
