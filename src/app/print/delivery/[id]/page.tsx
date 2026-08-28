@@ -2,16 +2,57 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
-import { deliveryNoteStore, type DeliveryNote } from "@/lib/store";
+import { deliveryNoteStore, deliveryCustomerStore, type DeliveryNote, type DeliveryCustomer } from "@/lib/store";
+
+function numToCN(n: number): string {
+  if (isNaN(n) || n === 0) return "零元整";
+  const digits = ["零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖"];
+  const units = ["", "拾", "佰", "仟"];
+  const bigUnits = ["", "万", "亿"];
+  const intPart = Math.floor(n);
+  const decPart = Math.round((n - intPart) * 100);
+  const jiao = Math.floor(decPart / 10);
+  const fen = decPart % 10;
+  let result = "";
+  if (intPart === 0) { result = "零"; } else {
+    const s = intPart.toString();
+    let zeroFlag = false;
+    for (let i = 0; i < s.length; i++) {
+      const d = parseInt(s[i]);
+      const pos = s.length - 1 - i;
+      const u = pos % 4;
+      const bu = Math.floor(pos / 4);
+      if (d === 0) { zeroFlag = true; } else {
+        if (zeroFlag) { result += "零"; zeroFlag = false; }
+        result += digits[d] + units[u];
+      }
+      if (u === 0 && bigUnits[bu]) { result += bigUnits[bu]; zeroFlag = false; }
+    }
+  }
+  result += "元";
+  if (jiao === 0 && fen === 0) { result += "整"; } else {
+    if (jiao > 0) result += digits[jiao] + "角";
+    else if (fen > 0) result += "零";
+    if (fen > 0) result += digits[fen] + "分";
+  }
+  return result;
+}
 
 export default function PrintDeliveryPage() {
   const params = useParams();
   const orderId = params.id as string;
   const [order, setOrder] = useState<DeliveryNote | null>(null);
+  const [customer, setCustomer] = useState<DeliveryCustomer | null>(null);
 
   const load = useCallback(() => {
     const found = deliveryNoteStore.getById(orderId);
-    if (found) setOrder(found);
+    if (found) {
+      setOrder(found);
+      // 查找客户详情
+      const customers = deliveryCustomerStore.getAll();
+      const cust = customers.find(c => c.name === found.customer);
+      if (cust) setCustomer(cust);
+    }
   }, [orderId]);
 
   useEffect(() => { load(); }, [load]);
@@ -49,43 +90,53 @@ export default function PrintDeliveryPage() {
       </div>
 
       <div id="print-area" className="mx-auto bg-white" style={{ width: "229mm", minHeight: "132mm", padding: "0" }}>
-        {/* 标题行 */}
-        <div className="flex items-center justify-between border-b border-black pb-1 mb-1.5">
-          <h1 className="font-bold" style={{ fontSize: "14px" }}>{order.company}</h1>
-          <h2 className="font-bold" style={{ fontSize: "14px" }}>送 货 单</h2>
+        {/* 标题 */}
+        <div className="text-center border-b-2 border-black pb-1 mb-1.5">
+          <span className="font-bold" style={{ fontSize: "14px" }}>{order.company}</span>
+          <span className="font-bold ml-4" style={{ fontSize: "16px" }}>送 货 单</span>
         </div>
 
-        {/* 基本信息 */}
-        <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 mb-1.5 border-b border-black pb-1.5" style={{ fontSize: "11px" }}>
-          <div className="flex"><span className="font-medium" style={{ width: "56px" }}>单号：</span><span className="font-mono">{order.noteNo}</span></div>
-          <div className="flex"><span className="font-medium" style={{ width: "56px" }}>日期：</span><span>{order.date}</span></div>
-          <div className="flex"><span className="font-medium" style={{ width: "56px" }}>客户：</span><span>{order.customer}</span></div>
-          {order.orderNo && <div className="flex"><span className="font-medium" style={{ width: "56px" }}>订单号：</span><span>{order.orderNo}</span></div>}
+        {/* 基本信息三行 */}
+        <div className="mb-1.5 border-b border-black pb-1.5" style={{ fontSize: "11px", lineHeight: "1.6" }}>
+          <div className="flex">
+            <span style={{ width: "76mm" }}><span className="font-medium">客户名称：</span>{order.customer}</span>
+            <span style={{ width: "76mm" }}><span className="font-medium">联系人：</span>{customer?.contact || ""}</span>
+            <span><span className="font-medium">NO：</span><span className="font-mono">{order.noteNo}</span></span>
+          </div>
+          <div className="flex">
+            <span style={{ width: "76mm" }}><span className="font-medium">客户地址：</span>{customer?.address || ""}</span>
+            <span style={{ width: "76mm" }}><span className="font-medium">送货日期：</span>{order.date}</span>
+            <span><span className="font-medium">订单号：</span>{order.orderNo || ""}</span>
+          </div>
+          <div className="flex">
+            <span style={{ width: "76mm" }}><span className="font-medium">付款方式：</span>{customer?.paymentTerms || ""}</span>
+            <span><span className="font-medium">联系电话：</span>{customer?.phone || ""}</span>
+          </div>
         </div>
 
         {/* 明细表格 */}
-        <table className="w-full border-collapse mb-2" style={{ fontSize: "10px", tableLayout: "fixed" }}>
+        <table className="w-full border-collapse mb-1.5" style={{ fontSize: "10px", tableLayout: "fixed" }}>
           <colgroup>
             <col style={{ width: "8mm" }} />
+            <col style={{ width: "24mm" }} />
             <col style={{ width: "28mm" }} />
-            <col style={{ width: "30mm" }} />
-            <col style={{ width: "30mm" }} />
-            <col style={{ width: "18mm" }} />
-            <col style={{ width: "10mm" }} />
+            <col style={{ width: "32mm" }} />
+            <col style={{ width: "16mm" }} />
             <col style={{ width: "12mm" }} />
+            <col style={{ width: "10mm" }} />
             <col style={{ width: "14mm" }} />
             <col style={{ width: "16mm" }} />
-            <col style={{ width: "63mm" }} />
+            <col style={{ width: "69mm" }} />
           </colgroup>
           <thead>
             <tr className="border-b-2 border-black">
               <th className="border border-black px-0.5 py-1 font-medium text-center">序号</th>
-              <th className="border border-black px-0.5 py-1 font-medium text-center">物料编号</th>
-              <th className="border border-black px-0.5 py-1 font-medium text-center">产品名称</th>
-              <th className="border border-black px-0.5 py-1 font-medium text-center">规格</th>
-              <th className="border border-black px-0.5 py-1 font-medium text-center">表面处理</th>
-              <th className="border border-black px-0.5 py-1 font-medium text-center">单位</th>
+              <th className="border border-black px-0.5 py-1 font-medium text-center">产品编号</th>
+              <th className="border border-black px-0.5 py-1 font-medium text-center">名称</th>
+              <th className="border border-black px-0.5 py-1 font-medium text-center">型号规格mm</th>
+              <th className="border border-black px-0.5 py-1 font-medium text-center">颜色</th>
               <th className="border border-black px-0.5 py-1 font-medium text-center">数量</th>
+              <th className="border border-black px-0.5 py-1 font-medium text-center">单位</th>
               <th className="border border-black px-0.5 py-1 font-medium text-center">单价</th>
               <th className="border border-black px-0.5 py-1 font-medium text-center">金额</th>
               <th className="border border-black px-0.5 py-1 font-medium text-center">备注</th>
@@ -99,8 +150,8 @@ export default function PrintDeliveryPage() {
                 <td className="border border-black px-0.5 py-0.5" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{item.productName}</td>
                 <td className="border border-black px-0.5 py-0.5" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{item.spec}</td>
                 <td className="border border-black px-0.5 py-0.5" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{item.surface}</td>
-                <td className="border border-black px-0.5 py-0.5 text-center">{item.unit}</td>
                 <td className="border border-black px-0.5 py-0.5 text-right">{item.qty}</td>
+                <td className="border border-black px-0.5 py-0.5 text-center">{item.unit}</td>
                 <td className="border border-black px-0.5 py-0.5 text-right font-mono">{item.unitPrice.toFixed(2)}</td>
                 <td className="border border-black px-0.5 py-0.5 text-right font-mono">{item.amount.toFixed(2)}</td>
                 <td className="border border-black px-0.5 py-0.5" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{item.remark}</td>
@@ -109,18 +160,27 @@ export default function PrintDeliveryPage() {
           </tbody>
           <tfoot>
             <tr className="border-t-2 border-black font-bold">
-              <td colSpan={6} className="border border-black px-0.5 py-1 text-right">合计</td>
-              <td className="border border-black px-0.5 py-1"></td>
+              <td colSpan={8} className="border border-black px-1 py-1">合计人民币：{numToCN(totalAmount)}</td>
               <td className="border border-black px-0.5 py-1 text-right font-mono">{totalAmount.toFixed(2)}</td>
               <td className="border border-black px-0.5 py-1"></td>
             </tr>
           </tfoot>
         </table>
 
+        {/* 备注说明 */}
+        <div style={{ fontSize: "9px", marginBottom: "4px" }}>
+          请仔细核对货物品质、型号和数量，如果有误请于3个工作日内提出，并出具证明，协商解决
+        </div>
+
+        {/* 公司地址 */}
+        <div className="border-t border-black pt-1 mb-1.5" style={{ fontSize: "10px" }}>
+          公司地址：佛山市南海区大沥镇
+        </div>
+
         {/* 签字栏 */}
-        <div className="flex justify-between items-end" style={{ fontSize: "11px", marginTop: "8px" }}>
+        <div className="flex justify-between items-end" style={{ fontSize: "11px" }}>
           <div>
-            <span className="font-medium">制单人：</span>
+            <span className="font-medium">制单：</span>
             <span className="inline-block border-b border-black" style={{ width: "60px" }}>&nbsp;</span>
           </div>
           <div>
