@@ -193,15 +193,23 @@ export default function PrintReconciliationPage() {
               <td className="border border-black px-1 py-1"></td>
               <td className="border border-black px-1 py-1 text-right font-mono">{totalAmount.toFixed(2)}</td>
             </tr>
+            <tr>
+              <td colSpan={11} className="border border-black px-2 py-1.5">
+                <div className="flex justify-between items-center">
+                  <div className="flex"><span className="font-medium shrink-0">合计金额（大写）：</span><span className="tracking-wider">{amountToChinese(totalAmount)}</span></div>
+                  <div className="flex"><span className="font-medium shrink-0">（小写）：</span><span className="font-mono">¥{totalAmount.toFixed(2)}</span></div>
+                </div>
+              </td>
+            </tr>
           </tfoot>
         </table>
 
-        {/* 金额 + 备注 横向排列 */}
-        <div className="flex gap-8 mb-2 text-[12px]">
-          <div className="flex"><span className="font-medium shrink-0">合计金额(大写)：</span><span className="tracking-wider">{amountToChinese(totalAmount)}</span></div>
-          <div className="flex"><span className="font-medium shrink-0">(小写)：</span><span className="font-mono">¥ {totalAmount.toFixed(2)}</span></div>
-          {order.remark && <div className="flex"><span className="font-medium shrink-0">备注：</span><span>{order.remark}</span></div>}
-        </div>
+        {/* 备注 */}
+        {order.remark && (
+          <div className="mb-2 text-[12px]">
+            <div className="flex"><span className="font-medium shrink-0">备注：</span><span>{order.remark}</span></div>
+          </div>
+        )}
 
         {/* 签字栏 - 底部横向 */}
         <div className="flex justify-between items-end text-[12px] mt-4">
