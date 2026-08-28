@@ -177,14 +177,14 @@ export default function PrintReconciliationPage() {
         <div className="flex justify-between items-end text-[10px] mt-4">
           <div className="flex items-center gap-2">
             <span className="font-medium">制单人：</span>
-            <input type="text" value={makerName} onChange={e => handleMakerChange(e.target.value)} list="maker-name-list" placeholder="" className="bg-transparent border-b border-black outline-none text-[10px] py-0.5 w-28" />
+            <input type="text" value={makerName} onChange={e => handleMakerChange(e.target.value)} list="maker-name-list" placeholder="点击输入姓名" className="bg-white border border-gray-300 rounded px-1.5 py-0.5 outline-none text-[10px] w-28 focus:border-blue-500 print:border-black print:bg-white" />
             <datalist id="maker-name-list">{makerHistory.map(n => <option key={n} value={n} />)}</datalist>
           </div>
           <div className="flex items-center gap-2">
             <span className="font-medium">客户确认签字：</span>
             <span className="inline-block border-b border-black w-28"></span>
           </div>
-          <div className="text-[9px] text-gray-500">本对帐单一式两份，供需双方各执一份</div>
+
         </div>
       </div>
     </>
