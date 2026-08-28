@@ -135,7 +135,7 @@ export default function PrintDeliveryPage() {
         <div style={{ width: "100%", height: "100%", border: `2px solid ${BORDER_COLOR}`, display: "flex", flexDirection: "column", boxSizing: "border-box" }}>
           {/* 标题区域 - 横排居中，固定高度 10mm */}
           <div className="flex items-center justify-center" style={{ height: "10mm", borderBottom: `2px solid ${BORDER_COLOR}`, flexShrink: 0 }}>
-            <h1 style={{ fontSize: "18px", fontWeight: "bold", margin: 0, letterSpacing: "2px", writingMode: "horizontal-tb" }}>
+            <h1 style={{ fontSize: "18px", fontWeight: "bold", margin: 0, letterSpacing: "2px" }}>
               {order.company}送货单
             </h1>
           </div>
