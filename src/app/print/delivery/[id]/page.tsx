@@ -203,6 +203,7 @@ export default function PrintDeliveryPage() {
               </div>
               <div>
                 <span className="font-bold">客户签收：</span>
+                <span style={{ display: "inline-block", width: "45mm", borderBottom: "1px solid #000", marginLeft: "2px" }}>&nbsp;</span>
               </div>
             </div>
           </div>
