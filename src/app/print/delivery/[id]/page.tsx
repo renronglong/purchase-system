@@ -160,12 +160,12 @@ export default function PrintDeliveryPage() {
           {/* 表头信息区域 - 左右两列布局，固定高度26mm（4行×6.5mm），底部留2mm间距 */}
           <div style={{ fontSize: "15px", lineHeight: "1.3", padding: "0.5mm 2mm 2mm 2mm", flexShrink: 0, height: "26mm", boxSizing: "border-box", overflow: "visible", marginBottom: "2mm" }}>
             <div className="flex">
-              <span style={{ flex: "1" }}><span className="font-bold">客户名称：</span>{order.customer}</span>
-              <span style={{ flex: "1", marginLeft: "30mm" }}><span className="font-bold">NO：</span><span className="font-mono font-bold" style={{ fontSize: "15px" }}>{order.noteNo}</span></span>
+              <span style={{ flex: "2", whiteSpace: "nowrap", overflow: "visible" }}><span className="font-bold">客户名称：</span>{order.customer}</span>
+              <span style={{ flex: "1", marginLeft: "10mm", whiteSpace: "nowrap" }}><span className="font-bold">NO：</span><span className="font-mono font-bold" style={{ fontSize: "15px" }}>{order.noteNo}</span></span>
             </div>
             <div className="flex">
-              <span style={{ flex: "1", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}><span className="font-bold">客户地址：</span>{customer?.address || ""}</span>
-              <span style={{ flex: "1", marginLeft: "30mm" }}><span className="font-bold">送货日期：</span>{order.date}</span>
+              <span style={{ flex: "2", whiteSpace: "nowrap", overflow: "visible" }}><span className="font-bold">客户地址：</span>{customer?.address || ""}</span>
+              <span style={{ flex: "1", marginLeft: "10mm", whiteSpace: "nowrap" }}><span className="font-bold">送货日期：</span>{order.date}</span>
             </div>
             <div className="flex">
               <span style={{ flex: "1" }}><span className="font-bold">联系电话：</span>{customer?.phone || ""}</span>
@@ -210,7 +210,7 @@ export default function PrintDeliveryPage() {
               {tableRows.map((item, idx) => (
                 <tr key={item.id} style={{ height: ROW_HEIGHT }}>
                   <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "center", verticalAlign: "middle", padding: "1px 0", fontSize: "14px" }}>{item.isEmpty ? "" : idx + 1}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", whiteSpace: "nowrap", overflow: "visible", fontSize: "14px" }}>{item.materialCode}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", whiteSpace: "nowrap", overflow: "visible", fontSize: "14px", fontWeight: "bold" }}>{item.materialCode}</td>
                   <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: "14px" }}>{item.productName}</td>
                   <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: "14px" }}>{item.spec}</td>
                   <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: "14px" }}>{item.surface}</td>
