@@ -85,7 +85,19 @@ export default function PrintPurchasePage() {
         </div>
 
         {/* 明细表格 */}
-        <table className="w-full border-collapse mb-2" style={{ fontSize: "10px" }}>
+        <table className="w-full border-collapse mb-2" style={{ fontSize: "10px", tableLayout: "fixed" }}>
+          <colgroup>
+            <col style={{ width: "8mm" }} />
+            <col style={{ width: "25mm" }} />
+            <col style={{ width: "40mm" }} />
+            <col style={{ width: "15mm" }} />
+            <col style={{ width: "12mm" }} />
+            <col style={{ width: "10mm" }} />
+            <col style={{ width: "18mm" }} />
+            <col style={{ width: "20mm" }} />
+            <col style={{ width: "20mm" }} />
+            <col style={{ width: "61mm" }} />
+          </colgroup>
           <thead>
             <tr>
               <th className="border border-black px-1 py-0.5 font-medium">序号</th>
@@ -105,14 +117,14 @@ export default function PrintPurchasePage() {
               <tr key={item.id}>
                 <td className="border border-black px-1 py-0.5 text-center">{index + 1}</td>
                 <td className="border border-black px-1 py-0.5 font-mono" style={{ wordBreak: "break-all" }}>{item.productCode}</td>
-                <td className="border border-black px-1 py-0.5">{item.spec}</td>
+                <td className="border border-black px-1 py-0.5" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{item.spec}</td>
                 <td className="border border-black px-1 py-0.5 text-right">{item.length}</td>
                 <td className="border border-black px-1 py-0.5 text-right">{item.quantity}</td>
                 <td className="border border-black px-1 py-0.5 text-center">{item.unit}</td>
                 <td className="border border-black px-1 py-0.5 text-right font-mono">{item.totalWeight.toFixed(2)}</td>
-                <td className="border border-black px-1 py-0.5">{item.surfaceTreatment}</td>
+                <td className="border border-black px-1 py-0.5" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{item.surfaceTreatment}</td>
                 <td className="border border-black px-1 py-0.5">{item.deliveryDate}</td>
-                <td className="border border-black px-1 py-0.5">{item.remark}</td>
+                <td className="border border-black px-1 py-0.5" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{item.remark}</td>
               </tr>
             ))}
           </tbody>
