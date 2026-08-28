@@ -91,7 +91,7 @@ export default function PurchaseOrderDetailPage() {
                 <td className="px-3 py-2 text-right">{item.length}</td>
                 <td className="px-3 py-2 text-right">{item.quantity}</td>
                 <td className="px-3 py-2">{item.unit}</td>
-                <td className="px-3 py-2 text-right font-mono">{item.totalWeight.toFixed(3)}</td>
+                <td className="px-3 py-2 text-right font-mono">{item.totalWeight.toFixed(2)}</td>
                 <td className="px-3 py-2">{item.surfaceTreatment}</td>
                 <td className="px-3 py-2">{item.deliveryDate}</td>
                 <td className="px-3 py-2">{item.remark}</td>
@@ -103,7 +103,7 @@ export default function PurchaseOrderDetailPage() {
               <td colSpan={5} className="px-3 py-2 text-right font-medium">合计</td>
               <td className="px-3 py-2 text-right font-bold">{order.totalQuantity}</td>
               <td></td>
-              <td className="px-3 py-2 text-right font-mono font-bold">{order.totalWeight.toFixed(3)}</td>
+              <td className="px-3 py-2 text-right font-mono font-bold">{order.totalWeight.toFixed(2)}</td>
               <td colSpan={3}></td>
             </tr>
           </tfoot>

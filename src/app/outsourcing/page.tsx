@@ -255,7 +255,7 @@ export default function OutsourcingPage() {
                         onChange={(e) => updateItem(index, "process", e.target.value)}
                         className="w-full px-2 py-1 text-xs border border-slate-200 rounded" placeholder="工序" />
                     </td>
-                    <td className="px-2 py-1 text-right font-mono">{item.weight.toFixed(3)}</td>
+                    <td className="px-2 py-1 text-right font-mono">{item.weight.toFixed(2)}</td>
                     <td className="px-2 py-1">
                       <input type="number" step="0.01" value={item.unitPrice || ""}
                         onChange={(e) => updateItem(index, "unitPrice", Number(e.target.value))}
@@ -281,7 +281,7 @@ export default function OutsourcingPage() {
                   <td colSpan={4} className="px-2 py-2 text-right font-medium text-slate-600">合计</td>
                   <td className="px-2 py-2 text-center font-bold">{totalQuantity}</td>
                   <td colSpan={3}></td>
-                  <td className="px-2 py-2 text-right font-mono font-bold">{totalWeight.toFixed(3)}</td>
+                  <td className="px-2 py-2 text-right font-mono font-bold">{totalWeight.toFixed(2)}</td>
                   <td className="px-2 py-2 text-right font-mono font-bold">{totalPrice.toFixed(2)}</td>
                   <td colSpan={2}></td>
                 </tr>

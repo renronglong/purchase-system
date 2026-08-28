@@ -145,7 +145,7 @@ export default function PrintPurchasePage() {
                 <td className="border border-black px-1.5 py-1 text-right">{item.length}</td>
                 <td className="border border-black px-1.5 py-1 text-right">{item.quantity}</td>
                 <td className="border border-black px-1.5 py-1 text-center">{item.unit}</td>
-                <td className="border border-black px-1.5 py-1 text-right font-mono">{item.totalWeight.toFixed(3)}</td>
+                <td className="border border-black px-1.5 py-1 text-right font-mono">{item.totalWeight.toFixed(2)}</td>
                 <td className="border border-black px-1.5 py-1">{item.surfaceTreatment}</td>
                 <td className="border border-black px-1.5 py-1">{item.deliveryDate}</td>
                 <td className="border border-black px-1.5 py-1">{item.remark}</td>
@@ -157,7 +157,7 @@ export default function PrintPurchasePage() {
               <td colSpan={5} className="border border-black px-1.5 py-1.5 text-right">合计</td>
               <td className="border border-black px-1.5 py-1.5 text-center">{order.totalQuantity}</td>
               <td className="border border-black px-1.5 py-1.5"></td>
-              <td className="border border-black px-1.5 py-1.5 text-right font-mono">{order.totalWeight.toFixed(3)}</td>
+              <td className="border border-black px-1.5 py-1.5 text-right font-mono">{order.totalWeight.toFixed(2)}</td>
               <td colSpan={3} className="border border-black px-1.5 py-1.5"></td>
             </tr>
           </tfoot>

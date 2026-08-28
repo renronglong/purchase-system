@@ -318,7 +318,7 @@ export default function PurchaseOrderFormPage() {
                   />
                 </td>
                 <td className="px-2 py-1.5 text-right font-mono text-slate-700">
-                  {item.totalWeight.toFixed(3)}
+                  {item.totalWeight.toFixed(2)}
                 </td>
                 <td className="px-2 py-1.5">
                   <select
@@ -368,7 +368,7 @@ export default function PurchaseOrderFormPage() {
               <td colSpan={5} className="px-2 py-2 text-right text-sm font-medium text-slate-600">合计</td>
               <td className="px-2 py-2 text-center font-mono font-bold text-slate-900">{totalQuantity}</td>
               <td className="px-2 py-2"></td>
-              <td className="px-2 py-2 text-right font-mono font-bold text-slate-900">{totalWeight.toFixed(3)}</td>
+              <td className="px-2 py-2 text-right font-mono font-bold text-slate-900">{totalWeight.toFixed(2)}</td>
               <td colSpan={4}></td>
             </tr>
           </tfoot>
