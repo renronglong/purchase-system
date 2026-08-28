@@ -90,7 +90,7 @@ export default function PrintDeliveryPage() {
         <button onClick={() => window.close()} className="px-4 py-2 bg-slate-500 text-white text-sm rounded-md hover:bg-slate-600 shadow-lg">关闭</button>
       </div>
 
-      <div id="print-area" className="mx-auto bg-white" style={{ width: "231mm", height: "134mm", padding: "0", display: "flex", flexDirection: "column" }}>
+      <div id="print-area" className="mx-auto bg-white" style={{ width: "231mm", height: "134mm", padding: "0", display: "flex", flexDirection: "column", border: `2px solid ${BORDER_COLOR}` }}>
         {/* 顶部区域：左侧信息 + 右侧竖排标题 */}
         <div className="flex" style={{ height: "28mm", borderBottom: `2px solid ${BORDER_COLOR}` }}>
           {/* 左侧表头信息 */}
@@ -188,11 +188,10 @@ export default function PrintDeliveryPage() {
           <div className="flex justify-between">
             <div>
               <span className="font-bold">制单：</span>
-              <span className="inline-block border-b" style={{ borderColor: BORDER_COLOR, width: "80px" }}>{order.maker || ""}</span>
+              <span>{order.maker || ""}</span>
             </div>
             <div>
               <span className="font-bold">客户签收：</span>
-              <span className="inline-block border-b" style={{ borderColor: BORDER_COLOR, width: "80px" }}>&nbsp;</span>
             </div>
           </div>
         </div>
