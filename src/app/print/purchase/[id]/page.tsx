@@ -89,19 +89,21 @@ export default function PrintPurchasePage() {
           <colgroup>
             <col style={{ width: "8mm" }} />
             <col style={{ width: "25mm" }} />
-            <col style={{ width: "40mm" }} />
-            <col style={{ width: "15mm" }} />
+            <col style={{ width: "30mm" }} />
+            <col style={{ width: "30mm" }} />
             <col style={{ width: "12mm" }} />
             <col style={{ width: "10mm" }} />
-            <col style={{ width: "18mm" }} />
-            <col style={{ width: "20mm" }} />
-            <col style={{ width: "20mm" }} />
-            <col style={{ width: "61mm" }} />
+            <col style={{ width: "10mm" }} />
+            <col style={{ width: "16mm" }} />
+            <col style={{ width: "16mm" }} />
+            <col style={{ width: "16mm" }} />
+            <col style={{ width: "56mm" }} />
           </colgroup>
           <thead>
             <tr>
               <th className="border border-black px-1 py-0.5 font-medium">序号</th>
               <th className="border border-black px-1 py-0.5 font-medium">产品编号</th>
+              <th className="border border-black px-1 py-0.5 font-medium">产品名称</th>
               <th className="border border-black px-1 py-0.5 font-medium">规格</th>
               <th className="border border-black px-1 py-0.5 font-medium">长度mm</th>
               <th className="border border-black px-1 py-0.5 font-medium">数量</th>
@@ -117,6 +119,7 @@ export default function PrintPurchasePage() {
               <tr key={item.id}>
                 <td className="border border-black px-1 py-0.5 text-center">{index + 1}</td>
                 <td className="border border-black px-1 py-0.5 font-mono" style={{ wordBreak: "break-all" }}>{item.productCode}</td>
+                <td className="border border-black px-1 py-0.5" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{item.productName}</td>
                 <td className="border border-black px-1 py-0.5" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{item.spec}</td>
                 <td className="border border-black px-1 py-0.5 text-right">{item.length}</td>
                 <td className="border border-black px-1 py-0.5 text-right">{item.quantity}</td>
@@ -130,11 +133,11 @@ export default function PrintPurchasePage() {
           </tbody>
           <tfoot>
             <tr className="font-bold">
-              <td colSpan={4} className="border border-black px-1 py-0.5 text-right">合计</td>
+              <td colSpan={5} className="border border-black px-1 py-0.5 text-right">合计</td>
               <td className="border border-black px-1 py-0.5 text-center">{order.totalQuantity}</td>
               <td className="border border-black px-1 py-0.5"></td>
               <td className="border border-black px-1 py-0.5 text-right font-mono">{order.totalWeight.toFixed(2)}</td>
-              <td colSpan={3} className="border border-black px-1 py-0.5"></td>
+              <td colSpan={4} className="border border-black px-1 py-0.5"></td>
             </tr>
           </tfoot>
         </table>

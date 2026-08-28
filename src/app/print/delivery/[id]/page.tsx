@@ -68,18 +68,20 @@ export default function PrintDeliveryPage() {
           <colgroup>
             <col style={{ width: "8mm" }} />
             <col style={{ width: "28mm" }} />
-            <col style={{ width: "45mm" }} />
-            <col style={{ width: "22mm" }} />
+            <col style={{ width: "30mm" }} />
+            <col style={{ width: "30mm" }} />
+            <col style={{ width: "18mm" }} />
+            <col style={{ width: "10mm" }} />
             <col style={{ width: "12mm" }} />
             <col style={{ width: "14mm" }} />
             <col style={{ width: "16mm" }} />
-            <col style={{ width: "18mm" }} />
-            <col style={{ width: "66mm" }} />
+            <col style={{ width: "63mm" }} />
           </colgroup>
           <thead>
             <tr className="border-b-2 border-black">
               <th className="border border-black px-0.5 py-1 font-medium text-center">序号</th>
               <th className="border border-black px-0.5 py-1 font-medium text-center">物料编号</th>
+              <th className="border border-black px-0.5 py-1 font-medium text-center">产品名称</th>
               <th className="border border-black px-0.5 py-1 font-medium text-center">规格</th>
               <th className="border border-black px-0.5 py-1 font-medium text-center">表面处理</th>
               <th className="border border-black px-0.5 py-1 font-medium text-center">单位</th>
@@ -94,6 +96,7 @@ export default function PrintDeliveryPage() {
               <tr key={item.id}>
                 <td className="border border-black px-0.5 py-0.5 text-center">{idx + 1}</td>
                 <td className="border border-black px-0.5 py-0.5 font-mono" style={{ wordBreak: "break-all" }}>{item.materialCode}</td>
+                <td className="border border-black px-0.5 py-0.5" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{item.productName}</td>
                 <td className="border border-black px-0.5 py-0.5" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{item.spec}</td>
                 <td className="border border-black px-0.5 py-0.5" style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{item.surface}</td>
                 <td className="border border-black px-0.5 py-0.5 text-center">{item.unit}</td>
@@ -106,7 +109,7 @@ export default function PrintDeliveryPage() {
           </tbody>
           <tfoot>
             <tr className="border-t-2 border-black font-bold">
-              <td colSpan={5} className="border border-black px-0.5 py-1 text-right">合计</td>
+              <td colSpan={6} className="border border-black px-0.5 py-1 text-right">合计</td>
               <td className="border border-black px-0.5 py-1"></td>
               <td className="border border-black px-0.5 py-1 text-right font-mono">{totalAmount.toFixed(2)}</td>
               <td className="border border-black px-0.5 py-1"></td>
