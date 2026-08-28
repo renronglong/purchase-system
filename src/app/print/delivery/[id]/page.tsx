@@ -152,16 +152,16 @@ export default function PrintDeliveryPage() {
         <div style={{ width: CONTENT_WIDTH, height: "134mm", display: "flex", flexDirection: "column", boxSizing: "border-box", marginLeft: "2mm" }}>
           {/* 标题区域 - 横排居中，固定高度 10mm，无下边框 */}
           <div className="flex items-center justify-center" style={{ height: "10mm", flexShrink: 0 }}>
-            <h1 style={{ fontSize: "20px", fontWeight: "bold", margin: 0, letterSpacing: "2px" }}>
+            <h1 style={{ fontSize: "22px", fontWeight: "bold", margin: 0, letterSpacing: "2px" }}>
               {order.company}送货单
             </h1>
           </div>
 
           {/* 表头信息区域 - 左右两列布局，固定高度26mm（4行×6.5mm），底部留2mm间距 */}
-          <div style={{ fontSize: "13px", lineHeight: "1.3", padding: "0.5mm 2mm 2mm 2mm", flexShrink: 0, height: "26mm", boxSizing: "border-box", overflow: "visible", marginBottom: "2mm" }}>
+          <div style={{ fontSize: "15px", lineHeight: "1.3", padding: "0.5mm 2mm 2mm 2mm", flexShrink: 0, height: "26mm", boxSizing: "border-box", overflow: "visible", marginBottom: "2mm" }}>
             <div className="flex">
               <span style={{ flex: "1" }}><span className="font-bold">客户名称：</span>{order.customer}</span>
-              <span style={{ flex: "1", marginLeft: "30mm" }}><span className="font-bold">NO：</span><span className="font-mono font-bold" style={{ fontSize: "13px" }}>{order.noteNo}</span></span>
+              <span style={{ flex: "1", marginLeft: "30mm" }}><span className="font-bold">NO：</span><span className="font-mono font-bold" style={{ fontSize: "15px" }}>{order.noteNo}</span></span>
             </div>
             <div className="flex">
               <span style={{ flex: "1", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}><span className="font-bold">客户地址：</span>{customer?.address || ""}</span>
@@ -178,7 +178,7 @@ export default function PrintDeliveryPage() {
           </div>
 
           {/* 明细表格 - 固定6行，每行9mm，总宽度190mm，只有单元格有边框 */}
-          <table className="w-full border-collapse" style={{ fontSize: "12px", tableLayout: "fixed", flexShrink: 0, border: "none" }}>
+          <table className="w-full border-collapse" style={{ fontSize: "14px", tableLayout: "fixed", flexShrink: 0, border: "none" }}>
             <colgroup>
               <col style={{ width: "7mm" }} />   {/* 序号 */}
               <col style={{ width: "30mm" }} />  {/* 产品编号 +4mm，自动适应长编号 */}
@@ -194,42 +194,42 @@ export default function PrintDeliveryPage() {
             </colgroup>
             <thead>
               <tr style={{ height: "5mm", borderTop: "none" }}>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "12px" }}>序号</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "12px" }}>产品编号</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "12px" }}>名称</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "12px" }}>型号规格mm</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "12px" }}>颜色</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "12px" }}>数量</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "12px" }}>单位</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "12px" }}>单价</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "12px" }}>金额</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "12px" }}>备注</th>
+                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>序号</th>
+                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>产品编号</th>
+                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>名称</th>
+                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>型号规格mm</th>
+                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>颜色</th>
+                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>数量</th>
+                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>单位</th>
+                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>单价</th>
+                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>金额</th>
+                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>备注</th>
               </tr>
             </thead>
             <tbody>
               {tableRows.map((item, idx) => (
                 <tr key={item.id} style={{ height: ROW_HEIGHT }}>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "center", verticalAlign: "middle", padding: "1px 0", fontSize: "12px" }}>{item.isEmpty ? "" : idx + 1}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", whiteSpace: "nowrap", overflow: "visible", fontSize: "12px" }}>{item.materialCode}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: "12px" }}>{item.productName}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: "12px" }}>{item.spec}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: "12px" }}>{item.surface}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: "12px" }}>{item.isEmpty ? "" : item.qty}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "center", padding: "0 1px", verticalAlign: "middle", fontSize: "12px" }}>{item.unit}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: "12px" }}>{item.isEmpty ? "" : item.unitPrice.toFixed(2)}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: "12px" }}>{item.isEmpty ? "" : item.amount.toFixed(2)}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: "12px" }}>{item.remark}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "center", verticalAlign: "middle", padding: "1px 0", fontSize: "14px" }}>{item.isEmpty ? "" : idx + 1}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", whiteSpace: "nowrap", overflow: "visible", fontSize: "14px" }}>{item.materialCode}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: "14px" }}>{item.productName}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: "14px" }}>{item.spec}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: "14px" }}>{item.surface}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: "14px" }}>{item.isEmpty ? "" : item.qty}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "center", padding: "0 1px", verticalAlign: "middle", fontSize: "14px" }}>{item.unit}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: "14px" }}>{item.isEmpty ? "" : item.unitPrice.toFixed(2)}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: "14px" }}>{item.isEmpty ? "" : item.amount.toFixed(2)}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: "14px" }}>{item.remark}</td>
                 </tr>
               ))}
             </tbody>
             <tfoot>
               <tr style={{ height: "6mm" }}>
                 {/* 大写金额从序号列开始，跨8列（序号到单价） */}
-                <td colSpan={8} style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 2mm", verticalAlign: "middle", fontSize: "13px" }}>
+                <td colSpan={8} style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 2mm", verticalAlign: "middle", fontSize: "15px" }}>
                   <span style={{ fontWeight: "bold" }}>合计人民币（大写）：{numToCN(totalAmount)}</span>
                 </td>
                 {/* 小写金额对齐到"金额"列 */}
-                <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: "13px", fontWeight: "bold" }}>¥{totalAmount > 0 ? totalAmount.toFixed(2) : "0.00"}</td>
+                <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: "15px", fontWeight: "bold" }}>¥{totalAmount > 0 ? totalAmount.toFixed(2) : "0.00"}</td>
                 {/* 备注列留空 */}
                 <td style={{ border: `1px solid ${BORDER_COLOR}` }}></td>
               </tr>
@@ -237,14 +237,14 @@ export default function PrintDeliveryPage() {
           </table>
 
           {/* 底部区域 - 备注、公司地址、签字栏，固定高度14mm */}
-          <div style={{ fontSize: "11px", padding: "1mm 2mm", flexShrink: 0, height: "14mm", boxSizing: "border-box", overflow: "visible" }}>
-            <div style={{ marginBottom: "0.3mm", fontSize: "11px", color: "#333" }}>
+          <div style={{ fontSize: "13px", padding: "1mm 2mm", flexShrink: 0, height: "14mm", boxSizing: "border-box", overflow: "visible" }}>
+            <div style={{ marginBottom: "0.3mm", fontSize: "13px", color: "#333" }}>
               备注：请仔细核对货物品质、型号和数量，如果有误请于3个工作日内提出，并出具证明，协商解决。
             </div>
-            <div style={{ marginBottom: "0.5mm", fontSize: "11px" }}>
+            <div style={{ marginBottom: "0.5mm", fontSize: "13px" }}>
               公司地址：{companyAddress}
             </div>
-            <div className="flex justify-between" style={{ fontSize: "11px", paddingTop: "0.5mm" }}>
+            <div className="flex justify-between" style={{ fontSize: "13px", paddingTop: "0.5mm" }}>
               <span><span className="font-bold">制单：</span>{order.maker || "易金兰"}</span>
               <span>
                 <span className="font-bold">客户签收：</span>
