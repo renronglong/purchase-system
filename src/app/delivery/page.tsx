@@ -143,7 +143,7 @@ export default function DeliveryPage() {
             ))}
           </datalist>
           <datalist id="surface-treatment-list">
-            {["本色", "氧化雾银", "氧化砂银", "590", "650", "380", "180", "736.4", "520.4",
+            {["本色", "氧化雾银", "氧化砂银",
               ...Array.from(new Set(deliveryProductStore.getAll().map(p => p.surface).filter(Boolean)))
             ].map(s => <option key={s} value={s} />)}
           </datalist>
