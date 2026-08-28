@@ -147,19 +147,19 @@ export default function PrintDeliveryPage() {
           <div style={{ fontSize: "11px", lineHeight: "1.3", padding: "0.5mm 2mm", borderBottom: `2px solid ${BORDER_COLOR}`, flexShrink: 0, height: "20mm", boxSizing: "border-box", overflow: "hidden" }}>
             <div className="flex">
               <span style={{ flex: "1" }}><span className="font-bold">客户名称：</span>{order.customer}</span>
-              <span style={{ flexShrink: 0, marginLeft: "5mm" }}><span className="font-bold">NO：</span><span className="font-mono font-bold" style={{ fontSize: "13px" }}>{order.noteNo}</span></span>
+              <span style={{ flex: "1" }}><span className="font-bold">NO：</span><span className="font-mono font-bold" style={{ fontSize: "13px" }}>{order.noteNo}</span></span>
             </div>
             <div className="flex">
               <span style={{ flex: "1" }}><span className="font-bold">客户地址：</span>{customer?.address || ""}</span>
-              <span style={{ flexShrink: 0, marginLeft: "5mm" }}><span className="font-bold">送货日期：</span>{order.date}</span>
+              <span style={{ flex: "1" }}><span className="font-bold">送货日期：</span>{order.date}</span>
             </div>
             <div className="flex">
               <span style={{ flex: "1" }}><span className="font-bold">联系电话：</span>{customer?.phone || ""}</span>
-              <span style={{ flexShrink: 0, marginLeft: "5mm" }}><span className="font-bold">订单号：</span>{order.orderNo || ""}</span>
+              <span style={{ flex: "1" }}><span className="font-bold">订单号：</span>{order.orderNo || ""}</span>
             </div>
             <div className="flex">
               <span style={{ flex: "1" }}><span className="font-bold">联系人：</span>{customer?.contact || ""}</span>
-              <span style={{ flexShrink: 0, marginLeft: "5mm" }}><span className="font-bold">付款方式：</span>{customer?.paymentTerms || ""}</span>
+              <span style={{ flex: "1" }}><span className="font-bold">付款方式：</span>{customer?.paymentTerms || ""}</span>
             </div>
           </div>
 
