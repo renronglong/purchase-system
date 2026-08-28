@@ -82,18 +82,45 @@ export default function PrintDeliveryPage() {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: `
+        @page {
+          size: 241mm 140mm;
+          margin: 3mm;
+        }
         @media print {
-          @page { size: 241mm 140mm; margin: 3mm; }
-          html, body { width: 241mm; height: 140mm; margin: 0; padding: 0; }
-          body * { visibility: hidden; }
-          #print-area, #print-area * { visibility: visible; }
-          #print-area { position: absolute; left: 0; top: 0; width: 235mm; height: 134mm; }
-          .no-print { display: none !important; }
-          aside, nav, [class*="sidebar"], .w-60, .bg-slate-900 { display: none !important; }
+          html, body {
+            width: 241mm;
+            height: 140mm;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden;
+          }
+          body * {
+            visibility: hidden;
+          }
+          #print-area, #print-area * {
+            visibility: visible;
+          }
+          #print-area {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 235mm;
+            height: 134mm;
+          }
+          .no-print {
+            display: none !important;
+          }
+          aside, nav, [class*="sidebar"], .w-60, .bg-slate-900 {
+            display: none !important;
+          }
         }
         @media screen {
-          body { background: #e2e8f0; }
-          aside, nav, [class*="sidebar"], .w-60, .bg-slate-900 { display: none !important; }
+          body {
+            background: #e2e8f0;
+          }
+          aside, nav, [class*="sidebar"], .w-60, .bg-slate-900 {
+            display: none !important;
+          }
         }
       `}} />
 
@@ -102,13 +129,13 @@ export default function PrintDeliveryPage() {
         <button onClick={() => window.close()} className="px-4 py-2 bg-slate-500 text-white text-sm rounded-md hover:bg-slate-600 shadow-lg">关闭</button>
       </div>
 
-      {/* 打印区域 - 精确高度 134mm (140mm - 6mm margin) */}
+      {/* 打印区域 - 横向布局，宽度241mm > 高度140mm */}
       <div id="print-area" className="mx-auto bg-white" style={{ width: "235mm", height: "134mm", display: "flex", flexDirection: "column", overflow: "hidden", boxSizing: "border-box" }}>
         {/* 内层容器 - 带边框，占满整个区域 */}
         <div style={{ width: "100%", height: "100%", border: `2px solid ${BORDER_COLOR}`, display: "flex", flexDirection: "column", boxSizing: "border-box" }}>
           {/* 标题区域 - 横排居中，固定高度 10mm */}
           <div className="flex items-center justify-center" style={{ height: "10mm", borderBottom: `2px solid ${BORDER_COLOR}`, flexShrink: 0 }}>
-            <h1 style={{ fontSize: "18px", fontWeight: "bold", margin: 0, letterSpacing: "2px" }}>
+            <h1 style={{ fontSize: "18px", fontWeight: "bold", margin: 0, letterSpacing: "2px", writingMode: "horizontal-tb" }}>
               {order.company}送货单
             </h1>
           </div>
