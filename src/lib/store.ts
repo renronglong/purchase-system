@@ -3,6 +3,7 @@ import {
   deliveryCustomers, deliveryProducts, deliveryNotes,
   type DeliveryCustomer, type DeliveryProduct, type DeliveryNote, type DeliveryItem,
 } from "./delivery-seed-data";
+import { seedPurchaseOrders } from "./purchase-seed-data";
 
 export type { Product, Supplier };
 export type { DeliveryCustomer, DeliveryProduct, DeliveryNote, DeliveryItem };
@@ -301,7 +302,7 @@ function initializeData(): void {
   if (currentVersion === null) {
     localStorage.setItem(KEYS.PRODUCTS, JSON.stringify(seedProducts));
     localStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(seedSuppliers));
-    localStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([]));
+    localStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify(seedPurchaseOrders));
     localStorage.setItem(KEYS.OUTSOURCING_ORDERS, JSON.stringify([]));
     localStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify(deliveryCustomers));
     localStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify(deliveryProducts));
