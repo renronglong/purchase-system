@@ -325,6 +325,12 @@ function initializeData(): void {
     }
     localStorage.setItem(KEYS.STORAGE_VERSION, STORAGE_VERSION);
   }
+
+  // 采购单种子数据补充：如果采购单键不存在或为空数组，写入种子数据
+  const purchaseOrdersData = localStorage.getItem(KEYS.PURCHASE_ORDERS);
+  if (!purchaseOrdersData || JSON.parse(purchaseOrdersData).length === 0) {
+    localStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify(seedPurchaseOrders));
+  }
 }
 
 // 通用 CRUD
