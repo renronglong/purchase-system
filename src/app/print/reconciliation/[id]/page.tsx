@@ -104,15 +104,50 @@ export default function PrintReconciliationPage() {
 
   return (
     <>
-      <style jsx global>{`
-        @media print {
-          body * { visibility: hidden; }
-          #print-area, #print-area * { visibility: visible; }
-          #print-area { position: absolute; left: 0; top: 0; width: 233mm; }
-          .no-print { display: none !important; }
-          @page { size: 241mm 140mm; margin: 4mm 6mm; }
+      <style dangerouslySetInnerHTML={{ __html: `
+        @page {
+          size: 241mm 140mm;
+          margin: 0;
         }
-      `}</style>
+        @media print {
+          html, body {
+            width: 241mm;
+            height: 140mm;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden;
+          }
+          body * {
+            visibility: hidden;
+          }
+          #print-area, #print-area * {
+            visibility: visible;
+          }
+          #print-area {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 241mm;
+            height: 140mm;
+            padding: 3mm;
+            box-sizing: border-box;
+          }
+          .no-print {
+            display: none !important;
+          }
+          aside, nav, [class*="sidebar"], .w-60, .bg-slate-900 {
+            display: none !important;
+          }
+        }
+        @media screen {
+          body {
+            background: #e2e8f0;
+          }
+          aside, nav, [class*="sidebar"], .w-60, .bg-slate-900 {
+            display: none !important;
+          }
+        }
+      `}} />
 
       <div className="no-print fixed top-4 right-4 z-50">
         <button onClick={() => window.print()} className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 shadow-lg">打印 / 导出PDF</button>
