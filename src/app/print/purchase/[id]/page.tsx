@@ -133,21 +133,19 @@ export default function PrintPurchasePage() {
           </div>
 
           {/* 表头信息区域 - 左右两列布局 */}
-          <div style={{ fontSize: "15px", lineHeight: "1.3", padding: "0 2mm", flexShrink: 0, height: "26mm", boxSizing: "border-box", overflow: "visible", marginBottom: "0" }}>
+          <div style={{ fontSize: "15px", lineHeight: "1.3", padding: "0 2mm", flexShrink: 0, height: "20mm", boxSizing: "border-box", overflow: "visible", marginBottom: "0" }}>
             <div className="flex" style={{ alignItems: "stretch" }}>
               {/* 左侧列 */}
               <div style={{ flex: "1", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                 <div style={{ whiteSpace: "nowrap", overflow: "visible" }}><span className="font-bold">供应商：</span>{order.supplierName}</div>
                 <div style={{ whiteSpace: "nowrap", overflow: "visible" }}><span className="font-bold">联系人：</span>{order.contact}</div>
                 <div style={{ whiteSpace: "nowrap", overflow: "visible" }}><span className="font-bold">地址：</span>{order.address || ""}</div>
-                <div style={{ whiteSpace: "nowrap", overflow: "visible" }}><span className="font-bold">制单人：</span>{order.maker || ""}</div>
               </div>
               {/* 右侧列 */}
               <div style={{ width: "45%", display: "flex", flexDirection: "column", justifyContent: "space-between", paddingLeft: "5mm" }}>
                 <div style={{ whiteSpace: "nowrap" }}><span className="font-bold">编号：</span><span className="font-mono font-bold" style={{ fontSize: "15px" }}>{order.orderNo}</span></div>
                 <div style={{ whiteSpace: "nowrap" }}><span className="font-bold">电话：</span>{order.phone}</div>
                 <div style={{ whiteSpace: "nowrap" }}><span className="font-bold">制单日期：</span>{order.orderDate}</div>
-                <div style={{ whiteSpace: "nowrap" }}></div>
               </div>
             </div>
           </div>
@@ -155,31 +153,31 @@ export default function PrintPurchasePage() {
           {/* 明细表格 */}
           <table className="w-full border-collapse" style={{ fontSize: "14px", tableLayout: "fixed", flexShrink: 0, border: "none", marginTop: "0.5mm" }}>
             <colgroup>
-              <col style={{ width: "7mm" }} />
-              <col style={{ width: "28mm" }} />
-              <col style={{ width: "25mm" }} />
-              <col style={{ width: "25mm" }} />
-              <col style={{ width: "12mm" }} />
-              <col style={{ width: "10mm" }} />
-              <col style={{ width: "9mm" }} />
-              <col style={{ width: "16mm" }} />
-              <col style={{ width: "16mm" }} />
-              <col style={{ width: "16mm" }} />
+              <col style={{ width: "6mm" }} />
               <col style={{ width: "26mm" }} />
+              <col style={{ width: "22mm" }} />
+              <col style={{ width: "24mm" }} />
+              <col style={{ width: "11mm" }} />
+              <col style={{ width: "9mm" }} />
+              <col style={{ width: "8mm" }} />
+              <col style={{ width: "20mm" }} />
+              <col style={{ width: "18mm" }} />
+              <col style={{ width: "20mm" }} />
+              <col style={{ width: "16mm" }} />
             </colgroup>
             <thead>
               <tr style={{ height: "5mm", borderTop: "none" }}>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>序号</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>产品编号</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>产品名称</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>规格</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>长度mm</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>数量</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>单位</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>理论重量KG</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>表面处理</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>交货时间</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>备注</th>
+                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>序号</th>
+                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>产品编号</th>
+                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>产品名称</th>
+                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>规格</th>
+                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>长度mm</th>
+                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>数量</th>
+                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>单位</th>
+                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>理论重量KG</th>
+                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>表面处理</th>
+                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>交货时间</th>
+                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>备注</th>
               </tr>
             </thead>
             <tbody>
