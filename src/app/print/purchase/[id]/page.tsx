@@ -162,8 +162,8 @@ export default function PrintPurchasePage() {
               <col style={{ width: "8mm" }} />
               <col style={{ width: "20mm" }} />
               <col style={{ width: "18mm" }} />
-              <col style={{ width: "20mm" }} />
-              <col style={{ width: "26mm" }} />
+              <col style={{ width: "22mm" }} />
+              <col style={{ width: "24mm" }} />
             </colgroup>
             <thead>
               <tr style={{ height: "5mm", borderTop: "none" }}>
