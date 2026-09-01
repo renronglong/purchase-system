@@ -161,7 +161,7 @@ export default function ContractPrintPage() {
         fontSize: "14px",
         lineHeight: "1.5",
       }}>
-        {/* 牌头 + 标题 */}
+        {/* 牌头 + 标题（碧利莱） */}
         <div style={{ textAlign: "center", marginBottom: "3mm", flexShrink: 0 }}>
           <div style={{ fontSize: "20px", fontWeight: "bold", letterSpacing: "2px", marginBottom: "1mm" }}>{contract.supplierName}</div>
           <h1 style={{ fontSize: "24px", fontWeight: "bold", margin: 0, letterSpacing: "6px" }}>购 销 合 同</h1>
