@@ -67,12 +67,12 @@ export default function ContractPrintPage() {
       if (localRaw) {
         const localContracts: ContractData[] = JSON.parse(localRaw);
         const localFound = localContracts.find(c => c.id === contractId);
-        if (localFound) { setContract(localFound); return; }
+        if (localFound) { setContract(fixSupplierInfo(localFound)); return; }
       }
     } catch { /* ignore */ }
     // 回退到种子数据
     const found = contractSeedData.find(c => c.id === contractId);
-    if (found) setContract(found);
+    if (found) setContract(fixSupplierInfo(found));
   }, [contractId]);
 
   useEffect(() => {
