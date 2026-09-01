@@ -32,10 +32,10 @@ function emptyItem(): ContractItem {
 // 默认供方信息（碧利莱）
 const DEFAULT_SUPPLIER = {
   supplierName: "佛山市碧利莱照明有限公司",
-  supplierAddress: "佛山市南海区里水镇大冲象岗村250号之一",
+  supplierAddress: "佛山市南海区里水镇大冲村委会象岗村250号之一",
   supplierContact: "龙任荣",
-  supplierPhone: "18925938858",
-  supplierFax: "0757-81097385",
+  supplierPhone: "0757-85609935",
+  supplierFax: "85609935",
   supplierTaxNo: "91440605MACGMXTJ3G",
 };
 
