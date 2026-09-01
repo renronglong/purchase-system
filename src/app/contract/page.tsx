@@ -25,6 +25,14 @@ function genContractNo(existing: ContractData[]): string {
   return `${prefix}${String(maxSeq + 1).padStart(2, "0")}`;
 }
 
+// 碧利莱供方信息按最新开票资料自动纠正（覆盖旧的localStorage缓存）
+function fixSupplierInfo<T extends { supplierName?: string; supplierAddress?: string; supplierPhone?: string; supplierTaxNo?: string }>(c: T): T {
+  if (c.supplierName && c.supplierName.includes("碧利莱")) {
+    return { ...c, supplierAddress: "佛山市南海区狮山镇松岗办事处显纲村委会厦边村口首层之六", supplierPhone: "18929979760", supplierTaxNo: "91440605MACUYJRB5C" };
+  }
+  return c;
+}
+
 function emptyItem(): ContractItem {
   return { id: genItemId(), code: "", name: "", spec: "", surface: "", quantity: 0, unit: "条", unitPrice: 0, amount: 0, remark: "" };
 }
@@ -32,11 +40,11 @@ function emptyItem(): ContractItem {
 // 默认供方信息（碧利莱）
 const DEFAULT_SUPPLIER = {
   supplierName: "佛山市碧利莱照明有限公司",
-  supplierAddress: "佛山市南海区里水镇大冲村委会象岗村250号之一",
+  supplierAddress: "佛山市南海区狮山镇松岗办事处显纲村委会厦边村口首层之六",
   supplierContact: "龙任荣",
-  supplierPhone: "0757-85609935",
+  supplierPhone: "18929979760",
   supplierFax: "85609935",
-  supplierTaxNo: "91440605MACGMXTJ3G",
+  supplierTaxNo: "91440605MACUYJRB5C",
 };
 
 export default function ContractPage() {
@@ -82,7 +90,7 @@ export default function ContractPage() {
     const fromSeed = contractSeedData.filter(c => !localIds.has(c.id));
     const all = [...fromSeed, ...localContracts];
     all.sort((a, b) => b.signDate.localeCompare(a.signDate));
-    setContracts(all);
+    setContracts(all.map(fixSupplierInfo));
   }, []);
 
   useEffect(() => { load(); }, [load]);
