@@ -140,7 +140,7 @@ export default function ContractPage() {
     const c = customers.find(c => c.name === name);
     if (c) {
       setCustomerAddress(c.address || "");
-      setCustomerContact(c.contactPerson || "");
+      setCustomerContact(c.contact || "");
       setCustomerPhone(c.phone || "");
       setCustomerTaxNo(c.taxNo || "");
     }
