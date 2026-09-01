@@ -75,7 +75,8 @@ function SealPlaceholder() {
   );
 }
 
-export default function ContractPrintPage({ params }: { params: { id: string } }) {
+export default function ContractPrintPage() {
+  const params = useParams();
   const contractId = params.id as string;
   const [contract, setContract] = useState<ContractData | null>(null);
 
