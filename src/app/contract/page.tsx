@@ -2,10 +2,28 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { contractSeedData, type ContractData, type ContractItem } from "@/lib/contract-seed-data";
-import { deliveryCustomerStore } from "@/lib/store";
+import { deliveryCustomerStore, deliveryProductStore } from "@/lib/store";
 
 function genItemId(): string { return Math.random().toString(36).slice(2, 10); }
 function genContractId(): string { return "ct" + Date.now().toString(36); }
+
+// 自动生成合同编号：BL + 年月日 + 序号
+function genContractNo(existing: ContractData[]): string {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, "0");
+  const d = String(now.getDate()).padStart(2, "0");
+  const prefix = `BL${y}${m}${d}`;
+  // 找今天已有合同的最大序号
+  let maxSeq = 0;
+  for (const c of existing) {
+    if (c.contractNo && c.contractNo.startsWith(prefix)) {
+      const seq = parseInt(c.contractNo.slice(prefix.length), 10);
+      if (!isNaN(seq) && seq > maxSeq) maxSeq = seq;
+    }
+  }
+  return `${prefix}${String(maxSeq + 1).padStart(2, "0")}`;
+}
 
 function emptyItem(): ContractItem {
   return { id: genItemId(), code: "", name: "", spec: "", surface: "", quantity: 0, unit: "条", unitPrice: 0, amount: 0, remark: "" };
@@ -53,6 +71,7 @@ export default function ContractPage() {
 
   // 客户列表
   const customers = typeof window !== "undefined" ? deliveryCustomerStore.getAll() : [];
+  const products = typeof window !== "undefined" ? deliveryProductStore.getAll() : [];
 
   const load = useCallback(() => {
     // 合并种子数据 + localStorage，local覆盖种子
@@ -72,7 +91,7 @@ export default function ContractPage() {
 
   const resetForm = () => {
     setEditId(null);
-    setContractNo("");
+    setContractNo(genContractNo(contracts));
     setSignDate(new Date().toISOString().slice(0, 10));
     setSignPlace("佛山市南海区");
     setCustomerName(""); setCustomerAddress(""); setCustomerContact(""); setCustomerPhone(""); setCustomerTaxNo("");
@@ -143,6 +162,29 @@ export default function ContractPage() {
       setCustomerContact(c.contact || "");
       setCustomerPhone(c.phone || "");
       setCustomerTaxNo(c.taxNo || "");
+    }
+  };
+
+  const selectProduct = (idx: number, keyword: string) => {
+    const p = products.find(p =>
+      (p.code && p.code.toLowerCase() === keyword.toLowerCase()) ||
+      (p.name && p.name === keyword)
+    );
+    if (p) {
+      setItems(prev => {
+        const next = [...prev];
+        next[idx] = {
+          ...next[idx],
+          code: p.code || "",
+          name: p.name || "",
+          spec: p.spec || "",
+          surface: p.surface || "",
+          unit: p.unit || next[idx].unit,
+          unitPrice: p.unitPrice || 0,
+          amount: Math.round(next[idx].quantity * (p.unitPrice || 0) * 100) / 100,
+        };
+        return next;
+      });
     }
   };
 
@@ -258,8 +300,8 @@ export default function ContractPage() {
                 <h3 className="text-sm font-bold text-slate-700 mb-3">合同基本信息</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div>
-                    <label className="block text-xs text-slate-500 mb-1">合同编号</label>
-                    <input type="text" value={contractNo} onChange={e => setContractNo(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" placeholder="如 BL20260901" />
+                    <label className="block text-xs text-slate-500 mb-1">合同编号（自动生成）</label>
+                    <input type="text" value={contractNo} readOnly className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md bg-slate-50 text-slate-600" />
                   </div>
                   <div>
                     <label className="block text-xs text-slate-500 mb-1">签订日期</label>
@@ -365,8 +407,8 @@ export default function ContractPage() {
                       {items.map((item, idx) => (
                         <tr key={item.id} className="hover:bg-slate-50">
                           <td className="px-2 py-1 text-slate-400">{idx + 1}</td>
-                          <td className="px-1 py-1"><input type="text" value={item.code} onChange={e => updateItem(idx, "code", e.target.value)} className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded" /></td>
-                          <td className="px-1 py-1"><input type="text" value={item.name} onChange={e => updateItem(idx, "name", e.target.value)} className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded" /></td>
+                          <td className="px-1 py-1"><input type="text" value={item.code} onChange={e => updateItem(idx, "code", e.target.value)} onBlur={() => { if (item.code) selectProduct(idx, item.code); }} className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded" list="contract-product-list" placeholder="编号" /></td>
+                          <td className="px-1 py-1"><input type="text" value={item.name} onChange={e => updateItem(idx, "name", e.target.value)} onBlur={() => { if (item.name) selectProduct(idx, item.name); }} className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded" list="contract-product-list" placeholder="名称" /></td>
                           <td className="px-1 py-1"><input type="text" value={item.spec} onChange={e => updateItem(idx, "spec", e.target.value)} className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded" /></td>
                           <td className="px-1 py-1"><input type="text" value={item.surface} onChange={e => updateItem(idx, "surface", e.target.value)} className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded" /></td>
                           <td className="px-1 py-1">
@@ -387,6 +429,13 @@ export default function ContractPage() {
                       ))}
                     </tbody>
                   </table>
+                  <datalist id="contract-product-list">
+                    {products.map(p => (
+                      <option key={p.id} value={p.code || p.name}>
+                        {p.name} {p.spec} {p.surface}
+                      </option>
+                    ))}
+                  </datalist>
                 </div>
               </div>
 
