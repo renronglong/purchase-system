@@ -54,26 +54,6 @@ function numberToChinese(num: number): string {
   return result;
 }
 
-// 印章占位圆框组件（甲方预留盖章位）
-function SealPlaceholder() {
-  return (
-    <div style={{
-      width: '36mm',
-      height: '36mm',
-      border: '2px dashed red',
-      borderRadius: '50%',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      color: 'red',
-      fontSize: '12px',
-      margin: '2mm auto',
-      flexShrink: 0,
-    }}>
-      （盖章处）
-    </div>
-  );
-}
 
 export default function ContractPrintPage() {
   const params = useParams();
@@ -181,9 +161,10 @@ export default function ContractPrintPage() {
         fontSize: "14px",
         lineHeight: "1.5",
       }}>
-        {/* 标题 */}
-        <div style={{ textAlign: "center", marginBottom: "4mm", flexShrink: 0 }}>
-          <h1 style={{ fontSize: "24px", fontWeight: "bold", margin: 0, letterSpacing: "4px" }}>购销合同</h1>
+        {/* 牌头 + 标题 */}
+        <div style={{ textAlign: "center", marginBottom: "3mm", flexShrink: 0 }}>
+          <div style={{ fontSize: "20px", fontWeight: "bold", letterSpacing: "2px", marginBottom: "1mm" }}>{contract.supplierName}</div>
+          <h1 style={{ fontSize: "24px", fontWeight: "bold", margin: 0, letterSpacing: "6px" }}>购 销 合 同</h1>
         </div>
 
         {/* 合同编号、签订地点、签订时间 */}
@@ -312,8 +293,6 @@ export default function ContractPrintPage() {
               <div>电话：{contract.customerPhone}</div>
               <div style={{ marginTop: "2mm" }}>日期：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;日</div>
             </div>
-            {/* 甲方盖章占位 - 红色虚线圆框 */}
-            <SealPlaceholder />
           </div>
           {/* 右侧 供方（乙方） */}
           <div style={{ width: "42%", position: "relative" }}>
@@ -327,8 +306,17 @@ export default function ContractPrintPage() {
               <div>纳税人识别号：{contract.supplierTaxNo}</div>
               <div style={{ marginTop: "2mm" }}>日期：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;日</div>
             </div>
-            {/* 乙方盖章占位 - 红色虚线圆框（如有印章图片可替换此处） */}
-            <SealPlaceholder />
+            {/* 乙方印章 */}
+            <img src="/seal-bililai.png" alt="" style={{
+              position: "absolute",
+              right: "-4mm",
+              bottom: "0mm",
+              width: "40mm",
+              height: "40mm",
+              transform: "rotate(-8deg)",
+              opacity: 0.9,
+              pointerEvents: "none",
+            }} />
           </div>
         </div>
       </div>
