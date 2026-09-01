@@ -4,6 +4,14 @@ import { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { contractSeedData, type ContractData } from "@/lib/contract-seed-data";
 
+// 碧利莱供方信息按最新开票资料自动纠正（覆盖旧的localStorage缓存）
+function fixSupplierInfo<T extends { supplierName?: string; supplierAddress?: string; supplierPhone?: string; supplierTaxNo?: string }>(c: T): T {
+  if (c.supplierName && c.supplierName.includes("碧利莱")) {
+    return { ...c, supplierAddress: "佛山市南海区狮山镇松岗办事处显纲村委会厦边村口首层之六", supplierPhone: "18929979760", supplierTaxNo: "91440605MACUYJRB5C" };
+  }
+  return c;
+}
+
 // 数字转中文大写金额
 function numberToChinese(num: number): string {
   const digits = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖'];
