@@ -304,15 +304,15 @@ export default function ContractPrintPage() {
               <div>电话：{contract.supplierPhone}</div>
               <div>传真：{contract.supplierFax}</div>
               <div>纳税人识别号：{contract.supplierTaxNo}</div>
-              <div style={{ marginTop: "2mm" }}>日期：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年&nbsp;&nbsp;&nbsp;&nbsp;月&nbsp;&nbsp;&nbsp;&nbsp;日</div>
+              <div style={{ marginTop: "2mm" }}>日期：{contract.signDate.slice(0,4)}年{contract.signDate.slice(5,7)}月{contract.signDate.slice(8,10)}日</div>
             </div>
             {/* 乙方印章 */}
             <img src="/seal-bililai.png" alt="" style={{
               position: "absolute",
-              right: "-4mm",
+              right: "12mm",
               bottom: "0mm",
-              width: "40mm",
-              height: "40mm",
+              width: "38mm",
+              height: "38mm",
               transform: "rotate(-8deg)",
               opacity: 0.9,
               pointerEvents: "none",
