@@ -55,10 +55,13 @@ export default function ContractPage() {
   const customers = typeof window !== "undefined" ? deliveryCustomerStore.getAll() : [];
 
   const load = useCallback(() => {
-    // 种子数据 + localStorage 合并
+    // 合并种子数据 + localStorage，local覆盖种子
     const localRaw = typeof window !== "undefined" ? localStorage.getItem("contracts_local") : null;
     const localContracts: ContractData[] = localRaw ? JSON.parse(localRaw) : [];
-    const all = [...contractSeedData, ...localContracts];
+    const localIds = new Set(localContracts.map(c => c.id));
+    // 种子数据中不在local里的
+    const fromSeed = contractSeedData.filter(c => !localIds.has(c.id));
+    const all = [...fromSeed, ...localContracts];
     all.sort((a, b) => b.signDate.localeCompare(a.signDate));
     setContracts(all);
   }, []);
