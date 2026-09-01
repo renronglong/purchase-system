@@ -51,10 +51,10 @@ export const contractSeedData: ContractData[] = [
     customerPhone: '18503056541',
     customerTaxNo: '',
     supplierName: '佛山市碧利莱照明有限公司',
-    supplierAddress: '佛山市南海区里水镇大冲象岗村250号之一',
+    supplierAddress: '佛山市南海区里水镇大冲村委会象岗村250号之一',
     supplierContact: '龙任荣',
-    supplierPhone: '18925938858',
-    supplierFax: '0757-81097385',
+    supplierPhone: '0757-85609935',
+    supplierFax: '85609935',
     supplierTaxNo: '91440605MACGMXTJ3G',
     items: [
       { id: 'ci1', code: '', name: '电控箱', spec: '300*280*100', surface: '喷涂', quantity: 500, unit: '套', unitPrice: 78, amount: 500 * 78, remark: '' },
