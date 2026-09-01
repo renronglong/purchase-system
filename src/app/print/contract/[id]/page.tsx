@@ -81,6 +81,16 @@ export default function ContractPrintPage() {
   const [contract, setContract] = useState<ContractData | null>(null);
 
   const loadContract = useCallback(() => {
+    // 优先从 localStorage 读取编辑后的版本
+    try {
+      const localRaw = localStorage.getItem("contracts_local");
+      if (localRaw) {
+        const localContracts: ContractData[] = JSON.parse(localRaw);
+        const localFound = localContracts.find(c => c.id === contractId);
+        if (localFound) { setContract(localFound); return; }
+      }
+    } catch { /* ignore */ }
+    // 回退到种子数据
     const found = contractSeedData.find(c => c.id === contractId);
     if (found) setContract(found);
   }, [contractId]);
