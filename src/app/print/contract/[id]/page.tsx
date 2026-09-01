@@ -79,6 +79,14 @@ export default function ContractPrintPage() {
     loadContract();
   }, [loadContract]);
 
+  // 设置文档标题为 客户名_合同编号（导出PDF时作为默认文件名）
+  useEffect(() => {
+    if (contract) {
+      document.title = `${contract.customerName}_${contract.contractNo}`;
+    }
+  }, [contract]);
+
+  // 页面加载后自动弹出打印
   useEffect(() => {
     if (contract) {
       const timer = setTimeout(() => {
@@ -86,6 +94,14 @@ export default function ContractPrintPage() {
       }, 300);
       return () => clearTimeout(timer);
     }
+  }, [contract]);
+
+  // 导出PDF：确保标题已设置后调起打印对话框（选"另存为PDF"即自动命名）
+  const handleExportPDF = useCallback(() => {
+    if (contract) {
+      document.title = `${contract.customerName}_${contract.contractNo}`;
+    }
+    setTimeout(() => window.print(), 50);
   }, [contract]);
 
   if (!contract) {
@@ -144,7 +160,7 @@ export default function ContractPrintPage() {
       `}} />
 
       <div className="no-print fixed top-4 right-4 z-50 flex gap-2">
-        <button onClick={() => window.print()} className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 shadow-lg">打印 / 导出PDF</button>
+        <button onClick={handleExportPDF} className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 shadow-lg">导出PDF / 打印</button>
         <button onClick={() => window.close()} className="px-4 py-2 bg-slate-500 text-white text-sm rounded-md hover:bg-slate-600 shadow-lg">关闭</button>
       </div>
 
