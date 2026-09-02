@@ -418,7 +418,25 @@ export default function ContractPage() {
                           <td className="px-1 py-1"><input type="text" value={item.code} onChange={e => updateItem(idx, "code", e.target.value)} onBlur={() => { if (item.code) selectProduct(idx, item.code); }} className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded" list="contract-product-list" placeholder="编号" /></td>
                           <td className="px-1 py-1"><input type="text" value={item.name} onChange={e => updateItem(idx, "name", e.target.value)} onBlur={() => { if (item.name) selectProduct(idx, item.name); }} className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded" list="contract-product-list" placeholder="名称" /></td>
                           <td className="px-1 py-1"><input type="text" value={item.spec} onChange={e => updateItem(idx, "spec", e.target.value)} className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded" /></td>
-                          <td className="px-1 py-1"><input type="text" value={item.surface} onChange={e => updateItem(idx, "surface", e.target.value)} className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded" /></td>
+                          <td className="px-1 py-1">
+                            <select value={item.surface} onChange={e => updateItem(idx, "surface", e.target.value)} className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded" list="surface-list">
+                              <option value="">-</option>
+                              <option value="喷涂">喷涂</option>
+                              <option value="磨砂">磨砂</option>
+                              <option value="阳极氧化">阳极氧化</option>
+                              <option value="电泳">电泳</option>
+                              <option value="木纹">木纹</option>
+                              <option value="氟碳">氟碳</option>
+                              <option value="拉丝">拉丝</option>
+                              <option value="抛光">抛光</option>
+                              <option value="喷砂">喷砂</option>
+                              <option value="本色">本色</option>
+                              <option value="黑色">黑色</option>
+                              <option value="白色">白色</option>
+                              <option value="灰色">灰色</option>
+                            </select>
+                            <input type="text" list="surface-custom" value={item.surface} onChange={e => updateItem(idx, "surface", e.target.value)} className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded mt-0.5 hidden" placeholder="自定义颜色" />
+                          </td>
                           <td className="px-1 py-1">
                             <select value={item.unit} onChange={e => updateItem(idx, "unit", e.target.value)} className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded">
                               <option value="条">条</option>
@@ -457,28 +475,4 @@ export default function ContractPage() {
                   </div>
                   <div>
                     <label className="block text-xs text-slate-500 mb-1">交货时间</label>
-                    <input type="text" value={deliveryDays} onChange={e => setDeliveryDays(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-slate-500 mb-1">交货地点</label>
-                    <input type="text" value={deliveryPlace} onChange={e => setDeliveryPlace(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-slate-500 mb-1">货运方式</label>
-                    <input type="text" value={deliveryMethod} onChange={e => setDeliveryMethod(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" />
-                  </div>
-                </div>
-              </div>
-
-              {/* 操作按钮 */}
-              <div className="flex justify-end gap-3 pt-2 border-t border-slate-200">
-                <button onClick={() => { setShowForm(false); resetForm(); }} className="px-4 py-1.5 text-sm text-slate-600 bg-slate-100 rounded-md hover:bg-slate-200">取消</button>
-                <button onClick={handleSave} className="px-4 py-1.5 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700">保存</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
+                    <input type="text" value={deliveryDays} onChange={e => setDeliveryDays(e.target.value)} className="w-full px-3
