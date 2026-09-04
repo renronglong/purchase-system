@@ -5,6 +5,7 @@ import ProductSearchSelect from "@/components/product-search-select";
 import {
   supplierStore,
   purchaseOrderStore,
+  deliveryNoteStore,
   type Product,
   type Supplier,
   type PurchaseOrder,
@@ -622,30 +623,53 @@ export default function InventoryPage() {
                 <option value="kg">kg</option>
               </select>
             </div>
-            {/* 关联单据号（手动输入，或从采购单带出） */}
+            {/* 关联单据号 - 下拉选择（采购单+送货单） */}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
                 关联单据号
               </label>
               <input
                 type="text"
+                list="reference-no-list"
                 value={formData.referenceNo}
                 onChange={(e) => setFormData({ ...formData, referenceNo: e.target.value })}
                 className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                placeholder="采购单号（可从采购单自动带出）"
+                placeholder="点击选择或手动输入"
               />
+              <datalist id="reference-no-list">
+                <option value="" disabled>-- 选择单据 --</option>
+                {(() => {
+                  const orders = purchaseOrderStore.getAll().map(o => o.orderNo);
+                  const notes = deliveryNoteStore.getAll().map(n => n.noteNo);
+                  return [...orders, ...notes].map(no => (
+                    <option key={no} value={no} />
+                  ));
+                })()}
+              </datalist>
             </div>
-            {/* 操作员 */}
+            {/* 操作员 - 下拉选择（历史记录+可手动输入） */}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
                 操作员
               </label>
               <input
                 type="text"
+                list="operator-list"
                 value={formData.operator}
                 onChange={(e) => setFormData({ ...formData, operator: e.target.value })}
                 className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                placeholder="点击选择或手动输入"
               />
+              <datalist id="operator-list">
+                <option value="" disabled>-- 选择操作员 --</option>
+                {(() => {
+                  const existing = loadRecords().map(r => r.operator).filter(Boolean);
+                  const unique = Array.from(new Set(existing));
+                  return unique.map(name => (
+                    <option key={name} value={name} />
+                  ));
+                })()}
+              </datalist>
             </div>
           </div>
           <div className="mt-6">
