@@ -96,12 +96,8 @@ export const plateProducts: Product[] = [
   { id: "PLT-滤芯支架底板", name: "滤芯支架底板", spec: "1220*115*0.8", productType: "plate", plateWidth: 115.0, thickness: 0.8, step: 97.0, outputPerTime: 1, piecesPerSheet: 252, weight: 0.0737112380952381, area: 0.011155, perimeter: 424.0, bladeCount: 21, plateSpec: "115*97*T0.8" },
   { id: "PLT-上盖", name: "上盖", spec: "1220*398.2*1", productType: "plate", plateWidth: 398.2, thickness: 1.0, step: 285.0, outputPerTime: 1, piecesPerSheet: 24, weight: 0.96746, area: 0.113487, perimeter: 1366.4, bladeCount: 6, plateSpec: "398.2*285*T1" },
   { id: "PLT-上盖组件", name: "上盖组件", spec: "1220*280*1", productType: "plate", plateWidth: 280.0, thickness: 1.0, step: 155.0, outputPerTime: 1, piecesPerSheet: 56, weight: 0.414625714285714, area: 0.0434, perimeter: 870.0, bladeCount: 8, plateSpec: "280*155*T1" },
-  { id: "PLT-洗墙灯改投光灯
-侧面固定板", name: "洗墙灯改投光灯
-侧面固定板", spec: "1220*106.5*4", productType: "plate", plateWidth: 106.5, thickness: 4.0, step: 179.0, outputPerTime: 1, piecesPerSheet: 132, weight: 0.703607272727273, area: 0.0190635, perimeter: 571.0, bladeCount: 22, plateSpec: "106.5*179*T4" },
-  { id: "PLT-洗墙灯改投光灯
-工型支架", name: "洗墙灯改投光灯
-工型支架", spec: "1220*50*4", productType: "plate", plateWidth: 50.0, thickness: 4.0, step: 850.0, outputPerTime: 1, piecesPerSheet: 48, weight: 1.93492, area: 0.0425, perimeter: 1800.0, bladeCount: 48, plateSpec: "50*850*T4" },
+  { id: "PLT-洗墙灯改投光灯侧面固定板", name: "洗墙灯改投光灯侧面固定板", spec: "1220*106.5*4", productType: "plate", plateWidth: 106.5, thickness: 4.0, step: 179.0, outputPerTime: 1, piecesPerSheet: 132, weight: 0.703607272727273, area: 0.0190635, perimeter: 571.0, bladeCount: 22, plateSpec: "106.5*179*T4" },
+  { id: "PLT-洗墙灯改投光灯工型支架", name: "洗墙灯改投光灯工型支架", spec: "1220*50*4", productType: "plate", plateWidth: 50.0, thickness: 4.0, step: 850.0, outputPerTime: 1, piecesPerSheet: 48, weight: 1.93492, area: 0.0425, perimeter: 1800.0, bladeCount: 48, plateSpec: "50*850*T4" },
   { id: "PLT-yl-107", name: "yl-107", spec: "1220*106*1.5", productType: "plate", plateWidth: 106.0, thickness: 1.5, step: 127.0, outputPerTime: 1, piecesPerSheet: 207, weight: 0.168253913043478, area: 0.013462, perimeter: 466.0, bladeCount: 23, plateSpec: "106*127*T1.5" },
   { id: "PLT-YW-04", name: "YW-04", spec: "1220*72*1", productType: "plate", plateWidth: 72.0, thickness: 1.0, step: 18.0, outputPerTime: 2, piecesPerSheet: 4455, weight: 0.00521190572390572, area: 0.001296, perimeter: 180.0, bladeCount: 33, plateSpec: "72*18*T1" },
   { id: "PLT-BL-014", name: "BL-014", spec: "1220*33*2", productType: "plate", plateWidth: 33.0, thickness: 2.0, step: 100.0, outputPerTime: 1, piecesPerSheet: 876, weight: 0.0530115068493151, area: 0.0033, perimeter: 266.0, bladeCount: 73, plateSpec: "33*100*T2" },
@@ -109,3 +105,4 @@ export const plateProducts: Product[] = [
   { id: "PLT-1.04.01.1099.9902", name: "1.04.01.1099.9902", spec: "1220*50*2", productType: "plate", plateWidth: 50.0, thickness: 2.0, step: 44.0, outputPerTime: 1, piecesPerSheet: 1296, weight: 0.0358318518518519, area: 0.0022, perimeter: 188.0, bladeCount: 48, plateSpec: "50*44*T2" },
   { id: "PLT-BL-126", name: "BL-126", spec: "2440*51.5*1.5", productType: "plate", plateWidth: 51.5, thickness: 1.5, step: 143.0, outputPerTime: 1, piecesPerSheet: 391, weight: 0.0890756010230179, area: 0.0073645, perimeter: 389.0, bladeCount: 23, plateSpec: "51.5*143*T1.5" },
 ];
+
