@@ -224,24 +224,24 @@ export default function PrintPurchasePage() {
               <colgroup>
                 <col style={{ width: "6mm" }} />
                 <col style={{ width: "28mm" }} />
-                <col style={{ width: "22mm" }} />
-                <col style={{ width: "26mm" }} />
-                <col style={{ width: "16mm" }} />
-                <col style={{ width: "16mm" }} />
-                <col style={{ width: "16mm" }} />
-                <col style={{ width: "12mm" }} />
-                <col style={{ width: "38mm" }} />
+                <col style={{ width: "40mm" }} />
+                <col style={{ width: "14mm" }} />
+                <col style={{ width: "10mm" }} />
+                <col style={{ width: "14mm" }} />
+                <col style={{ width: "18mm" }} />
+                <col style={{ width: "24mm" }} />
+                <col style={{ width: "36mm" }} />
               </colgroup>
               <thead>
                 <tr style={{ height: "5mm", borderTop: "none" }}>
                   <th style={{ border: `1px solid ${bc}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>序号</th>
                   <th style={{ border: `1px solid ${bc}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>产品编号</th>
-                  <th style={{ border: `1px solid ${bc}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>材质</th>
-                  <th style={{ border: `1px solid ${bc}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>规格</th>
-                  <th style={{ border: `1px solid ${bc}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>订单数量(张)</th>
-                  <th style={{ border: `1px solid ${bc}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>每张出材</th>
-                  <th style={{ border: `1px solid ${bc}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>实际出材</th>
+                  <th style={{ border: `1px solid ${bc}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>规格尺寸mm</th>
+                  <th style={{ border: `1px solid ${bc}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>数量</th>
+                  <th style={{ border: `1px solid ${bc}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>单位</th>
                   <th style={{ border: `1px solid ${bc}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>刀数</th>
+                  <th style={{ border: `1px solid ${bc}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>材质</th>
+                  <th style={{ border: `1px solid ${bc}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>交货时间</th>
                   <th style={{ border: `1px solid ${bc}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "13px", whiteSpace: "nowrap" }}>备注</th>
                 </tr>
               </thead>
@@ -250,23 +250,23 @@ export default function PrintPurchasePage() {
                   <tr key={item.id} style={{ height: ROW_HEIGHT }}>
                     <td style={{ border: `1px solid ${bc}`, textAlign: "center", verticalAlign: "middle", padding: "1px 0", fontSize: "14px" }}>{item.isEmpty ? "" : idx + 1}</td>
                     <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", whiteSpace: "nowrap", overflow: "visible", fontSize: "14px", fontWeight: "bold" }}>{item.productCode}</td>
-                    <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", fontSize: "14px" }}>{item.material || ""}</td>
                     <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: "14px" }}>{item.spec}</td>
                     <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: "14px" }}>{item.isEmpty ? "" : (item.sheetsCount || "")}</td>
-                    <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: "14px" }}>{item.isEmpty ? "" : (item.piecesPerSheet || "")}</td>
-                    <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: "14px" }}>{item.isEmpty ? "" : (item.actualOutput || "")}</td>
-                    <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: "14px" }}>{item.isEmpty ? "" : (item.bladeCount || "")}</td>
+                    <td style={{ border: `1px solid ${bc}`, textAlign: "center", padding: "0 1px", verticalAlign: "middle", fontSize: "14px" }}>{item.isEmpty ? "" : "张"}</td>
+                    <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: "14px" }}>{item.isEmpty ? "" : ((item.bladeCount || 0) * (item.sheetsCount || 0) || "")}</td>
+                    <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", fontSize: "14px" }}>{item.material || ""}</td>
+                    <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: "14px" }}>{item.deliveryDate}</td>
                     <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: "14px" }}>{item.remark}</td>
                   </tr>
                 ))}
               </tbody>
               <tfoot>
                 <tr style={{ height: "6mm" }}>
-                  <td colSpan={4} style={{ border: `1px solid ${bc}`, padding: "0 2mm", verticalAlign: "middle", fontSize: "14px", fontWeight: "bold", textAlign: "right" }}>合计</td>
+                  <td colSpan={3} style={{ border: `1px solid ${bc}`, padding: "0 2mm", verticalAlign: "middle", fontSize: "14px", fontWeight: "bold", textAlign: "right" }}>合计</td>
                   <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: "14px", fontWeight: "bold" }}>{order.totalSheets ?? 0}</td>
                   <td style={{ border: `1px solid ${bc}` }}></td>
-                  <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: "14px", fontWeight: "bold" }}>{order.totalActualOutput ?? 0}</td>
-                  <td colSpan={2} style={{ border: `1px solid ${bc}` }}></td>
+                  <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: "14px", fontWeight: "bold" }}>{order.items.reduce((s: number, it: any) => s + (it.bladeCount || 0) * (it.sheetsCount || 0), 0)}</td>
+                  <td colSpan={3} style={{ border: `1px solid ${bc}` }}></td>
                 </tr>
               </tfoot>
             </table>

@@ -119,12 +119,26 @@ export default function PurchaseOrderFormPage() {
     }
   };
 
+  const calcPlateFields = (item: PurchaseOrderItem): PurchaseOrderItem => {
+    const orderQty = item.quantity || 0;
+    const pps = item.piecesPerSheet || 0;
+    if (pps > 0 && orderQty > 0) {
+      const sc = Math.ceil(orderQty / pps);
+      const ao = sc * pps;
+      const perSheetBlade = item.bladeCount || 0;
+      return { ...item, sheetsCount: sc, actualOutput: ao };
+    }
+    return item;
+  };
+
   const updateItem = (index: number, field: keyof PurchaseOrderItem, value: string | number) => {
     setItems(prev => {
       const next = [...prev];
       const item = { ...next[index], [field]: value };
       if (orderType === "profile") {
         item.totalWeight = calcWeight(item.weightPerMeter, item.length, item.quantity);
+      } else if (orderType === "plate") {
+        return next.map((it, i) => i === index ? calcPlateFields(item) : it);
       }
       next[index] = item;
       return next;
@@ -137,7 +151,7 @@ export default function PurchaseOrderFormPage() {
       const next = [...prev];
       if (orderType === "plate") {
         // For plate: auto-fill plate-specific fields from product data
-        const item = {
+        let item: any = {
           ...next[index],
           productCode: product.id,
           productName: product.name,
@@ -145,6 +159,8 @@ export default function PurchaseOrderFormPage() {
           piecesPerSheet: product.piecesPerSheet || 0,
           bladeCount: product.bladeCount || 0,
         };
+        // Recalculate based on existing quantity
+        item = calcPlateFields(item);
         next[index] = item;
       } else {
         const item = {
@@ -485,19 +501,22 @@ export default function PurchaseOrderFormPage() {
       {/* 明细表格 - 板材 */}
       {orderType === "plate" && (
         <div className="bg-white rounded-lg border border-slate-200 overflow-x-auto">
-          <table className="w-full text-xs min-w-[1100px]">
+          <table className="w-full text-xs min-w-[1200px]">
             <thead>
               <tr className="bg-orange-50 border-b border-orange-200">
                 <th className="px-2 py-2 font-medium text-slate-600 w-10">序号</th>
-                <th className="px-2 py-2 font-medium text-slate-600 w-36">产品编号</th>
-                <th className="px-2 py-2 font-medium text-slate-600 w-24">材质</th>
-                <th className="px-2 py-2 font-medium text-slate-600 w-32">规格</th>
-                <th className="px-2 py-2 font-medium text-slate-600 w-20">订单数量(张)</th>
-                <th className="px-2 py-2 font-medium text-slate-600 w-20">每张出材数</th>
-                <th className="px-2 py-2 font-medium text-slate-600 w-20">实际出材数</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-32">产品编号</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-20">材质</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-20">订单数量</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-16">张数</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-12">单位</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-32">规格尺寸</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-20">单张数量</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-20">实际数量</th>
                 <th className="px-2 py-2 font-medium text-slate-600 w-16">刀数</th>
-                <th className="px-2 py-2 font-medium text-slate-600 w-32">备注</th>
-                <th className="px-2 py-2 font-medium text-slate-600 w-12">操作</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-28">日期</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-28">备注</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-10">操作</th>
               </tr>
             </thead>
             <tbody>
@@ -522,41 +541,27 @@ export default function PurchaseOrderFormPage() {
                       ))}
                     </select>
                   </td>
+                  <td className="px-2 py-1.5">
+                    <input
+                      type="number"
+                      value={item.quantity || ""}
+                      onChange={(e) => updateItem(index, "quantity", Number(e.target.value))}
+                      className="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-orange-500/30"
+                      placeholder="0"
+                    />
+                  </td>
+                  <td className="px-2 py-1.5 text-center text-slate-600 font-mono">{item.sheetsCount || ""}</td>
+                  <td className="px-2 py-1.5 text-center text-slate-600">张</td>
                   <td className="px-2 py-1.5 text-slate-600">{item.spec}</td>
+                  <td className="px-2 py-1.5 text-center text-slate-600 font-mono">{item.piecesPerSheet || ""}</td>
+                  <td className="px-2 py-1.5 text-center text-slate-600 font-mono">{item.actualOutput || ""}</td>
+                  <td className="px-2 py-1.5 text-center text-slate-600 font-mono">{(item.bladeCount || 0) * (item.sheetsCount || 0) || ""}</td>
                   <td className="px-2 py-1.5">
                     <input
-                      type="number"
-                      value={item.sheetsCount || ""}
-                      onChange={(e) => updateItem(index, "sheetsCount", Number(e.target.value))}
-                      className="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-orange-500/30"
-                      placeholder="0"
-                    />
-                  </td>
-                  <td className="px-2 py-1.5">
-                    <input
-                      type="number"
-                      value={item.piecesPerSheet || ""}
-                      onChange={(e) => updateItem(index, "piecesPerSheet", Number(e.target.value))}
-                      className="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-orange-500/30"
-                      placeholder="0"
-                    />
-                  </td>
-                  <td className="px-2 py-1.5">
-                    <input
-                      type="number"
-                      value={item.actualOutput || ""}
-                      onChange={(e) => updateItem(index, "actualOutput", Number(e.target.value))}
-                      className="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-orange-500/30"
-                      placeholder="0"
-                    />
-                  </td>
-                  <td className="px-2 py-1.5">
-                    <input
-                      type="number"
-                      value={item.bladeCount || ""}
-                      onChange={(e) => updateItem(index, "bladeCount", Number(e.target.value))}
-                      className="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-orange-500/30"
-                      placeholder="0"
+                      type="date"
+                      value={item.deliveryDate}
+                      onChange={(e) => updateItem(index, "deliveryDate", e.target.value)}
+                      className="w-full px-1 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-orange-500/30"
                     />
                   </td>
                   <td className="px-2 py-1.5">
@@ -584,10 +589,14 @@ export default function PurchaseOrderFormPage() {
             </tbody>
             <tfoot>
               <tr className="bg-orange-50 border-t border-orange-200">
-                <td colSpan={4} className="px-2 py-2 text-right text-sm font-medium text-slate-600">合计</td>
+                <td colSpan={3} className="px-2 py-2 text-right text-sm font-medium text-slate-600">合计</td>
+                <td className="px-2 py-2 text-center font-mono font-bold text-slate-900">{items.reduce((s, it) => s + (it.quantity || 0), 0)}</td>
                 <td className="px-2 py-2 text-center font-mono font-bold text-slate-900">{totalSheets}</td>
-                <td className="px-2 py-2"></td>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td className="px-2 py-2 text-center font-mono font-bold text-slate-900">{totalActualOutput}</td>
+                <td className="px-2 py-2 text-center font-mono font-bold text-slate-900">{items.reduce((s, it) => s + (it.bladeCount || 0) * (it.sheetsCount || 0), 0)}</td>
                 <td colSpan={3}></td>
               </tr>
             </tfoot>
