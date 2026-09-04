@@ -15,12 +15,17 @@ import {
 interface InventoryRecord {
   id: string;
   type: "inbound" | "outbound"; // 入库/出库
+  orderType?: "profile" | "plate"; // 单据类型：型材/板材，默认 profile
   productCode: string;
   productName: string;
   spec: string;
   surface: string;
+  material?: string; // 材质（板材）
   quantity: number;
   unit: string;
+  piecesPerSheet?: number; // 单张数量（板材）
+  actualOutput?: number; // 实际数量（板材）
+  bladeCount?: number; // 总刀数（板材）
   supplierName: string; // 供应商
   referenceNo: string; // 关联单据号（采购单号/送货单号）
   operator: string; // 操作员
@@ -34,6 +39,7 @@ interface InventorySummary {
   productName: string;
   spec: string;
   surface: string;
+  material?: string;
   unit: string;
   inboundQty: number;
   outboundQty: number;
@@ -247,12 +253,17 @@ export default function InventoryPage() {
   const [formType, setFormType] = useState<"inbound" | "outbound">("inbound");
   const [editingRecord, setEditingRecord] = useState<InventoryRecord | null>(null);
   const [formData, setFormData] = useState({
+    orderType: "profile" as "profile" | "plate",
     productCode: "",
     productName: "",
     spec: "",
     surface: "",
+    material: "",
     quantity: "",
     unit: "条",
+    piecesPerSheet: "",
+    actualOutput: "",
+    bladeCount: "",
     supplierName: "",
     referenceNo: "",
     operator: "",
@@ -262,6 +273,7 @@ export default function InventoryPage() {
 
   // 关联采购单状态
   const [selectedOrder, setSelectedOrder] = useState<PurchaseOrder | null>(null);
+  const isPlate = formData.orderType === "plate";
 
   // 加载数据
   useEffect(() => {
@@ -279,12 +291,17 @@ export default function InventoryPage() {
     setFormType(type);
     setEditingRecord(null);
     setFormData({
+      orderType: "profile",
       productCode: "",
       productName: "",
       spec: "",
       surface: "",
+      material: "",
       quantity: "",
       unit: "条",
+      piecesPerSheet: "",
+      actualOutput: "",
+      bladeCount: "",
       supplierName: "",
       referenceNo: "",
       operator: "",
@@ -300,12 +317,17 @@ export default function InventoryPage() {
     setFormType(record.type);
     setEditingRecord(record);
     setFormData({
+      orderType: record.orderType || "profile",
       productCode: record.productCode,
       productName: record.productName,
       spec: record.spec,
       surface: record.surface,
+      material: record.material || "",
       quantity: String(record.quantity),
       unit: record.unit,
+      piecesPerSheet: record.piecesPerSheet ? String(record.piecesPerSheet) : "",
+      actualOutput: record.actualOutput ? String(record.actualOutput) : "",
+      bladeCount: record.bladeCount ? String(record.bladeCount) : "",
       supplierName: record.supplierName || "",
       referenceNo: record.referenceNo,
       operator: record.operator,
@@ -317,14 +339,26 @@ export default function InventoryPage() {
   };
 
   // 从产品库选中产品后自动填充
-  const handleProductSelect = (product: Product | null) => {
+  const handleProductSelect = (product: any | null) => {
     if (product) {
-      setFormData((prev) => ({
-        ...prev,
-        productCode: product.id,
-        productName: product.name,
-        spec: product.spec,
-      }));
+      setFormData((prev) => {
+        const next = {
+          ...prev,
+          productCode: product.id,
+          productName: product.name,
+          spec: product.spec,
+        };
+        // 板材产品：自动带出材质和板材参数
+        if (product.productType === "plate" || (product.id && String(product.id).startsWith("PLT"))) {
+          next.orderType = "plate";
+          next.material = product.material || product.name || "";
+          next.unit = "张";
+          next.piecesPerSheet = product.piecesPerSheet ? String(product.piecesPerSheet) : "";
+          next.bladeCount = product.bladeCount ? String(product.bladeCount) : "";
+          next.surface = "";
+        }
+        return next;
+      });
     }
   };
 
@@ -332,24 +366,39 @@ export default function InventoryPage() {
   const handleOrderSelect = (order: PurchaseOrder | null) => {
     setSelectedOrder(order);
     if (order) {
+      const ot = (order.orderType || "profile") as "profile" | "plate";
       setFormData((prev) => ({
         ...prev,
+        orderType: ot,
         referenceNo: order.orderNo,
         supplierName: order.supplierName,
+        unit: ot === "plate" ? "张" : prev.unit,
+        surface: ot === "plate" ? "" : prev.surface,
       }));
     }
   };
 
   // 点击采购单中的某行产品，自动填充产品信息
-  const handleOrderItemClick = (item: PurchaseOrderItem) => {
+  const handleOrderItemClick = (item: any) => {
+    const plateItem = (selectedOrder?.orderType === "plate") ||
+      (item.piecesPerSheet !== undefined && item.piecesPerSheet !== null);
     setFormData((prev) => ({
       ...prev,
+      orderType: plateItem ? "plate" : "profile",
       productCode: item.productCode,
       productName: item.productName,
       spec: item.spec,
-      surface: item.surfaceTreatment,
-      quantity: String(item.quantity),
-      unit: item.unit,
+      surface: plateItem ? "" : item.surfaceTreatment,
+      material: plateItem ? (item.material || "") : prev.material,
+      quantity: plateItem
+        ? String(item.sheetsCount || item.quantity || "")
+        : String(item.quantity),
+      unit: plateItem ? "张" : item.unit,
+      piecesPerSheet: plateItem && item.piecesPerSheet ? String(item.piecesPerSheet) : "",
+      actualOutput: plateItem && item.actualOutput ? String(item.actualOutput) : "",
+      bladeCount: plateItem
+        ? String((item.bladeCount || 0) * (item.sheetsCount || 0))
+        : "",
     }));
     setProductSearchKey(item.productCode);
   };
@@ -369,15 +418,26 @@ export default function InventoryPage() {
 
     let newRecords: InventoryRecord[];
 
+    const plateExtra = isPlate
+      ? {
+          orderType: "plate" as const,
+          surface: "",
+          material: formData.material,
+          piecesPerSheet: formData.piecesPerSheet ? Number(formData.piecesPerSheet) : undefined,
+          actualOutput: formData.actualOutput ? Number(formData.actualOutput) : undefined,
+          bladeCount: formData.bladeCount ? Number(formData.bladeCount) : undefined,
+        }
+      : { orderType: "profile" as const, surface: formData.surface, material: "" };
+
     if (editingRecord) {
       newRecords = records.map((r) =>
         r.id === editingRecord.id
           ? {
               ...r,
+              ...plateExtra,
               productCode: formData.productCode,
               productName: formData.productName,
               spec: formData.spec,
-              surface: formData.surface,
               quantity: qty,
               unit: formData.unit,
               supplierName: formData.supplierName,
@@ -394,7 +454,6 @@ export default function InventoryPage() {
         productCode: formData.productCode,
         productName: formData.productName,
         spec: formData.spec,
-        surface: formData.surface,
         quantity: qty,
         unit: formData.unit,
         supplierName: formData.supplierName,
@@ -402,6 +461,7 @@ export default function InventoryPage() {
         operator: formData.operator,
         remark: formData.remark,
         createdAt: new Date().toISOString(),
+        ...plateExtra,
       };
       newRecords = [newRecord, ...records];
     }
@@ -422,20 +482,24 @@ export default function InventoryPage() {
     const map = new Map<string, InventorySummary>();
 
     records.forEach((r) => {
-      const key = `${r.productCode}-${r.spec}-${r.surface}`;
-      if (!map.has(key)) {
-        map.set(key, {
+      const rType = r.orderType || "profile";
+      const groupKey = rType === "plate"
+        ? `${r.productCode}-${r.spec}-plate-${r.material || ""}`
+        : `${r.productCode}-${r.spec}-${r.surface}`;
+      if (!map.has(groupKey)) {
+        map.set(groupKey, {
           productCode: r.productCode,
           productName: r.productName,
           spec: r.spec,
           surface: r.surface,
+          material: r.material || "",
           unit: r.unit,
           inboundQty: 0,
           outboundQty: 0,
           currentQty: 0,
         });
       }
-      const summary = map.get(key)!;
+      const summary = map.get(groupKey)!;
       if (r.type === "inbound") {
         summary.inboundQty += r.quantity;
         summary.currentQty += r.quantity;
@@ -457,8 +521,11 @@ export default function InventoryPage() {
       <div className="p-6">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-bold text-slate-900">
+            <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
               {formType === "inbound" ? "入库单" : "出库单"}
+              {isPlate && (
+                <span className="text-sm px-2 py-0.5 bg-orange-100 text-orange-700 rounded">板材</span>
+              )}
             </h1>
             <p className="text-sm text-slate-500 mt-1">单号：{recordNo}</p>
           </div>
@@ -487,18 +554,30 @@ export default function InventoryPage() {
                 </p>
                 <div className="bg-white rounded border border-blue-200 overflow-hidden">
                   <table className="w-full">
-                    <thead className="bg-blue-100">
+                    <thead className={selectedOrder.orderType === "plate" ? "bg-orange-100" : "bg-blue-100"}>
                       <tr>
                         <th className="px-3 py-2 text-left text-xs font-medium text-blue-800">产品编号</th>
-                        <th className="px-3 py-2 text-left text-xs font-medium text-blue-800">产品名称</th>
                         <th className="px-3 py-2 text-left text-xs font-medium text-blue-800">规格</th>
-                        <th className="px-3 py-2 text-left text-xs font-medium text-blue-800">表面处理</th>
-                        <th className="px-3 py-2 text-right text-xs font-medium text-blue-800">数量</th>
-                        <th className="px-3 py-2 text-center text-xs font-medium text-blue-800">单位</th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-blue-800">
+                          {selectedOrder.orderType === "plate" ? "材质" : "表面处理"}
+                        </th>
+                        {selectedOrder.orderType === "plate" ? (
+                          <>
+                            <th className="px-3 py-2 text-right text-xs font-medium text-blue-800">订单数量</th>
+                            <th className="px-3 py-2 text-right text-xs font-medium text-blue-800">张数</th>
+                            <th className="px-3 py-2 text-right text-xs font-medium text-blue-800">实际数量</th>
+                            <th className="px-3 py-2 text-right text-xs font-medium text-blue-800">刀数</th>
+                          </>
+                        ) : (
+                          <>
+                            <th className="px-3 py-2 text-right text-xs font-medium text-blue-800">数量</th>
+                            <th className="px-3 py-2 text-center text-xs font-medium text-blue-800">单位</th>
+                          </>
+                        )}
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-blue-100">
-                      {selectedOrder.items.map((item) => (
+                      {selectedOrder.items.map((item: any) => (
                         <tr
                           key={item.id}
                           onClick={() => handleOrderItemClick(item)}
@@ -509,11 +588,23 @@ export default function InventoryPage() {
                           }`}
                         >
                           <td className="px-3 py-2 text-xs text-slate-900 font-mono">{item.productCode}</td>
-                          <td className="px-3 py-2 text-xs text-slate-700">{item.productName}</td>
                           <td className="px-3 py-2 text-xs text-slate-600">{item.spec}</td>
-                          <td className="px-3 py-2 text-xs text-slate-600">{item.surfaceTreatment}</td>
-                          <td className="px-3 py-2 text-xs text-right text-slate-900">{item.quantity}</td>
-                          <td className="px-3 py-2 text-xs text-center text-slate-600">{item.unit}</td>
+                          <td className="px-3 py-2 text-xs text-slate-600">
+                            {selectedOrder.orderType === "plate" ? (item.material || "-") : item.surfaceTreatment}
+                          </td>
+                          {selectedOrder.orderType === "plate" ? (
+                            <>
+                              <td className="px-3 py-2 text-xs text-right text-slate-900">{item.quantity}</td>
+                              <td className="px-3 py-2 text-xs text-right font-medium text-orange-700">{item.sheetsCount}</td>
+                              <td className="px-3 py-2 text-xs text-right text-slate-900">{item.actualOutput}</td>
+                              <td className="px-3 py-2 text-xs text-right text-slate-600">{(item.bladeCount || 0) * (item.sheetsCount || 0)}</td>
+                            </>
+                          ) : (
+                            <>
+                              <td className="px-3 py-2 text-xs text-right text-slate-900">{item.quantity}</td>
+                              <td className="px-3 py-2 text-xs text-center text-slate-600">{item.unit}</td>
+                            </>
+                          )}
                         </tr>
                       ))}
                     </tbody>
@@ -534,7 +625,8 @@ export default function InventoryPage() {
               <ProductSearchSelect
                 value={productSearchKey}
                 onChange={handleProductSelect}
-                placeholder="输入编号/名称搜索产品库"
+                placeholder={isPlate ? "输入板材编号/名称搜索" : "输入编号/名称搜索产品库"}
+                productType={isPlate ? "plate" : "profile"}
               />
             </div>
             {/* 产品名称 */}
@@ -563,23 +655,38 @@ export default function InventoryPage() {
                 placeholder="选择产品后自动填充"
               />
             </div>
-            {/* 表面处理 - 下拉选择 */}
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                表面处理（颜色）
-              </label>
-              <select
-                value={formData.surface}
-                onChange={(e) => setFormData({ ...formData, surface: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-              >
-                {SURFACE_OPTIONS.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt || "-- 请选择 --"}
-                  </option>
-                ))}
-              </select>
-            </div>
+            {/* 表面处理 - 下拉选择（型材）；材质（板材） */}
+            {isPlate ? (
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  材质
+                </label>
+                <input
+                  type="text"
+                  value={formData.material}
+                  onChange={(e) => setFormData({ ...formData, material: e.target.value })}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm bg-orange-50"
+                  placeholder="如 5052、普通铝板"
+                />
+              </div>
+            ) : (
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  表面处理（颜色）
+                </label>
+                <select
+                  value={formData.surface}
+                  onChange={(e) => setFormData({ ...formData, surface: e.target.value })}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                >
+                  {SURFACE_OPTIONS.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt || "-- 请选择 --"}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
             {/* 供应商 */}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
@@ -595,13 +702,15 @@ export default function InventoryPage() {
             {/* 数量 */}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
-                数量 <span className="text-red-500">*</span>
+                {isPlate ? "数量（张）" : "数量"} <span className="text-red-500">*</span>
               </label>
               <input
                 type="number"
                 value={formData.quantity}
                 onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                className={`w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 text-sm ${
+                  isPlate ? "focus:ring-orange-500" : "focus:ring-blue-500"
+                }`}
                 step="0.01"
               />
             </div>
@@ -613,13 +722,25 @@ export default function InventoryPage() {
               <select
                 value={formData.unit}
                 onChange={(e) => setFormData({ ...formData, unit: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                className={`w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 text-sm ${
+                  isPlate ? "focus:ring-orange-500" : "focus:ring-blue-500"
+                }`}
               >
-                <option value="条">条</option>
-                <option value="支">支</option>
-                <option value="根">根</option>
-                <option value="件">件</option>
-                <option value="kg">kg</option>
+                {isPlate ? (
+                  <>
+                    <option value="张">张</option>
+                    <option value="件">件</option>
+                    <option value="kg">kg</option>
+                  </>
+                ) : (
+                  <>
+                    <option value="条">条</option>
+                    <option value="支">支</option>
+                    <option value="根">根</option>
+                    <option value="件">件</option>
+                    <option value="kg">kg</option>
+                  </>
+                )}
               </select>
             </div>
             {/* 关联单据号 - 下拉选择（采购单+送货单） */}
@@ -667,6 +788,23 @@ export default function InventoryPage() {
               </datalist>
             </div>
           </div>
+          {/* 板材参数只读信息 */}
+          {isPlate && (
+            <div className="mt-6 grid grid-cols-3 gap-4 bg-orange-50 border border-orange-200 rounded-md p-4">
+              <div>
+                <label className="block text-xs font-medium text-slate-500 mb-1">单张数量</label>
+                <div className="text-sm font-mono text-slate-900">{formData.piecesPerSheet || "-"}</div>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-slate-500 mb-1">实际数量</label>
+                <div className="text-sm font-mono text-slate-900">{formData.actualOutput || "-"}</div>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-slate-500 mb-1">总刀数</label>
+                <div className="text-sm font-mono text-slate-900">{formData.bladeCount || "-"}</div>
+              </div>
+            </div>
+          )}
           <div className="mt-6">
             <label className="block text-sm font-medium text-slate-700 mb-2">
               备注
@@ -763,7 +901,7 @@ export default function InventoryPage() {
                 <th className="px-4 py-3 text-left text-xs font-medium text-slate-600">产品编号</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-slate-600">产品名称</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-slate-600">规格</th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-slate-600">表面处理</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-slate-600">材质/表面处理</th>
                 <th className="px-4 py-3 text-right text-xs font-medium text-slate-600">入库数量</th>
                 <th className="px-4 py-3 text-right text-xs font-medium text-slate-600">出库数量</th>
                 <th className="px-4 py-3 text-right text-xs font-medium text-slate-600">当前库存</th>
@@ -780,10 +918,12 @@ export default function InventoryPage() {
               ) : (
                 summary.map((item, idx) => (
                   <tr key={idx} className="hover:bg-slate-50">
-                    <td className="px-4 py-3 text-sm text-slate-900">{item.productCode}</td>
+                    <td className="px-4 py-3 text-sm text-slate-900 font-mono">{item.productCode}</td>
                     <td className="px-4 py-3 text-sm text-slate-600">{item.productName}</td>
                     <td className="px-4 py-3 text-sm text-slate-600">{item.spec}</td>
-                    <td className="px-4 py-3 text-sm text-slate-600">{item.surface}</td>
+                    <td className="px-4 py-3 text-sm text-slate-600">
+                      {item.material || item.surface || "-"}
+                    </td>
                     <td className="px-4 py-3 text-sm text-right text-green-600">
                       {item.inboundQty > 0 ? `+${item.inboundQty}` : "-"}
                     </td>
@@ -814,6 +954,7 @@ export default function InventoryPage() {
                 <th className="px-4 py-3 text-left text-xs font-medium text-slate-600">产品编号</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-slate-600">产品名称</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-slate-600">规格</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-slate-600">材质/表面</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-slate-600">供应商</th>
                 <th className="px-4 py-3 text-right text-xs font-medium text-slate-600">数量</th>
                 <th className="px-4 py-3 text-center text-xs font-medium text-slate-600">单位</th>
@@ -826,7 +967,7 @@ export default function InventoryPage() {
             <tbody className="divide-y divide-slate-100">
               {records.filter((r) => r.type === activeTab).length === 0 ? (
                 <tr>
-                  <td colSpan={11} className="px-4 py-8 text-center text-sm text-slate-400">
+                  <td colSpan={12} className="px-4 py-8 text-center text-sm text-slate-400">
                     暂无记录
                   </td>
                 </tr>
@@ -836,9 +977,14 @@ export default function InventoryPage() {
                   .map((record) => (
                     <tr key={record.id} className="hover:bg-slate-50">
                       <td className="px-4 py-3 text-sm text-slate-900 font-mono">{record.id}</td>
-                      <td className="px-4 py-3 text-sm text-slate-600">{record.productCode}</td>
+                      <td className="px-4 py-3 text-sm text-slate-600 font-mono">{record.productCode}</td>
                       <td className="px-4 py-3 text-sm text-slate-600">{record.productName}</td>
                       <td className="px-4 py-3 text-sm text-slate-600">{record.spec}</td>
+                      <td className="px-4 py-3 text-sm text-slate-600">
+                        {record.orderType === "plate"
+                          ? (record.material || <span className="text-slate-300">-</span>)
+                          : (record.surface || <span className="text-slate-300">-</span>)}
+                      </td>
                       <td className="px-4 py-3 text-sm text-slate-600">{record.supplierName || "-"}</td>
                       <td className={`px-4 py-3 text-sm text-right font-medium ${
                         record.type === "inbound" ? "text-green-600" : "text-red-600"
