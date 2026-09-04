@@ -7,9 +7,10 @@ interface ProductSearchSelectProps {
   value: string;
   onChange: (product: Product | null) => void;
   placeholder?: string;
+  productType?: "profile" | "plate";
 }
 
-export default function ProductSearchSelect({ value, onChange, placeholder = "输入编号/名称搜索" }: ProductSearchSelectProps) {
+export default function ProductSearchSelect({ value, onChange, placeholder = "输入编号/名称搜索", productType }: ProductSearchSelectProps) {
   const [keyword, setKeyword] = useState(value);
   const [isOpen, setIsOpen] = useState(false);
   const [results, setResults] = useState<Product[]>([]);
@@ -22,7 +23,10 @@ export default function ProductSearchSelect({ value, onChange, placeholder = "�
 
   useEffect(() => {
     if (keyword.length >= 1) {
-      const found = productStore.search(keyword);
+      let found = productStore.search(keyword);
+      if (productType) {
+        found = found.filter((p) => (p.productType || "profile") === productType);
+      }
       setResults(found.slice(0, 20));
       setIsOpen(found.length > 0);
     } else {
