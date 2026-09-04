@@ -56,6 +56,12 @@ export interface PurchaseOrderItem {
   surfaceTreatment: string;
   deliveryDate: string;
   remark: string;
+  // 板材专属字段（可选，向后兼容）
+  material?: string;        // 材质
+  sheetsCount?: number;     // 订单数量（张数）
+  piecesPerSheet?: number;  // 每张出材数
+  actualOutput?: number;    // 实际出材数
+  bladeCount?: number;      // 刀数
 }
 
 // 采购单
@@ -70,9 +76,12 @@ export interface PurchaseOrder {
   address: string;
   orderDate: string;
   maker: string;
+  orderType?: 'profile' | 'plate';  // 订单类型，默认 profile（向后兼容）
   items: PurchaseOrderItem[];
   totalQuantity: number;
   totalWeight: number;
+  totalSheets?: number;       // 板材用：总张数
+  totalActualOutput?: number; // 板材用：总实际出材数
   createdAt: string;
   updatedAt: string;
 }
@@ -112,7 +121,7 @@ export interface OutsourcingOrder {
 }
 
 // 种子数据版本号：每次更新 seed-data 时升此值，强制覆盖旧缓存
-const STORAGE_VERSION = "v11";
+const STORAGE_VERSION = "v12";
 
 // 存储键名
 const KEYS = {
@@ -293,6 +302,131 @@ export const reconciliationStore = {
   },
 };
 
+
+// 板材采购单种子数据
+export const seedPlatePurchaseOrders: PurchaseOrder[] = [
+  {
+    id: 'plate-po-1',
+    orderNo: 'PO-B2025021001',
+    company: '佛山市质稳五金有限公司',
+    supplierId: 's-plate-1',
+    supplierName: '铝板供应商',
+    contact: '张经理',
+    phone: '13800138001',
+    address: '佛山市南海区',
+    orderDate: '2025-02-10',
+    maker: '易金兰',
+    orderType: 'plate',
+    items: [
+      {
+        id: 'plate-item-1',
+        productCode: 'PLT-lk-003',
+        productName: 'lk-003',
+        spec: '1220*116.19*0.5',
+        length: 0,
+        quantity: 0,
+        unit: '',
+        weightPerMeter: 0,
+        totalWeight: 0,
+        surfaceTreatment: '',
+        deliveryDate: '',
+        remark: '不要附膜',
+        material: '普通铝板',
+        sheetsCount: 5000,
+        piecesPerSheet: 210,
+        actualOutput: 5040,
+        bladeCount: 504,
+      }
+    ],
+    totalQuantity: 0,
+    totalWeight: 0,
+    totalSheets: 5000,
+    totalActualOutput: 5040,
+    createdAt: '2025-02-10T10:00:00.000Z',
+    updatedAt: '2025-02-10T10:00:00.000Z'
+  },
+  {
+    id: 'plate-po-2',
+    orderNo: 'PO-B2025021002',
+    company: '佛山市质稳五金有限公司',
+    supplierId: 's-plate-1',
+    supplierName: '铝板供应商',
+    contact: '张经理',
+    phone: '13800138001',
+    address: '佛山市南海区',
+    orderDate: '2025-02-10',
+    maker: '易金兰',
+    orderType: 'plate',
+    items: [
+      {
+        id: 'plate-item-2',
+        productCode: 'PLT-yl-014',
+        productName: 'yl-014',
+        spec: '1220*152*1.2',
+        length: 0,
+        quantity: 0,
+        unit: '',
+        weightPerMeter: 0,
+        totalWeight: 0,
+        surfaceTreatment: '',
+        deliveryDate: '',
+        remark: '',
+        material: '5052',
+        sheetsCount: 3000,
+        piecesPerSheet: 640,
+        actualOutput: 3200,
+        bladeCount: 65,
+      }
+    ],
+    totalQuantity: 0,
+    totalWeight: 0,
+    totalSheets: 3000,
+    totalActualOutput: 3200,
+    createdAt: '2025-02-10T11:00:00.000Z',
+    updatedAt: '2025-02-10T11:00:00.000Z'
+  },
+  {
+    id: 'plate-po-3',
+    orderNo: 'PO-B2025021003',
+    company: '佛山市质稳五金有限公司',
+    supplierId: 's-plate-1',
+    supplierName: '铝板供应商',
+    contact: '张经理',
+    phone: '13800138001',
+    address: '佛山市南海区',
+    orderDate: '2025-02-10',
+    maker: '易金兰',
+    orderType: 'plate',
+    items: [
+      {
+        id: 'plate-item-3',
+        productCode: 'PLT-YL-071',
+        productName: 'YL-071',
+        spec: '1220*51.9*1.2',
+        length: 0,
+        quantity: 0,
+        unit: '',
+        weightPerMeter: 0,
+        totalWeight: 0,
+        surfaceTreatment: '',
+        deliveryDate: '',
+        remark: '',
+        material: '5052',
+        sheetsCount: 2000,
+        piecesPerSheet: 1316,
+        actualOutput: 2632,
+        bladeCount: 94,
+      }
+    ],
+    totalQuantity: 0,
+    totalWeight: 0,
+    totalSheets: 2000,
+    totalActualOutput: 2632,
+    createdAt: '2025-02-10T12:00:00.000Z',
+    updatedAt: '2025-02-10T12:00:00.000Z'
+  }
+];
+
 // 初始化数据
 function initializeData(): void {
   if (typeof window === "undefined") return;
@@ -302,8 +436,8 @@ function initializeData(): void {
   // 首次访问：写入全部初始数据
   if (currentVersion === null) {
     localStorage.setItem(KEYS.PRODUCTS, JSON.stringify([...seedProducts, ...plateProducts]));
-    localStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(seedSuppliers));
-    localStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify(seedPurchaseOrders));
+    localStorage.setItem(KEYS.SUPPLIERS, JSON.stringify([...seedSuppliers, { id: "s-plate-1", name: "铝板供应商", contact: "张经理", phone: "13800138001", address: "佛山市南海区" }]));
+    localStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([...seedPurchaseOrders, ...seedPlatePurchaseOrders]));
     localStorage.setItem(KEYS.OUTSOURCING_ORDERS, JSON.stringify([]));
     localStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify(deliveryCustomers));
     localStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify(deliveryProducts));
@@ -316,7 +450,7 @@ function initializeData(): void {
   // 版本号不匹配：强制用最新种子数据覆盖，保留用户订单数据
   if (currentVersion !== STORAGE_VERSION) {
     localStorage.setItem(KEYS.PRODUCTS, JSON.stringify([...seedProducts, ...plateProducts]));
-    localStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(seedSuppliers));
+    localStorage.setItem(KEYS.SUPPLIERS, JSON.stringify([...seedSuppliers, { id: "s-plate-1", name: "铝板供应商", contact: "张经理", phone: "13800138001", address: "佛山市南海区" }]));
     localStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify(deliveryCustomers));
     localStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify(deliveryProducts));
     localStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify(deliveryNotes));
@@ -330,7 +464,27 @@ function initializeData(): void {
   // 采购单种子数据补充：如果采购单键不存在或为空数组，写入种子数据
   const purchaseOrdersData = localStorage.getItem(KEYS.PURCHASE_ORDERS);
   if (!purchaseOrdersData || JSON.parse(purchaseOrdersData).length === 0) {
-    localStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify(seedPurchaseOrders));
+    localStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([...seedPurchaseOrders, ...seedPlatePurchaseOrders]));
+  }
+
+  // 补充铝板供应商（如不存在）
+  const suppliersData = localStorage.getItem(KEYS.SUPPLIERS);
+  if (suppliersData) {
+    const suppliersList = JSON.parse(suppliersData) as Supplier[];
+    if (!suppliersList.some(s => s.id === 's-plate-1')) {
+      suppliersList.push({ id: 's-plate-1', name: '铝板供应商', contact: '张经理', phone: '13800138001', address: '佛山市南海区' });
+      localStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(suppliersList));
+    }
+  }
+
+  // v12升级：补充板材采购单种子数据（如不存在则添加）
+  if (currentVersion === "v11" && purchaseOrdersData) {
+    const existing = JSON.parse(purchaseOrdersData) as PurchaseOrder[];
+    const plateIds = seedPlatePurchaseOrders.map(p => p.id);
+    const hasPlate = existing.some(o => plateIds.includes(o.id));
+    if (!hasPlate) {
+      localStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([...existing, ...seedPlatePurchaseOrders]));
+    }
   }
 }
 
@@ -535,3 +689,4 @@ export const outsourcingOrderStore = {
 export function initData(): void {
   initializeData();
 }
+
