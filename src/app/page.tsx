@@ -9,6 +9,7 @@ export default function PurchaseOrderListPage() {
   const [searchSupplier, setSearchSupplier] = useState("");
   const [searchDate, setSearchDate] = useState("");
   const [searchProduct, setSearchProduct] = useState("");
+  const [showNewDropdown, setShowNewDropdown] = useState(false);
 
   const loadOrders = useCallback(() => {
     const all = purchaseOrderStore.getAll();
@@ -34,19 +35,51 @@ export default function PurchaseOrderListPage() {
     }
   };
 
+  const getOrderTypeLabel = (order: PurchaseOrder) => {
+    const t = order.orderType || "profile";
+    if (t === "plate") {
+      return <span className="inline-block px-1.5 py-0.5 text-xs bg-orange-100 text-orange-700 rounded font-medium">板材</span>;
+    }
+    return <span className="inline-block px-1.5 py-0.5 text-xs bg-blue-100 text-blue-700 rounded font-medium">型材</span>;
+  };
+
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl font-bold text-slate-900">采购单管理</h1>
-        <Link
-          href="/purchase/new"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors"
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
-          </svg>
-          新建采购单
-        </Link>
+        <div className="relative">
+          <button
+            onClick={() => setShowNewDropdown(!showNewDropdown)}
+            onBlur={() => setTimeout(() => setShowNewDropdown(false), 200)}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+            </svg>
+            新建采购单
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          {showNewDropdown && (
+            <div className="absolute right-0 mt-1 w-44 bg-white border border-slate-200 rounded-md shadow-lg z-10">
+              <Link
+                href="/purchase/new"
+                className="block px-4 py-2 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-700 rounded-t-md"
+                onClick={() => setShowNewDropdown(false)}
+              >
+                新建型材采购单
+              </Link>
+              <Link
+                href="/purchase/new?type=plate"
+                className="block px-4 py-2 text-sm text-slate-700 hover:bg-orange-50 hover:text-orange-700 rounded-b-md border-t border-slate-100"
+                onClick={() => setShowNewDropdown(false)}
+              >
+                新建板材采购单
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* 搜索栏 */}
@@ -90,6 +123,7 @@ export default function PurchaseOrderListPage() {
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200">
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">订单编号</th>
+              <th className="text-center px-4 py-2.5 font-medium text-slate-600 w-16">类型</th>
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">制单日期</th>
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">采购公司</th>
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">供应商</th>
@@ -102,51 +136,59 @@ export default function PurchaseOrderListPage() {
           <tbody>
             {filteredOrders.length === 0 ? (
               <tr>
-                <td colSpan={8} className="text-center py-12 text-slate-400">
+                <td colSpan={9} className="text-center py-12 text-slate-400">
                   暂无采购单数据
                 </td>
               </tr>
             ) : (
-              filteredOrders.map((order) => (
-                <tr key={order.id} className="border-b border-slate-100 hover:bg-slate-50/50">
-                  <td className="px-4 py-2.5 font-mono text-blue-600">{order.orderNo}</td>
-                  <td className="px-4 py-2.5 text-slate-600">{order.orderDate}</td>
-                  <td className="px-4 py-2.5 text-slate-600">{order.company}</td>
-                  <td className="px-4 py-2.5 text-slate-600">{order.supplierName}</td>
-                  <td className="px-4 py-2.5 text-right text-slate-600">{order.items.length}</td>
-                  <td className="px-4 py-2.5 text-right text-slate-600">{order.totalQuantity}</td>
-                  <td className="px-4 py-2.5 text-right text-slate-600">{order.totalWeight.toFixed(2)}</td>
-                  <td className="px-4 py-2.5 text-center">
-                    <div className="flex items-center justify-center gap-2">
-                      <Link
-                        href={`/purchase/${order.id}/detail`}
-                        className="text-blue-600 hover:text-blue-800 text-xs"
-                      >
-                        查看
-                      </Link>
-                      <Link
-                        href={`/purchase/${order.id}`}
-                        className="text-amber-600 hover:text-amber-800 text-xs"
-                      >
-                        编辑
-                      </Link>
-                      <Link
-                        href={`/print/purchase/${order.id}`}
-                        target="_blank"
-                        className="text-emerald-600 hover:text-emerald-800 text-xs"
-                      >
-                        打印
-                      </Link>
-                      <button
-                        onClick={() => handleDelete(order.id)}
-                        className="text-red-500 hover:text-red-700 text-xs"
-                      >
-                        删除
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
+              filteredOrders.map((order) => {
+                const isPlate = (order.orderType || "profile") === "plate";
+                return (
+                  <tr key={order.id} className="border-b border-slate-100 hover:bg-slate-50/50">
+                    <td className="px-4 py-2.5 font-mono text-blue-600">{order.orderNo}</td>
+                    <td className="px-4 py-2.5 text-center">{getOrderTypeLabel(order)}</td>
+                    <td className="px-4 py-2.5 text-slate-600">{order.orderDate}</td>
+                    <td className="px-4 py-2.5 text-slate-600">{order.company}</td>
+                    <td className="px-4 py-2.5 text-slate-600">{order.supplierName}</td>
+                    <td className="px-4 py-2.5 text-right text-slate-600">{order.items.length}</td>
+                    <td className="px-4 py-2.5 text-right text-slate-600">
+                      {isPlate ? (order.totalSheets ?? 0) : order.totalQuantity}
+                    </td>
+                    <td className="px-4 py-2.5 text-right text-slate-600">
+                      {isPlate ? (order.totalActualOutput ?? 0) : order.totalWeight.toFixed(2)}
+                    </td>
+                    <td className="px-4 py-2.5 text-center">
+                      <div className="flex items-center justify-center gap-2">
+                        <Link
+                          href={`/purchase/${order.id}/detail`}
+                          className="text-blue-600 hover:text-blue-800 text-xs"
+                        >
+                          查看
+                        </Link>
+                        <Link
+                          href={`/purchase/${order.id}`}
+                          className="text-amber-600 hover:text-amber-800 text-xs"
+                        >
+                          编辑
+                        </Link>
+                        <Link
+                          href={`/print/purchase/${order.id}`}
+                          target="_blank"
+                          className="text-emerald-600 hover:text-emerald-800 text-xs"
+                        >
+                          打印
+                        </Link>
+                        <button
+                          onClick={() => handleDelete(order.id)}
+                          className="text-red-500 hover:text-red-700 text-xs"
+                        >
+                          删除
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>
