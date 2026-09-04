@@ -4,6 +4,7 @@ import {
   type DeliveryCustomer, type DeliveryProduct, type DeliveryNote, type DeliveryItem,
 } from "./delivery-seed-data";
 import { seedPurchaseOrders } from "./purchase-seed-data";
+import { plateProducts } from "./plate-seed-data";
 
 export type { Product, Supplier };
 export type { DeliveryCustomer, DeliveryProduct, DeliveryNote, DeliveryItem };
@@ -111,7 +112,7 @@ export interface OutsourcingOrder {
 }
 
 // 种子数据版本号：每次更新 seed-data 时升此值，强制覆盖旧缓存
-const STORAGE_VERSION = "v10";
+const STORAGE_VERSION = "v11";
 
 // 存储键名
 const KEYS = {
@@ -300,7 +301,7 @@ function initializeData(): void {
 
   // 首次访问：写入全部初始数据
   if (currentVersion === null) {
-    localStorage.setItem(KEYS.PRODUCTS, JSON.stringify(seedProducts));
+    localStorage.setItem(KEYS.PRODUCTS, JSON.stringify([...seedProducts, ...plateProducts]));
     localStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(seedSuppliers));
     localStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify(seedPurchaseOrders));
     localStorage.setItem(KEYS.OUTSOURCING_ORDERS, JSON.stringify([]));
@@ -314,7 +315,7 @@ function initializeData(): void {
 
   // 版本号不匹配：强制用最新种子数据覆盖，保留用户订单数据
   if (currentVersion !== STORAGE_VERSION) {
-    localStorage.setItem(KEYS.PRODUCTS, JSON.stringify(seedProducts));
+    localStorage.setItem(KEYS.PRODUCTS, JSON.stringify([...seedProducts, ...plateProducts]));
     localStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(seedSuppliers));
     localStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify(deliveryCustomers));
     localStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify(deliveryProducts));
