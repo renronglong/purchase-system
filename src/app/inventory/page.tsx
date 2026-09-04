@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
+import ProductSearchSelect from "@/components/product-search-select";
+import { supplierStore, type Product, type Supplier } from "@/lib/store";
 
 // 库存记录类型
 interface InventoryRecord {
@@ -12,6 +14,7 @@ interface InventoryRecord {
   surface: string;
   quantity: number;
   unit: string;
+  supplierName: string; // 供应商
   referenceNo: string; // 关联单据号（采购单号/送货单号）
   operator: string; // 操作员
   remark: string;
@@ -31,6 +34,12 @@ interface InventorySummary {
 }
 
 const STORAGE_KEY = "inventory_records_local";
+
+// 表面处理选项（来自送货单真实数据）
+const SURFACE_OPTIONS = [
+  "", "喷涂", "拉丝", "本色", "白色", "砂白", "砂纹白", "砂银",
+  "银白", "铁灰", "氧化砂银", "氧化雾银", "氧化黑色", "镀彩锌", "镀白锌",
+];
 
 // 从 localStorage 加载
 function loadRecords(): InventoryRecord[] {
@@ -62,6 +71,105 @@ function genRecordNo(records: InventoryRecord[], type: "inbound" | "outbound"): 
   return `${prefix}${today}${String(maxSeq + 1).padStart(3, "0")}`;
 }
 
+// 供应商搜索选择组件（内联）
+function SupplierSearchSelect({
+  value,
+  onSelect,
+}: {
+  value: string;
+  onSelect: (supplier: Supplier | null) => void;
+}) {
+  const [keyword, setKeyword] = useState(value);
+  const [isOpen, setIsOpen] = useState(false);
+  const [results, setResults] = useState<Supplier[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setKeyword(value);
+  }, [value]);
+
+  useEffect(() => {
+    if (keyword.length >= 1) {
+      const all = supplierStore.getAll();
+      const kw = keyword.toLowerCase();
+      const found = all.filter(
+        (s) =>
+          s.name.toLowerCase().includes(kw) ||
+          s.contact.toLowerCase().includes(kw)
+      );
+      setResults(found.slice(0, 20));
+      setIsOpen(found.length > 0);
+    } else {
+      setResults([]);
+      setIsOpen(false);
+    }
+    setSelectedIndex(-1);
+  }, [keyword]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSelect = (supplier: Supplier) => {
+    setKeyword(supplier.name);
+    setIsOpen(false);
+    onSelect(supplier);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!isOpen) return;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setSelectedIndex((prev) => Math.min(prev + 1, results.length - 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setSelectedIndex((prev) => Math.max(prev - 1, 0));
+    } else if (e.key === "Enter" && selectedIndex >= 0) {
+      e.preventDefault();
+      handleSelect(results[selectedIndex]);
+    } else if (e.key === "Escape") {
+      setIsOpen(false);
+    }
+  };
+
+  return (
+    <div ref={wrapperRef} className="relative">
+      <input
+        type="text"
+        value={keyword}
+        onChange={(e) => {
+          setKeyword(e.target.value);
+          if (e.target.value === "") onSelect(null);
+        }}
+        onFocus={() => { if (results.length > 0) setIsOpen(true); }}
+        onKeyDown={handleKeyDown}
+        placeholder="输入供应商名称搜索"
+        className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+      />
+      {isOpen && (
+        <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-md shadow-lg max-h-48 overflow-auto">
+          {results.map((supplier, idx) => (
+            <div
+              key={supplier.id}
+              onClick={() => handleSelect(supplier)}
+              className={`px-3 py-2 cursor-pointer text-sm hover:bg-blue-50 ${idx === selectedIndex ? "bg-blue-50" : ""}`}
+            >
+              {supplier.name}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function InventoryPage() {
   const [records, setRecords] = useState<InventoryRecord[]>([]);
   const [view, setView] = useState<"list" | "form">("list");
@@ -77,10 +185,13 @@ export default function InventoryPage() {
     surface: "",
     quantity: "",
     unit: "条",
+    supplierName: "",
     referenceNo: "",
     operator: "",
     remark: "",
   });
+  // 用于重置 ProductSearchSelect
+  const [productSearchKey, setProductSearchKey] = useState("");
 
   // 加载数据
   useEffect(() => {
@@ -104,10 +215,12 @@ export default function InventoryPage() {
       surface: "",
       quantity: "",
       unit: "条",
+      supplierName: "",
       referenceNo: "",
       operator: "",
       remark: "",
     });
+    setProductSearchKey("");
     setView("form");
   };
 
@@ -122,11 +235,25 @@ export default function InventoryPage() {
       surface: record.surface,
       quantity: String(record.quantity),
       unit: record.unit,
+      supplierName: record.supplierName || "",
       referenceNo: record.referenceNo,
       operator: record.operator,
       remark: record.remark,
     });
+    setProductSearchKey(record.productCode);
     setView("form");
+  };
+
+  // 从产品库选中产品后自动填充
+  const handleProductSelect = (product: Product | null) => {
+    if (product) {
+      setFormData((prev) => ({
+        ...prev,
+        productCode: product.id,
+        productName: product.name,
+        spec: product.spec,
+      }));
+    }
   };
 
   // 保存记录
@@ -156,6 +283,7 @@ export default function InventoryPage() {
               surface: formData.surface,
               quantity: qty,
               unit: formData.unit,
+              supplierName: formData.supplierName,
               referenceNo: formData.referenceNo,
               operator: formData.operator,
               remark: formData.remark,
@@ -173,6 +301,7 @@ export default function InventoryPage() {
         surface: formData.surface,
         quantity: qty,
         unit: formData.unit,
+        supplierName: formData.supplierName,
         referenceNo: formData.referenceNo,
         operator: formData.operator,
         remark: formData.remark,
@@ -247,18 +376,18 @@ export default function InventoryPage() {
 
         <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
           <div className="grid grid-cols-2 gap-6">
+            {/* 产品编号 - 关联产品库搜索 */}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
                 产品编号 <span className="text-red-500">*</span>
               </label>
-              <input
-                type="text"
-                value={formData.productCode}
-                onChange={(e) => setFormData({ ...formData, productCode: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="如：YL-001"
+              <ProductSearchSelect
+                value={productSearchKey}
+                onChange={handleProductSelect}
+                placeholder="输入编号/名称搜索产品库"
               />
             </div>
+            {/* 产品名称 - 自动填充，可手动修改 */}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
                 产品名称
@@ -267,9 +396,11 @@ export default function InventoryPage() {
                 type="text"
                 value={formData.productName}
                 onChange={(e) => setFormData({ ...formData, productName: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-slate-50"
+                placeholder="选择产品后自动填充"
               />
             </div>
+            {/* 规格 - 自动填充 */}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
                 规格
@@ -278,20 +409,40 @@ export default function InventoryPage() {
                 type="text"
                 value={formData.spec}
                 onChange={(e) => setFormData({ ...formData, spec: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-slate-50"
+                placeholder="选择产品后自动填充"
               />
             </div>
+            {/* 表面处理 - 下拉选择 */}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
-                表面处理
+                表面处理（颜色）
               </label>
-              <input
-                type="text"
+              <select
                 value={formData.surface}
                 onChange={(e) => setFormData({ ...formData, surface: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+              >
+                {SURFACE_OPTIONS.map((opt) => (
+                  <option key={opt} value={opt}>
+                    {opt || "-- 请选择 --"}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {/* 供应商 - 关联供应商库搜索 */}
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-2">
+                供应商
+              </label>
+              <SupplierSearchSelect
+                value={formData.supplierName}
+                onSelect={(supplier) =>
+                  setFormData({ ...formData, supplierName: supplier?.name || "" })
+                }
               />
             </div>
+            {/* 数量 */}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
                 数量 <span className="text-red-500">*</span>
@@ -300,10 +451,11 @@ export default function InventoryPage() {
                 type="number"
                 value={formData.quantity}
                 onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                 step="0.01"
               />
             </div>
+            {/* 单位 */}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
                 单位
@@ -311,7 +463,7 @@ export default function InventoryPage() {
               <select
                 value={formData.unit}
                 onChange={(e) => setFormData({ ...formData, unit: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               >
                 <option value="条">条</option>
                 <option value="支">支</option>
@@ -320,6 +472,7 @@ export default function InventoryPage() {
                 <option value="kg">kg</option>
               </select>
             </div>
+            {/* 关联单据号 */}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
                 关联单据号
@@ -328,10 +481,11 @@ export default function InventoryPage() {
                 type="text"
                 value={formData.referenceNo}
                 onChange={(e) => setFormData({ ...formData, referenceNo: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                 placeholder="采购单号或送货单号"
               />
             </div>
+            {/* 操作员 */}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
                 操作员
@@ -340,7 +494,7 @@ export default function InventoryPage() {
                 type="text"
                 value={formData.operator}
                 onChange={(e) => setFormData({ ...formData, operator: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               />
             </div>
           </div>
@@ -351,7 +505,7 @@ export default function InventoryPage() {
             <textarea
               value={formData.remark}
               onChange={(e) => setFormData({ ...formData, remark: e.target.value })}
-              className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
               rows={3}
             />
           </div>
@@ -491,6 +645,7 @@ export default function InventoryPage() {
                 <th className="px-4 py-3 text-left text-xs font-medium text-slate-600">产品编号</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-slate-600">产品名称</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-slate-600">规格</th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-slate-600">供应商</th>
                 <th className="px-4 py-3 text-right text-xs font-medium text-slate-600">数量</th>
                 <th className="px-4 py-3 text-center text-xs font-medium text-slate-600">单位</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-slate-600">关联单号</th>
@@ -502,7 +657,7 @@ export default function InventoryPage() {
             <tbody className="divide-y divide-slate-100">
               {records.filter((r) => r.type === activeTab).length === 0 ? (
                 <tr>
-                  <td colSpan={10} className="px-4 py-8 text-center text-sm text-slate-400">
+                  <td colSpan={11} className="px-4 py-8 text-center text-sm text-slate-400">
                     暂无记录
                   </td>
                 </tr>
@@ -515,6 +670,7 @@ export default function InventoryPage() {
                       <td className="px-4 py-3 text-sm text-slate-600">{record.productCode}</td>
                       <td className="px-4 py-3 text-sm text-slate-600">{record.productName}</td>
                       <td className="px-4 py-3 text-sm text-slate-600">{record.spec}</td>
+                      <td className="px-4 py-3 text-sm text-slate-600">{record.supplierName || "-"}</td>
                       <td className={`px-4 py-3 text-sm text-right font-medium ${
                         record.type === "inbound" ? "text-green-600" : "text-red-600"
                       }`}>
