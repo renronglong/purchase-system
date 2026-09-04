@@ -35,7 +35,7 @@ export default function ProductsPage() {
   };
 
   const handleEdit = (product: Product) => {
-    setFormData({ id: product.id, name: product.name, spec: product.spec, weightPerMeter: product.weightPerMeter, material: product.material, defaultSupplier: product.defaultSupplier });
+    setFormData({ id: product.id, name: product.name, spec: product.spec, weightPerMeter: product.weightPerMeter || 0, material: product.material || "", defaultSupplier: product.defaultSupplier || "" });
     setEditingProduct(product);
     setIsAdding(false);
   };
@@ -188,7 +188,7 @@ export default function ProductsPage() {
                   <td className="px-4 py-2 font-mono text-blue-600">{product.id}</td>
                   <td className="px-4 py-2">{product.name}</td>
                   <td className="px-4 py-2">{product.spec}</td>
-                  <td className="px-4 py-2 text-right font-mono">{product.weightPerMeter.toFixed(2)}</td>
+                  <td className="px-4 py-2 text-right font-mono">{(product.weightPerMeter || 0).toFixed(2)}</td>
                   <td className="px-4 py-2">{product.material}</td>
                   <td className="px-4 py-2">{product.defaultSupplier}</td>
                   <td className="px-4 py-2 text-center">
