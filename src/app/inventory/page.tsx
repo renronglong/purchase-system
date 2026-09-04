@@ -176,8 +176,17 @@ function PurchaseOrderSearchSelect({
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
+  // 最近采购单（按创建时间倒序，最多10条）
+  const getRecentOrders = (): PurchaseOrder[] => {
+    return purchaseOrderStore
+      .getAll()
+      .slice()
+      .sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""))
+      .slice(0, 10);
+  };
+
   useEffect(() => {
-    if (keyword.length >= 2) {
+    if (keyword.trim().length >= 1) {
       const all = purchaseOrderStore.getAll();
       const kw = keyword.toLowerCase();
       const found = all.filter(
@@ -185,12 +194,12 @@ function PurchaseOrderSearchSelect({
       );
       setResults(found.slice(0, 10));
       setIsOpen(found.length > 0);
-    } else {
-      setResults([]);
-      setIsOpen(false);
+    } else if (isOpen) {
+      // 无关键词且下拉打开时，显示最近采购单
+      setResults(getRecentOrders());
     }
     setSelectedIndex(-1);
-  }, [keyword]);
+  }, [keyword, isOpen]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -206,11 +215,20 @@ function PurchaseOrderSearchSelect({
     onSelect(order);
   };
 
+  const toggleOpen = () => {
+    if (!isOpen) {
+      setResults(keyword.trim() ? results : getRecentOrders());
+    }
+    setIsOpen(!isOpen);
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (!isOpen) return;
-    if (e.key === "ArrowDown") { e.preventDefault(); setSelectedIndex((prev) => Math.min(prev + 1, results.length - 1)); }
-    else if (e.key === "ArrowUp") { e.preventDefault(); setSelectedIndex((prev) => Math.max(prev - 1, 0)); }
-    else if (e.key === "Enter" && selectedIndex >= 0) { e.preventDefault(); handleSelect(results[selectedIndex]); }
+    if (e.key === "ArrowDown" && isOpen) { e.preventDefault(); setSelectedIndex((prev) => Math.min(prev + 1, results.length - 1)); }
+    else if (e.key === "ArrowUp" && isOpen) { e.preventDefault(); setSelectedIndex((prev) => Math.max(prev - 1, 0)); }
+    else if (e.key === "Enter") {
+      if (selectedIndex >= 0) { e.preventDefault(); handleSelect(results[selectedIndex]); }
+      else if (!isOpen) { setIsOpen(true); }
+    }
     else if (e.key === "Escape") { setIsOpen(false); }
   };
 
@@ -220,22 +238,44 @@ function PurchaseOrderSearchSelect({
         type="text"
         value={keyword}
         onChange={(e) => setKeyword(e.target.value)}
-        onFocus={() => { if (results.length > 0) setIsOpen(true); }}
+        onFocus={() => { if (!isOpen) { setResults(getRecentOrders()); setIsOpen(true); } }}
         onKeyDown={handleKeyDown}
-        placeholder="输入采购单号或供应商名称搜索"
-        className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+        placeholder="点击选择最近采购单，或输入单号/供应商搜索"
+        className="w-full px-3 py-2 pr-9 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm cursor-pointer"
       />
+      <button
+        type="button"
+        onClick={toggleOpen}
+        className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+        tabIndex={-1}
+      >
+        <svg className={`w-4 h-4 transition-transform ${isOpen ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
       {isOpen && (
-        <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-md shadow-lg max-h-48 overflow-auto">
-          {results.map((order, idx) => (
+        <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-md shadow-lg max-h-60 overflow-auto">
+          {keyword.trim().length === 0 && (
+            <div className="px-3 py-1.5 text-xs text-slate-400 bg-slate-50 border-b border-slate-100">最近采购单</div>
+          )}
+          {results.length === 0 ? (
+            <div className="px-3 py-3 text-sm text-slate-400 text-center">未找到匹配的采购单</div>
+          ) : results.map((order, idx) => (
             <div
               key={order.id}
               onClick={() => handleSelect(order)}
-              className={`px-3 py-2 cursor-pointer text-sm hover:bg-blue-50 ${idx === selectedIndex ? "bg-blue-50" : ""}`}
+              className={`px-3 py-2 cursor-pointer text-sm hover:bg-blue-50 flex items-center ${idx === selectedIndex ? "bg-blue-50" : ""}`}
             >
               <span className="font-mono text-blue-600">{order.orderNo}</span>
-              <span className="ml-2 text-slate-700">{order.supplierName}</span>
-              <span className="ml-2 text-slate-400">{order.items.length}项</span>
+              <span className={`ml-2 px-1.5 py-0.5 text-xs rounded ${
+                (order.orderType || "profile") === "plate"
+                  ? "bg-orange-100 text-orange-700"
+                  : "bg-blue-100 text-blue-700"
+              }`}>
+                {(order.orderType || "profile") === "plate" ? "板材" : "型材"}
+              </span>
+              <span className="ml-2 text-slate-700 truncate flex-1">{order.supplierName}</span>
+              <span className="ml-2 text-slate-400 whitespace-nowrap">{order.items.length}项</span>
             </div>
           ))}
         </div>
