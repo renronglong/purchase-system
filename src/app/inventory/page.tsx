@@ -5,7 +5,6 @@ import ProductSearchSelect from "@/components/product-search-select";
 import {
   supplierStore,
   purchaseOrderStore,
-  deliveryNoteStore,
   type Product,
   type Supplier,
   type PurchaseOrder,
@@ -637,14 +636,10 @@ export default function InventoryPage() {
                 placeholder="点击选择或手动输入"
               />
               <datalist id="reference-no-list">
-                <option value="" disabled>-- 选择单据 --</option>
-                {(() => {
-                  const orders = purchaseOrderStore.getAll().map(o => o.orderNo);
-                  const notes = deliveryNoteStore.getAll().map(n => n.noteNo);
-                  return [...orders, ...notes].map(no => (
-                    <option key={no} value={no} />
-                  ));
-                })()}
+                <option value="" disabled>-- 选择采购单 --</option>
+                {purchaseOrderStore.getAll().map(o => (
+                  <option key={o.orderNo} value={o.orderNo} />
+                ))}
               </datalist>
             </div>
             {/* 操作员 - 下拉选择（历史记录+可手动输入） */}
