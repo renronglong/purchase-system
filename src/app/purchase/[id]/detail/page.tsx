@@ -126,43 +126,51 @@ export default function PurchaseOrderDetailPage() {
       {/* 板材明细 */}
       {isPlate && (
         <div className="bg-white rounded-lg border border-orange-200 overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full text-xs min-w-[1200px]">
             <thead>
               <tr className="bg-orange-50 border-b border-orange-200">
-                <th className="px-3 py-2 text-left font-medium text-slate-600">序号</th>
-                <th className="px-3 py-2 text-left font-medium text-slate-600">产品编号</th>
-                <th className="px-3 py-2 text-left font-medium text-slate-600">产品名称</th>
-                <th className="px-3 py-2 text-left font-medium text-slate-600">材质</th>
-                <th className="px-3 py-2 text-left font-medium text-slate-600">规格</th>
-                <th className="px-3 py-2 text-right font-medium text-slate-600">订单数量(张)</th>
-                <th className="px-3 py-2 text-right font-medium text-slate-600">每张出材数</th>
-                <th className="px-3 py-2 text-right font-medium text-slate-600">实际出材数</th>
-                <th className="px-3 py-2 text-right font-medium text-slate-600">刀数</th>
-                <th className="px-3 py-2 text-left font-medium text-slate-600">备注</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-10">序号</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-32">产品编号</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-20">材质</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-20">订单数量</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-16">张数</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-12">单位</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-32">规格尺寸</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-20">单张数量</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-20">实际数量</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-16">刀数</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-28">日期</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-28">备注</th>
               </tr>
             </thead>
             <tbody>
               {order.items.map((item, index) => (
                 <tr key={item.id} className="border-b border-slate-100">
-                  <td className="px-3 py-2 text-slate-500">{index + 1}</td>
-                  <td className="px-3 py-2 font-mono text-blue-600">{item.productCode}</td>
-                  <td className="px-3 py-2">{item.productName}</td>
-                  <td className="px-3 py-2">{item.material || "-"}</td>
-                  <td className="px-3 py-2">{item.spec}</td>
-                  <td className="px-3 py-2 text-right">{item.sheetsCount ?? "-"}</td>
-                  <td className="px-3 py-2 text-right">{item.piecesPerSheet ?? "-"}</td>
-                  <td className="px-3 py-2 text-right">{item.actualOutput ?? "-"}</td>
-                  <td className="px-3 py-2 text-right">{item.bladeCount ?? "-"}</td>
-                  <td className="px-3 py-2">{item.remark}</td>
+                  <td className="px-2 py-1.5 text-center text-slate-500">{index + 1}</td>
+                  <td className="px-2 py-1.5 font-mono text-blue-600">{item.productCode}</td>
+                  <td className="px-2 py-1.5">{item.material || "-"}</td>
+                  <td className="px-2 py-1.5 text-center font-mono">{item.quantity || ""}</td>
+                  <td className="px-2 py-1.5 text-center text-slate-600 font-mono">{item.sheetsCount || ""}</td>
+                  <td className="px-2 py-1.5 text-center text-slate-600">{item.unit || "张"}</td>
+                  <td className="px-2 py-1.5 text-slate-600">{item.spec}</td>
+                  <td className="px-2 py-1.5 text-center text-slate-600 font-mono">{item.piecesPerSheet || ""}</td>
+                  <td className="px-2 py-1.5 text-center text-slate-600 font-mono">{item.actualOutput || ""}</td>
+                  <td className="px-2 py-1.5 text-center text-slate-600 font-mono">{((item.bladeCount || 0) * (item.sheetsCount || 0)) || ""}</td>
+                  <td className="px-2 py-1.5 text-slate-600">{item.deliveryDate || ""}</td>
+                  <td className="px-2 py-1.5">{item.remark}</td>
                 </tr>
               ))}
             </tbody>
             <tfoot>
               <tr className="bg-orange-50 border-t-2 border-orange-300">
-                <td colSpan={5} className="px-3 py-2 text-right font-medium">合计</td>
-                <td className="px-3 py-2 text-right font-bold">{order.totalSheets ?? 0}</td>
+                <td colSpan={3} className="px-2 py-2 text-right text-sm font-medium text-slate-600">合计</td>
+                <td className="px-2 py-2 text-center font-mono font-bold text-slate-900">{order.items.reduce((s, it) => s + (it.quantity || 0), 0)}</td>
+                <td className="px-2 py-2 text-center font-mono font-bold text-slate-900">{order.totalSheets ?? 0}</td>
                 <td></td>
-                <td className="px-3 py-2 text-right font-bold">{order.totalActualOutput ?? 0}</td>
+                <td></td>
+                <td></td>
+                <td className="px-2 py-2 text-center font-mono font-bold text-slate-900">{order.totalActualOutput ?? 0}</td>
+                <td className="px-2 py-2 text-center font-mono font-bold text-slate-900">{order.items.reduce((s, it) => s + ((it.bladeCount || 0) * (it.sheetsCount || 0)), 0)}</td>
                 <td colSpan={2}></td>
               </tr>
             </tfoot>
