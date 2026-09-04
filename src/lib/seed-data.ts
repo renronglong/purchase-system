@@ -3,9 +3,21 @@ export interface Product {
   id: string;
   name: string;
   spec: string;
-  weightPerMeter: number;
-  material: string;
-  defaultSupplier: string;
+  weightPerMeter?: number;  // 型材用（每米重量）
+  material?: string;
+  defaultSupplier?: string;
+  // 板材专属字段
+  plateWidth?: number;      // 剪板宽度
+  thickness?: number;       // 厚度
+  step?: number;            // 步距
+  piecesPerSheet?: number;  // 每张板数量
+  weight?: number;          // 重量（单张）
+  plateSpec?: string;       // 产品规格
+  area?: number;            // 面积
+  perimeter?: number;       // 周长
+  bladeCount?: number;      // 刀数
+  outputPerTime?: number;   // 一次出数量
+  productType?: 'profile' | 'plate';  // 产品类型
 }
 
 export const seedProducts: Product[] = [
