@@ -152,7 +152,7 @@ export default function PurchaseOrderFormPage() {
           productCode: product.id,
           productName: product.name,
           spec: product.spec,
-          weightPerMeter: product.weightPerMeter,
+          weightPerMeter: product.weightPerMeter || 0,
         };
         item.totalWeight = calcWeight(item.weightPerMeter, item.length, item.quantity);
         next[index] = item;
