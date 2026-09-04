@@ -338,6 +338,24 @@ export default function InventoryPage() {
     setView("form");
   };
 
+  // 切换型材/板材模式
+  const switchOrderType = (ot: "profile" | "plate") => {
+    setFormData((prev) => ({
+      ...prev,
+      orderType: ot,
+      surface: ot === "plate" ? "" : prev.surface,
+      material: ot === "plate" ? prev.material : "",
+      unit: ot === "plate" ? "张" : "条",
+      piecesPerSheet: ot === "plate" ? prev.piecesPerSheet : "",
+      actualOutput: ot === "plate" ? prev.actualOutput : "",
+      bladeCount: ot === "plate" ? prev.bladeCount : "",
+    }));
+    if (ot === "profile") {
+      setProductSearchKey("");
+      setFormData((prev) => ({ ...prev, productCode: "", productName: "", spec: "" }));
+    }
+  };
+
   // 从产品库选中产品后自动填充
   const handleProductSelect = (product: any | null) => {
     if (product) {
@@ -616,6 +634,32 @@ export default function InventoryPage() {
         )}
 
         <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
+          {/* 类型切换 */}
+          <div className="mb-5 flex items-center gap-2">
+            <span className="text-sm text-slate-600">类型：</span>
+            <button
+              type="button"
+              onClick={() => switchOrderType("profile")}
+              className={`px-4 py-1.5 text-sm rounded-md border transition-colors ${
+                !isPlate
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "bg-white text-slate-600 border-slate-300 hover:bg-slate-50"
+              }`}
+            >
+              型材
+            </button>
+            <button
+              type="button"
+              onClick={() => switchOrderType("plate")}
+              className={`px-4 py-1.5 text-sm rounded-md border transition-colors ${
+                isPlate
+                  ? "bg-orange-600 text-white border-orange-600"
+                  : "bg-white text-slate-600 border-slate-300 hover:bg-slate-50"
+              }`}
+            >
+              板材
+            </button>
+          </div>
           <div className="grid grid-cols-2 gap-6">
             {/* 产品编号 - 关联产品库搜索 */}
             <div>
