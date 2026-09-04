@@ -2,7 +2,14 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import ProductSearchSelect from "@/components/product-search-select";
-import { supplierStore, type Product, type Supplier } from "@/lib/store";
+import {
+  supplierStore,
+  purchaseOrderStore,
+  type Product,
+  type Supplier,
+  type PurchaseOrder,
+  type PurchaseOrderItem,
+} from "@/lib/store";
 
 // 库存记录类型
 interface InventoryRecord {
@@ -71,7 +78,7 @@ function genRecordNo(records: InventoryRecord[], type: "inbound" | "outbound"): 
   return `${prefix}${today}${String(maxSeq + 1).padStart(3, "0")}`;
 }
 
-// 供应商搜索选择组件（内联）
+// 供应商搜索选择组件
 function SupplierSearchSelect({
   value,
   onSelect,
@@ -85,19 +92,13 @@ function SupplierSearchSelect({
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    setKeyword(value);
-  }, [value]);
+  useEffect(() => { setKeyword(value); }, [value]);
 
   useEffect(() => {
     if (keyword.length >= 1) {
       const all = supplierStore.getAll();
       const kw = keyword.toLowerCase();
-      const found = all.filter(
-        (s) =>
-          s.name.toLowerCase().includes(kw) ||
-          s.contact.toLowerCase().includes(kw)
-      );
+      const found = all.filter((s) => s.name.toLowerCase().includes(kw) || s.contact.toLowerCase().includes(kw));
       setResults(found.slice(0, 20));
       setIsOpen(found.length > 0);
     } else {
@@ -109,9 +110,7 @@ function SupplierSearchSelect({
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) setIsOpen(false);
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -125,18 +124,10 @@ function SupplierSearchSelect({
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (!isOpen) return;
-    if (e.key === "ArrowDown") {
-      e.preventDefault();
-      setSelectedIndex((prev) => Math.min(prev + 1, results.length - 1));
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      setSelectedIndex((prev) => Math.max(prev - 1, 0));
-    } else if (e.key === "Enter" && selectedIndex >= 0) {
-      e.preventDefault();
-      handleSelect(results[selectedIndex]);
-    } else if (e.key === "Escape") {
-      setIsOpen(false);
-    }
+    if (e.key === "ArrowDown") { e.preventDefault(); setSelectedIndex((prev) => Math.min(prev + 1, results.length - 1)); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); setSelectedIndex((prev) => Math.max(prev - 1, 0)); }
+    else if (e.key === "Enter" && selectedIndex >= 0) { e.preventDefault(); handleSelect(results[selectedIndex]); }
+    else if (e.key === "Escape") { setIsOpen(false); }
   };
 
   return (
@@ -144,10 +135,7 @@ function SupplierSearchSelect({
       <input
         type="text"
         value={keyword}
-        onChange={(e) => {
-          setKeyword(e.target.value);
-          if (e.target.value === "") onSelect(null);
-        }}
+        onChange={(e) => { setKeyword(e.target.value); if (e.target.value === "") onSelect(null); }}
         onFocus={() => { if (results.length > 0) setIsOpen(true); }}
         onKeyDown={handleKeyDown}
         placeholder="输入供应商名称搜索"
@@ -170,11 +158,91 @@ function SupplierSearchSelect({
   );
 }
 
+// 采购单搜索选择组件
+function PurchaseOrderSearchSelect({
+  onSelect,
+}: {
+  onSelect: (order: PurchaseOrder | null) => void;
+}) {
+  const [keyword, setKeyword] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [results, setResults] = useState<PurchaseOrder[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (keyword.length >= 2) {
+      const all = purchaseOrderStore.getAll();
+      const kw = keyword.toLowerCase();
+      const found = all.filter(
+        (o) => o.orderNo.toLowerCase().includes(kw) || o.supplierName.toLowerCase().includes(kw)
+      );
+      setResults(found.slice(0, 10));
+      setIsOpen(found.length > 0);
+    } else {
+      setResults([]);
+      setIsOpen(false);
+    }
+    setSelectedIndex(-1);
+  }, [keyword]);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) setIsOpen(false);
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleSelect = (order: PurchaseOrder) => {
+    setKeyword(order.orderNo);
+    setIsOpen(false);
+    onSelect(order);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!isOpen) return;
+    if (e.key === "ArrowDown") { e.preventDefault(); setSelectedIndex((prev) => Math.min(prev + 1, results.length - 1)); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); setSelectedIndex((prev) => Math.max(prev - 1, 0)); }
+    else if (e.key === "Enter" && selectedIndex >= 0) { e.preventDefault(); handleSelect(results[selectedIndex]); }
+    else if (e.key === "Escape") { setIsOpen(false); }
+  };
+
+  return (
+    <div ref={wrapperRef} className="relative">
+      <input
+        type="text"
+        value={keyword}
+        onChange={(e) => setKeyword(e.target.value)}
+        onFocus={() => { if (results.length > 0) setIsOpen(true); }}
+        onKeyDown={handleKeyDown}
+        placeholder="输入采购单号或供应商名称搜索"
+        className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+      />
+      {isOpen && (
+        <div className="absolute z-50 top-full left-0 right-0 mt-1 bg-white border border-slate-200 rounded-md shadow-lg max-h-48 overflow-auto">
+          {results.map((order, idx) => (
+            <div
+              key={order.id}
+              onClick={() => handleSelect(order)}
+              className={`px-3 py-2 cursor-pointer text-sm hover:bg-blue-50 ${idx === selectedIndex ? "bg-blue-50" : ""}`}
+            >
+              <span className="font-mono text-blue-600">{order.orderNo}</span>
+              <span className="ml-2 text-slate-700">{order.supplierName}</span>
+              <span className="ml-2 text-slate-400">{order.items.length}项</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function InventoryPage() {
   const [records, setRecords] = useState<InventoryRecord[]>([]);
   const [view, setView] = useState<"list" | "form">("list");
   const [activeTab, setActiveTab] = useState<"summary" | "inbound" | "outbound">("summary");
-  
+
   // 表单状态
   const [formType, setFormType] = useState<"inbound" | "outbound">("inbound");
   const [editingRecord, setEditingRecord] = useState<InventoryRecord | null>(null);
@@ -190,8 +258,10 @@ export default function InventoryPage() {
     operator: "",
     remark: "",
   });
-  // 用于重置 ProductSearchSelect
   const [productSearchKey, setProductSearchKey] = useState("");
+
+  // 关联采购单状态
+  const [selectedOrder, setSelectedOrder] = useState<PurchaseOrder | null>(null);
 
   // 加载数据
   useEffect(() => {
@@ -221,6 +291,7 @@ export default function InventoryPage() {
       remark: "",
     });
     setProductSearchKey("");
+    setSelectedOrder(null);
     setView("form");
   };
 
@@ -241,6 +312,7 @@ export default function InventoryPage() {
       remark: record.remark,
     });
     setProductSearchKey(record.productCode);
+    setSelectedOrder(null);
     setView("form");
   };
 
@@ -254,6 +326,32 @@ export default function InventoryPage() {
         spec: product.spec,
       }));
     }
+  };
+
+  // 选择采购单后，自动填充供应商和单号
+  const handleOrderSelect = (order: PurchaseOrder | null) => {
+    setSelectedOrder(order);
+    if (order) {
+      setFormData((prev) => ({
+        ...prev,
+        referenceNo: order.orderNo,
+        supplierName: order.supplierName,
+      }));
+    }
+  };
+
+  // 点击采购单中的某行产品，自动填充产品信息
+  const handleOrderItemClick = (item: PurchaseOrderItem) => {
+    setFormData((prev) => ({
+      ...prev,
+      productCode: item.productCode,
+      productName: item.productName,
+      spec: item.spec,
+      surface: item.surfaceTreatment,
+      quantity: String(item.quantity),
+      unit: item.unit,
+    }));
+    setProductSearchKey(item.productCode);
   };
 
   // 保存记录
@@ -272,7 +370,6 @@ export default function InventoryPage() {
     let newRecords: InventoryRecord[];
 
     if (editingRecord) {
-      // 编辑现有记录
       newRecords = records.map((r) =>
         r.id === editingRecord.id
           ? {
@@ -291,7 +388,6 @@ export default function InventoryPage() {
           : r
       );
     } else {
-      // 新建记录
       const newRecord: InventoryRecord = {
         id: genRecordNo(records, formType),
         type: formType,
@@ -374,6 +470,60 @@ export default function InventoryPage() {
           </button>
         </div>
 
+        {/* 关联采购单区域（仅入库单显示） */}
+        {formType === "inbound" && !editingRecord && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+            <div className="flex items-center mb-3">
+              <span className="text-sm font-medium text-blue-900">关联采购单</span>
+              <span className="text-xs text-blue-600 ml-2">选择后自动带出供应商和产品信息</span>
+            </div>
+            <PurchaseOrderSearchSelect onSelect={handleOrderSelect} />
+
+            {/* 采购单产品明细列表 */}
+            {selectedOrder && selectedOrder.items.length > 0 && (
+              <div className="mt-3">
+                <p className="text-xs text-blue-700 mb-2">
+                  采购单 {selectedOrder.orderNo} 的产品明细（点击行填充到表单）：
+                </p>
+                <div className="bg-white rounded border border-blue-200 overflow-hidden">
+                  <table className="w-full">
+                    <thead className="bg-blue-100">
+                      <tr>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-blue-800">产品编号</th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-blue-800">产品名称</th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-blue-800">规格</th>
+                        <th className="px-3 py-2 text-left text-xs font-medium text-blue-800">表面处理</th>
+                        <th className="px-3 py-2 text-right text-xs font-medium text-blue-800">数量</th>
+                        <th className="px-3 py-2 text-center text-xs font-medium text-blue-800">单位</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-blue-100">
+                      {selectedOrder.items.map((item) => (
+                        <tr
+                          key={item.id}
+                          onClick={() => handleOrderItemClick(item)}
+                          className={`cursor-pointer hover:bg-blue-50 ${
+                            formData.productCode === item.productCode && formData.spec === item.spec
+                              ? "bg-blue-100"
+                              : ""
+                          }`}
+                        >
+                          <td className="px-3 py-2 text-xs text-slate-900 font-mono">{item.productCode}</td>
+                          <td className="px-3 py-2 text-xs text-slate-700">{item.productName}</td>
+                          <td className="px-3 py-2 text-xs text-slate-600">{item.spec}</td>
+                          <td className="px-3 py-2 text-xs text-slate-600">{item.surfaceTreatment}</td>
+                          <td className="px-3 py-2 text-xs text-right text-slate-900">{item.quantity}</td>
+                          <td className="px-3 py-2 text-xs text-center text-slate-600">{item.unit}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
         <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6">
           <div className="grid grid-cols-2 gap-6">
             {/* 产品编号 - 关联产品库搜索 */}
@@ -387,7 +537,7 @@ export default function InventoryPage() {
                 placeholder="输入编号/名称搜索产品库"
               />
             </div>
-            {/* 产品名称 - 自动填充，可手动修改 */}
+            {/* 产品名称 */}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
                 产品名称
@@ -400,7 +550,7 @@ export default function InventoryPage() {
                 placeholder="选择产品后自动填充"
               />
             </div>
-            {/* 规格 - 自动填充 */}
+            {/* 规格 */}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
                 规格
@@ -430,7 +580,7 @@ export default function InventoryPage() {
                 ))}
               </select>
             </div>
-            {/* 供应商 - 关联供应商库搜索 */}
+            {/* 供应商 */}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
                 供应商
@@ -472,7 +622,7 @@ export default function InventoryPage() {
                 <option value="kg">kg</option>
               </select>
             </div>
-            {/* 关联单据号 */}
+            {/* 关联单据号（手动输入，或从采购单带出） */}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
                 关联单据号
@@ -482,7 +632,7 @@ export default function InventoryPage() {
                 value={formData.referenceNo}
                 onChange={(e) => setFormData({ ...formData, referenceNo: e.target.value })}
                 className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                placeholder="采购单号或送货单号"
+                placeholder="采购单号（可从采购单自动带出）"
               />
             </div>
             {/* 操作员 */}
