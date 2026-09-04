@@ -486,6 +486,27 @@ function initializeData(): void {
       localStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([...existing, ...seedPlatePurchaseOrders]));
     }
   }
+
+  // v13升级：为缺少orderType的板材采购单自动补充orderType='plate'
+  const poData = localStorage.getItem(KEYS.PURCHASE_ORDERS);
+  if (poData) {
+    const orders = JSON.parse(poData) as PurchaseOrder[];
+    let needUpdate = false;
+    for (const order of orders) {
+      if (order.orderType !== 'plate' && order.items && order.items.length > 0) {
+        const hasPlateFields = order.items.some((item: any) => 
+          item.piecesPerSheet !== undefined || item.sheetsCount !== undefined || item.actualOutput !== undefined
+        );
+        if (hasPlateFields) {
+          order.orderType = 'plate';
+          needUpdate = true;
+        }
+      }
+    }
+    if (needUpdate) {
+      localStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify(orders));
+    }
+  }
 }
 
 // 通用 CRUD
