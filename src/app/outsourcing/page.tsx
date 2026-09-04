@@ -80,13 +80,13 @@ export default function OutsourcingPage() {
         if (product) {
           item.productName = product.name;
           item.spec = product.spec;
-          item.weight = product.weightPerMeter * (item.length / 1000) * item.quantity;
+          item.weight = (product.weightPerMeter || 0) * (item.length / 1000) * item.quantity;
         }
       }
       if (field === "length" || field === "quantity") {
         const product = productStore.getAll().find(p => p.id === item.productCode);
         if (product) {
-          item.weight = product.weightPerMeter * (item.length / 1000) * item.quantity;
+          item.weight = (product.weightPerMeter || 0) * (item.length / 1000) * item.quantity;
         }
       }
       next[index] = item;
