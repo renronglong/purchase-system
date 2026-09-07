@@ -111,8 +111,14 @@ export default function DeliveryPage() {
       localStorage.setItem("delivery_maker_names", JSON.stringify(names.slice(0, 20)));
     }
     const data = { company, customer, orderNo, date, items: valid, reconciled, maker: maker.trim() };
-    if (editId) { deliveryNoteStore.update(editId, data); } else { deliveryNoteStore.add(data); }
+    let savedId = editId;
+    if (editId) { deliveryNoteStore.update(editId, data); } else {
+      const newOrder = deliveryNoteStore.add(data);
+      savedId = newOrder.id;
+    }
     setShowForm(false); load();
+    // 保存后自动打开打印预览
+    if (savedId) { window.open(`/print/delivery/${savedId}`, "_blank"); }
   };
 
   const handleDelete = (id: string) => {
