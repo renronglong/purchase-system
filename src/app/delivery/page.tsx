@@ -7,6 +7,7 @@ import {
   type DeliveryNote, type DeliveryItem,
 } from "@/lib/store";
 import { deliveryCompanies } from "@/lib/delivery-seed-data";
+import { exportInvoiceExcel } from "@/lib/export-invoice-excel";
 
 function genItemId(): string { return Math.random().toString(36).slice(2, 10); }
 
@@ -123,6 +124,20 @@ export default function DeliveryPage() {
 
   const handleDelete = (id: string) => {
     if (confirm("确定要删除此送货单吗？")) { deliveryNoteStore.remove(id); load(); }
+  };
+
+
+  const handleExportInvoice = () => {
+    const allCustomers = deliveryCustomerStore.getAll();
+    // If filtering by customer, only export that customer
+    const filter = searchCustomer.trim() || undefined;
+    // Get all notes (not just filtered by date/status)
+    const allNotes = deliveryNoteStore.getAll();
+    // If customer filter, match notes by customer name
+    const notesForExport = filter
+      ? allNotes.filter(n => n.customer.toLowerCase().includes(filter.toLowerCase()))
+      : allNotes;
+    exportInvoiceExcel(notesForExport, allCustomers, filter ? notesForExport[0]?.customer : undefined);
   };
 
   const statusColor = (s: string) => s === "已对帐" ? "text-emerald-600 bg-emerald-50" : s === "部分对帐" ? "text-amber-600 bg-amber-50" : "text-slate-500 bg-slate-100";
@@ -257,6 +272,10 @@ export default function DeliveryPage() {
             <option value="未对帐">未对帐</option>
             <option value="部分对帐">部分对帐</option>
           </select>
+            <button onClick={handleExportInvoice} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm bg-emerald-600 text-white rounded-md hover:bg-emerald-700 whitespace-nowrap">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+              导出开票明细
+            </button>
         </div>
       </div>
 
