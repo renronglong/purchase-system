@@ -21,6 +21,8 @@ export default function DeliveryPage() {
   const [searchDate, setSearchDate] = useState("");
   const [searchStatus, setSearchStatus] = useState("");
 
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [noteNo, setNoteNo] = useState("");
@@ -47,6 +49,31 @@ export default function DeliveryPage() {
     if (searchStatus && o.reconciled !== searchStatus) return false;
     return true;
   });
+
+  // Selection helpers
+  const filteredIds = filtered.map(o => o.id);
+  const allFilteredSelected = filteredIds.length > 0 && filteredIds.every(id => selectedIds.has(id));
+  const someFilteredSelected = filteredIds.some(id => selectedIds.has(id));
+
+  const toggleSelect = (id: string) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleSelectAllFiltered = () => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (allFilteredSelected) {
+        filteredIds.forEach(id => next.delete(id));
+      } else {
+        filteredIds.forEach(id => next.add(id));
+      }
+      return next;
+    });
+  };
 
   const openNew = () => {
     setEditId(null);
@@ -123,18 +150,23 @@ export default function DeliveryPage() {
   };
 
   const handleDelete = (id: string) => {
-    if (confirm("确定要删除此送货单吗？")) { deliveryNoteStore.remove(id); load(); }
+    if (confirm("确定要删除此送货单吗？")) {
+      deliveryNoteStore.remove(id);
+      setSelectedIds(prev => { const n = new Set(prev); n.delete(id); return n; });
+      load();
+    }
   };
 
 
   const handleExportInvoice = () => {
     const allCustomers = deliveryCustomerStore.getAll();
-    const filter = searchCustomer.trim().toLowerCase();
     const allNotes = deliveryNoteStore.getAll();
-    // If customer search is active, only export matching notes
-    const notesForExport = filter
-      ? allNotes.filter(n => n.customer.toLowerCase().includes(filter))
-      : allNotes;
+    // Export only selected notes
+    const notesForExport = allNotes.filter(n => selectedIds.has(n.id));
+    if (notesForExport.length === 0) {
+      alert("请先勾选要导出的送货单");
+      return;
+    }
     exportInvoiceExcel(notesForExport, allCustomers);
   };
 
@@ -261,7 +293,7 @@ export default function DeliveryPage() {
       )}
 
       <div className="bg-white rounded-lg border border-slate-200 p-4 mb-4">
-        <div className="flex gap-4 flex-wrap">
+        <div className="flex gap-4 flex-wrap items-center">
           <input type="text" value={searchCustomer} onChange={(e) => setSearchCustomer(e.target.value)} placeholder="搜索客户" className="flex-1 min-w-[180px] px-3 py-1.5 text-sm border border-slate-200 rounded-md" />
           <input type="date" value={searchDate} onChange={(e) => setSearchDate(e.target.value)} className="w-40 px-3 py-1.5 text-sm border border-slate-200 rounded-md" />
           <select value={searchStatus} onChange={(e) => setSearchStatus(e.target.value)} className="w-32 px-3 py-1.5 text-sm border border-slate-200 rounded-md">
@@ -270,9 +302,13 @@ export default function DeliveryPage() {
             <option value="未对帐">未对帐</option>
             <option value="部分对帐">部分对帐</option>
           </select>
-            <button onClick={handleExportInvoice} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm bg-emerald-600 text-white rounded-md hover:bg-emerald-700 whitespace-nowrap">
+            <button
+              onClick={handleExportInvoice}
+              disabled={selectedIds.size === 0}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm bg-emerald-600 text-white rounded-md hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap"
+            >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
-              导出开票明细
+              导出开票明细{selectedIds.size > 0 ? ` (${selectedIds.size})` : ""}
             </button>
         </div>
       </div>
@@ -281,6 +317,16 @@ export default function DeliveryPage() {
         <table className="w-full text-sm">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200">
+              <th className="text-center px-3 py-2.5 w-10">
+                <input
+                  type="checkbox"
+                  checked={allFilteredSelected}
+                  ref={el => { if (el) el.indeterminate = someFilteredSelected && !allFilteredSelected; }}
+                  onChange={toggleSelectAllFiltered}
+                  className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                  title={allFilteredSelected ? "取消全选" : "全选当前列表"}
+                />
+              </th>
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">单号</th>
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">日期</th>
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">发货公司</th>
@@ -292,11 +338,20 @@ export default function DeliveryPage() {
           </thead>
           <tbody>
             {filtered.length === 0 ? (
-              <tr><td colSpan={7} className="text-center py-12 text-slate-400">暂无送货单</td></tr>
+              <tr><td colSpan={8} className="text-center py-12 text-slate-400">暂无送货单</td></tr>
             ) : filtered.map(o => {
               const amt = o.items.reduce((s, i) => s + i.amount, 0);
+              const isSelected = selectedIds.has(o.id);
               return (
-                <tr key={o.id} className="border-b border-slate-100 hover:bg-slate-50/50">
+                <tr key={o.id} className={`border-b border-slate-100 hover:bg-slate-50/50 ${isSelected ? "bg-blue-50/40" : ""}`}>
+                  <td className="text-center px-3 py-2.5">
+                    <input
+                      type="checkbox"
+                      checked={isSelected}
+                      onChange={() => toggleSelect(o.id)}
+                      className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                    />
+                  </td>
                   <td className="px-4 py-2.5 font-mono text-blue-600">{o.noteNo}</td>
                   <td className="px-4 py-2.5">{o.date}</td>
                   <td className="px-4 py-2.5">{o.company}</td>
@@ -316,7 +371,10 @@ export default function DeliveryPage() {
           </tbody>
         </table>
       </div>
-      <div className="mt-3 text-xs text-slate-400">共 {filtered.length} 条记录</div>
+      <div className="mt-3 text-xs text-slate-400 flex items-center gap-3">
+        <span>共 {filtered.length} 条记录</span>
+        {selectedIds.size > 0 && <span className="text-blue-600">已勾选 {selectedIds.size} 张送货单</span>}
+      </div>
     </div>
   );
 }
