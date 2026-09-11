@@ -129,15 +129,13 @@ export default function DeliveryPage() {
 
   const handleExportInvoice = () => {
     const allCustomers = deliveryCustomerStore.getAll();
-    // If filtering by customer, only export that customer
-    const filter = searchCustomer.trim() || undefined;
-    // Get all notes (not just filtered by date/status)
+    const filter = searchCustomer.trim().toLowerCase();
     const allNotes = deliveryNoteStore.getAll();
-    // If customer filter, match notes by customer name
+    // If customer search is active, only export matching notes
     const notesForExport = filter
-      ? allNotes.filter(n => n.customer.toLowerCase().includes(filter.toLowerCase()))
+      ? allNotes.filter(n => n.customer.toLowerCase().includes(filter))
       : allNotes;
-    exportInvoiceExcel(notesForExport, allCustomers, filter ? notesForExport[0]?.customer : undefined);
+    exportInvoiceExcel(notesForExport, allCustomers);
   };
 
   const statusColor = (s: string) => s === "已对帐" ? "text-emerald-600 bg-emerald-50" : s === "部分对帐" ? "text-amber-600 bg-amber-50" : "text-slate-500 bg-slate-100";
