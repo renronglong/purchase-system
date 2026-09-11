@@ -79,7 +79,7 @@ export function exportInvoiceExcel(
 
     for (const note of custNotes) {
       for (const item of note.items) {
-        const remark = note.noteNo + (note.date ? ` ${note.date}` : "");
+        const remark = note.orderNo || "";
         rows.push([
           "*金属制品*",
           item.productName,
