@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { usePathname } from "next/navigation";
 import { authStore, type AppUser } from "@/lib/auth-store";
 import { setCurrentUserId } from "@/lib/user-storage";
 import { initData } from "@/lib/store";
@@ -80,10 +81,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
-  const { currentUser, logout } = useAuth();
+  const { currentUser } = useAuth();
+  const pathname = usePathname();
+
+  // 登录页不需要鉴权，直接渲染
+  if (pathname === "/login") {
+    return <>{children}</>;
+  }
 
   if (!currentUser) {
-    if (typeof window !== "undefined" && window.location.pathname !== "/login") {
+    // 未登录，跳转到登录页
+    if (typeof window !== "undefined") {
       window.location.href = "/login";
     }
     return null;
@@ -95,7 +103,11 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
         <span className="text-xs text-slate-500">当前用户：</span>
         <span className="text-xs font-medium text-slate-700">{currentUser.displayName}</span>
         <button
-          onClick={logout}
+          onClick={() => {
+            authStore.logout();
+            setCurrentUserId(null);
+            window.location.href = "/login";
+          }}
           className="text-xs text-red-500 hover:text-red-700 ml-2"
         >
           退出
