@@ -1,3 +1,4 @@
+import { userStorage } from "./user-storage";
 import { seedProducts, seedSuppliers, type Product, type Supplier } from "./seed-data";
 import {
   deliveryCustomers, deliveryProducts, deliveryNotes,
@@ -431,49 +432,49 @@ export const seedPlatePurchaseOrders: PurchaseOrder[] = [
 function initializeData(): void {
   if (typeof window === "undefined") return;
 
-  const currentVersion = localStorage.getItem(KEYS.STORAGE_VERSION);
+  const currentVersion = userStorage.getItem(KEYS.STORAGE_VERSION);
 
   // 首次访问：写入全部初始数据
   if (currentVersion === null) {
-    localStorage.setItem(KEYS.PRODUCTS, JSON.stringify([...seedProducts, ...plateProducts]));
-    localStorage.setItem(KEYS.SUPPLIERS, JSON.stringify([...seedSuppliers, { id: "s-plate-1", name: "铝板供应商", contact: "张经理", phone: "13800138001", address: "佛山市南海区" }]));
-    localStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([...seedPurchaseOrders, ...seedPlatePurchaseOrders]));
-    localStorage.setItem(KEYS.OUTSOURCING_ORDERS, JSON.stringify([]));
-    localStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify(deliveryCustomers));
-    localStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify(deliveryProducts));
-    localStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify(deliveryNotes));
-    localStorage.setItem(KEYS.RECONCILIATION_ORDERS, JSON.stringify([]));
-    localStorage.setItem(KEYS.STORAGE_VERSION, STORAGE_VERSION);
+    userStorage.setItem(KEYS.PRODUCTS, JSON.stringify([...seedProducts, ...plateProducts]));
+    userStorage.setItem(KEYS.SUPPLIERS, JSON.stringify([...seedSuppliers, { id: "s-plate-1", name: "铝板供应商", contact: "张经理", phone: "13800138001", address: "佛山市南海区" }]));
+    userStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([...seedPurchaseOrders, ...seedPlatePurchaseOrders]));
+    userStorage.setItem(KEYS.OUTSOURCING_ORDERS, JSON.stringify([]));
+    userStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify(deliveryCustomers));
+    userStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify(deliveryProducts));
+    userStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify(deliveryNotes));
+    userStorage.setItem(KEYS.RECONCILIATION_ORDERS, JSON.stringify([]));
+    userStorage.setItem(KEYS.STORAGE_VERSION, STORAGE_VERSION);
     return;
   }
 
   // 版本号不匹配：强制用最新种子数据覆盖，保留用户订单数据
   if (currentVersion !== STORAGE_VERSION) {
-    localStorage.setItem(KEYS.PRODUCTS, JSON.stringify([...seedProducts, ...plateProducts]));
-    localStorage.setItem(KEYS.SUPPLIERS, JSON.stringify([...seedSuppliers, { id: "s-plate-1", name: "铝板供应商", contact: "张经理", phone: "13800138001", address: "佛山市南海区" }]));
-    localStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify(deliveryCustomers));
-    localStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify(deliveryProducts));
-    localStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify(deliveryNotes));
+    userStorage.setItem(KEYS.PRODUCTS, JSON.stringify([...seedProducts, ...plateProducts]));
+    userStorage.setItem(KEYS.SUPPLIERS, JSON.stringify([...seedSuppliers, { id: "s-plate-1", name: "铝板供应商", contact: "张经理", phone: "13800138001", address: "佛山市南海区" }]));
+    userStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify(deliveryCustomers));
+    userStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify(deliveryProducts));
+    userStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify(deliveryNotes));
     // 对帐单保留用户数据，不覆盖
-    if (!localStorage.getItem(KEYS.RECONCILIATION_ORDERS)) {
-      localStorage.setItem(KEYS.RECONCILIATION_ORDERS, JSON.stringify([]));
+    if (!userStorage.getItem(KEYS.RECONCILIATION_ORDERS)) {
+      userStorage.setItem(KEYS.RECONCILIATION_ORDERS, JSON.stringify([]));
     }
-    localStorage.setItem(KEYS.STORAGE_VERSION, STORAGE_VERSION);
+    userStorage.setItem(KEYS.STORAGE_VERSION, STORAGE_VERSION);
   }
 
   // 采购单种子数据补充：如果采购单键不存在或为空数组，写入种子数据
-  const purchaseOrdersData = localStorage.getItem(KEYS.PURCHASE_ORDERS);
+  const purchaseOrdersData = userStorage.getItem(KEYS.PURCHASE_ORDERS);
   if (!purchaseOrdersData || JSON.parse(purchaseOrdersData).length === 0) {
-    localStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([...seedPurchaseOrders, ...seedPlatePurchaseOrders]));
+    userStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([...seedPurchaseOrders, ...seedPlatePurchaseOrders]));
   }
 
   // 补充铝板供应商（如不存在）
-  const suppliersData = localStorage.getItem(KEYS.SUPPLIERS);
+  const suppliersData = userStorage.getItem(KEYS.SUPPLIERS);
   if (suppliersData) {
     const suppliersList = JSON.parse(suppliersData) as Supplier[];
     if (!suppliersList.some(s => s.id === 's-plate-1')) {
       suppliersList.push({ id: 's-plate-1', name: '铝板供应商', contact: '张经理', phone: '13800138001', address: '佛山市南海区' });
-      localStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(suppliersList));
+      userStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(suppliersList));
     }
   }
 
@@ -483,12 +484,12 @@ function initializeData(): void {
     const plateIds = seedPlatePurchaseOrders.map(p => p.id);
     const hasPlate = existing.some(o => plateIds.includes(o.id));
     if (!hasPlate) {
-      localStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([...existing, ...seedPlatePurchaseOrders]));
+      userStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([...existing, ...seedPlatePurchaseOrders]));
     }
   }
 
   // v13升级：为缺少orderType的板材采购单自动补充orderType='plate'
-  const poData = localStorage.getItem(KEYS.PURCHASE_ORDERS);
+  const poData = userStorage.getItem(KEYS.PURCHASE_ORDERS);
   if (poData) {
     const orders = JSON.parse(poData) as PurchaseOrder[];
     let needUpdate = false;
@@ -504,7 +505,7 @@ function initializeData(): void {
       }
     }
     if (needUpdate) {
-      localStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify(orders));
+      userStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify(orders));
     }
   }
 }
@@ -512,13 +513,13 @@ function initializeData(): void {
 // 通用 CRUD
 function getAll<T>(key: string): T[] {
   if (typeof window === "undefined") return [];
-  const data = localStorage.getItem(key);
+  const data = userStorage.getItem(key);
   return data ? JSON.parse(data) : [];
 }
 
 function saveAll<T>(key: string, data: T[]): void {
   if (typeof window === "undefined") return;
-  localStorage.setItem(key, JSON.stringify(data));
+  userStorage.setItem(key, JSON.stringify(data));
 }
 
 function generateId(): string {
