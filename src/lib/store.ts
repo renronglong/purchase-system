@@ -122,7 +122,7 @@ export interface OutsourcingOrder {
 }
 
 // 种子数据版本号：每次更新 seed-data 时升此值，强制覆盖旧缓存
-const STORAGE_VERSION = "v13";
+const STORAGE_VERSION = "v14";
 
 // 存储键名
 const KEYS = {
@@ -434,79 +434,46 @@ function initializeData(): void {
 
   const currentVersion = userStorage.getItem(KEYS.STORAGE_VERSION);
 
-  // 首次访问：写入全部初始数据
+  // 首次访问：检查是否有旧的全局数据需要迁移
   if (currentVersion === null) {
-    userStorage.setItem(KEYS.PRODUCTS, JSON.stringify([...seedProducts, ...plateProducts]));
-    userStorage.setItem(KEYS.SUPPLIERS, JSON.stringify([...seedSuppliers, { id: "s-plate-1", name: "铝板供应商", contact: "张经理", phone: "13800138001", address: "佛山市南海区" }]));
-    userStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([...seedPurchaseOrders, ...seedPlatePurchaseOrders]));
+    // 尝试从旧的全局存储迁移数据（兼容升级前已有数据的用户）
+    const oldProducts = localStorage.getItem(KEYS.PRODUCTS);
+    if (oldProducts) {
+      // 旧数据存在，迁移到当前用户空间
+      userStorage.setItem(KEYS.PRODUCTS, oldProducts);
+      const oldSuppliers = localStorage.getItem(KEYS.SUPPLIERS);
+      if (oldSuppliers) userStorage.setItem(KEYS.SUPPLIERS, oldSuppliers);
+      const oldPO = localStorage.getItem(KEYS.PURCHASE_ORDERS);
+      if (oldPO) userStorage.setItem(KEYS.PURCHASE_ORDERS, oldPO);
+      const oldOutsource = localStorage.getItem(KEYS.OUTSOURCING_ORDERS);
+      if (oldOutsource) userStorage.setItem(KEYS.OUTSOURCING_ORDERS, oldOutsource);
+      const oldCust = localStorage.getItem(KEYS.DELIVERY_CUSTOMERS);
+      if (oldCust) userStorage.setItem(KEYS.DELIVERY_CUSTOMERS, oldCust);
+      const oldDProd = localStorage.getItem(KEYS.DELIVERY_PRODUCTS);
+      if (oldDProd) userStorage.setItem(KEYS.DELIVERY_PRODUCTS, oldDProd);
+      const oldDNotes = localStorage.getItem(KEYS.DELIVERY_NOTES);
+      if (oldDNotes) userStorage.setItem(KEYS.DELIVERY_NOTES, oldDNotes);
+      const oldRecon = localStorage.getItem(KEYS.RECONCILIATION_ORDERS);
+      if (oldRecon) userStorage.setItem(KEYS.RECONCILIATION_ORDERS, oldRecon);
+      userStorage.setItem(KEYS.STORAGE_VERSION, STORAGE_VERSION);
+      return;
+    }
+    // 没有旧数据：新用户空白初始化
+    userStorage.setItem(KEYS.PRODUCTS, JSON.stringify([]));
+    userStorage.setItem(KEYS.SUPPLIERS, JSON.stringify([]));
+    userStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([]));
     userStorage.setItem(KEYS.OUTSOURCING_ORDERS, JSON.stringify([]));
-    userStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify(deliveryCustomers));
-    userStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify(deliveryProducts));
-    userStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify(deliveryNotes));
+    userStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify([]));
+    userStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify([]));
+    userStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify([]));
     userStorage.setItem(KEYS.RECONCILIATION_ORDERS, JSON.stringify([]));
     userStorage.setItem(KEYS.STORAGE_VERSION, STORAGE_VERSION);
     return;
   }
 
-  // 版本号不匹配：强制用最新种子数据覆盖，保留用户订单数据
+  // 版本号不匹配：只更新版本号，保留用户已有数据
   if (currentVersion !== STORAGE_VERSION) {
-    userStorage.setItem(KEYS.PRODUCTS, JSON.stringify([...seedProducts, ...plateProducts]));
-    userStorage.setItem(KEYS.SUPPLIERS, JSON.stringify([...seedSuppliers, { id: "s-plate-1", name: "铝板供应商", contact: "张经理", phone: "13800138001", address: "佛山市南海区" }]));
-    userStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify(deliveryCustomers));
-    userStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify(deliveryProducts));
-    userStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify(deliveryNotes));
-    // 对帐单保留用户数据，不覆盖
-    if (!userStorage.getItem(KEYS.RECONCILIATION_ORDERS)) {
-      userStorage.setItem(KEYS.RECONCILIATION_ORDERS, JSON.stringify([]));
-    }
     userStorage.setItem(KEYS.STORAGE_VERSION, STORAGE_VERSION);
-  }
-
-  // 采购单种子数据补充：如果采购单键不存在或为空数组，写入种子数据
-  const purchaseOrdersData = userStorage.getItem(KEYS.PURCHASE_ORDERS);
-  if (!purchaseOrdersData || JSON.parse(purchaseOrdersData).length === 0) {
-    userStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([...seedPurchaseOrders, ...seedPlatePurchaseOrders]));
-  }
-
-  // 补充铝板供应商（如不存在）
-  const suppliersData = userStorage.getItem(KEYS.SUPPLIERS);
-  if (suppliersData) {
-    const suppliersList = JSON.parse(suppliersData) as Supplier[];
-    if (!suppliersList.some(s => s.id === 's-plate-1')) {
-      suppliersList.push({ id: 's-plate-1', name: '铝板供应商', contact: '张经理', phone: '13800138001', address: '佛山市南海区' });
-      userStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(suppliersList));
-    }
-  }
-
-  // v12升级：补充板材采购单种子数据（如不存在则添加）
-  if ((currentVersion === "v11" || currentVersion === "v12") && purchaseOrdersData) {
-    const existing = JSON.parse(purchaseOrdersData) as PurchaseOrder[];
-    const plateIds = seedPlatePurchaseOrders.map(p => p.id);
-    const hasPlate = existing.some(o => plateIds.includes(o.id));
-    if (!hasPlate) {
-      userStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([...existing, ...seedPlatePurchaseOrders]));
-    }
-  }
-
-  // v13升级：为缺少orderType的板材采购单自动补充orderType='plate'
-  const poData = userStorage.getItem(KEYS.PURCHASE_ORDERS);
-  if (poData) {
-    const orders = JSON.parse(poData) as PurchaseOrder[];
-    let needUpdate = false;
-    for (const order of orders) {
-      if (order.orderType !== 'plate' && order.items && order.items.length > 0) {
-        const hasPlateFields = order.items.some((item: any) => 
-          item.piecesPerSheet !== undefined || item.sheetsCount !== undefined || item.actualOutput !== undefined
-        );
-        if (hasPlateFields) {
-          order.orderType = 'plate';
-          needUpdate = true;
-        }
-      }
-    }
-    if (needUpdate) {
-      userStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify(orders));
-    }
   }
 }
 
