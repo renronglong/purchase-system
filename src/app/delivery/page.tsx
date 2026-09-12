@@ -247,25 +247,25 @@ export default function DeliveryPage() {
             <div><label className="block text-xs text-slate-500 mb-1">日期</label>
               <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" /></div>
             <div><label className="block text-xs text-slate-500 mb-1">客户 <span className="text-red-500">*</span></label>
-              <input type="text" value={customer} onChange={(e) => setCustomer(e.target.value)}
+              <input type="text" value={customer} onChange={(e) => { setCustomer(e.target.value); setOrderNo(""); setSelectedOrder(null); }}
                 className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" placeholder="客户名称" list="customer-list" />
               <datalist id="customer-list">{customers.map(c => <option key={c.id} value={c.name} />)}</datalist></div>
             <div><label className="block text-xs text-slate-500 mb-1">关联订单号</label>
-              <select value={orderNo} onChange={(e) => handleOrderSelect(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md">
-                <option value="">请选择订单</option>
-                {salesOrders.map(o => {
-                  // 检查是否全部交货完成
-                  const allDelivered = o.items.every(item => salesOrderStore.getRemainingQty(o.id, item.materialCode) <= 0);
-                  const productNames = o.items.map(i => i.productName).filter(Boolean);
-                  const productDisplay = productNames.length > 3 
-                    ? `${productNames.slice(0, 3).join(", ")}...` 
-                    : productNames.join(", ");
-                  return (
-                    <option key={o.id} value={o.orderNo} disabled={allDelivered}>
-                      {o.customer} | {o.date} | {productDisplay} ({o.orderNo}){allDelivered ? " [已交齐]" : ""}
-                    </option>
-                  );
-                })}
+              <select value={orderNo} onChange={(e) => handleOrderSelect(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" disabled={!customer}>
+                <option value="">{customer ? "请选择订单" : "请先填写客户名称"}</option>
+                {salesOrders
+                  .filter(o => !customer || o.customer === customer)
+                  .sort((a, b) => b.date.localeCompare(a.date))
+                  .map(o => {
+                    const displayOrderNo = o.customerOrderNo || o.orderNo;
+                    // 检查是否全部交货完成
+                    const allDelivered = o.items.every(item => salesOrderStore.getRemainingQty(o.id, item.materialCode) <= 0);
+                    return (
+                      <option key={o.id} value={o.orderNo} disabled={allDelivered}>
+                        {displayOrderNo}{allDelivered ? " [已交齐]" : ""}
+                      </option>
+                    );
+                  })}
               </select></div>
             <div><label className="block text-xs text-slate-500 mb-1">对帐状态</label>
               <select value={reconciled} onChange={(e) => setReconciled(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md">
