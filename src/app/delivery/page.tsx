@@ -5,7 +5,7 @@ import Link from "next/link";
 import {
   deliveryNoteStore, deliveryCustomerStore, deliveryProductStore, previewDeliveryOrderNo,
   salesOrderStore,
-  type DeliveryNote, type DeliveryItem,
+  type DeliveryNote, type DeliveryItem, type SalesOrder,
 } from "@/lib/store";
 import { deliveryCompanies } from "@/lib/delivery-seed-data";
 import { exportInvoiceExcel } from "@/lib/export-invoice-excel";
@@ -30,6 +30,7 @@ export default function DeliveryPage() {
   const [company, setCompany] = useState(deliveryCompanies[0]);
   const [customer, setCustomer] = useState("");
   const [orderNo, setOrderNo] = useState("");
+  const [selectedOrder, setSelectedOrder] = useState<SalesOrder | null>(null);
   const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
   const [items, setItems] = useState<DeliveryItem[]>([emptyItem()]);
   const [reconciled, setReconciled] = useState("");
@@ -81,7 +82,8 @@ export default function DeliveryPage() {
     setEditId(null);
     setNoteNo(previewDeliveryOrderNo());
     setCompany(deliveryCompanies[0]);
-    setCustomer(""); setOrderNo(""); setDate(new Date().toISOString().slice(0, 10));
+    setCustomer(""); setOrderNo(""); setSelectedOrder(null);
+    setDate(new Date().toISOString().slice(0, 10));
     setItems([emptyItem()]); setReconciled(""); setMaker("");
     setShowForm(true);
   };
@@ -92,11 +94,51 @@ export default function DeliveryPage() {
     setCompany(order.company);
     setCustomer(order.customer);
     setOrderNo(order.orderNo);
+    // 查找关联的订单
+    const linkedOrder = salesOrders.find(o => o.orderNo === order.orderNo) || null;
+    setSelectedOrder(linkedOrder);
     setDate(order.date);
     setItems(order.items.length > 0 ? order.items : [emptyItem()]);
     setReconciled(order.reconciled);
     setMaker(order.maker || "");
     setShowForm(true);
+  };
+
+  // 选择订单后自动填充产品明细
+  const handleOrderSelect = (orderNo: string) => {
+    setOrderNo(orderNo);
+    if (!orderNo) {
+      setSelectedOrder(null);
+      return;
+    }
+    const order = salesOrders.find(o => o.orderNo === orderNo);
+    if (!order || !order.items || order.items.length === 0) {
+      setSelectedOrder(null);
+      return;
+    }
+    setSelectedOrder(order);
+    // 自动填充产品明细（使用剩余数量）
+    const newItems: DeliveryItem[] = order.items.map(item => {
+      const remainingQty = salesOrderStore.getRemainingQty(order.id, item.materialCode);
+      return {
+        id: genItemId(),
+        materialCode: item.materialCode,
+        productName: item.productName,
+        spec: item.spec,
+        surface: item.surface,
+        unit: item.unit,
+        qty: remainingQty > 0 ? remainingQty : item.qty,
+        unitPrice: item.unitPrice,
+        amount: remainingQty > 0 ? Math.round(remainingQty * item.unitPrice * 100) / 100 : item.amount,
+        remark: item.remark || "",
+      };
+    }).filter(item => item.qty > 0); // 只显示还有剩余数量的产品
+    if (newItems.length === 0) {
+      setItems([emptyItem()]);
+      alert("该订单已全部交货完成");
+    } else {
+      setItems(newItems);
+    }
   };
 
   const updateItem = (idx: number, field: keyof DeliveryItem, value: string | number) => {
@@ -145,6 +187,10 @@ export default function DeliveryPage() {
     if (editId) { deliveryNoteStore.update(editId, data); } else {
       const newOrder = deliveryNoteStore.add(data);
       savedId = newOrder.id;
+    }
+    // 更新订单的已送货数量
+    if (selectedOrder && orderNo) {
+      salesOrderStore.updateDeliveredItems(selectedOrder.id, valid);
     }
     setShowForm(false); load();
     // 保存后自动打开打印预览
@@ -201,12 +247,18 @@ export default function DeliveryPage() {
                 className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" placeholder="客户名称" list="customer-list" />
               <datalist id="customer-list">{customers.map(c => <option key={c.id} value={c.name} />)}</datalist></div>
             <div><label className="block text-xs text-slate-500 mb-1">关联订单号</label>
-              <select value={orderNo} onChange={(e) => setOrderNo(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md">
+              <select value={orderNo} onChange={(e) => handleOrderSelect(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md">
                 <option value="">请选择订单</option>
                 {salesOrders.map(o => {
                   const productNames = o.items.map(i => i.productName).filter(Boolean);
                   const displayText = productNames.length > 0 ? `${productNames.join(", ")} (${o.orderNo})` : o.orderNo;
-                  return <option key={o.id} value={o.orderNo}>{displayText}</option>;
+                  // 检查是否全部交货完成
+                  const allDelivered = o.items.every(item => salesOrderStore.getRemainingQty(o.id, item.materialCode) <= 0);
+                  return (
+                    <option key={o.id} value={o.orderNo} disabled={allDelivered}>
+                      {displayText}{allDelivered ? " [已交齐]" : ""}
+                    </option>
+                  );
                 })}
               </select></div>
             <div><label className="block text-xs text-slate-500 mb-1">对帐状态</label>
@@ -387,4 +439,5 @@ export default function DeliveryPage() {
     </div>
   );
 }
+
 
