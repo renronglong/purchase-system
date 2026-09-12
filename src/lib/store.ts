@@ -122,8 +122,36 @@ export interface OutsourcingOrder {
   updatedAt: string;
 }
 
+// 销售订单明细
+export interface SalesOrderItem {
+  id: string;
+  materialCode: string;
+  productName: string;
+  spec: string;
+  surface: string;
+  unit: string;
+  qty: number;
+  unitPrice: number;
+  amount: number;
+  remark: string;
+}
+
+// 销售订单
+export interface SalesOrder {
+  id: string;
+  orderNo: string;
+  date: string;
+  company: string;
+  customer: string;
+  orderStatus: string;
+  maker?: string;
+  items: SalesOrderItem[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 // 种子数据版本号：每次更新 seed-data 时升此值，强制覆盖旧缓存
-const STORAGE_VERSION = "v14";
+const STORAGE_VERSION = "v15";
 
 // 存储键名
 const KEYS = {
@@ -135,6 +163,7 @@ const KEYS = {
   DELIVERY_PRODUCTS: "delivery_products",
   DELIVERY_NOTES: "delivery_notes",
   RECONCILIATION_ORDERS: "reconciliation_orders",
+  SALES_ORDERS: "sales_orders",
   STORAGE_VERSION: "aluminum_storage_version",
 };
 
@@ -142,6 +171,12 @@ const KEYS = {
 export function previewDeliveryOrderNo(): string {
   if (typeof window === "undefined") return "";
   return generateOrderNo("BL", KEYS.DELIVERY_NOTES);
+}
+
+// 预览下一个销售订单号
+export function previewSalesOrderNo(): string {
+  if (typeof window === "undefined") return "";
+  return generateOrderNo("DD", KEYS.SALES_ORDERS);
 }
 
 // 客户管理（送货模块）
@@ -304,6 +339,51 @@ export const reconciliationStore = {
   },
 };
 
+// ========== 销售订单 ==========
+export const salesOrderStore = {
+  getAll(): SalesOrder[] {
+    return getAll<SalesOrder>(KEYS.SALES_ORDERS);
+  },
+  getById(id: string): SalesOrder | undefined {
+    return this.getAll().find(o => o.id === id);
+  },
+  add(order: Omit<SalesOrder, "id" | "orderNo" | "createdAt" | "updatedAt">): SalesOrder {
+    const list = this.getAll();
+    const now = new Date().toISOString();
+    const newOrder: SalesOrder = {
+      ...order,
+      id: generateId(),
+      orderNo: generateOrderNo("DD", KEYS.SALES_ORDERS),
+      createdAt: now,
+      updatedAt: now,
+    };
+    list.push(newOrder);
+    saveAll(KEYS.SALES_ORDERS, list);
+    return newOrder;
+  },
+  update(id: string, data: Partial<SalesOrder>): SalesOrder | undefined {
+    const list = this.getAll();
+    const idx = list.findIndex(o => o.id === id);
+    if (idx === -1) return undefined;
+    list[idx] = { ...list[idx], ...data, updatedAt: new Date().toISOString() };
+    saveAll(KEYS.SALES_ORDERS, list);
+    return list[idx];
+  },
+  remove(id: string): boolean {
+    const list = this.getAll();
+    const filtered = list.filter(o => o.id !== id);
+    if (filtered.length === list.length) return false;
+    saveAll(KEYS.SALES_ORDERS, filtered);
+    return true;
+  },
+  search(keyword: string): SalesOrder[] {
+    const kw = keyword.toLowerCase();
+    return this.getAll().filter(o =>
+      o.orderNo.toLowerCase().includes(kw) ||
+      o.customer.toLowerCase().includes(kw)
+    );
+  },
+};
 
 // 板材采购单种子数据
 export const seedPlatePurchaseOrders: PurchaseOrder[] = [
@@ -459,6 +539,8 @@ function initializeData(): void {
       if (oldDNotes) userStorage.setItem(KEYS.DELIVERY_NOTES, oldDNotes);
       const oldRecon = localStorage.getItem(KEYS.RECONCILIATION_ORDERS);
       if (oldRecon) userStorage.setItem(KEYS.RECONCILIATION_ORDERS, oldRecon);
+      const oldSales = localStorage.getItem(KEYS.SALES_ORDERS);
+      if (oldSales) userStorage.setItem(KEYS.SALES_ORDERS, oldSales);
     } else {
       // 全新用户：空白初始化
       userStorage.setItem(KEYS.PRODUCTS, JSON.stringify([]));
@@ -469,6 +551,7 @@ function initializeData(): void {
       userStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify([]));
       userStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify([]));
       userStorage.setItem(KEYS.RECONCILIATION_ORDERS, JSON.stringify([]));
+      userStorage.setItem(KEYS.SALES_ORDERS, JSON.stringify([]));
     }
     userStorage.setItem(KEYS.STORAGE_VERSION, STORAGE_VERSION);
     return;
