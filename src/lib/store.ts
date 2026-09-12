@@ -767,3 +767,31 @@ export function initData(): void {
   initializeData();
 }
 
+
+
+// 恢复原始数据
+export function restoreSeedData(): void {
+  if (typeof window === 'undefined') return;
+  
+  console.log('开始恢复原始数据...');
+  
+  // 保存送货单相关数据
+  userStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify(deliveryCustomers));
+  userStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify(deliveryProducts));
+  userStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify(deliveryNotes));
+  
+  // 保存产品数据
+  userStorage.setItem(KEYS.PRODUCTS, JSON.stringify(seedProducts));
+  
+  // 保存供应商数据
+  userStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(seedSuppliers));
+  
+  // 保存采购单数据
+  userStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify(seedPurchaseOrders || []));
+  
+  console.log('原始数据恢复完成！');
+  console.log('客户:', deliveryCustomers.length, '家');
+  console.log('产品:', deliveryProducts.length, '条');
+  console.log('送货单:', deliveryNotes.length, '张');
+}
+
