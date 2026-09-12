@@ -1,7 +1,7 @@
-import { useAuth } from "@/components/auth-provider";
 "use client";
 
 import Link from "next/link";
+import { useAuth } from "@/components/auth-provider";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { initData } from "@/lib/store";
