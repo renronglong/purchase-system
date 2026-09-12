@@ -1,4 +1,20 @@
-"use client";
+              <th className="text-left px-4 py-2.5 font-medium text-slate-600">客户订单号</th>            <div><label className="block text-xs text-slate-500 mb-1">客户订单号</label>
+              <input type="text" value={orderNo} onChange={(e) => setOrderNo(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" placeholder="填写客户的订单编号" /></div>  const openNew = () => {
+    setEditId(null);
+    setOrderNo(""); setCompany(currentUser?.company || ""); setCustomer(""); setDate(new Date().toISOString().slice(0, 10));
+    setItems([emptyItem()]); setOrderStatus("草稿"); setMaker("");
+    setShowForm(true);
+  };import {
+  salesOrderStore, deliveryCustomerStore, deliveryProductStore,
+  type SalesOrder, type SalesOrderItem,
+} from "@/lib/store";export default function OrdersPage() {
+  const { currentUser } = useAuth();
+  const [orders, setOrders] = useState<SalesOrder[]>([]);import { useState, useEffect, useCallback } from "react";
+import { useAuth } from "@/components/auth-provider";
+import {
+  salesOrderStore, deliveryCustomerStore, deliveryProductStore,
+  type SalesOrder, type SalesOrderItem,
+} from "@/lib/store";"use client";
 
 import { useState, useEffect, useCallback } from "react";
 import {
