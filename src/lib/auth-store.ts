@@ -8,6 +8,7 @@ export interface AppUser {
   username: string;
   passwordHash: string;
   displayName: string;
+  company: string;
   createdAt: string;
 }
 
@@ -39,7 +40,7 @@ function saveUsers(users: AppUser[]): void {
 }
 
 export const authStore = {
-  async register(username: string, password: string, displayName: string): Promise<{ success: boolean; error?: string; user?: AppUser }> {
+  async register(username: string, password: string, displayName: string, company: string): Promise<{ success: boolean; error?: string; user?: AppUser }> {
     if (!username.trim()) return { success: false, error: "用户名不能为空" };
     if (password.length < 4) return { success: false, error: "密码至少4位" };
     if (!displayName.trim()) return { success: false, error: "显示名称不能为空" };
@@ -55,6 +56,7 @@ export const authStore = {
       username: username.trim(),
       passwordHash,
       displayName: displayName.trim(),
+      company: company.trim(),
       createdAt: new Date().toISOString(),
     };
 
