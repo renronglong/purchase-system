@@ -94,4 +94,8 @@ export const authStore = {
     const users = getUsers();
     return users.find(u => u.id === userId) || null;
   },
+
+  getAllUsers(): AppUser[] {
+    return getUsers();
+  },
 };
