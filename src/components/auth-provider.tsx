@@ -1,5 +1,4 @@
-  const register = useCallback(async (username: string, password: string, displayName: string, company: string) => {
-    const result = await authStore.register(username, password, displayName, company);  register: (username: string, password: string, displayName: string, company: string) => Promise<{ success: boolean; error?: string }>;"use client";
+"use client";
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
@@ -11,7 +10,7 @@ interface AuthContextType {
   currentUser: AppUser | null;
   loading: boolean;
   login: (username: string, password: string) => Promise<{ success: boolean; error?: string }>;
-  register: (username: string, password: string, displayName: string) => Promise<{ success: boolean; error?: string }>;
+  register: (username: string, password: string, displayName: string, company: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
 }
 
@@ -48,8 +47,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return { success: false, error: result.error };
   }, []);
 
-  const register = useCallback(async (username: string, password: string, displayName: string) => {
-    const result = await authStore.register(username, password, displayName);
+  const register = useCallback(async (username: string, password: string, displayName: string, company: string) => {
+    const result = await authStore.register(username, password, displayName, company);
     if (result.success && result.user) {
       setCurrentUserId(result.user.id);
       initData();
@@ -103,6 +102,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
       <div className="fixed top-0 right-0 z-50 flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur border-b border-l border-slate-200 rounded-bl-lg shadow-sm">
         <span className="text-xs text-slate-500">当前用户：</span>
         <span className="text-xs font-medium text-slate-700">{currentUser.displayName}</span>
+        <span className="text-xs text-slate-400">({currentUser.company})</span>
         <button
           onClick={() => {
             authStore.logout();
