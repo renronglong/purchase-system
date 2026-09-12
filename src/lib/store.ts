@@ -136,6 +136,16 @@ export interface SalesOrderItem {
   remark: string;
 }
 
+// 销售订单已送货明细
+export interface DeliveredItem {
+  productCode: string;
+  productName: string;
+  spec: string;
+  surface: string;
+  unit: string;
+  deliveredQty: number;  // 已送货数量
+}
+
 // 销售订单
 export interface SalesOrder {
   id: string;
@@ -147,6 +157,7 @@ export interface SalesOrder {
   orderStatus: string;
   maker?: string;
   items: SalesOrderItem[];
+  deliveredItems?: DeliveredItem[];  // 已送货明细
   createdAt?: string;
   updatedAt?: string;
 }
@@ -384,6 +395,38 @@ export const salesOrderStore = {
       (o.customerOrderNo || "").toLowerCase().includes(kw) ||
       o.customer.toLowerCase().includes(kw)
     );
+  },
+  // 获取订单产品的剩余数量
+  getRemainingQty(orderId: string, productCode: string): number {
+    const order = this.getById(orderId);
+    if (!order || !order.items) return 0;
+    const orderItem = order.items.find(i => i.materialCode === productCode);
+    if (!orderItem) return 0;
+    const deliveredItem = order.deliveredItems?.find(d => d.productCode === productCode);
+    const deliveredQty = deliveredItem?.deliveredQty || 0;
+    return orderItem.qty - deliveredQty;
+  },
+  // 更新订单的已送货数量
+  updateDeliveredItems(orderId: string, deliveryItems: { materialCode: string; productName: string; spec: string; surface: string; unit: string; qty: number }[]): SalesOrder | undefined {
+    const order = this.getById(orderId);
+    if (!order) return undefined;
+    const deliveredItems = order.deliveredItems ? [...order.deliveredItems] : [];
+    deliveryItems.forEach(item => {
+      const idx = deliveredItems.findIndex(d => d.productCode === item.materialCode);
+      if (idx >= 0) {
+        deliveredItems[idx].deliveredQty += item.qty;
+      } else {
+        deliveredItems.push({
+          productCode: item.materialCode,
+          productName: item.productName,
+          spec: item.spec,
+          surface: item.surface,
+          unit: item.unit,
+          deliveredQty: item.qty,
+        });
+      }
+    });
+    return this.update(orderId, { deliveredItems });
   },
 };
 
@@ -794,5 +837,6 @@ export function restoreSeedData(): void {
   console.log('产品:', deliveryProducts.length, '条');
   console.log('送货单:', deliveryNotes.length, '张');
 }
+
 
 
