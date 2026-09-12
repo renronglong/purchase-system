@@ -117,6 +117,10 @@ export default function DeliveryPage() {
       return;
     }
     setSelectedOrder(order);
+    // 自动填充客户名称
+    if (order.customer && !customer) {
+      setCustomer(order.customer);
+    }
     // 自动填充产品明细（使用剩余数量）
     const newItems: DeliveryItem[] = order.items.map(item => {
       const remainingQty = salesOrderStore.getRemainingQty(order.id, item.materialCode);
@@ -250,13 +254,15 @@ export default function DeliveryPage() {
               <select value={orderNo} onChange={(e) => handleOrderSelect(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md">
                 <option value="">请选择订单</option>
                 {salesOrders.map(o => {
-                  const productNames = o.items.map(i => i.productName).filter(Boolean);
-                  const displayText = productNames.length > 0 ? `${productNames.join(", ")} (${o.orderNo})` : o.orderNo;
                   // 检查是否全部交货完成
                   const allDelivered = o.items.every(item => salesOrderStore.getRemainingQty(o.id, item.materialCode) <= 0);
+                  const productNames = o.items.map(i => i.productName).filter(Boolean);
+                  const productDisplay = productNames.length > 3 
+                    ? `${productNames.slice(0, 3).join(", ")}...` 
+                    : productNames.join(", ");
                   return (
                     <option key={o.id} value={o.orderNo} disabled={allDelivered}>
-                      {displayText}{allDelivered ? " [已交齐]" : ""}
+                      {o.customer} | {o.date} | {productDisplay} ({o.orderNo}){allDelivered ? " [已交齐]" : ""}
                     </option>
                   );
                 })}
