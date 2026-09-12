@@ -1,4 +1,5 @@
 import { userStorage } from "./user-storage";
+import { authStore } from "./auth-store";
 import { seedProducts, seedSuppliers, type Product, type Supplier } from "./seed-data";
 import {
   deliveryCustomers, deliveryProducts, deliveryNotes,
@@ -434,12 +435,15 @@ function initializeData(): void {
 
   const currentVersion = userStorage.getItem(KEYS.STORAGE_VERSION);
 
-  // 首次访问：检查是否有旧的全局数据需要迁移
+  // 首次访问：判断是「旧版升级用户」还是「全新用户」
   if (currentVersion === null) {
-    // 尝试从旧的全局存储迁移数据（兼容升级前已有数据的用户）
+    // 只有当 auth 系统中已有其他用户存在时，才认为是旧版升级 → 迁移全局数据
+    const allUsers = authStore.getAllUsers();
+    const existingUsers = allUsers.filter(u => u.id !== authStore.getCurrentUser()?.id);
     const oldProducts = localStorage.getItem(KEYS.PRODUCTS);
-    if (oldProducts) {
-      // 旧数据存在，迁移到当前用户空间
+    
+    if (existingUsers.length > 0 && oldProducts) {
+      // 旧版升级：将全局数据迁移到当前用户空间
       userStorage.setItem(KEYS.PRODUCTS, oldProducts);
       const oldSuppliers = localStorage.getItem(KEYS.SUPPLIERS);
       if (oldSuppliers) userStorage.setItem(KEYS.SUPPLIERS, oldSuppliers);
@@ -455,18 +459,17 @@ function initializeData(): void {
       if (oldDNotes) userStorage.setItem(KEYS.DELIVERY_NOTES, oldDNotes);
       const oldRecon = localStorage.getItem(KEYS.RECONCILIATION_ORDERS);
       if (oldRecon) userStorage.setItem(KEYS.RECONCILIATION_ORDERS, oldRecon);
-      userStorage.setItem(KEYS.STORAGE_VERSION, STORAGE_VERSION);
-      return;
+    } else {
+      // 全新用户：空白初始化
+      userStorage.setItem(KEYS.PRODUCTS, JSON.stringify([]));
+      userStorage.setItem(KEYS.SUPPLIERS, JSON.stringify([]));
+      userStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([]));
+      userStorage.setItem(KEYS.OUTSOURCING_ORDERS, JSON.stringify([]));
+      userStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify([]));
+      userStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify([]));
+      userStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify([]));
+      userStorage.setItem(KEYS.RECONCILIATION_ORDERS, JSON.stringify([]));
     }
-    // 没有旧数据：新用户空白初始化
-    userStorage.setItem(KEYS.PRODUCTS, JSON.stringify([]));
-    userStorage.setItem(KEYS.SUPPLIERS, JSON.stringify([]));
-    userStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([]));
-    userStorage.setItem(KEYS.OUTSOURCING_ORDERS, JSON.stringify([]));
-    userStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify([]));
-    userStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify([]));
-    userStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify([]));
-    userStorage.setItem(KEYS.RECONCILIATION_ORDERS, JSON.stringify([]));
     userStorage.setItem(KEYS.STORAGE_VERSION, STORAGE_VERSION);
     return;
   }
