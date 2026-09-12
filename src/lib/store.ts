@@ -140,6 +140,7 @@ export interface SalesOrderItem {
 export interface SalesOrder {
   id: string;
   orderNo: string;
+  customerOrderNo?: string;
   date: string;
   company: string;
   customer: string;
@@ -347,13 +348,13 @@ export const salesOrderStore = {
   getById(id: string): SalesOrder | undefined {
     return this.getAll().find(o => o.id === id);
   },
-  add(order: Omit<SalesOrder, "id" | "orderNo" | "createdAt" | "updatedAt">): SalesOrder {
+  add(order: Omit<SalesOrder, "id" | "createdAt" | "updatedAt">): SalesOrder {
     const list = this.getAll();
     const now = new Date().toISOString();
     const newOrder: SalesOrder = {
       ...order,
       id: generateId(),
-      orderNo: generateOrderNo("DD", KEYS.SALES_ORDERS),
+      orderNo: order.orderNo || generateOrderNo("DD", KEYS.SALES_ORDERS),
       createdAt: now,
       updatedAt: now,
     };
@@ -380,6 +381,7 @@ export const salesOrderStore = {
     const kw = keyword.toLowerCase();
     return this.getAll().filter(o =>
       o.orderNo.toLowerCase().includes(kw) ||
+      (o.customerOrderNo || "").toLowerCase().includes(kw) ||
       o.customer.toLowerCase().includes(kw)
     );
   },
