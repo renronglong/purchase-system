@@ -544,14 +544,14 @@ function initializeData(): void {
       const oldSales = localStorage.getItem(KEYS.SALES_ORDERS);
       if (oldSales) userStorage.setItem(KEYS.SALES_ORDERS, oldSales);
     } else {
-      // 全新用户：空白初始化
-      userStorage.setItem(KEYS.PRODUCTS, JSON.stringify([]));
-      userStorage.setItem(KEYS.SUPPLIERS, JSON.stringify([]));
-      userStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([]));
+      // 全新用户：填充原始种子数据
+      userStorage.setItem(KEYS.PRODUCTS, JSON.stringify(seedProducts));
+      userStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(seedSuppliers));
+      userStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify(seedPurchaseOrders || []));
       userStorage.setItem(KEYS.OUTSOURCING_ORDERS, JSON.stringify([]));
-      userStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify([]));
-      userStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify([]));
-      userStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify([]));
+      userStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify(deliveryCustomers));
+      userStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify(deliveryProducts));
+      userStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify(deliveryNotes));
       userStorage.setItem(KEYS.RECONCILIATION_ORDERS, JSON.stringify([]));
       userStorage.setItem(KEYS.SALES_ORDERS, JSON.stringify([]));
     }
@@ -794,4 +794,5 @@ export function restoreSeedData(): void {
   console.log('产品:', deliveryProducts.length, '条');
   console.log('送货单:', deliveryNotes.length, '张');
 }
+
 
