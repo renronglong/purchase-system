@@ -1,24 +1,9 @@
-              <th className="text-left px-4 py-2.5 font-medium text-slate-600">客户订单号</th>            <div><label className="block text-xs text-slate-500 mb-1">客户订单号</label>
-              <input type="text" value={orderNo} onChange={(e) => setOrderNo(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" placeholder="填写客户的订单编号" /></div>  const openNew = () => {
-    setEditId(null);
-    setOrderNo(""); setCompany(currentUser?.company || ""); setCustomer(""); setDate(new Date().toISOString().slice(0, 10));
-    setItems([emptyItem()]); setOrderStatus("草稿"); setMaker("");
-    setShowForm(true);
-  };import {
-  salesOrderStore, deliveryCustomerStore, deliveryProductStore,
-  type SalesOrder, type SalesOrderItem,
-} from "@/lib/store";export default function OrdersPage() {
-  const { currentUser } = useAuth();
-  const [orders, setOrders] = useState<SalesOrder[]>([]);import { useState, useEffect, useCallback } from "react";
+"use client";
+
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/components/auth-provider";
 import {
   salesOrderStore, deliveryCustomerStore, deliveryProductStore,
-  type SalesOrder, type SalesOrderItem,
-} from "@/lib/store";"use client";
-
-import { useState, useEffect, useCallback } from "react";
-import {
-  salesOrderStore, deliveryCustomerStore, deliveryProductStore, previewSalesOrderNo,
   type SalesOrder, type SalesOrderItem,
 } from "@/lib/store";
 
@@ -31,6 +16,7 @@ function emptyItem(): SalesOrderItem {
 const ORDER_STATUSES = ["草稿", "已确认", "生产中", "已发货", "已完成", "已取消"];
 
 export default function OrdersPage() {
+  const { currentUser } = useAuth();
   const [orders, setOrders] = useState<SalesOrder[]>([]);
   const [searchCustomer, setSearchCustomer] = useState("");
   const [searchDate, setSearchDate] = useState("");
@@ -91,15 +77,19 @@ export default function OrdersPage() {
 
   const openNew = () => {
     setEditId(null);
-    setOrderNo(previewSalesOrderNo());
-    setCompany(""); setCustomer(""); setDate(new Date().toISOString().slice(0, 10));
-    setItems([emptyItem()]); setOrderStatus("草稿"); setMaker("");
+    setOrderNo("");
+    setCompany(currentUser?.company || "");
+    setCustomer("");
+    setDate(new Date().toISOString().slice(0, 10));
+    setItems([emptyItem()]);
+    setOrderStatus("草稿");
+    setMaker("");
     setShowForm(true);
   };
 
   const openEdit = (order: SalesOrder) => {
     setEditId(order.id);
-    setOrderNo(order.orderNo);
+    setOrderNo(order.customerOrderNo || order.orderNo);
     setCompany(order.company);
     setCustomer(order.customer);
     setDate(order.date);
@@ -150,7 +140,7 @@ export default function OrdersPage() {
       names.unshift(maker.trim());
       localStorage.setItem("sales_order_maker_names", JSON.stringify(names.slice(0, 20)));
     }
-    const data = { company, customer, date, items: valid, orderStatus, maker: maker.trim() };
+    const data = { company, customer, date, items: valid, orderStatus, maker: maker.trim(), orderNo: orderNo.trim() };
     if (editId) { salesOrderStore.update(editId, data); } else {
       salesOrderStore.add(data);
     }
@@ -207,8 +197,8 @@ export default function OrdersPage() {
         <div className="bg-white rounded-lg border border-blue-200 p-5 mb-4">
           <h3 className="text-sm font-medium text-slate-700 mb-3">{editId ? "编辑订单" : "新建订单"}</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
-            <div><label className="block text-xs text-slate-500 mb-1">订单编号</label>
-              <input type="text" value={orderNo} readOnly className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md bg-slate-50 font-mono text-blue-600 font-medium" /></div>
+            <div><label className="block text-xs text-slate-500 mb-1">客户订单号</label>
+              <input type="text" value={orderNo} onChange={(e) => setOrderNo(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md font-mono text-blue-600 font-medium" placeholder="填写客户的订单编号" /></div>
             <div><label className="block text-xs text-slate-500 mb-1">公司</label>
               <input type="text" value={company} onChange={(e) => setCompany(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" placeholder="公司名称" /></div>
             <div><label className="block text-xs text-slate-500 mb-1">日期</label>
@@ -336,7 +326,7 @@ export default function OrdersPage() {
                   title={allFilteredSelected ? "取消全选" : "全选当前列表"}
                 />
               </th>
-              <th className="text-left px-4 py-2.5 font-medium text-slate-600">订单编号</th>
+              <th className="text-left px-4 py-2.5 font-medium text-slate-600">客户订单号</th>
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">日期</th>
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">公司</th>
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">客户</th>
