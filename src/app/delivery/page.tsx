@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
   deliveryNoteStore, deliveryCustomerStore, deliveryProductStore, previewDeliveryOrderNo,
+  salesOrderStore,
   type DeliveryNote, type DeliveryItem,
 } from "@/lib/store";
 import { deliveryCompanies } from "@/lib/delivery-seed-data";
@@ -35,6 +36,7 @@ export default function DeliveryPage() {
   const [maker, setMaker] = useState("易金兰");
 
   const customers = deliveryCustomerStore.getAll();
+  const salesOrders = salesOrderStore.getAll().filter(o => o.items && o.items.length > 0);
 
   const load = useCallback(() => {
     const all = deliveryNoteStore.getAll();
@@ -199,7 +201,14 @@ export default function DeliveryPage() {
                 className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" placeholder="客户名称" list="customer-list" />
               <datalist id="customer-list">{customers.map(c => <option key={c.id} value={c.name} />)}</datalist></div>
             <div><label className="block text-xs text-slate-500 mb-1">关联订单号</label>
-              <input type="text" value={orderNo} onChange={(e) => setOrderNo(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" /></div>
+              <select value={orderNo} onChange={(e) => setOrderNo(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md">
+                <option value="">请选择订单</option>
+                {salesOrders.map(o => {
+                  const productNames = o.items.map(i => i.productName).filter(Boolean);
+                  const displayText = productNames.length > 0 ? `${productNames.join(", ")} (${o.orderNo})` : o.orderNo;
+                  return <option key={o.id} value={o.orderNo}>{displayText}</option>;
+                })}
+              </select></div>
             <div><label className="block text-xs text-slate-500 mb-1">对帐状态</label>
               <select value={reconciled} onChange={(e) => setReconciled(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md">
                 <option value="">未对帐</option><option value="已对帐">已对帐</option><option value="部分对帐">部分对帐</option>
@@ -378,3 +387,4 @@ export default function DeliveryPage() {
     </div>
   );
 }
+
