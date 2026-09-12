@@ -1,3 +1,4 @@
+import { useAuth } from "@/components/auth-provider";
 "use client";
 
 import Link from "next/link";
@@ -90,6 +91,7 @@ function NavIcon({ type, className }: { type: string; className?: string }) {
 }
 
 export default function Sidebar() {
+  const { currentUser } = useAuth();
   const pathname = usePathname();
 
   useEffect(() => {
@@ -100,7 +102,7 @@ export default function Sidebar() {
     <aside className="w-60 bg-slate-900 text-white flex flex-col min-h-screen shrink-0">
       <div className="px-5 py-5 border-b border-slate-700">
         <h1 className="text-base font-bold tracking-wide">铝型材采购管理</h1>
-        <p className="text-xs text-slate-400 mt-1">佛山市碧利金属</p>
+        <p className="text-xs text-slate-400 mt-1">{currentUser?.company || "佛山市碧利金属"}</p>
         <p className="text-[10px] text-slate-500 mt-1">v2.0</p>
       </div>
       <nav className="flex-1 py-3">
@@ -131,3 +133,4 @@ export default function Sidebar() {
     </aside>
   );
 }
+
