@@ -1,4 +1,35 @@
-"use client";
+              {!isLogin && (
+              <div>
+                <label className="block text-sm font-medium text-slate-600 mb-1">
+                  显示名称
+                </label>
+                <input
+                  type="text"
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  placeholder="你的名字"
+                  required
+                />
+              </div>
+            )}
+
+            {!isLogin && (
+              <div>
+                <label className="block text-sm font-medium text-slate-600 mb-1">
+                  公司名称
+                </label>
+                <input
+                  type="text"
+                  value={company}
+                  onChange={(e) => setCompany(e.target.value)}
+                  className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                  placeholder="你的公司名称"
+                />
+              </div>
+            )}        result = await register(username, password, displayName, company);  const [displayName, setDisplayName] = useState("");
+  const [company, setCompany] = useState("");
+  const [error, setError] = useState("");"use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
