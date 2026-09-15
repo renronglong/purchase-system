@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useAuth } from "@/components/auth-provider";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { initData } from "@/lib/store";
@@ -18,6 +17,7 @@ const navItems = [
   { href: "/reconciliation", label: "对帐单管理", icon: "document-check" },
   { href: "/contract", label: "购销合同管理", icon: "contract" },
   { href: "/customers", label: "客户管理", icon: "building" },
+  { href: "/customer-account", label: "客户往来记录", icon: "account" },
 ];
 
 function NavIcon({ type, className }: { type: string; className?: string }) {
@@ -60,6 +60,12 @@ function NavIcon({ type, className }: { type: string; className?: string }) {
           <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
         </svg>
       );
+    case "account":
+      return (
+        <svg className={cls} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      );
     case "document-check":
       return (
         <svg className={cls} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -91,7 +97,6 @@ function NavIcon({ type, className }: { type: string; className?: string }) {
 }
 
 export default function Sidebar() {
-  const { currentUser } = useAuth();
   const pathname = usePathname();
 
   useEffect(() => {
@@ -102,7 +107,7 @@ export default function Sidebar() {
     <aside className="w-60 bg-slate-900 text-white flex flex-col min-h-screen shrink-0">
       <div className="px-5 py-5 border-b border-slate-700">
         <h1 className="text-base font-bold tracking-wide">铝型材采购管理</h1>
-        <p className="text-xs text-slate-400 mt-1">{currentUser?.company || "佛山市碧利金属"}</p>
+        <p className="text-xs text-slate-400 mt-1">佛山市碧利金属</p>
         <p className="text-[10px] text-slate-500 mt-1">v2.0</p>
       </div>
       <nav className="flex-1 py-3">
@@ -133,4 +138,3 @@ export default function Sidebar() {
     </aside>
   );
 }
-
