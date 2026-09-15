@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const IMPORT_DATA = [
   {"date":"2026-04-17","customer":"接上次财务离职帐单","type":"income","amount":40240.39,"remark":""},
@@ -8,7 +9,7 @@ const IMPORT_DATA = [
   {"date":"2026-04-30","customer":"百川慧通","type":"income","amount":20624.00,"remark":"付鑫晨"},
   {"date":"2026-04-30","customer":"百川慧通发票","type":"expense","amount":1649.92,"remark":"未开"},
   {"date":"2026-04-30","customer":"镭科照明","type":"income","amount":9000.00,"remark":""},
-  {"date":"2026-04-30","customer":"镭科照明发票","type":"expense","amount":1050.00,"remark":""},
+  {"date":"2026-04-30","customer":"科照明发票","type":"expense","amount":1050.00,"remark":""},
   {"date":"2026-05-05","customer":"付易金兰","type":"expense","amount":30000.00,"remark":""},
   {"date":"2026-05-08","customer":"弘美","type":"income","amount":18375.00,"remark":""},
   {"date":"2026-05-13","customer":"弘美发票","type":"expense","amount":1837.50,"remark":""},
@@ -48,10 +49,18 @@ function generateId() {
 
 export default function ImportPage() {
   const [status, setStatus] = useState("");
-  const [imported, setImported] = useState(0);
+  const [userId, setUserId] = useState<string | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const uid = localStorage.getItem("app_current_user");
+    setUserId(uid);
+    if (!uid) {
+      setStatus("请先登录");
+    }
+  }, []);
 
   const handleImport = () => {
-    const userId = sessionStorage.getItem("current_user_id");
     if (!userId) {
       setStatus("错误：请先登录");
       return;
@@ -71,18 +80,15 @@ export default function ImportPage() {
     const combined = [...existing, ...newRecords];
     localStorage.setItem(key, JSON.stringify(combined));
     
-    setImported(newRecords.length);
-    setStatus(`成功导入 ${newRecords.length} 条记录！`);
+    setStatus(`✅ 成功导入 ${newRecords.length} 条记录！`);
   };
 
   const handleClear = () => {
+    if (!userId) return;
     if (confirm("确定要清空所有往来记录吗？")) {
-      const userId = sessionStorage.getItem("current_user_id");
-      if (!userId) return;
       const key = `u_${userId}_customer_accounts`;
       localStorage.removeItem(key);
       setStatus("已清空所有往来记录");
-      setImported(0);
     }
   };
 
@@ -91,9 +97,13 @@ export default function ImportPage() {
       <h1 className="text-xl font-bold text-slate-900 mb-6">导入原始往来记录</h1>
       
       <div className="bg-white rounded-lg border border-slate-200 p-6 max-w-2xl">
+        <div className="mb-4 text-sm text-slate-600">
+          当前用户 ID: <span className="font-mono text-xs">{userId || '未登录'}</span>
+        </div>
+
         <div className="mb-4">
-          <p className="text-sm text-slate-600 mb-2">将导入以下数据：</p>
-          <ul className="text-xs text-slate-500 space-y-1 max-h-60 overflow-y-auto">
+          <p className="text-sm text-slate-600 mb-2">将导入以下 {IMPORT_DATA.length} 条数据：</p>
+          <ul className="text-xs text-slate-500 space-y-1 max-h-48 overflow-y-auto border border-slate-100 rounded p-2">
             {IMPORT_DATA.map((r, i) => (
               <li key={i} className="flex justify-between">
                 <span>{r.date} {r.customer}</span>
@@ -103,11 +113,10 @@ export default function ImportPage() {
               </li>
             ))}
           </ul>
-          <p className="text-sm text-slate-700 mt-3">共 <strong>{IMPORT_DATA.length}</strong> 条记录</p>
         </div>
 
         {status && (
-          <div className={`p-3 rounded-md mb-4 text-sm ${status.includes('成功') ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-700'}`}>
+          <div className={`p-3 rounded-md mb-4 text-sm ${status.includes('成功') || status.includes('✅') ? 'bg-emerald-50 text-emerald-700' : status.includes('清空') ? 'bg-blue-50 text-blue-700' : 'bg-red-50 text-red-700'}`}>
             {status}
           </div>
         )}
@@ -119,9 +128,9 @@ export default function ImportPage() {
           <button onClick={handleClear} className="px-4 py-2 bg-red-600 text-white text-sm rounded-md hover:bg-red-700">
             清空数据
           </button>
-          <a href="/customer-account" className="px-4 py-2 bg-slate-200 text-slate-700 text-sm rounded-md hover:bg-slate-300 inline-flex items-center">
+          <button onClick={() => router.push('/customer-account')} className="px-4 py-2 bg-slate-200 text-slate-700 text-sm rounded-md hover:bg-slate-300">
             返回往来记录
-          </a>
+          </button>
         </div>
       </div>
     </div>
