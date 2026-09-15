@@ -840,3 +840,63 @@ export function restoreSeedData(): void {
 
 
 
+
+// ========== 客户往来记录 ==========
+export interface CustomerAccountRecord {
+  id: string;
+  date: string;
+  customer: string;  // 客户/供应商名称
+  type: 'income' | 'expense';  // 收入/支出
+  amount: number;  // 金额
+  balance: number;  // 结余
+  remark: string;  // 备注
+  relatedOrderNo?: string;  // 关联订单号
+  createdAt?: string;
+}
+
+const KEYS_EXTENDED = {
+  ...KEYS,
+  CUSTOMER_ACCOUNTS: "customer_accounts",
+};
+
+export const customerAccountStore = {
+  getAll(): CustomerAccountRecord[] {
+    return getAll<CustomerAccountRecord>(KEYS_EXTENDED.CUSTOMER_ACCOUNTS);
+  },
+  add(record: Omit<CustomerAccountRecord, "id" | "createdAt">): CustomerAccountRecord {
+    const list = this.getAll();
+    const newRecord: CustomerAccountRecord = {
+      ...record,
+      id: generateId(),
+      createdAt: new Date().toISOString(),
+    };
+    list.push(newRecord);
+    saveAll(KEYS_EXTENDED.CUSTOMER_ACCOUNTS, list);
+    return newRecord;
+  },
+  update(id: string, data: Partial<CustomerAccountRecord>): CustomerAccountRecord | undefined {
+    const list = this.getAll();
+    const idx = list.findIndex(r => r.id === id);
+    if (idx === -1) return undefined;
+    list[idx] = { ...list[idx], ...data };
+    saveAll(KEYS_EXTENDED.CUSTOMER_ACCOUNTS, list);
+    return list[idx];
+  },
+  remove(id: string): boolean {
+    const list = this.getAll();
+    const filtered = list.filter(r => r.id !== id);
+    if (filtered.length === list.length) return false;
+    saveAll(KEYS_EXTENDED.CUSTOMER_ACCOUNTS, filtered);
+    return true;
+  },
+  // 计算某个客户的结余
+  getBalance(customer: string): number {
+    const records = this.getAll().filter(r => r.customer === customer);
+    return records.reduce((sum, r) => sum + (r.type === 'income' ? r.amount : -r.amount), 0);
+  },
+  // 获取所有客户列表
+  getCustomers(): string[] {
+    const records = this.getAll();
+    return Array.from(new Set(records.map(r => r.customer))).filter(Boolean);
+  },
+};
