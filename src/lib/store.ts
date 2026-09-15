@@ -848,7 +848,7 @@ export interface CustomerAccountRecord {
   customer: string;  // 客户/供应商名称
   type: 'income' | 'expense';  // 收入/支出
   amount: number;  // 金额
-  balance: number;  // 结余
+  balance?: number;  // 结余
   remark: string;  // 备注
   relatedOrderNo?: string;  // 关联订单号
   createdAt?: string;
