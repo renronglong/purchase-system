@@ -108,7 +108,7 @@ export default function Sidebar() {
       <div className="px-5 py-5 border-b border-slate-700">
         <h1 className="text-base font-bold tracking-wide">铝型材采购管理</h1>
         <p className="text-xs text-slate-400 mt-1">佛山市碧利金属</p>
-        <p className="text-[10px] text-slate-500 mt-1">v2.1</p>
+        <p className="text-[10px] text-slate-500 mt-1">v2.2</p>
       </div>
       <nav className="flex-1 py-3">
         {navItems.map((item) => {
