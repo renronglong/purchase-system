@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
 import { deliveryNoteStore, deliveryCustomerStore, type DeliveryNote, type DeliveryCustomer } from "@/lib/store";
 
@@ -40,16 +40,27 @@ function numToCN(n: number): string {
 
 const BORDER_COLOR = "#2563eb";
 const FIXED_ROWS = 6;
-const ROW_HEIGHT = "8mm"; // 每行8mm，6行共48mm
-// 内容宽度：190mm（右边距加大20mm，防止针式打印机裁切右侧内容）
+const ROW_HEIGHT = "8mm";
 const CONTENT_WIDTH = "190mm";
-// 高度分配：标题10mm + 表头18mm + 表格53mm(5+48) + 合计6mm + 底部14mm = 101mm < 134mm
+const DEFAULT_COL_WIDTHS = [7, 40, 25, 30, 14, 15, 9, 16, 20, 32];
+const STORAGE_KEY = "delivery_col_widths_v1";
 
 export default function PrintDeliveryPage() {
   const params = useParams();
   const orderId = params.id as string;
   const [order, setOrder] = useState<DeliveryNote | null>(null);
   const [customer, setCustomer] = useState<DeliveryCustomer | null>(null);
+  const [colWidths, setColWidths] = useState<number[]>(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length === DEFAULT_COL_WIDTHS.length) return parsed;
+      }
+    } catch {}
+    return [...DEFAULT_COL_WIDTHS];
+  });
+  const resizing = useRef<{ colIdx: number; startX: number; startW: number } | null>(null);
 
   const load = useCallback(() => {
     const found = deliveryNoteStore.getById(orderId);
@@ -70,11 +81,51 @@ export default function PrintDeliveryPage() {
     }
   }, [order]);
 
+  const handleMouseDown = (e: React.MouseEvent, colIdx: number) => {
+    e.preventDefault();
+    resizing.current = { colIdx, startX: e.clientX, startW: colWidths[colIdx] };
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!resizing.current) return;
+      const { colIdx, startX, startW } = resizing.current;
+      const dx = e.clientX - startX;
+      const mmPerPx = 241 / window.innerWidth;
+      const delta = Math.round(dx * mmPerPx * 10) / 10;
+      const newW = Math.max(5, Math.round((startW + delta) * 10) / 10);
+      setColWidths(prev => {
+        const next = [...prev];
+        next[colIdx] = newW;
+        return next;
+      });
+    };
+    const handleMouseUp = () => {
+      if (resizing.current) {
+        resizing.current = null;
+        document.body.style.cursor = "";
+        document.body.style.userSelect = "";
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(colWidths)); } catch {}
+      }
+    };
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [colWidths]);
+
+  const resetWidths = () => {
+    setColWidths([...DEFAULT_COL_WIDTHS]);
+    try { localStorage.removeItem(STORAGE_KEY); } catch {}
+  };
+
   if (!order) return <div className="p-6 text-center text-slate-400">加载中...</div>;
 
   const totalAmount = order.items.reduce((s, i) => s + i.amount, 0);
-
-  // 生成固定6行数据，不足的用空行填充
   const tableRows = Array.from({ length: FIXED_ROWS }, (_, idx) => {
     if (idx < order.items.length) {
       return { ...order.items[idx], isEmpty: false };
@@ -82,92 +133,58 @@ export default function PrintDeliveryPage() {
     return { id: `empty-${idx}`, materialCode: "", productName: "", spec: "", surface: "", qty: 0, unit: "", unitPrice: 0, amount: 0, remark: "", isEmpty: true };
   });
 
-  // 根据公司名称自动匹配地址
   const getCompanyAddress = (companyName: string) => {
-    if (companyName.includes("质稳")) {
-      return "广东省佛山市南海区狮山招大小坑尾坑尾园";
-    } else if (companyName.includes("碧利莱")) {
-      return "佛山市南海区狮山镇松岗办事处显纲村委会厦边村口首层";
-    }
+    if (companyName.includes("质稳")) return "广东省佛山市南海区狮山招大小坑尾坑尾园";
+    else if (companyName.includes("碧利莱")) return "佛山市南海区狮山镇松岗办事处显纲村委会厦边村口首层";
     return "";
   };
-
   const companyAddress = getCompanyAddress(order.company);
 
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: `
-        @page {
-          size: 241mm 140mm;
-          margin: 0;
-        }
+        @page { size: 241mm 140mm; margin: 0; }
         @media print {
-          html, body {
-            width: 241mm;
-            height: 140mm;
-            margin: 0 !important;
-            padding: 0 !important;
-            overflow: hidden;
-          }
-          body * {
-            visibility: hidden;
-          }
-          #print-area, #print-area * {
-            visibility: visible;
-          }
-          #print-area {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 241mm;
-            height: 140mm;
-            padding: 3mm;
-            box-sizing: border-box;
-          }
-          .no-print {
-            display: none !important;
-          }
-          aside, nav, [class*="sidebar"], .w-60, .bg-slate-900 {
-            display: none !important;
-          }
+          html, body { width: 241mm; height: 140mm; margin: 0 !important; padding: 0 !important; overflow: hidden; }
+          body * { visibility: hidden; }
+          #print-area, #print-area * { visibility: visible; }
+          #print-area { position: absolute; left: 0; top: 0; width: 241mm; height: 140mm; padding: 3mm; box-sizing: border-box; }
+          .no-print { display: none !important; }
+          .resize-handle { display: none !important; }
+          aside, nav, [class*="sidebar"], .w-60, .bg-slate-900 { display: none !important; }
         }
         @media screen {
-          body {
-            background: #e2e8f0;
+          body { background: #e2e8f0; }
+          aside, nav, [class*="sidebar"], .w-60, .bg-slate-900 { display: none !important; }
+          .resize-handle {
+            position: absolute; right: -3px; top: 0; bottom: 0; width: 6px;
+            cursor: col-resize; background: transparent; z-index: 10;
           }
-          aside, nav, [class*="sidebar"], .w-60, .bg-slate-900 {
-            display: none !important;
-          }
+          .resize-handle:hover { background: #3b82f6; }
+          th { position: relative; }
         }
       `}} />
 
       <div className="no-print fixed top-4 right-4 z-50 flex gap-2">
         <button onClick={() => window.print()} className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 shadow-lg">打印 / 导出PDF</button>
+        <button onClick={resetWidths} className="px-4 py-2 bg-slate-500 text-white text-sm rounded-md hover:bg-slate-600 shadow-lg">重置列宽</button>
         <button onClick={() => window.close()} className="px-4 py-2 bg-slate-500 text-white text-sm rounded-md hover:bg-slate-600 shadow-lg">关闭</button>
       </div>
 
-      {/* 打印区域 - 内容宽度190mm，左右各留5mm边距，高度134mm（140mm-2*3mm padding） */}
       <div id="print-area" className="mx-auto bg-white" style={{ width: "241mm", height: "140mm", display: "flex", flexDirection: "column", overflow: "hidden", boxSizing: "border-box", padding: "3mm" }}>
-        {/* 内层容器 - 无边框，高度134mm，左边距2mm，flex-start防止自动撑开 */}
         <div style={{ width: CONTENT_WIDTH, height: "134mm", display: "flex", flexDirection: "column", justifyContent: "flex-start", boxSizing: "border-box", marginLeft: "2mm" }}>
-          {/* 标题区域 - 横排居中，固定高度 10mm，无下边框，底部5mm间距 */}
           <div className="flex items-center justify-center" style={{ height: "10mm", flexShrink: 0, marginBottom: "5mm" }}>
-            <h1 style={{ fontSize: "22px", fontWeight: "bold", margin: 0, letterSpacing: "2px" }}>
-              {order.company}送货单
-            </h1>
+            <h1 style={{ fontSize: "22px", fontWeight: "bold", margin: 0, letterSpacing: "2px" }}>{order.company}送货单</h1>
           </div>
 
-          {/* 表头信息区域 - 左右两列布局，固定高度26mm（4行×6.5mm），底部无间距 */}
           <div style={{ fontSize: "15px", lineHeight: "1.3", padding: "0 2mm", flexShrink: 0, height: "26mm", boxSizing: "border-box", overflow: "visible", marginBottom: "0" }}>
             <div className="flex" style={{ alignItems: "stretch" }}>
-              {/* 左侧列：客户信息 */}
               <div style={{ flex: "1", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                 <div><span className="font-bold">客户名称：</span>{order.customer}</div>
                 <div style={{ whiteSpace: "nowrap", overflow: "visible" }}><span className="font-bold">客户地址：</span>{customer?.address || ""}</div>
                 <div><span className="font-bold">联系电话：</span>{customer?.phone || ""}</div>
                 <div><span className="font-bold">联系人：</span>{customer?.contact || ""}</div>
               </div>
-              {/* 右侧列：固定宽度，所有字段从同一位置开始 */}
               <div style={{ width: "45%", display: "flex", flexDirection: "column", justifyContent: "space-between", paddingLeft: "5mm" }}>
                 <div style={{ whiteSpace: "nowrap" }}><span className="font-bold">NO：</span><span className="font-mono font-bold" style={{ fontSize: "15px" }}>{order.noteNo}</span></div>
                 <div style={{ whiteSpace: "nowrap" }}><span className="font-bold">送货日期：</span>{order.date}</div>
@@ -177,33 +194,18 @@ export default function PrintDeliveryPage() {
             </div>
           </div>
 
-          {/* 明细表格 - 固定6行，每行9mm，总宽度190mm，只有单元格有边框，顶部0.5mm间距 */}
           <table className="w-full border-collapse" style={{ fontSize: "14px", tableLayout: "fixed", flexShrink: 0, border: "none", marginTop: "0.5mm" }}>
             <colgroup>
-              <col style={{ width: "7mm" }} />   {/* 序号 */}
-              <col style={{ width: "40mm" }} />  {/* 产品编号 +4mm，自动适应长编号 */}
-              <col style={{ width: "25mm" }} />  {/* 名称 -2mm */}
-              <col style={{ width: "30mm" }} />  {/* 型号规格mm */}
-              <col style={{ width: "14mm" }} />  {/* 颜色 */}
-              <col style={{ width: "15mm" }} />  {/* 数量 */}
-              <col style={{ width: "9mm" }} />   {/* 单位 */}
-              <col style={{ width: "16mm" }} />  {/* 单价 */}
-              <col style={{ width: "20mm" }} />  {/* 金额 */}
-              <col style={{ width: "32mm" }} />  {/* 备注 -2mm */}
-              {/* 总计: 7+30+22+30+14+10+9+16+20+32 = 190mm */}
+              {colWidths.map((w, i) => <col key={i} style={{ width: `${w}mm` }} />)}
             </colgroup>
             <thead>
               <tr style={{ height: "5mm", borderTop: "none" }}>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>序号</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>产品编号</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>名称</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>型号规格mm</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>颜色</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>数量</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>单位</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>单价</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>金额</th>
-                <th style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>备注</th>
+                {["序号","产品编号","名称","型号规格mm","颜色","数量","单位","单价","金额","备注"].map((label, i) => (
+                  <th key={i} style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: "14px" }}>
+                    {label}
+                    <span className="resize-handle no-print" onMouseDown={e => handleMouseDown(e, i)} />
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
@@ -224,32 +226,23 @@ export default function PrintDeliveryPage() {
             </tbody>
             <tfoot>
               <tr style={{ height: "6mm" }}>
-                {/* 大写金额从序号列开始，跨8列（序号到单价） */}
                 <td colSpan={8} style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 2mm", verticalAlign: "middle", fontSize: "15px" }}>
                   <span style={{ fontWeight: "bold" }}>合计人民币（大写）：{numToCN(totalAmount)}</span>
                 </td>
-                {/* 小写金额对齐到"金额"列 */}
                 <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: "15px", fontWeight: "bold" }}>¥{totalAmount > 0 ? totalAmount.toFixed(2) : "0.00"}</td>
-                {/* 备注列留空 */}
                 <td style={{ border: `1px solid ${BORDER_COLOR}` }}></td>
               </tr>
             </tfoot>
           </table>
 
-          {/* 底部区域 - 备注、公司地址、签字栏，固定高度14mm */}
           <div style={{ fontSize: "13px", padding: "1mm 2mm", flexShrink: 0, height: "14mm", boxSizing: "border-box", overflow: "visible" }}>
             <div style={{ marginBottom: "0.3mm", fontSize: "13px", color: "#333" }}>
               备注：请仔细核对货物品质、型号和数量，如果有误请于3个工作日内提出，并出具证明，协商解决。
             </div>
-            <div style={{ marginBottom: "0.5mm", fontSize: "13px" }}>
-              公司地址：{companyAddress}
-            </div>
+            <div style={{ marginBottom: "0.5mm", fontSize: "13px" }}>公司地址：{companyAddress}</div>
             <div className="flex justify-between" style={{ fontSize: "13px", paddingTop: "0.5mm" }}>
               <span><span className="font-bold">制单：</span>{order.maker || "易金兰"}</span>
-              <span>
-                <span className="font-bold">客户签收：</span>
-                <span style={{ display: "inline-block", width: "20mm" }}></span>
-              </span>
+              <span><span className="font-bold">客户签收：</span><span style={{ display: "inline-block", width: "20mm" }}></span></span>
             </div>
           </div>
         </div>
