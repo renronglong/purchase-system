@@ -160,8 +160,7 @@ export default function PrintDeliveryPage() {
 
   useEffect(() => {
     if (order) {
-      const timer = setTimeout(() => { if (!isEditing) window.print(); }, 100);
-      return () => clearTimeout(timer);
+      return () => {};
     }
   }, [order, isEditing]);
 
