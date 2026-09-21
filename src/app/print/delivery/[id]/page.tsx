@@ -304,7 +304,7 @@ export default function PrintDeliveryPage() {
                 <div><span className="font-bold">联系人：</span><EditableText value={customer?.contact || ""} fontSize={layout.labelFontSize} isEditing={isEditing} /></div>
               </div>
               {/* Right: order info */}
-              <div style={{ width: "45%", display: "flex", flexDirection: "column", justifyContent: "space-between", paddingLeft: "5mm" }}>
+              <div style={{ width: "45%", display: "flex", flexDirection: "column", justifyContent: "space-between", paddingLeft: "15mm" }}>
                 <div style={{ whiteSpace: "nowrap" }}><span className="font-bold">NO：</span><span className="font-mono font-bold" style={{ fontSize: `${layout.labelFontSize}px` }}>{order.noteNo}</span></div>
                 <div style={{ whiteSpace: "nowrap" }}><span className="font-bold">送货日期：</span>{order.date}</div>
                 <div style={{ whiteSpace: "nowrap" }}><span className="font-bold">订单号：</span>{order.orderNo || ""}</div>
