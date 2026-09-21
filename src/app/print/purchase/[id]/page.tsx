@@ -308,7 +308,7 @@ export default function PrintPurchasePage() {
           {/* 标题 */}
           <div className="flex items-center justify-center" style={{ height: "10mm", flexShrink: 0, marginBottom: "5mm" }}>
             <h1 style={{ fontSize: `${layout.titleFontSize}px`, fontWeight: "bold", margin: 0, letterSpacing: "2px" }}>
-              <EditableText value={layout.title} fontSize={layout.titleFontSize} style={{ fontWeight: "bold", letterSpacing: "2px" }} isEditing={isEditing} onBlur={v => updateLayout("title", v)} />
+              <EditableText value={(order.company || "佛山市质稳五金有限公司") + "采购单"} fontSize={layout.titleFontSize} style={{ fontWeight: "bold", letterSpacing: "2px" }} isEditing={isEditing} onBlur={v => updateLayout("title", v)} />
               {isPlate && <EditableText value={layout.plateLabel} fontSize={14} style={{ color: bc, marginLeft: "8px" }} isEditing={isEditing} onBlur={v => updateLayout("plateLabel", v)} />}
             </h1>
           </div>
