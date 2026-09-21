@@ -76,7 +76,7 @@ export default function PrintDeliveryPage() {
 
   useEffect(() => {
     if (order) {
-      const timer = setTimeout(() => window.print(), 300);
+      const timer = setTimeout(() => window.print(), 100);
       return () => clearTimeout(timer);
     }
   }, [order]);
@@ -154,7 +154,7 @@ export default function PrintDeliveryPage() {
           aside, nav, [class*="sidebar"], .w-60, .bg-slate-900 { display: none !important; }
         }
         @media screen {
-          body { background: #e2e8f0; }
+          body { background: #fff; }
           aside, nav, [class*="sidebar"], .w-60, .bg-slate-900 { display: none !important; }
           .resize-handle {
             position: absolute; right: -3px; top: 0; bottom: 0; width: 6px;
@@ -165,11 +165,7 @@ export default function PrintDeliveryPage() {
         }
       `}} />
 
-      <div className="no-print fixed top-4 right-4 z-50 flex gap-2">
-        <button onClick={() => window.print()} className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 shadow-lg">打印 / 导出PDF</button>
-        <button onClick={resetWidths} className="px-4 py-2 bg-slate-500 text-white text-sm rounded-md hover:bg-slate-600 shadow-lg">重置列宽</button>
-        <button onClick={() => window.close()} className="px-4 py-2 bg-slate-500 text-white text-sm rounded-md hover:bg-slate-600 shadow-lg">关闭</button>
-      </div>
+      
 
       <div id="print-area" className="mx-auto bg-white" style={{ width: "241mm", height: "140mm", display: "flex", flexDirection: "column", overflow: "hidden", boxSizing: "border-box", padding: "3mm" }}>
         <div style={{ width: CONTENT_WIDTH, height: "134mm", display: "flex", flexDirection: "column", justifyContent: "flex-start", boxSizing: "border-box", marginLeft: "2mm" }}>
