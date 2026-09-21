@@ -1,7 +1,9 @@
 "use client";
 
+import { exportReconciliationExcel } from "@/lib/export-reconciliation";
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { exportReconciliationExcel } from "@/lib/export-reconciliation";
 import {
   reconciliationStore, deliveryCustomerStore, deliveryNoteStore, previewReconciliationOrderNo,
   type ReconciliationOrder, type ReconciliationItem, type DeliveryNote,
@@ -178,6 +180,7 @@ export default function ReconciliationPage() {
     <div>
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-lg font-bold text-slate-800">对帐单管理</h1>
+        <button onClick={() => exportReconciliationExcel(orders)} className="px-4 py-1.5 bg-emerald-600 text-white text-sm rounded-md hover:bg-emerald-700">导出对帐单</button>
         <button onClick={openCreate} className="px-4 py-1.5 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700">新建对帐单</button>
       </div>
 
