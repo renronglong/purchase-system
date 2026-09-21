@@ -177,10 +177,12 @@ export default function ReconciliationPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-lg font-bold text-slate-800">对帐单管理</h1>
-        <button onClick={() => exportReconciliationExcel(orders)} className="px-4 py-1.5 bg-emerald-600 text-white text-sm rounded-md hover:bg-emerald-700">导出对帐单</button>
-        <button onClick={openCreate} className="px-4 py-1.5 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700">新建对帐单</button>
+      <div className="mb-4">
+        <h1 className="text-lg font-bold text-slate-800 mb-3">对帐单管理</h1>
+        <div className="flex gap-2">
+          <button onClick={openCreate} className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700">+ 新建对帐单</button>
+          <button onClick={() => exportReconciliationExcel(orders)} className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-md hover:bg-emerald-700">导出对帐单</button>
+        </div>
       </div>
 
       {/* 筛选 */}
