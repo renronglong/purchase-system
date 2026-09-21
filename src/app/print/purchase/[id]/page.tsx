@@ -163,11 +163,11 @@ export default function PrintPurchasePage() {
             <table className="w-full border-collapse" style={{ fontSize: "14px", tableLayout: "fixed", flexShrink: 0, border: "none", marginTop: "0.5mm" }}>
               <colgroup>
                 <col style={{ width: "6mm" }} />
-                <col style={{ width: "26mm" }} />
-                <col style={{ width: "22mm" }} />
+                <col style={{ width: "36mm" }} />
+                <col style={{ width: "25mm" }} />
                 <col style={{ width: "24mm" }} />
                 <col style={{ width: "11mm" }} />
-                <col style={{ width: "9mm" }} />
+                <col style={{ width: "14mm" }} />
                 <col style={{ width: "8mm" }} />
                 <col style={{ width: "20mm" }} />
                 <col style={{ width: "18mm" }} />
