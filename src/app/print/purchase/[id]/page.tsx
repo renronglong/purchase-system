@@ -162,11 +162,11 @@ export default function PrintPurchasePage() {
           {!isPlate && (
             <table className="w-full border-collapse" style={{ fontSize: "14px", tableLayout: "fixed", flexShrink: 0, border: "none", marginTop: "0.5mm" }}>
               <colgroup>
-                <col style={{ width: "6mm" }} />
+                <col style={{ width: "8mm" }} />
                 <col style={{ width: "36mm" }} />
                 <col style={{ width: "25mm" }} />
                 <col style={{ width: "24mm" }} />
-                <col style={{ width: "11mm" }} />
+                <col style={{ width: "13mm" }} />
                 <col style={{ width: "14mm" }} />
                 <col style={{ width: "8mm" }} />
                 <col style={{ width: "20mm" }} />
@@ -193,7 +193,7 @@ export default function PrintPurchasePage() {
                 {tableRows.map((item: any, idx: number) => (
                   <tr key={item.id} style={{ height: ROW_HEIGHT }}>
                     <td style={{ border: `1px solid ${bc}`, textAlign: "center", verticalAlign: "middle", padding: "1px 0", fontSize: "14px" }}>{item.isEmpty ? "" : idx + 1}</td>
-                    <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", whiteSpace: "nowrap", overflow: "visible", fontSize: "14px", fontWeight: "bold" }}>{item.productCode}</td>
+                    <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", whiteSpace: "nowrap", overflow: "visible", fontSize: "13px", fontWeight: "bold" }}>{item.productCode}</td>
                     <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: "14px" }}>{item.productName}</td>
                     <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: "14px" }}>{item.spec}</td>
                     <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: "14px" }}>{item.isEmpty ? "" : item.length}</td>
@@ -222,7 +222,7 @@ export default function PrintPurchasePage() {
           {isPlate && (
             <table className="w-full border-collapse" style={{ fontSize: "14px", tableLayout: "fixed", flexShrink: 0, border: "none", marginTop: "0.5mm" }}>
               <colgroup>
-                <col style={{ width: "6mm" }} />
+                <col style={{ width: "8mm" }} />
                 <col style={{ width: "38mm" }} />
                 <col style={{ width: "43mm" }} />
                 <col style={{ width: "19mm" }} />
@@ -249,7 +249,7 @@ export default function PrintPurchasePage() {
                 {tableRows.map((item: any, idx: number) => (
                   <tr key={item.id} style={{ height: ROW_HEIGHT }}>
                     <td style={{ border: `1px solid ${bc}`, textAlign: "center", verticalAlign: "middle", padding: "1px 0", fontSize: "14px" }}>{item.isEmpty ? "" : idx + 1}</td>
-                    <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", whiteSpace: "nowrap", overflow: "visible", fontSize: "14px", fontWeight: "bold" }}>{item.productCode}</td>
+                    <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", whiteSpace: "nowrap", overflow: "visible", fontSize: "13px", fontWeight: "bold" }}>{item.productCode}</td>
                     <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: "14px" }}>{item.spec}</td>
                     <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: "14px" }}>{item.isEmpty ? "" : (item.sheetsCount || "")}</td>
                     <td style={{ border: `1px solid ${bc}`, textAlign: "center", padding: "0 1px", verticalAlign: "middle", fontSize: "14px" }}>{item.isEmpty ? "" : "张"}</td>
