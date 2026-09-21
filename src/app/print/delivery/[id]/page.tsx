@@ -181,11 +181,11 @@ export default function PrintDeliveryPage() {
           <table className="w-full border-collapse" style={{ fontSize: "14px", tableLayout: "fixed", flexShrink: 0, border: "none", marginTop: "0.5mm" }}>
             <colgroup>
               <col style={{ width: "7mm" }} />   {/* 序号 */}
-              <col style={{ width: "30mm" }} />  {/* 产品编号 +4mm，自动适应长编号 */}
-              <col style={{ width: "22mm" }} />  {/* 名称 -2mm */}
+              <col style={{ width: "40mm" }} />  {/* 产品编号 +4mm，自动适应长编号 */}
+              <col style={{ width: "25mm" }} />  {/* 名称 -2mm */}
               <col style={{ width: "30mm" }} />  {/* 型号规格mm */}
               <col style={{ width: "14mm" }} />  {/* 颜色 */}
-              <col style={{ width: "10mm" }} />  {/* 数量 */}
+              <col style={{ width: "15mm" }} />  {/* 数量 */}
               <col style={{ width: "9mm" }} />   {/* 单位 */}
               <col style={{ width: "16mm" }} />  {/* 单价 */}
               <col style={{ width: "20mm" }} />  {/* 金额 */}
