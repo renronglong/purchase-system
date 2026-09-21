@@ -254,7 +254,7 @@ export default function PrintReconciliationPage() {
           </div>
           <div className="flex items-center gap-2">
             <span className="font-medium">客户确认签字：</span>
-            <span className="inline-block border-b border-black w-28"></span>
+            
           </div>
 
         </div>
