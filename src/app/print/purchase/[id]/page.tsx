@@ -353,7 +353,7 @@ export default function PrintPurchasePage() {
                 {tableRows.map((item: any, idx: number) => (
                   <tr key={item.id} style={{ height: ROW_HEIGHT }}>
                     <td style={{ border: `1px solid ${bc}`, textAlign: "center", verticalAlign: "middle", padding: "1px 0", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.isEmpty ? "" : idx + 1}</td>
-                    <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", whiteSpace: "nowrap", overflow: "visible", fontSize: , fontFamily: "仿宋"`${layout.cellFontSize - 1}px`, fontWeight: "bold" }}>{item.productCode}</td>
+                    <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", whiteSpace: "nowrap", overflow: "visible", fontSize: `${layout.cellFontSize - 1}px`, fontWeight: "bold" }}>{item.productCode}</td>
                     <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.productName}</td>
                     <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.spec}</td>
                     <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.isEmpty ? "" : item.length}</td>
@@ -402,7 +402,7 @@ export default function PrintPurchasePage() {
                 {tableRows.map((item: any, idx: number) => (
                   <tr key={item.id} style={{ height: ROW_HEIGHT }}>
                     <td style={{ border: `1px solid ${bc}`, textAlign: "center", verticalAlign: "middle", padding: "1px 0", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.isEmpty ? "" : idx + 1}</td>
-                    <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", whiteSpace: "nowrap", overflow: "visible", fontSize: , fontFamily: "仿宋"`${layout.cellFontSize - 1}px`, fontWeight: "bold" }}>{item.productCode}</td>
+                    <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", whiteSpace: "nowrap", overflow: "visible", fontSize: `${layout.cellFontSize - 1}px`, fontWeight: "bold" }}>{item.productCode}</td>
                     <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.spec}</td>
                     <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.isEmpty ? "" : (item.sheetsCount || "")}</td>
                     <td style={{ border: `1px solid ${bc}`, textAlign: "center", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.isEmpty ? "" : "张"}</td>
