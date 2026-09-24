@@ -141,6 +141,7 @@ export default function PrintDeliveryPage() {
   const [order, setOrder] = useState<DeliveryNote | null>(null);
   const [customer, setCustomer] = useState<DeliveryCustomer | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [hidePrices, setHidePrices] = useState(false);
   const [colWidths, setColWidths] = useState<number[]>(loadColWidths);
   const [layout, setLayout] = useState<LayoutConfig | null>(null);
   const resizing = useRef<{ colIdx: number; startX: number; startW: number } | null>(null);
@@ -341,8 +342,8 @@ export default function PrintDeliveryPage() {
                   <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: `${layout.cellFontSize}px` }}>{item.surface}</td>
                   <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px` }}>{item.isEmpty ? "" : item.qty}</td>
                   <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "center", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px` }}>{item.unit}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px` }}>{item.isEmpty ? "" : item.unitPrice.toFixed(2)}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px` }}>{item.isEmpty ? "" : item.amount.toFixed(2)}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px` }}>{item.isEmpty ? "" : (hidePrices ? "***" : item.unitPrice.toFixed(2))}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px` }}>{item.isEmpty ? "" : (hidePrices ? "***" : item.amount.toFixed(2))}</td>
                   <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: `${layout.cellFontSize}px` }}>{item.remark}</td>
                 </tr>
               ))}
@@ -352,7 +353,7 @@ export default function PrintDeliveryPage() {
                 <td colSpan={8} style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 2mm", verticalAlign: "middle", fontSize: `${layout.cellFontSize + 1}px` }}>
                   <span style={{ fontWeight: "bold" }}>合计人民币（大写）：{numToCN(totalAmount)}</span>
                 </td>
-                <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize + 1}px`, fontWeight: "bold" }}>¥{totalAmount > 0 ? totalAmount.toFixed(2) : "0.00"}</td>
+                <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize + 1}px`, fontWeight: "bold" }}>{hidePrices ? "***" : "¥" + (totalAmount > 0 ? totalAmount.toFixed(2) : "0.00")}</td>
                 <td style={{ border: `1px solid ${BORDER_COLOR}` }}></td>
               </tr>
             </tfoot>
