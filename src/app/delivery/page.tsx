@@ -25,6 +25,7 @@ export default function DeliveryPage() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   const [showForm, setShowForm] = useState(false);
+  const [hidePrices, setHidePrices] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [noteNo, setNoteNo] = useState("");
   const [company, setCompany] = useState(deliveryCompanies[0]);
@@ -330,8 +331,8 @@ export default function DeliveryPage() {
                     <td className="px-2 py-1"><input type="text" value={item.surface} onChange={(e) => updateItem(idx, "surface", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" list="surface-treatment-list" /></td>
                     <td className="px-2 py-1"><input type="text" value={item.unit} onChange={(e) => updateItem(idx, "unit", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" list="unit-list" /></td>
                     <td className="px-2 py-1"><input type="number" value={item.qty || ""} onChange={(e) => updateItem(idx, "qty", Number(e.target.value))} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
-                    <td className="px-2 py-1"><input type="number" step="0.01" value={item.unitPrice || ""} onChange={(e) => updateItem(idx, "unitPrice", Number(e.target.value))} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
-                    <td className="px-2 py-1 text-right font-mono font-medium">{item.amount.toFixed(2)}</td>
+                    <td className="px-2 py-1">{hidePrices ? <span className="text-slate-400">***</span> : <input type="number" step="0.01" value={item.unitPrice || ""} onChange={(e) => updateItem(idx, "unitPrice", Number(e.target.value))} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" />}</td>
+                    <td className="px-2 py-1 text-right font-mono font-medium">{hidePrices ? "***" : item.amount.toFixed(2)}</td>
                     <td className="px-2 py-1"><input type="text" value={item.remark} onChange={(e) => updateItem(idx, "remark", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
                     <td className="px-2 py-1 text-center">
                       <button onClick={() => removeItem(idx)} className="text-red-400 hover:text-red-600">
@@ -344,7 +345,7 @@ export default function DeliveryPage() {
               <tfoot>
                 <tr className="bg-slate-50 border-t border-slate-200">
                   <td colSpan={8} className="px-2 py-2 text-right font-medium text-slate-600">合计金额</td>
-                  <td className="px-2 py-2 text-right font-mono font-bold text-blue-600">{totalAmount.toFixed(2)}</td>
+                  <td className="px-2 py-2 text-right font-mono font-bold text-blue-600">{hidePrices ? "***" : totalAmount.toFixed(2)}</td>
                   <td colSpan={2}></td>
                 </tr>
               </tfoot>
@@ -353,6 +354,9 @@ export default function DeliveryPage() {
 
           <div className="flex gap-2 mt-4">
             <button onClick={addItem} className="px-3 py-1.5 text-xs text-blue-600 border border-blue-200 rounded-md hover:bg-blue-50">+ 添加行</button>
+            <button onClick={() => setHidePrices(!hidePrices)} className={`px-3 py-1.5 text-xs rounded-md border ${hidePrices ? "bg-amber-600 text-white border-amber-600" : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"}`}>
+              {hidePrices ? "显示价格" : "隐藏价格"}
+            </button>
             <button onClick={handleSave} className="px-4 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700">保存</button>
             <button onClick={() => setShowForm(false)} className="px-4 py-1.5 text-sm text-slate-600 border border-slate-200 rounded-md hover:bg-slate-50">取消</button>
           </div>
