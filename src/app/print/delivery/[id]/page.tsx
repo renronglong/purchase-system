@@ -102,7 +102,7 @@ function loadColWidths(): number[] {
 
 // Editable text component
 function EditableText({ value, fontSize, className = "", style = {}, onBlur, isEditing }: {
-  value: string; fontSize: number; className?: string; style?: React.CSSProperties;
+  value: string; fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"number; className?: string; style?: React.CSSProperties;
   onBlur?: (v: string) => void; isEditing: boolean;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -126,7 +126,7 @@ function EditableText({ value, fontSize, className = "", style = {}, onBlur, isE
       contentEditable={isEditing}
       suppressContentEditableWarning
       className={className}
-      style={{ ...style, fontSize: `${fontSize}px`, outline: "none", borderBottom: isEditing ? "1px dashed #93c5fd" : "none", minHeight: "1em", display: "inline-block" }}
+      style={{ ...style, fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${fontSize}px`, outline: "none", borderBottom: isEditing ? "1px dashed #93c5fd" : "none", minHeight: "1em", display: "inline-block" }}
       onBlur={handleBlur}
       onKeyDown={handleKeyDown}
     >
@@ -291,13 +291,13 @@ export default function PrintDeliveryPage() {
 
           {/* Title */}
           <div className="flex items-center justify-center" style={{ height: "10mm", flexShrink: 0, marginBottom: "5mm" }}>
-            <h1 style={{ fontSize: `${layout.titleFontSize}px`, fontWeight: "bold", margin: 0, letterSpacing: "2px" }}>
+            <h1 style={{ fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.titleFontSize}px`, fontWeight: "bold", margin: 0, letterSpacing: "2px" }}>
               <EditableText value={order.company + "送货单"} fontSize={layout.titleFontSize} style={{ fontWeight: "bold", letterSpacing: "2px" }} isEditing={isEditing} onBlur={v => updateLayout("title", v)} />
             </h1>
           </div>
 
           {/* Header info */}
-          <div style={{ fontSize: `${layout.labelFontSize}px`, lineHeight: "1.4", padding: "0 2mm", flexShrink: 0, height: "26mm", boxSizing: "border-box", overflow: "visible" }}>
+          <div style={{ fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.labelFontSize}px`, lineHeight: "1.4", padding: "0 2mm", flexShrink: 0, height: "26mm", boxSizing: "border-box", overflow: "visible" }}>
             <div className="flex" style={{ alignItems: "stretch" }}>
               {/* Left: customer info */}
               <div style={{ flex: "1", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
@@ -308,7 +308,7 @@ export default function PrintDeliveryPage() {
               </div>
               {/* Right: order info */}
               <div style={{ width: "45%", display: "flex", flexDirection: "column", justifyContent: "space-between", paddingLeft: "15mm" }}>
-                <div style={{ whiteSpace: "nowrap" }}><span className="font-bold">NO：</span><span className="font-mono font-bold" style={{ fontSize: `${layout.labelFontSize}px` }}>{order.noteNo}</span></div>
+                <div style={{ whiteSpace: "nowrap" }}><span className="font-bold">NO：</span><span className="font-mono font-bold" style={{ fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.labelFontSize}px` }}>{order.noteNo}</span></div>
                 <div style={{ whiteSpace: "nowrap" }}><span className="font-bold">送货日期：</span>{order.date}</div>
                 <div style={{ whiteSpace: "nowrap" }}><span className="font-bold">订单号：</span>{order.orderNo || ""}</div>
                 <div style={{ whiteSpace: "nowrap" }}><span className="font-bold">付款方式：</span><EditableText value={customer?.paymentTerms || ""} fontSize={layout.labelFontSize} isEditing={isEditing} /></div>
@@ -317,14 +317,14 @@ export default function PrintDeliveryPage() {
           </div>
 
           {/* Table */}
-          <table className="w-full border-collapse" style={{ fontSize: `${layout.cellFontSize}px`, tableLayout: "fixed", flexShrink: 0, border: "none", marginTop: "0.5mm" }}>
+          <table className="w-full border-collapse" style={{ fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px`, tableLayout: "fixed", flexShrink: 0, border: "none", marginTop: "0.5mm" }}>
             <colgroup>
               {colWidths.map((w, i) => <col key={i} style={{ width: `${w}mm` }} />)}
             </colgroup>
             <thead>
               <tr style={{ height: "5mm", borderTop: "none" }}>
                 {layout.headerLabels.map((label, i) => (
-                  <th key={i} style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px` }}>
+                  <th key={i} style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px` }}>
                     <EditableText value={label} fontSize={layout.cellFontSize} style={{ fontWeight: "bold" }} isEditing={isEditing} onBlur={v => {
                       const newLabels = [...layout.headerLabels];
                       newLabels[i] = v;
@@ -338,39 +338,39 @@ export default function PrintDeliveryPage() {
             <tbody>
               {tableRows.map((item, idx) => (
                 <tr key={item.id} style={{ height: ROW_HEIGHT }}>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "center", verticalAlign: "middle", padding: "1px 0", fontSize: `${layout.cellFontSize}px` }}>{item.isEmpty ? "" : idx + 1}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", whiteSpace: "nowrap", overflow: "visible", fontSize: `${layout.cellFontSize}px`, fontWeight: "bold" }}>{item.materialCode}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: `${layout.cellFontSize}px` }}>{item.productName}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: `${layout.cellFontSize}px` }}>{item.spec}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: `${layout.cellFontSize}px` }}>{item.surface}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px` }}>{item.isEmpty ? "" : item.qty}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "center", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px` }}>{item.unit}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px` }}>{item.isEmpty ? "" : (hidePrices ? "***" : item.unitPrice.toFixed(2))}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px` }}>{item.isEmpty ? "" : (hidePrices ? "***" : item.amount.toFixed(2))}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: `${layout.cellFontSize}px` }}>{item.remark}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "center", verticalAlign: "middle", padding: "1px 0", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px` }}>{item.isEmpty ? "" : idx + 1}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", whiteSpace: "nowrap", overflow: "visible", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px`, fontWeight: "bold" }}>{item.materialCode}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px` }}>{item.productName}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px` }}>{item.spec}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px` }}>{item.surface}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px` }}>{item.isEmpty ? "" : item.qty}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "center", padding: "0 1px", verticalAlign: "middle", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px` }}>{item.unit}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px` }}>{item.isEmpty ? "" : (hidePrices ? "***" : item.unitPrice.toFixed(2))}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px` }}>{item.isEmpty ? "" : (hidePrices ? "***" : item.amount.toFixed(2))}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px` }}>{item.remark}</td>
                 </tr>
               ))}
             </tbody>
             <tfoot>
               <tr style={{ height: "6mm" }}>
-                <td colSpan={8} style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 2mm", verticalAlign: "middle", fontSize: `${layout.cellFontSize + 1}px` }}>
+                <td colSpan={8} style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 2mm", verticalAlign: "middle", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize + 1}px` }}>
                   <span style={{ fontWeight: "bold" }}>合计人民币（大写）：{numToCN(totalAmount)}</span>
                 </td>
-                <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize + 1}px`, fontWeight: "bold" }}>{hidePrices ? "***" : "¥" + (totalAmount > 0 ? totalAmount.toFixed(2) : "0.00")}</td>
+                <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize + 1}px`, fontWeight: "bold" }}>{hidePrices ? "***" : "¥" + (totalAmount > 0 ? totalAmount.toFixed(2) : "0.00")}</td>
                 <td style={{ border: `1px solid ${BORDER_COLOR}` }}></td>
               </tr>
             </tfoot>
           </table>
 
           {/* Footer */}
-          <div style={{ fontSize: "13px", padding: "1mm 2mm", flexShrink: 0, height: "14mm", boxSizing: "border-box", overflow: "visible" }}>
-            <div style={{ marginBottom: "0.3mm", fontSize: "13px", color: "#333" }}>
+          <div style={{ fontSize: , fontFamily: "仿宋", fontFamily: "仿宋""13px", padding: "1mm 2mm", flexShrink: 0, height: "14mm", boxSizing: "border-box", overflow: "visible" }}>
+            <div style={{ marginBottom: "0.3mm", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋""13px", color: "#333" }}>
               <EditableText value={layout.footerNote} fontSize={13} isEditing={isEditing} onBlur={v => updateLayout("footerNote", v)} />
             </div>
-            <div style={{ marginBottom: "0.5mm", fontSize: "13px" }}>
+            <div style={{ marginBottom: "0.5mm", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋""13px" }}>
               <span className="font-bold">公司地址：</span><EditableText value={companyAddress} fontSize={13} isEditing={isEditing} onBlur={v => updateLayout("companyAddress", v)} />
             </div>
-            <div className="flex justify-between" style={{ fontSize: "13px", paddingTop: "0.5mm" }}>
+            <div className="flex justify-between" style={{ fontSize: , fontFamily: "仿宋", fontFamily: "仿宋""13px", paddingTop: "0.5mm" }}>
               <span><span className="font-bold"><EditableText value={layout.makerLabel} fontSize={13} isEditing={isEditing} onBlur={v => updateLayout("makerLabel", v)} />：</span><EditableText value={layout.maker} fontSize={13} isEditing={isEditing} onBlur={v => updateLayout("maker", v)} /></span>
               <span><span className="font-bold"><EditableText value={layout.signLabel} fontSize={13} isEditing={isEditing} onBlur={v => updateLayout("signLabel", v)} />：</span><span style={{ display: "inline-block", width: "20mm" }}></span></span>
             </div>
