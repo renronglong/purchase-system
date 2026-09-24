@@ -359,7 +359,7 @@ export default function PrintPurchasePage() {
                     <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.isEmpty ? "" : item.length}</td>
                     <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.isEmpty ? "" : item.quantity}</td>
                     <td style={{ border: `1px solid ${bc}`, textAlign: "center", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.unit}</td>
-                    <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋", fontFamily: "monospace" }}>{item.isEmpty ? "" : item.totalWeight.toFixed(2)}</td>
+                    <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.isEmpty ? "" : item.totalWeight.toFixed(2)}</td>
                     <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.surfaceTreatment}</td>
                     <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.deliveryDate}</td>
                     <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.remark}</td>
@@ -371,7 +371,7 @@ export default function PrintPurchasePage() {
                   <td colSpan={5} style={{ border: `1px solid ${bc}`, padding: "0 2mm", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋", fontWeight: "bold", textAlign: "right" }}>合计</td>
                   <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋", fontWeight: "bold" }}>{order.totalQuantity}</td>
                   <td style={{ border: `1px solid ${bc}` }}></td>
-                  <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋", fontWeight: "bold", fontFamily: "monospace" }}>{order.totalWeight.toFixed(2)}</td>
+                  <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋", fontWeight: "bold" }}>{order.totalWeight.toFixed(2)}</td>
                   <td colSpan={4} style={{ border: `1px solid ${bc}` }}></td>
                 </tr>
               </tfoot>
