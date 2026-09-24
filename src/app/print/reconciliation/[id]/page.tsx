@@ -395,7 +395,7 @@ export default function PrintReconciliationPage() {
 
           {/* 备注 */}
           {order.remark && (
-            <div style={{ fontSize: , fontFamily: "仿宋""12px", padding: "1mm 2mm", flexShrink: 0 }}>
+            <div style={{ fontSize: "12px", padding: "1mm 2mm", flexShrink: 0 }}>
               <div className="flex">
                 <span className="font-bold">备注：</span>
                 <EditableText value={order.remark} fontSize={12} isEditing={isEditing} />
