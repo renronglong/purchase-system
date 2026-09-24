@@ -102,7 +102,7 @@ function loadColWidths(): number[] {
 
 // Editable text component
 function EditableText({ value, fontSize, className = "", style = {}, onBlur, isEditing }: {
-  value: string; fontSize: , fontFamily: "仿宋"number; className?: string; style?: React.CSSProperties;
+  value: string; fontSize: number; className?: string; style?: React.CSSProperties;
   onBlur?: (v: string) => void; isEditing: boolean;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
