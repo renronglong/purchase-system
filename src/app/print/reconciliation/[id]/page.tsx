@@ -71,7 +71,7 @@ function loadColWidths(): number[] {
 
 // Editable text component
 function EditableText({ value, fontSize, className = "", style = {}, onBlur, isEditing }: {
-  value: string; fontSize: number; className?: string; style?: React.CSSProperties;
+  value: string; fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"number; className?: string; style?: React.CSSProperties;
   onBlur?: (v: string) => void; isEditing: boolean;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
@@ -95,7 +95,7 @@ function EditableText({ value, fontSize, className = "", style = {}, onBlur, isE
       contentEditable={isEditing}
       suppressContentEditableWarning
       className={className}
-      style={{ ...style, fontSize: `${fontSize}px`, outline: "none", borderBottom: isEditing ? "1px dashed #93c5fd" : "none", minHeight: "1em", display: "inline-block" }}
+      style={{ ...style, fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${fontSize}px`, outline: "none", borderBottom: isEditing ? "1px dashed #93c5fd" : "none", minHeight: "1em", display: "inline-block" }}
       onBlur={handleBlur}
       onKeyDown={handleKeyDown}
     >
@@ -306,13 +306,13 @@ export default function PrintReconciliationPage() {
 
           {/* 标题行 */}
           <div className="flex items-center justify-center" style={{ height: "10mm", flexShrink: 0, marginBottom: "3mm" }}>
-            <h1 style={{ fontSize: `${layout.titleFontSize}px`, fontWeight: "bold", margin: 0, letterSpacing: "2px" }}>
+            <h1 style={{ fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.titleFontSize}px`, fontWeight: "bold", margin: 0, letterSpacing: "2px" }}>
               <EditableText value={layout.title} fontSize={layout.titleFontSize} style={{ fontWeight: "bold", letterSpacing: "2px" }} isEditing={isEditing} onBlur={v => updateLayout("title", v)} />
             </h1>
           </div>
 
           {/* 基本信息 */}
-          <div style={{ fontSize: `${layout.labelFontSize}px`, lineHeight: "1.4", padding: "0 2mm", flexShrink: 0, boxSizing: "border-box", overflow: "visible", marginBottom: "2mm" }}>
+          <div style={{ fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.labelFontSize}px`, lineHeight: "1.4", padding: "0 2mm", flexShrink: 0, boxSizing: "border-box", overflow: "visible", marginBottom: "2mm" }}>
             <div className="flex mb-0.5">
               <div className="flex" style={{ whiteSpace: "nowrap" }}>
                 <span className="font-bold">对帐单编号：</span>
@@ -338,14 +338,14 @@ export default function PrintReconciliationPage() {
           </div>
 
           {/* 明细表格 */}
-          <table className="w-full border-collapse" style={{ fontSize: `${layout.cellFontSize}px`, tableLayout: "fixed", flexShrink: 0, border: "none" }}>
+          <table className="w-full border-collapse" style={{ fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px`, tableLayout: "fixed", flexShrink: 0, border: "none" }}>
             <colgroup>
               {colWidths.map((w, i) => <col key={i} style={{ width: `${w}mm` }} />)}
             </colgroup>
             <thead>
               <tr style={{ height: "5mm" }}>
                 {layout.headerLabels.map((label, i) => (
-                  <th key={i} style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px` }}>
+                  <th key={i} style={{ border: `1px solid ${BORDER_COLOR}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px` }}>
                     <EditableText value={label} fontSize={layout.cellFontSize} style={{ fontWeight: "bold" }} isEditing={isEditing} onBlur={v => {
                       const newLabels = [...layout.headerLabels];
                       newLabels[i] = v;
@@ -359,31 +359,31 @@ export default function PrintReconciliationPage() {
             <tbody>
               {order.items.map((item, idx) => (
                 <tr key={item.id} style={{ height: "7mm" }}>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "center", verticalAlign: "middle", padding: "1px 0", fontSize: `${layout.cellFontSize}px` }}>{idx + 1}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", whiteSpace: "nowrap", overflow: "visible", fontSize: `${layout.cellFontSize}px` }}>{item.deliveryNoteNo}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px` }}>{item.deliveryDate}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", whiteSpace: "nowrap", overflow: "visible", fontSize: `${layout.cellFontSize}px`, fontWeight: "bold" }}>{item.materialCode}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: `${layout.cellFontSize}px` }}>{item.productName}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: `${layout.cellFontSize}px` }}>{item.spec}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: `${layout.cellFontSize}px` }}>{item.surface}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "center", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px` }}>{item.unit}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px` }}>{item.qty}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", fontSize: `${layout.cellFontSize}px` }}>{item.unitPrice.toFixed(2)}</td>
-                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", fontSize: `${layout.cellFontSize}px` }}>{item.amount.toFixed(2)}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "center", verticalAlign: "middle", padding: "1px 0", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px` }}>{idx + 1}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", whiteSpace: "nowrap", overflow: "visible", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px` }}>{item.deliveryNoteNo}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px` }}>{item.deliveryDate}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", whiteSpace: "nowrap", overflow: "visible", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px`, fontWeight: "bold" }}>{item.materialCode}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px` }}>{item.productName}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px` }}>{item.spec}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px` }}>{item.surface}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "center", padding: "0 1px", verticalAlign: "middle", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px` }}>{item.unit}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px` }}>{item.qty}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px` }}>{item.unitPrice.toFixed(2)}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize}px` }}>{item.amount.toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>
             <tfoot>
               <tr style={{ height: "6mm" }}>
-                <td colSpan={8} style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 2mm", verticalAlign: "middle", fontSize: `${layout.cellFontSize + 1}px`, textAlign: "right" }}>
+                <td colSpan={8} style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 2mm", verticalAlign: "middle", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize + 1}px`, textAlign: "right" }}>
                   <span style={{ fontWeight: "bold" }}>合计</span>
                 </td>
-                <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize + 1}px`, fontWeight: "bold" }}>{totalQty}</td>
+                <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize + 1}px`, fontWeight: "bold" }}>{totalQty}</td>
                 <td style={{ border: `1px solid ${BORDER_COLOR}` }}></td>
-                <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize + 1}px`, fontWeight: "bold" }}>{totalAmount.toFixed(2)}</td>
+                <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize + 1}px`, fontWeight: "bold" }}>{totalAmount.toFixed(2)}</td>
               </tr>
               <tr style={{ height: "6mm" }}>
-                <td colSpan={11} style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 2mm", verticalAlign: "middle", fontSize: `${layout.cellFontSize + 1}px` }}>
+                <td colSpan={11} style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 2mm", verticalAlign: "middle", fontSize: , fontFamily: "仿宋", fontFamily: "仿宋"`${layout.cellFontSize + 1}px` }}>
                   <div className="flex justify-between items-center">
                     <div className="flex"><span style={{ fontWeight: "bold" }}>合计金额（大写）：</span><span>{amountToChinese(totalAmount)}</span></div>
                     <div className="flex"><span style={{ fontWeight: "bold" }}>（小写）：</span><span style={{ fontFamily: "monospace" }}>¥{totalAmount.toFixed(2)}</span></div>
@@ -395,7 +395,7 @@ export default function PrintReconciliationPage() {
 
           {/* 备注 */}
           {order.remark && (
-            <div style={{ fontSize: "12px", padding: "1mm 2mm", flexShrink: 0 }}>
+            <div style={{ fontSize: , fontFamily: "仿宋", fontFamily: "仿宋""12px", padding: "1mm 2mm", flexShrink: 0 }}>
               <div className="flex">
                 <span className="font-bold">备注：</span>
                 <EditableText value={order.remark} fontSize={12} isEditing={isEditing} />
