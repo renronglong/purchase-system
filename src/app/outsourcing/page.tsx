@@ -115,6 +115,19 @@ export default function OutsourcingPage() {
       return;
     }
 
+    // 自动添加新供应商到数据库
+    const existingSuppliers = supplierStore.getAll();
+    if (!existingSuppliers.find(s => s.name === supplierName)) {
+      supplierStore.add({ name: supplierName, contact: contact || "", phone: phone || "", address: address || "" });
+    }
+    // 自动添加新产品到数据库
+    const existingProducts = productStore.getAll();
+    for (const item of validItems) {
+      if (item.productCode && !existingProducts.find(p => p.id === item.productCode)) {
+        productStore.add({ id: item.productCode, name: item.productName, spec: item.spec || "", weightPerMeter: item.weightPerMeter || 0 });
+      }
+    }
+
     outsourcingOrderStore.add({
       company,
       supplierId,
