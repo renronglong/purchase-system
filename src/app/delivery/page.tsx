@@ -187,6 +187,20 @@ export default function DeliveryPage() {
       names.unshift(maker.trim());
       localStorage.setItem("delivery_maker_names", JSON.stringify(names.slice(0, 20)));
     }
+    // 自动添加新客户到客户数据库
+    const existingCustomers = deliveryCustomerStore.getAll();
+    if (!existingCustomers.find(c => c.name === customer)) {
+      deliveryCustomerStore.add({ name: customer, address: "", contact: "", phone: "", taxNo: "", legalPerson: "", email: "", paymentTerms: "" });
+    }
+    // 自动添加新产品到产品数据库
+    const existingProducts = deliveryProductStore.getAll();
+    for (const item of valid) {
+      if (item.materialCode && !existingProducts.find(p => p.code === item.materialCode)) {
+        deliveryProductStore.add({ code: item.materialCode, name: item.productName, spec: item.spec || "", surface: item.surface || "", unit: item.unit || "", weightPerMeter: 0, unitPrice: item.unitPrice || 0, customer: customer });
+      } else if (!item.materialCode && item.productName && !existingProducts.find(p => p.name === item.productName)) {
+        deliveryProductStore.add({ code: "", name: item.productName, spec: item.spec || "", surface: item.surface || "", unit: item.unit || "", weightPerMeter: 0, unitPrice: item.unitPrice || 0, customer: customer });
+      }
+    }
     const data = { company, customer, orderNo, date, items: valid, reconciled, maker: maker.trim() };
     let savedId = editId;
     if (editId) { deliveryNoteStore.update(editId, data); } else {
