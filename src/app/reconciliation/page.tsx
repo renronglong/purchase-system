@@ -121,6 +121,11 @@ export default function ReconciliationPage() {
   const handleSave = () => {
     if (!customer) { alert("请选择客户"); return; }
     if (!startDate || !endDate) { alert("请选择日期范围"); return; }
+    // 自动添加新客户到客户数据库
+    const existingCustomers = deliveryCustomerStore.getAll();
+    if (!existingCustomers.find(c => c.name === customer)) {
+      deliveryCustomerStore.add({ name: customer, address: "", contact: "", phone: "", taxNo: "", legalPerson: "", email: "", paymentTerms: "" });
+    }
     const data = { customer, startDate, endDate, status, remark, items, totalQty, totalAmount };
     if (editId) {
       reconciliationStore.update(editId, data);
