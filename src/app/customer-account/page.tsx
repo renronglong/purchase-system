@@ -60,7 +60,11 @@ export default function CustomerAccountPage() {
   const handleSave = () => {
     if (!customer) { alert("请填写客户名称"); return; }
     if (amount <= 0) { alert("请填写金额"); return; }
-    
+    // 自动添加新客户到客户数据库
+    const existingCustomers = deliveryCustomerStore.getAll();
+    if (!existingCustomers.find(c => c.name === customer)) {
+      deliveryCustomerStore.add({ name: customer, address: "", contact: "", phone: "", taxNo: "", legalPerson: "", email: "", paymentTerms: "" });
+    }
     const data = { date, customer, type, amount, remark, relatedOrderNo };
     if (editId) {
       customerAccountStore.update(editId, data);
