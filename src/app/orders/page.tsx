@@ -140,6 +140,11 @@ export default function OrdersPage() {
       names.unshift(maker.trim());
       localStorage.setItem("sales_order_maker_names", JSON.stringify(names.slice(0, 20)));
     }
+    // 自动添加新客户到客户数据库
+    const existingCustomers = deliveryCustomerStore.getAll();
+    if (!existingCustomers.find(c => c.name === customer)) {
+      deliveryCustomerStore.add({ name: customer, address: "", contact: "", phone: "", taxNo: "", legalPerson: "", email: "", paymentTerms: "" });
+    }
     const data = { company, customer, date, items: valid, orderStatus, maker: maker.trim(), orderNo: orderNo.trim() };
     if (editId) { salesOrderStore.update(editId, data); } else {
       salesOrderStore.add(data);
