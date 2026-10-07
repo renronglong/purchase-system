@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
 import {
-  purchaseOrderStore, supplierStore, previewPurchaseOrderNo,
+  purchaseOrderStore, supplierStore, productStore, previewPurchaseOrderNo,
   type PurchaseOrder, type PurchaseOrderItem,
 } from "@/lib/store";
 import { purchasingCompanies, surfaceTreatments } from "@/lib/seed-data";
@@ -237,6 +237,19 @@ export default function PurchaseOrderFormPage() {
         filtered.unshift(maker);
         localStorage.setItem("print_maker_names", JSON.stringify(filtered.slice(0, 20)));
       } catch { /* ignore */ }
+    }
+
+    // 自动添加新供应商到数据库
+    const existingSuppliers = supplierStore.getAll();
+    if (!existingSuppliers.find(s => s.name === supplierName)) {
+      supplierStore.add({ name: supplierName, contact: contact || "", phone: phone || "", address: address || "" });
+    }
+    // 自动添加新产品到数据库
+    const existingProducts = productStore.getAll();
+    for (const item of validItems) {
+      if (item.productCode && !existingProducts.find(p => p.id === item.productCode)) {
+        productStore.add({ id: item.productCode, name: item.productName, spec: item.spec || "", weightPerMeter: item.weightPerMeter || 0, material: item.material || "" });
+      }
     }
 
     if (isEdit) {
