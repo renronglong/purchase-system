@@ -354,7 +354,7 @@ export default function PrintDeliveryPage() {
             <tfoot>
               <tr style={{ height: "6mm" }}>
                 <td colSpan={8} style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 2mm", verticalAlign: "middle", fontSize: `${layout.cellFontSize + 1}px`, fontFamily: "仿宋" }}>
-                  <span style={{ fontWeight: "bold" }}>合计人民币（大写）：{numToCN(totalAmount)}</span>
+                  <span style={{ fontWeight: "bold" }}>合计人民币（大写）：{hidePrices ? "***" : numToCN(totalAmount)}</span>
                 </td>
                 <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize + 1}px`, fontFamily: "仿宋", fontWeight: "bold" }}>{hidePrices ? "***" : "¥" + (totalAmount > 0 ? totalAmount.toFixed(2) : "0.00")}</td>
                 <td style={{ border: `1px solid ${BORDER_COLOR}` }}></td>
