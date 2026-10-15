@@ -113,6 +113,7 @@ export default function PrintReconciliationPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [colWidths, setColWidths] = useState<number[]>(loadColWidths);
   const [layout, setLayout] = useState<LayoutConfig | null>(null);
+  const [hidePrices, setHidePrices] = useState(false);
   const resizing = useRef<{ colIdx: number; startX: number; startW: number } | null>(null);
 
   const load = useCallback(() => {
@@ -296,6 +297,7 @@ export default function PrintReconciliationPage() {
             <button onClick={resetAll} className="px-3 py-1.5 text-xs text-slate-600 hover:text-red-600 ml-2">重置</button>
           </>
         )}
+        <button onClick={() => setHidePrices(!hidePrices)} className="px-3 py-1.5 text-sm rounded-md font-medium {`hidePrices ? "bg-amber-600 text-white" : "bg-slate-200 text-slate-700"`} hover:opacity-90 no-print">{hidePrices ? "显示价格" : "隐藏价格"}</button>
         <button onClick={() => window.print()} className="px-3 py-1.5 bg-emerald-600 text-white text-sm rounded-md hover:bg-emerald-700 ml-2">打印</button>
         <button onClick={() => window.close()} className="px-3 py-1.5 bg-slate-400 text-white text-sm rounded-md hover:bg-slate-500">关闭</button>
       </div>
@@ -385,7 +387,7 @@ export default function PrintReconciliationPage() {
               <tr style={{ height: "6mm" }}>
                 <td colSpan={11} style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 2mm", verticalAlign: "middle", fontSize: `${layout.cellFontSize + 1}px`, fontFamily: "仿宋" }}>
                   <div className="flex justify-between items-center">
-                    <div className="flex"><span style={{ fontWeight: "bold" }}>合计金额（大写）：</span><span>{amountToChinese(totalAmount)}</span></div>
+                    <div className="flex"><span style={{ fontWeight: "bold" }}>合计金额（大写）：</span><span>{hidePrices ? "***" : amountToChinese(totalAmount)}</span></div>
                     <div className="flex"><span style={{ fontWeight: "bold" }}>（小写）：</span><span style={{ fontFamily: "monospace" }}>¥{totalAmount.toFixed(2)}</span></div>
                   </div>
                 </td>
