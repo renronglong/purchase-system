@@ -248,7 +248,7 @@ export default function PurchaseOrderFormPage() {
     const existingProducts = productStore.getAll();
     for (const item of validItems) {
       if (item.productCode && !existingProducts.find(p => p.id === item.productCode)) {
-        productStore.add({ id: item.productCode, name: item.productName, spec: item.spec || "", weightPerMeter: item.weightPerMeter || 0, material: item.material || "" });
+        productStore.add({ name: item.productName, spec: item.spec || "", weightPerMeter: item.weightPerMeter || 0, material: item.material || "" });
       }
     }
 
