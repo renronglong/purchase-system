@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { outsourcingOrderStore, supplierStore, productStore, previewOutsourcingOrderNo, type OutsourcingOrder, type OutsourcingItem } from "@/lib/store";
-import ProductSearchSelect from "@/components/product-search-select";
+import { outsourcingOrderStore, supplierStore, deliveryProductStore, previewOutsourcingOrderNo, type OutsourcingOrder, type OutsourcingItem } from "@/lib/store";
 import { exportOutsourcingExcel } from "@/lib/export-outsourcing";
 
 function generateItemId(): string {
@@ -16,6 +15,7 @@ function createEmptyItem(): OutsourcingItem {
     productCode: "",
     productName: "",
     spec: "",
+    surface: "",
     quantity: 0,
     unit: "支",
     length: 0,
@@ -33,6 +33,7 @@ export default function OutsourcingPage() {
 
   // 新建表单状态
   const [showForm, setShowForm] = useState(false);
+  const [editId, setEditId] = useState<string | null>(null);
   const [outsourcingOrderNo, setOutsourcingOrderNo] = useState("");
   const [company, setCompany] = useState("佛山市质稳五金有限公司");
   const [supplierId, setSupplierId] = useState("");
@@ -72,39 +73,26 @@ export default function OutsourcingPage() {
     }
   };
 
-  const handleProductSelect = (index: number, product: any | null) => {
-    if (!product) return;
-    setItems(prev => {
-      const next = [...prev];
-      const item = {
-        ...next[index],
-        productCode: product.id,
-        productName: product.name,
-        spec: product.spec,
-      };
-      item.weight = (product.weightPerMeter || 0) * (item.length / 1000) * item.quantity;
-      next[index] = item;
-      return next;
-    });
-  };
-
   const updateItem = (index: number, field: keyof OutsourcingItem, value: string | number) => {
     setItems(prev => {
       const next = [...prev];
       const item = { ...next[index], [field]: value };
-      // 自动计算重量
-      if (field === "productCode" && typeof value === "string") {
-        const product = productStore.getAll().find(p => p.id === value);
-        if (product) {
-          item.productName = product.name;
-          item.spec = product.spec;
-          item.weight = (product.weightPerMeter || 0) * (item.length / 1000) * item.quantity;
+      const products = deliveryProductStore.getAll();
+      if (typeof value === "string" && field === "productCode") {
+        const prod = products.find(p => p.code === value);
+        if (prod) {
+          item.productName = prod.name;
+          item.spec = prod.spec;
+          item.surface = prod.surface;
+          item.unit = prod.unit;
+          item.unitPrice = prod.unitPrice;
+          item.weight = (prod.weightPerMeter || 0) * (item.length / 1000) * item.quantity;
         }
       }
-      if (field === "length" || field === "quantity") {
-        const product = productStore.getAll().find(p => p.id === item.productCode);
-        if (product) {
-          item.weight = (product.weightPerMeter || 0) * (item.length / 1000) * item.quantity;
+      if ((field === "length" || field === "quantity") && item.productCode) {
+        const prod = products.find(p => p.code === item.productCode);
+        if (prod) {
+          item.weight = (prod.weightPerMeter || 0) * (item.length / 1000) * item.quantity;
         }
       }
       next[index] = item;
@@ -138,15 +126,24 @@ export default function OutsourcingPage() {
     if (!existingSuppliers.find(s => s.name === supplierName)) {
       supplierStore.add({ name: supplierName, contact: contact || "", phone: phone || "", address: address || "" });
     }
-    // 自动添加新产品到数据库
-    const existingProducts = productStore.getAll();
+    // 自动添加新产品到数据库（与送货单同一产品库）
+    const existingProducts = deliveryProductStore.getAll();
     for (const item of validItems) {
-      if (item.productCode && !existingProducts.find(p => p.id === item.productCode)) {
-        productStore.add({ name: item.productName, spec: item.spec || "", weight: item.weight || 0 });
+      if (item.productCode && !existingProducts.find(p => p.code === item.productCode)) {
+        deliveryProductStore.add({
+          code: item.productCode,
+          name: item.productName,
+          spec: item.spec || "",
+          surface: item.surface || "",
+          unit: item.unit || "",
+          weightPerMeter: item.length && item.quantity ? (item.weight * 1000) / item.length / item.quantity : 0,
+          unitPrice: item.unitPrice || 0,
+          customer: "",
+        });
       }
     }
 
-    const saved = outsourcingOrderStore.add({
+    const data = {
       company,
       supplierId,
       supplierName,
@@ -158,18 +155,41 @@ export default function OutsourcingPage() {
       totalQuantity,
       totalWeight,
       totalPrice,
-    });
+    };
+    let savedId: string | null = null;
+    if (editId) {
+      outsourcingOrderStore.update(editId, data);
+      savedId = editId;
+    } else {
+      const newOrder = outsourcingOrderStore.add(data);
+      savedId = newOrder.id;
+    }
 
     setShowForm(false);
     setItems([createEmptyItem()]);
+    setEditId(null);
     loadOrders();
-    window.open(`/print/outsourcing/${saved.id}`, "_blank");
+    if (savedId) { window.open(`/print/outsourcing/${savedId}`, "_blank"); }
   };
 
   const handleExport = () => {
     const filtered = filteredOrders;
     if (filtered.length === 0) { alert("没有可导出的委外加工单"); return; }
     exportOutsourcingExcel(filtered);
+  };
+
+  const openEdit = (order: OutsourcingOrder) => {
+    setEditId(order.id);
+    setOutsourcingOrderNo(order.orderNo);
+    setCompany(order.company);
+    setSupplierId(order.supplierId);
+    setSupplierName(order.supplierName);
+    setContact(order.contact);
+    setPhone(order.phone);
+    setAddress(order.address);
+    setOrderDate(order.orderDate);
+    setItems(order.items.length > 0 ? order.items : [createEmptyItem()]);
+    setShowForm(true);
   };
 
   const handleDelete = (id: string) => {
@@ -205,7 +225,7 @@ export default function OutsourcingPage() {
       {/* 新建表单 */}
       {showForm && (
         <div className="bg-white rounded-lg border border-blue-200 p-5 mb-4">
-          <h3 className="text-sm font-medium text-slate-700 mb-3">新建委外加工单</h3>
+          <h3 className="text-sm font-medium text-slate-700 mb-3">{editId ? "编辑委外加工单" : "新建委外加工单"}</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
             <div>
               <label className="block text-xs text-slate-500 mb-1">单号</label>
@@ -252,6 +272,29 @@ export default function OutsourcingPage() {
           </div>
 
           {/* 明细表格 */}
+          <datalist id="delivery-product-list">
+            {deliveryProductStore.getAll().map(p => (
+              <option key={p.id} value={p.code} label={`${p.name} ${p.spec || ""}`} />
+            ))}
+          </datalist>
+          <datalist id="delivery-product-name-list">
+            {Array.from(new Set(deliveryProductStore.getAll().map(p => p.name))).map(n => (
+              <option key={n} value={n} />
+            ))}
+          </datalist>
+          <datalist id="delivery-product-spec-list">
+            {Array.from(new Set(deliveryProductStore.getAll().map(p => p.spec).filter(Boolean))).map(s => (
+              <option key={s} value={s} />
+            ))}
+          </datalist>
+          <datalist id="surface-treatment-list">
+            {["本色", "氧化雾银", "氧化砂银",
+              ...Array.from(new Set(deliveryProductStore.getAll().map(p => p.surface).filter(Boolean)))
+            ].map(s => <option key={s} value={s} />)}
+          </datalist>
+          <datalist id="unit-list">
+            {["pcs", "kg", "米", "套", "件"].map(u => <option key={u} value={u} />)}
+          </datalist>
           <div className="overflow-x-auto">
             <table className="w-full text-xs min-w-[900px]">
               <thead>
@@ -260,6 +303,7 @@ export default function OutsourcingPage() {
                   <th className="px-2 py-2 font-medium text-slate-600">产品编号</th>
                   <th className="px-2 py-2 font-medium text-slate-600">产品名称</th>
                   <th className="px-2 py-2 font-medium text-slate-600">规格尺寸</th>
+                  <th className="px-2 py-2 font-medium text-slate-600">表面处理</th>
                   <th className="px-2 py-2 font-medium text-slate-600">数量</th>
                   <th className="px-2 py-2 font-medium text-slate-600">单位</th>
                   <th className="px-2 py-2 font-medium text-slate-600">长度mm</th>
@@ -274,15 +318,10 @@ export default function OutsourcingPage() {
                 {items.map((item, index) => (
                   <tr key={item.id} className="border-b border-slate-100">
                     <td className="px-2 py-1 text-center text-slate-500">{index + 1}</td>
-                    <td className="px-2 py-1">
-                      <ProductSearchSelect
-                        value={item.productCode}
-                        onChange={(product) => handleProductSelect(index, product)}
-                        placeholder="输入编号/名称搜索"
-                      />
-                    </td>
-                    <td className="px-2 py-1 text-slate-600">{item.productName}</td>
-                    <td className="px-2 py-1 text-slate-600">{item.spec}</td>
+                    <td className="px-2 py-1"><input type="text" value={item.productCode} onChange={(e) => updateItem(index, "productCode", e.target.value)} className="w-full px-2 py-1 text-xs border border-slate-200 rounded" placeholder="产品编号" list="delivery-product-list" /></td>
+                    <td className="px-2 py-1"><input type="text" value={item.productName} onChange={(e) => updateItem(index, "productName", e.target.value)} className="w-full px-2 py-1 text-xs border border-slate-200 rounded" placeholder="产品名称" list="delivery-product-name-list" /></td>
+                    <td className="px-2 py-1"><input type="text" value={item.spec} onChange={(e) => updateItem(index, "spec", e.target.value)} className="w-full px-2 py-1 text-xs border border-slate-200 rounded" placeholder="规格" list="delivery-product-spec-list" /></td>
+                    <td className="px-2 py-1"><input type="text" value={item.surface} onChange={(e) => updateItem(index, "surface", e.target.value)} className="w-full px-2 py-1 text-xs border border-slate-200 rounded" placeholder="表面处理" list="surface-treatment-list" /></td>
                     <td className="px-2 py-1">
                       <input type="number" value={item.quantity || ""}
                         onChange={(e) => updateItem(index, "quantity", Number(e.target.value))}
@@ -388,8 +427,11 @@ export default function OutsourcingPage() {
                   <td className="px-4 py-2.5 text-right font-mono">{order.totalWeight.toFixed(2)}</td>
                   <td className="px-4 py-2.5 text-right font-mono">{order.totalPrice.toFixed(2)}</td>
                   <td className="px-4 py-2.5 text-center">
-                    <Link href={`/print/outsourcing/${order.id}`} target="_blank" className="text-emerald-600 hover:text-emerald-800 text-xs mr-3">打印</Link>
-                    <button onClick={() => handleDelete(order.id)} className="text-red-500 hover:text-red-700 text-xs">删除</button>
+                    <div className="flex items-center justify-center gap-2">
+                      <button onClick={() => openEdit(order)} className="text-amber-600 hover:text-amber-800 text-xs">编辑</button>
+                      <Link href={`/print/outsourcing/${order.id}`} target="_blank" className="text-emerald-600 hover:text-emerald-800 text-xs">打印</Link>
+                      <button onClick={() => handleDelete(order.id)} className="text-red-500 hover:text-red-700 text-xs">删除</button>
+                    </div>
                   </td>
                 </tr>
               ))
