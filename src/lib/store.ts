@@ -94,6 +94,7 @@ export interface OutsourcingItem {
   productCode: string;
   productName: string;
   spec: string;
+  surface: string;
   quantity: number;
   unit: string;
   length: number;
