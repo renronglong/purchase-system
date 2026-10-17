@@ -25,16 +25,48 @@ export function useAuth() {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<AppUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadFailed, setLoadFailed] = useState(false);
 
   useEffect(() => {
-    const user = authStore.getCurrentUser();
-    if (user) {
-      setCurrentUserId(user.id);
-      initData();
+    // R05 加载超时兜底：8 秒内未完成（存储被禁/异常）则给出重试入口
+    const timer = setTimeout(() => {
+      setLoadFailed(true);
+      setLoading(false);
+    }, 8000);
+    try {
+      const user = authStore.getCurrentUser();
+      if (user) {
+        setCurrentUserId(user.id);
+        initData();
+      }
+      setCurrentUser(user);
+      setLoading(false);
+      clearTimeout(timer);
+    } catch {
+      setLoadFailed(true);
+      setLoading(false);
+      clearTimeout(timer);
     }
-    setCurrentUser(user);
-    setLoading(false);
+    return () => clearTimeout(timer);
   }, []);
+
+  if (loadFailed) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-slate-50">
+        <div className="text-center">
+          <p className="text-slate-500 text-sm mb-4">
+            加载失败，可能是浏览器存储被禁用
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700"
+          >
+            重试
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const login = useCallback(async (username: string, password: string) => {
     const result = await authStore.login(username, password);
@@ -84,8 +116,8 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   const { currentUser } = useAuth();
   const pathname = usePathname();
 
-  // 登录页不需要鉴权，直接渲染
-  if (pathname === "/login") {
+  // 登录页 / 注册页不需要鉴权，直接渲染
+  if (pathname === "/login" || pathname === "/register") {
     return <>{children}</>;
   }
 
