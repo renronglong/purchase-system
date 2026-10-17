@@ -118,7 +118,7 @@ export default function OutsourcingPage() {
 
   const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
   const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
-  const totalPrice = items.reduce((sum, item) => sum + item.weight * item.unitPrice, 0);
+  const totalPrice = items.reduce((sum, item) => sum + item.quantity * item.unitPrice, 0);
 
   const handleSave = () => {
     if (!supplierName) {
@@ -303,7 +303,7 @@ export default function OutsourcingPage() {
             ].map(s => <option key={s} value={s} />)}
           </datalist>
           <datalist id="unit-list">
-            {["pcs", "kg", "米", "套", "件"].map(u => <option key={u} value={u} />)}
+            {Array.from(new Set(deliveryProductStore.getAll().map(p => p.unit).filter(Boolean))).map(u => <option key={u} value={u} />)}
           </datalist>
           <div className="overflow-x-auto">
             <table className="w-full text-xs min-w-[900px]">
@@ -316,9 +316,7 @@ export default function OutsourcingPage() {
                   <th className="px-2 py-2 font-medium text-slate-600">表面处理</th>
                   <th className="px-2 py-2 font-medium text-slate-600">数量</th>
                   <th className="px-2 py-2 font-medium text-slate-600">单位</th>
-                  <th className="px-2 py-2 font-medium text-slate-600">长度mm</th>
                   <th className="px-2 py-2 font-medium text-slate-600">工序</th>
-                  <th className="px-2 py-2 font-medium text-slate-600">重量KG</th>
                   <th className="px-2 py-2 font-medium text-slate-600">单价</th>
                   <th className="px-2 py-2 font-medium text-slate-600">备注</th>
                   <th className="px-2 py-2 font-medium text-slate-600">操作</th>
@@ -340,19 +338,13 @@ export default function OutsourcingPage() {
                     <td className="px-2 py-1">
                       <input type="text" value={item.unit}
                         onChange={(e) => updateItem(index, "unit", e.target.value)}
-                        className="w-full px-2 py-1 text-xs border border-slate-200 rounded" />
-                    </td>
-                    <td className="px-2 py-1">
-                      <input type="number" value={item.length || ""}
-                        onChange={(e) => updateItem(index, "length", Number(e.target.value))}
-                        className="w-full px-2 py-1 text-xs border border-slate-200 rounded" />
+                        className="w-full px-2 py-1 text-xs border border-slate-200 rounded" list="unit-list" />
                     </td>
                     <td className="px-2 py-1">
                       <input type="text" value={item.process}
                         onChange={(e) => updateItem(index, "process", e.target.value)}
                         className="w-full px-2 py-1 text-xs border border-slate-200 rounded" placeholder="工序" />
                     </td>
-                    <td className="px-2 py-1 text-right font-mono">{item.weight.toFixed(2)}</td>
                     <td className="px-2 py-1">
                       <input type="number" step="0.01" value={item.unitPrice || ""}
                         onChange={(e) => updateItem(index, "unitPrice", Number(e.target.value))}
@@ -375,12 +367,11 @@ export default function OutsourcingPage() {
               </tbody>
               <tfoot>
                 <tr className="bg-slate-50 border-t border-slate-200">
-                  <td colSpan={4} className="px-2 py-2 text-right font-medium text-slate-600">合计</td>
+                  <td colSpan={5} className="px-2 py-2 text-right font-medium text-slate-600">合计</td>
                   <td className="px-2 py-2 text-center font-bold">{totalQuantity}</td>
                   <td colSpan={3}></td>
-                  <td className="px-2 py-2 text-right font-mono font-bold">{totalWeight.toFixed(2)}</td>
                   <td className="px-2 py-2 text-right font-mono font-bold">{totalPrice.toFixed(2)}</td>
-                  <td colSpan={2}></td>
+                  <td colSpan={1}></td>
                 </tr>
               </tfoot>
             </table>
@@ -417,7 +408,6 @@ export default function OutsourcingPage() {
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">供应商</th>
               <th className="text-right px-4 py-2.5 font-medium text-slate-600">明细数</th>
               <th className="text-right px-4 py-2.5 font-medium text-slate-600">总数量</th>
-              <th className="text-right px-4 py-2.5 font-medium text-slate-600">总重量(KG)</th>
               <th className="text-right px-4 py-2.5 font-medium text-slate-600">总金额</th>
               <th className="text-center px-4 py-2.5 font-medium text-slate-600">操作</th>
             </tr>
@@ -434,7 +424,6 @@ export default function OutsourcingPage() {
                   <td className="px-4 py-2.5">{order.supplierName}</td>
                   <td className="px-4 py-2.5 text-right">{order.items.length}</td>
                   <td className="px-4 py-2.5 text-right">{order.totalQuantity}</td>
-                  <td className="px-4 py-2.5 text-right font-mono">{order.totalWeight.toFixed(2)}</td>
                   <td className="px-4 py-2.5 text-right font-mono">{order.totalPrice.toFixed(2)}</td>
                   <td className="px-4 py-2.5 text-center">
                     <div className="flex items-center justify-center gap-2">
