@@ -74,7 +74,7 @@ interface LayoutConfig {
 }
 
 const DEFAULT_LAYOUT: LayoutConfig = {
-  title: "委外加工单",
+  title: "",
   titleFontSize: 22,
   labelFontSize: 15,
   cellFontSize: 14,
@@ -88,7 +88,7 @@ const DEFAULT_LAYOUT: LayoutConfig = {
   signLabel: "客户签收",
 };
 
-function loadLayout(): LayoutConfig {
+function loadLayout(company: string): LayoutConfig {
   try {
     const saved = localStorage.getItem(LAYOUT_KEY);
     if (saved) {
@@ -96,7 +96,7 @@ function loadLayout(): LayoutConfig {
       return { ...DEFAULT_LAYOUT, ...parsed };
     }
   } catch {}
-  return { ...DEFAULT_LAYOUT };
+  return { ...DEFAULT_LAYOUT, title: `${company}委外加工单` };
 }
 
 function loadColWidths(): number[] {
@@ -168,7 +168,7 @@ export default function PrintOutsourcingPage() {
     const found = outsourcingOrderStore.getById(orderId);
     if (found) {
       setOrder(found);
-      setLayout(loadLayout());
+      setLayout(loadLayout(found.company));
     }
   }, [orderId]);
 
@@ -224,7 +224,7 @@ export default function PrintOutsourcingPage() {
   };
 
   const resetAll = () => {
-    setLayout({ ...DEFAULT_LAYOUT });
+    setLayout({ ...DEFAULT_LAYOUT, title: `${order!.company}委外加工单` });
     setColWidths([...DEFAULT_COL_WIDTHS]);
     try { localStorage.removeItem(LAYOUT_KEY); localStorage.removeItem(COL_WIDTHS_KEY); } catch {}
   };
