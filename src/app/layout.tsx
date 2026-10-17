@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Inspector } from 'react-dev-inspector';
 import './globals.css';
-import Sidebar from '@/components/sidebar';
+import AppShell from '@/components/app-shell';
 import { AuthProvider, AuthGuard } from '@/components/auth-provider';
 
 export const metadata: Metadata = {
@@ -22,12 +22,7 @@ export default function RootLayout({
         {isDev && <Inspector />}
         <AuthProvider>
           <AuthGuard>
-            <div className="flex min-h-screen bg-slate-50">
-              <Sidebar />
-              <main className="flex-1 overflow-auto">
-                {children}
-              </main>
-            </div>
+            <AppShell>{children}</AppShell>
           </AuthGuard>
         </AuthProvider>
       </body>
