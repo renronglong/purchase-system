@@ -387,6 +387,7 @@ export default function OutsourcingPage() {
                   <td className="px-4 py-2.5 text-right font-mono">{order.totalWeight.toFixed(2)}</td>
                   <td className="px-4 py-2.5 text-right font-mono">{order.totalPrice.toFixed(2)}</td>
                   <td className="px-4 py-2.5 text-center">
+                    <Link href={`/print/outsourcing/${order.id}`} target="_blank" className="text-emerald-600 hover:text-emerald-800 text-xs mr-3">打印</Link>
                     <button onClick={() => handleDelete(order.id)} className="text-red-500 hover:text-red-700 text-xs">删除</button>
                   </td>
                 </tr>
