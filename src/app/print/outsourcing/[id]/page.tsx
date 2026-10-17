@@ -231,9 +231,9 @@ export default function PrintOutsourcingPage() {
 
   if (!order || !layout) return <div className="p-6 text-center text-slate-400">加载中...</div>;
 
-  const totalAmount = order.items.reduce((s, item) => s + Math.round(item.weight * item.unitPrice * 100) / 100, 0);
+  const totalAmount = order.items.reduce((s, item) => s + Math.round((item.quantity * item.unitPrice) * 100) / 100, 0);
   const tableRows = Array.from({ length: FIXED_ROWS }, (_, idx) => {
-    if (idx < order.items.length) return { ...order.items[idx], isEmpty: false, amount: Math.round(order.items[idx].weight * order.items[idx].unitPrice * 100) / 100 };
+    if (idx < order.items.length) return { ...order.items[idx], isEmpty: false, amount: Math.round(order.items[idx].quantity * order.items[idx].unitPrice * 100) / 100 };
     return { id: `empty-${idx}`, productCode: "", productName: "", spec: "", surface: "", quantity: 0, unit: "", length: 0, process: "", weight: 0, unitPrice: 0, remark: "", amount: 0, isEmpty: true };
   });
 
