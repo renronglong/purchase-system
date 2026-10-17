@@ -116,6 +116,10 @@ export default function OutsourcingPage() {
     setItems(prev => prev.filter((_, i) => i !== index));
   };
 
+  const unitOptions = Array.from(new Set([
+    ...deliveryProductStore.getAll().map(p => p.unit).filter(Boolean),
+    "个", "支", "米", "KG", "平方", "套", "件", "pcs",
+  ]));
   const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
   const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
   const totalPrice = items.reduce((sum, item) => sum + item.quantity * item.unitPrice, 0);
@@ -336,9 +340,11 @@ export default function OutsourcingPage() {
                         className="w-full px-2 py-1 text-xs border border-slate-200 rounded" />
                     </td>
                     <td className="px-2 py-1">
-                      <input type="text" value={item.unit}
+                      <select value={item.unit}
                         onChange={(e) => updateItem(index, "unit", e.target.value)}
-                        className="w-full px-2 py-1 text-xs border border-slate-200 rounded" list="unit-list" />
+                        className="w-full px-1 py-1 text-xs border border-slate-200 rounded bg-white">
+                        {unitOptions.map(u => <option key={u} value={u}>{u}</option>)}
+                      </select>
                     </td>
                     <td className="px-2 py-1">
                       <input type="text" value={item.process}
