@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { outsourcingOrderStore, supplierStore, productStore, previewOutsourcingOrderNo, type OutsourcingOrder, type OutsourcingItem } from "@/lib/store";
+import ProductSearchSelect from "@/components/product-search-select";
 
 function generateItemId(): string {
   return Math.random().toString(36).slice(2, 10);
@@ -68,6 +69,22 @@ export default function OutsourcingPage() {
       setPhone(s.phone);
       setAddress(s.address);
     }
+  };
+
+  const handleProductSelect = (index: number, product: any | null) => {
+    if (!product) return;
+    setItems(prev => {
+      const next = [...prev];
+      const item = {
+        ...next[index],
+        productCode: product.id,
+        productName: product.name,
+        spec: product.spec,
+      };
+      item.weight = (product.weightPerMeter || 0) * (item.length / 1000) * item.quantity;
+      next[index] = item;
+      return next;
+    });
   };
 
   const updateItem = (index: number, field: keyof OutsourcingItem, value: string | number) => {
@@ -242,9 +259,11 @@ export default function OutsourcingPage() {
                   <tr key={item.id} className="border-b border-slate-100">
                     <td className="px-2 py-1 text-center text-slate-500">{index + 1}</td>
                     <td className="px-2 py-1">
-                      <input type="text" value={item.productCode}
-                        onChange={(e) => updateItem(index, "productCode", e.target.value)}
-                        className="w-full px-2 py-1 text-xs border border-slate-200 rounded" placeholder="编号" />
+                      <ProductSearchSelect
+                        value={item.productCode}
+                        onChange={(product) => handleProductSelect(index, product)}
+                        placeholder="输入编号/名称搜索"
+                      />
                     </td>
                     <td className="px-2 py-1 text-slate-600">{item.productName}</td>
                     <td className="px-2 py-1 text-slate-600">{item.spec}</td>
