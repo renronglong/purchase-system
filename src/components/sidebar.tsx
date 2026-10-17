@@ -96,7 +96,13 @@ function NavIcon({ type, className }: { type: string; className?: string }) {
   }
 }
 
-export default function Sidebar() {
+export default function Sidebar({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
   const pathname = usePathname();
 
   useEffect(() => {
@@ -104,11 +110,31 @@ export default function Sidebar() {
   }, []);
 
   return (
-    <aside className="w-60 bg-slate-900 text-white flex flex-col min-h-screen shrink-0">
-      <div className="px-5 py-5 border-b border-slate-700">
-        <h1 className="text-base font-bold tracking-wide">铝型材采购管理</h1>
-        <p className="text-xs text-slate-400 mt-1">佛山市碧利金属</p>
-        <p className="text-[10px] text-slate-500 mt-1">v2.2</p>
+    <aside
+      className={cn(
+        "bg-slate-900 text-white flex flex-col shrink-0",
+        // 移动端：fixed 抽屉，默认左侧收起，open 时滑出
+        "fixed inset-y-0 left-0 z-50 w-60 transform transition-transform duration-300",
+        open ? "translate-x-0" : "-translate-x-full",
+        // 桌面端：静态占位，正常在左侧
+        "md:static md:translate-x-0 md:min-h-screen"
+      )}
+    >
+      <div className="px-5 py-5 border-b border-slate-700 flex items-center justify-between">
+        <div>
+          <h1 className="text-base font-bold tracking-wide">铝型材采购管理</h1>
+          <p className="text-xs text-slate-400 mt-1">佛山市碧利金属</p>
+          <p className="text-[10px] text-slate-500 mt-1">v2.2</p>
+        </div>
+        <button
+          onClick={onClose}
+          className="text-slate-400 hover:text-white md:hidden p-1"
+          aria-label="关闭菜单"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
       </div>
       <nav className="flex-1 py-3">
         {navItems.map((item) => {
