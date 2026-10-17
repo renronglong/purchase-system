@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { outsourcingOrderStore, supplierStore, productStore, previewOutsourcingOrderNo, type OutsourcingOrder, type OutsourcingItem } from "@/lib/store";
 import ProductSearchSelect from "@/components/product-search-select";
+import { exportOutsourcingExcel } from "@/lib/export-outsourcing";
 
 function generateItemId(): string {
   return Math.random().toString(36).slice(2, 10);
@@ -164,6 +165,12 @@ export default function OutsourcingPage() {
     loadOrders();
   };
 
+  const handleExport = () => {
+    const filtered = filteredOrders;
+    if (filtered.length === 0) { alert("没有可导出的委外加工单"); return; }
+    exportOutsourcingExcel(filtered);
+  };
+
   const handleDelete = (id: string) => {
     if (confirm("确定要删除此委外加工单吗？")) {
       outsourcingOrderStore.remove(id);
@@ -175,6 +182,13 @@ export default function OutsourcingPage() {
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl font-bold text-slate-900">委外加工单管理</h1>
+        <div className="flex gap-2">
+        <button
+          onClick={handleExport}
+          className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-md hover:bg-emerald-700"
+        >
+          导出
+        </button>
         <button
           onClick={() => { if (!showForm) setOutsourcingOrderNo(previewOutsourcingOrderNo()); setShowForm(!showForm); }}
           className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700"
@@ -184,6 +198,7 @@ export default function OutsourcingPage() {
           </svg>
           新建委外加工单
         </button>
+        </div>
       </div>
 
       {/* 新建表单 */}
