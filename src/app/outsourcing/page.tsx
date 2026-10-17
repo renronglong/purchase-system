@@ -78,15 +78,25 @@ export default function OutsourcingPage() {
       const next = [...prev];
       const item = { ...next[index], [field]: value };
       const products = deliveryProductStore.getAll();
-      if (typeof value === "string" && field === "productCode") {
-        const prod = products.find(p => p.code === value);
-        if (prod) {
-          item.productName = prod.name;
-          item.spec = prod.spec;
-          item.surface = prod.surface;
-          item.unit = prod.unit;
-          item.unitPrice = prod.unitPrice;
-          item.weight = (prod.weightPerMeter || 0) * (item.length / 1000) * item.quantity;
+      const syncProduct = (prod: { code: string; name: string; spec: string; surface: string; unit: string; unitPrice: number; weightPerMeter: number }) => {
+        item.productCode = prod.code;
+        item.productName = prod.name;
+        item.spec = prod.spec;
+        item.surface = prod.surface;
+        item.unit = prod.unit;
+        item.unitPrice = prod.unitPrice;
+        item.weight = (prod.weightPerMeter || 0) * (item.length / 1000) * item.quantity;
+      };
+      if (typeof value === "string") {
+        if (field === "productCode") {
+          const prod = products.find(p => p.code === value);
+          if (prod) syncProduct(prod);
+        } else if (field === "productName") {
+          const prod = products.find(p => p.name === value);
+          if (prod) syncProduct(prod);
+        } else if (field === "spec") {
+          const prod = products.find(p => p.spec === value);
+          if (prod) syncProduct(prod);
         }
       }
       if ((field === "length" || field === "quantity") && item.productCode) {
