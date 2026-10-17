@@ -146,7 +146,7 @@ export default function OutsourcingPage() {
       }
     }
 
-    outsourcingOrderStore.add({
+    const saved = outsourcingOrderStore.add({
       company,
       supplierId,
       supplierName,
@@ -163,6 +163,7 @@ export default function OutsourcingPage() {
     setShowForm(false);
     setItems([createEmptyItem()]);
     loadOrders();
+    window.open(`/print/outsourcing/${saved.id}`, "_blank");
   };
 
   const handleExport = () => {
