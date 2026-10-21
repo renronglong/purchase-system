@@ -1,4 +1,5 @@
 import * as XLSX from "xlsx";
+import JSZip from "jszip";
 
 interface DeliveryItem {
   id: string;
@@ -115,43 +116,90 @@ export function exportInvoiceExcel(
   XLSX.writeFile(wb, fileName);
 }
 
+/* ===== 下面是「项目信息导入」模板导出（基于模板原文件插入数据行，保留全部模板结构） ===== */
 
+function xmlEsc(s: string): string {
+  return String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
 
-/** 按「项目信息导入」模板(税务局最新)格式导出发票项目：基于模板文件填充数据行，保证格式与模板完全一致 */
+/** 构造一个单元格 XML。kind=num 写数字 v；kind=text 写内联字符串 */
+function xmlCell(row: number, col: string, kind: "num" | "text", v: string): string {
+  const ref = `${col}${row}`;
+  if (kind === "num") {
+    return `<c r="${ref}"><v>${v}</v></c>`;
+  }
+  return `<c r="${ref}" t="inlineStr"><is><t xml:space="preserve">${xmlEsc(v)}</t></is></c>`;
+}
+
+/**
+ * 按「项目信息导入」模板(电子税务局最新)导出发票项目。
+ * 采用 JSZip 直接在模板 xlsx(zip) 的 sheet1.xml 中插入数据行，
+ * 模板自带的数据验证下拉、隐藏sheet、样式、属性全部原样保留，避免被税务局判定为"模板已更新"。
+ * 表头在第 3 行(A3:K3)，数据从第 4 行开始。
+ */
 export async function exportProjectTemplate(notes: DeliveryNote[]) {
   if (notes.length === 0) {
     alert("请先勾选要导出的送货单");
     return;
   }
   const res = await fetch("/templates/invoice-project-import.xlsx");
-  const buf = await res.arrayBuffer();
-  const wb = XLSX.read(buf, { type: "array", cellStyles: true });
-  // 定位「项目名称」所在行作为表头行，其后即为数据起始行
-  const ws = wb.Sheets["项目信息导入"] || wb.Sheets[wb.SheetNames[0]];
-  const range = XLSX.utils.decode_range(ws["!ref"] || "A1");
-  let headerRow = -1;
-  for (let r = range.s.r; r <= range.e.r; r++) {
-    const cell = ws[XLSX.utils.encode_cell({ r, c: 0 })];
-    if (cell && String(cell.v).includes("项目名称")) { headerRow = r; break; }
+  if (!res.ok) {
+    alert("模板加载失败，请稍后重试或刷新页面");
+    return;
   }
-  if (headerRow < 0) headerRow = range.s.r + 2; // 兜底：默认第 3 行（表头）
-  const startDataRow = headerRow + 1;
-  const rows = notes.flatMap((note) =>
-    note.items.map((item: DeliveryItem) => ({
-      项目名称: item.productName || "",
-      项目分类: "",
-      "商品和服务税收分类编码": "",
-      规格型号: item.spec || "",
-      单位: item.unit || "",
-      单价: Math.round((item.unitPrice || 0) * 100) / 100,
-      是否含税: "Y",
-      简码: "",
-      税率: "",
-      是否使用优惠政策: "",
-      优惠政策类型: "",
-    }))
-  );
-  XLSX.utils.sheet_add_json(ws, rows, { origin: { r: startDataRow, c: 0 }, skipHeader: true });
-  const fileName = notes.length === 1 ? `发票项目导入_${notes[0].customer}.xlsx` : "发票项目导入.xlsx";
-  XLSX.writeFile(wb, fileName);
+  const buf = await res.arrayBuffer();
+  const zip = await JSZip.loadAsync(buf);
+  const sheetPath = "xl/worksheets/sheet1.xml";
+  const sheetFile = zip.file(sheetPath);
+  if (!sheetFile) {
+    alert("模板结构异常，无法导出");
+    return;
+  }
+  let xml = await sheetFile.async("string");
+  if (!xml.includes("</sheetData>")) {
+    alert("模板结构异常，无法导出");
+    return;
+  }
+
+  const startRow = 4; // 模板数据从第 4 行开始（第 3 行为表头）
+  const rowXmls: string[] = [];
+  notes.forEach((note) => {
+    note.items.forEach((item, idx) => {
+      const r = startRow + rowXmls.length;
+      const cells =
+        xmlCell(r, "A", "text", item.productName || "") + // 项目名称
+        xmlCell(r, "B", "text", "") + // 项目分类
+        xmlCell(r, "C", "text", "") + // 商品和服务税收分类编码
+        xmlCell(r, "D", "text", item.spec || "") + // 规格型号
+        xmlCell(r, "E", "text", item.unit || "") + // 单位
+        xmlCell(r, "F", "num", (Math.round((item.unitPrice || 0) * 100) / 100).toString()) + // 单价
+        xmlCell(r, "G", "text", "Y") + // 是否含税
+        xmlCell(r, "H", "text", "") + // 简码
+        xmlCell(r, "I", "text", "") + // 税率
+        xmlCell(r, "J", "text", "") + // 是否使用优惠政策
+        xmlCell(r, "K", "text", ""); // 优惠政策类型
+      rowXmls.push(`<row r="${r}">${cells}</row>`);
+    });
+  });
+
+  xml = xml.replace("</sheetData>", rowXmls.join("") + "</sheetData>");
+  zip.file(sheetPath, xml);
+
+  const outBlob = await zip.generateAsync({ type: "blob" });
+  const fileName =
+    notes.length === 1
+      ? `发票项目导入_${notes[0].customer}.xlsx`
+      : "发票项目导入.xlsx";
+  const url = URL.createObjectURL(outBlob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
 }
