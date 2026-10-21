@@ -177,7 +177,7 @@ export async function exportProjectTemplate(notes: DeliveryNote[]) {
       const cells =
         xmlCell(r, "A", "text", item.productName || "") + // 项目名称
         xmlCell(r, "B", "text", "") + // 项目分类
-        xmlCell(r, "C", "text", "") + // 商品和服务税收分类编码
+        xmlCell(r, "C", "text", "1080316010000000000") + // 商品和服务税收分类编码(铝型材)
         xmlCell(r, "D", "text", item.spec || "") + // 规格型号
         xmlCell(r, "E", "text", item.unit || "") + // 单位
         xmlCell(r, "F", "num", (Math.round((item.unitPrice || 0) * 100) / 100).toString()) + // 单价
