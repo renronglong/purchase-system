@@ -130,7 +130,7 @@ export function exportProjectTemplate(notes: DeliveryNote[]) {
   ];
   const rows: (string | number)[][] = [];
   rows.push([
-    "说明：\n1、“是否含税”标识（Y/N）：Y为含税，N为不含税；当前明细按不含税（N）导出，如需含税请在表格中改。\n2、数据来源于已勾选的送货单明细，项目名称为产品名称，规格型号/单位/单价取自明细。\n3、单价保留两位小数。",
+    "说明：\n1、“是否含税”标识（Y/N）：Y为含税，N为不含税；默认填 Y（不含税）。\n2、数据来源于已勾选的送货单明细，项目名称为产品名称，规格型号/单位/单价取自明细。\n3、单价保留两位小数。",
   ]);
   rows.push(headers);
   for (const note of notes) {
@@ -142,7 +142,7 @@ export function exportProjectTemplate(notes: DeliveryNote[]) {
         item.spec || "",
         item.unit || "",
         Math.round((item.unitPrice || 0) * 100) / 100,
-        "N",
+        "Y",
         "",
         "",
         "",
