@@ -8,7 +8,7 @@ import {
   type DeliveryNote, type DeliveryItem, type SalesOrder,
 } from "@/lib/store";
 import { deliveryCompanies } from "@/lib/delivery-seed-data";
-import { exportInvoiceExcel } from "@/lib/export-invoice-excel";
+import { exportInvoiceExcel, exportProjectTemplate } from "@/lib/export-invoice-excel";
 
 function genItemId(): string { return Math.random().toString(36).slice(2, 10); }
 
@@ -237,6 +237,16 @@ export default function DeliveryPage() {
     exportInvoiceExcel(notesForExport, allCustomers);
   };
 
+  const handleExportProjectTemplate = () => {
+    const allNotes = deliveryNoteStore.getAll();
+    const notesForExport = allNotes.filter(n => selectedIds.has(n.id));
+    if (notesForExport.length === 0) {
+      alert("请先勾选要导出的送货单");
+      return;
+    }
+    exportProjectTemplate(notesForExport);
+  };
+
   const statusColor = (s: string) => s === "已对帐" ? "text-emerald-600 bg-emerald-50" : s === "部分对帐" ? "text-amber-600 bg-amber-50" : "text-slate-500 bg-slate-100";
 
   return (
@@ -394,6 +404,14 @@ export default function DeliveryPage() {
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3M3 17V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
               导出开票明细{selectedIds.size > 0 ? ` (${selectedIds.size})` : ""}
+            </button>
+            <button
+              onClick={handleExportProjectTemplate}
+              disabled={selectedIds.size === 0}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed whitespace-nowrap"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V15a2 2 0 01-2 2z" /></svg>
+              导出发票模板{selectedIds.size > 0 ? ` (${selectedIds.size})` : ""}
             </button>
         </div>
       </div>
