@@ -116,49 +116,42 @@ export function exportInvoiceExcel(
 }
 
 
-const TAX_UNITS = ["分","角","元","千元","万元","亿元","两","斤","毫克","克","千克(公斤)","吨","千吨","万吨","磅","毫米","厘米","分米","米","千米（公里）","万米","码","英尺","平方毫米","平方厘米","平方分米","平方米","平方公里","公顷","亩","毫升(立方厘米)","公升(立方分米)","立方米（方）","千立方米","万立方米","亿立方米","份","组","本","箱","卷","瓦（W）","千瓦","万瓦","千伏安时","千瓦时（度）","千千瓦时（千度）","万千瓦时","位（Bit）","字节（B）","千字节（KB）","兆字节（MB）","吉字节（GB）","太字节（TB）","皮字节（PB）","个","支","只","把","条","台","架","辆","头","件","双","套","打","包","批","匹","部","座","艘","张","枝","根","块","卷","副","片","瓶","标准箱","万支","盒","桶","枚","次","项","株（棵）","户","点","袋","档","朵","顶","罐","回路","间","捆","例","令","箩","对","门","面","付","盘","具","圈","扇","束","刷","卡","听","筒","粒","串","盏","合","轴","尊","节","万双","板","版","盆","亿支","台（套）","万台","万块","万部","床","羽","克拉","盎司","秒","分钟","小时","日","月","季","年","分贝"];
 
-/** 按「项目信息导入」模板格式导出发票项目（列与模板 11 列一致，另附单位 sheet） */
-export function exportProjectTemplate(notes: DeliveryNote[]) {
+/** 按「项目信息导入」模板(税务局最新)格式导出发票项目：基于模板文件填充数据行，保证格式与模板完全一致 */
+export async function exportProjectTemplate(notes: DeliveryNote[]) {
   if (notes.length === 0) {
     alert("请先勾选要导出的送货单");
     return;
   }
-  const headers = [
-    "项目名称", "项目分类", "商品和服务税收分类编码", "规格型号", "单位",
-    "单价", "是否含税", "简码", "税率", "是否使用优惠政策", "优惠政策类型",
-  ];
-  const rows: (string | number)[][] = [];
-  rows.push([
-    "说明：\n1、“是否含税”标识（Y/N）：Y为含税，N为不含税；默认填 Y（不含税）。\n2、数据来源于已勾选的送货单明细，项目名称为产品名称，规格型号/单位/单价取自明细。\n3、单价保留两位小数。",
-  ]);
-  rows.push(headers);
-  for (const note of notes) {
-    for (const item of note.items) {
-      rows.push([
-        item.productName || "",
-        "",
-        "",
-        item.spec || "",
-        item.unit || "",
-        Math.round((item.unitPrice || 0) * 100) / 100,
-        "Y",
-        "",
-        "",
-        "",
-        "",
-      ]);
-    }
+  const res = await fetch("/templates/invoice-project-import.xlsx");
+  const buf = await res.arrayBuffer();
+  const wb = XLSX.read(buf, { type: "array", cellStyles: true });
+  // 定位「项目名称」所在行作为表头行，其后即为数据起始行
+  const ws = wb.Sheets["项目信息导入"] || wb.Sheets[wb.SheetNames[0]];
+  const range = XLSX.utils.decode_range(ws["!ref"] || "A1");
+  let headerRow = -1;
+  for (let r = range.s.r; r <= range.e.r; r++) {
+    const cell = ws[XLSX.utils.encode_cell({ r, c: 0 })];
+    if (cell && String(cell.v).includes("项目名称")) { headerRow = r; break; }
   }
-  const ws = XLSX.utils.aoa_to_sheet(rows);
-  ws["!cols"] = [
-    { wch: 30 }, { wch: 12 }, { wch: 24 }, { wch: 20 }, { wch: 10 },
-    { wch: 12 }, { wch: 10 }, { wch: 12 }, { wch: 8 }, { wch: 14 }, { wch: 16 },
-  ];
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "项目信息导入");
-  const wsUnits = XLSX.utils.aoa_to_sheet(TAX_UNITS.map(u => [u]));
-  XLSX.utils.book_append_sheet(wb, wsUnits, "hiddenSheet1");
+  if (headerRow < 0) headerRow = range.s.r + 2; // 兜底：默认第 3 行（表头）
+  const startDataRow = headerRow + 1;
+  const rows = notes.flatMap((note) =>
+    note.items.map((item: DeliveryItem) => ({
+      项目名称: item.productName || "",
+      项目分类: "",
+      "商品和服务税收分类编码": "",
+      规格型号: item.spec || "",
+      单位: item.unit || "",
+      单价: Math.round((item.unitPrice || 0) * 100) / 100,
+      是否含税: "Y",
+      简码: "",
+      税率: "",
+      是否使用优惠政策: "",
+      优惠政策类型: "",
+    }))
+  );
+  XLSX.utils.sheet_add_json(ws, rows, { origin: { r: startDataRow, c: 0 }, skipHeader: true });
   const fileName = notes.length === 1 ? `发票项目导入_${notes[0].customer}.xlsx` : "发票项目导入.xlsx";
   XLSX.writeFile(wb, fileName);
 }
