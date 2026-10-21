@@ -42,7 +42,7 @@ export default function DeliveryPage() {
 
   const load = useCallback(() => {
     const all = deliveryNoteStore.getAll();
-    all.sort((a, b) => b.id.localeCompare(a.id));
+    all.sort((a, b) => (b.date || "").localeCompare(a.date || "") || b.id.localeCompare(a.id));
     setOrders(all);
   }, []);
   useEffect(() => { load(); }, [load]);
