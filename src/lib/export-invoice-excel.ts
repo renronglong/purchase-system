@@ -166,7 +166,7 @@ export async function exportProjectTemplate(notes: DeliveryNote[]) {
   }
 
   // 删除模板第 1 行的说明文字(含其 A1:K1 合并单元格)，保持表头/数据行结构不变
-  xml = xml.replace(/<row[^>]*\br="1"[^>]*>.*?<\/row>/s, "");
+  xml = xml.replace(/<row[^>]*\br="1"[^>]*>[\s\S]*?<\/row>/, "");
   xml = xml.replace(/<mergeCell ref="A1:K1"\s*\/>/gi, "");
 
   const startRow = 4; // 模板数据从第 4 行开始（第 3 行为表头）
