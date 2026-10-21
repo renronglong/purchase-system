@@ -146,7 +146,7 @@ export async function exportProjectTemplate(notes: DeliveryNote[]) {
     alert("请先勾选要导出的送货单");
     return;
   }
-  const res = await fetch("/templates/invoice-project-import.xlsx");
+  const res = await fetch("/templates/invoice-import-template.xlsx");
   if (!res.ok) {
     alert("模板加载失败，请稍后重试或刷新页面");
     return;
@@ -174,18 +174,19 @@ export async function exportProjectTemplate(notes: DeliveryNote[]) {
   notes.forEach((note) => {
     note.items.forEach((item, idx) => {
       const r = startRow + rowXmls.length;
+      const amount = Math.round((item.qty || 0) * (item.unitPrice || 0) * 100) / 100;
       const cells =
         xmlCell(r, "A", "text", item.productName || "") + // 项目名称
-        xmlCell(r, "B", "text", "") + // 项目分类
-        xmlCell(r, "C", "text", "1080499000000000000") + // 商品和服务税收分类编码(金属制品)
-        xmlCell(r, "D", "text", item.spec || "") + // 规格型号
-        xmlCell(r, "E", "text", item.unit || "") + // 单位
-        xmlCell(r, "F", "num", (Math.round((item.unitPrice || 0) * 100) / 100).toString()) + // 单价
-        xmlCell(r, "G", "text", "Y") + // 是否含税
-        xmlCell(r, "H", "text", "") + // 简码
-        xmlCell(r, "I", "text", "") + // 税率
-        xmlCell(r, "J", "text", "") + // 是否使用优惠政策
-        xmlCell(r, "K", "text", ""); // 优惠政策类型
+        xmlCell(r, "B", "text", "1080499000000000000") + // 商品和服务税收分类编码(金属制品)
+        xmlCell(r, "C", "text", item.spec || "") + // 规格型号
+        xmlCell(r, "D", "text", item.unit || "") + // 单位
+        xmlCell(r, "E", "num", String(item.qty || 0)) + // 商品数量
+        xmlCell(r, "F", "num", String(item.unitPrice || 0)) + // 商品单价
+        xmlCell(r, "G", "num", amount.toString()) + // 金额(数量×单价)
+        xmlCell(r, "H", "num", "0.13") + // 税率(13%)
+        xmlCell(r, "I", "text", "") + // 折扣金额
+        xmlCell(r, "J", "text", "") + // 优惠政策类型
+        xmlCell(r, "K", "text", ""); // 煤炭种类
       rowXmls.push(`<row r="${r}">${cells}</row>`);
     });
   });
@@ -196,8 +197,8 @@ export async function exportProjectTemplate(notes: DeliveryNote[]) {
   const outBlob = await zip.generateAsync({ type: "blob" });
   const fileName =
     notes.length === 1
-      ? `发票项目导入_${notes[0].customer}.xlsx`
-      : "发票项目导入.xlsx";
+      ? `发票开具明细_${notes[0].customer}.xlsx`
+      : "发票开具明细.xlsx";
   const url = URL.createObjectURL(outBlob);
   const a = document.createElement("a");
   a.href = url;
