@@ -266,7 +266,7 @@ export default function DeliveryPage() {
             <div><label className="block text-xs text-slate-500 mb-1">单号</label>
               <input type="text" value={noteNo} readOnly className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md bg-slate-50 font-mono text-blue-600 font-medium" /></div>
             <div><label className="block text-xs text-slate-500 mb-1">发货公司</label>
-              <select value={company} onChange={(e) => setCompany(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md">
+              <select value={company} onChange={(e) => { const nm = e.target.value; setCompany(nm); const c = companies.find(x => x.name === nm); if (c?.contact) setMaker(c.contact); }} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md">
                 <option value="">请选择公司</option>
                 {companies.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
               </select>
