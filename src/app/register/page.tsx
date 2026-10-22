@@ -37,7 +37,7 @@ export default function RegisterPage() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
       <div className="w-full max-w-md px-6">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">采购管理系统</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">零配件生产销售管理系统</h1>
           <p className="text-blue-300 text-sm">佛山市碧利金属</p>
         </div>
 
