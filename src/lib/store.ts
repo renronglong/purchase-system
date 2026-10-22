@@ -690,14 +690,25 @@ export function previewOutsourcingOrderNo(): string {
 // 产品管理
 export const productStore = {
   getAll(): Product[] {
-    return getAll<Product>(KEYS.PRODUCTS);
+    const list = getAll<Product>(KEYS.PRODUCTS);
+    // 首次访问：把板材种子数据惰性合并进产品库（按 id 去重，避免重复写入）
+    if (plateProducts.length > 0 && !list.some(p => (p.productType || "profile") === "plate")) {
+      const existing = new Set(list.map(p => p.id));
+      const missing = plateProducts.filter(p => p.id && !existing.has(p.id));
+      if (missing.length > 0) {
+        const merged = [...list, ...missing];
+        saveAll(KEYS.PRODUCTS, merged);
+        return merged;
+      }
+    }
+    return list;
   },
   getById(id: string): Product | undefined {
     return this.getAll().find(p => p.id === id);
   },
-  add(product: Omit<Product, "id">): Product {
+  add(product: Omit<Product, "id"> & { id?: string }): Product {
     const products = this.getAll();
-    const newProduct: Product = { ...product, id: generateId() };
+    const newProduct: Product = { ...product, id: (product.id && product.id.trim()) ? product.id.trim() : generateId() };
     products.push(newProduct);
     saveAll(KEYS.PRODUCTS, products);
     return newProduct;
