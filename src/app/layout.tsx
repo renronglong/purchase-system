@@ -5,8 +5,8 @@ import AppShell from '@/components/app-shell';
 import { AuthProvider, AuthGuard } from '@/components/auth-provider';
 
 export const metadata: Metadata = {
-  title: '铝型材采购管理系统',
-  description: '铝型材产品采购订单管理系统 - 佛山市碧利金属',
+  title: '零配件生产销售管理系统',
+  description: '零配件生产销售管理系统 - 佛山市碧利金属',
 };
 
 export default function RootLayout({
