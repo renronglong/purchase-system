@@ -1240,8 +1240,16 @@ export const deliveryNotes: DeliveryNote[] = [
   ]},
 ];
 
+export interface DeliveryCompany {
+  id: string;
+  name: string;
+  address: string;
+  contact: string;
+  phone: string;
+}
+
 // 发货公司
-export const deliveryCompanies = [
-  "佛山市质稳五金有限公司",
-  "佛山市碧利莱照明有限公司",
+export const deliveryCompanies: DeliveryCompany[] = [
+  { id: "dcomp1", name: "佛山市质稳五金有限公司", address: "广东省佛山市南海区狮山招大小坑尾坑尾园", contact: "", phone: "" },
+  { id: "dcomp2", name: "佛山市碧利莱照明有限公司", address: "佛山市南海区狮山镇松岗办事处显纲村委会厦边村口首层", contact: "", phone: "" },
 ];
