@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { supplierStore, type Supplier } from "@/lib/store";
-import ImportDialog from "@/components/import-dialog";
+import AddDialog from "@/components/add-dialog";
 
 function createEmptySupplier(): Omit<Supplier, "id"> {
   return { name: "", contact: "", phone: "", address: "" };
@@ -13,7 +13,7 @@ export default function SuppliersPage() {
   const [search, setSearch] = useState("");
   const [editingSupplier, setEditingSupplier] = useState<Supplier | null>(null);
   const [isAdding, setIsAdding] = useState(false);
-  const [importOpen, setImportOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [formData, setFormData] = useState<Omit<Supplier, "id">>(createEmptySupplier());
 
   const loadSuppliers = useCallback(() => {
@@ -29,16 +29,18 @@ export default function SuppliersPage() {
     s.contact.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleAdd = () => {
+  const openAdd = () => {
     setFormData(createEmptySupplier());
     setIsAdding(true);
     setEditingSupplier(null);
+    setDialogOpen(true);
   };
 
-  const handleEdit = (supplier: Supplier) => {
+  const openEdit = (supplier: Supplier) => {
     setFormData({ name: supplier.name, contact: supplier.contact, phone: supplier.phone, address: supplier.address });
-    setEditingSupplier(supplier);
     setIsAdding(false);
+    setEditingSupplier(supplier);
+    setDialogOpen(true);
   };
 
   const handleSave = () => {
@@ -51,9 +53,16 @@ export default function SuppliersPage() {
     } else if (editingSupplier) {
       supplierStore.update(editingSupplier.id, formData);
     }
+    setDialogOpen(false);
     setIsAdding(false);
     setEditingSupplier(null);
     loadSuppliers();
+  };
+
+  const closeDialog = () => {
+    setDialogOpen(false);
+    setIsAdding(false);
+    setEditingSupplier(null);
   };
 
   const handleDelete = (id: string) => {
@@ -63,32 +72,65 @@ export default function SuppliersPage() {
     }
   };
 
-  const handleCancel = () => {
-    setIsAdding(false);
-    setEditingSupplier(null);
-  };
+  const form = (
+    <>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div>
+          <label className="block text-xs text-slate-500 mb-1">供应商名称 <span className="text-red-500">*</span></label>
+          <input
+            type="text"
+            value={formData.name}
+            onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+            className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+          />
+        </div>
+        <div>
+          <label className="block text-xs text-slate-500 mb-1">联系人</label>
+          <input
+            type="text"
+            value={formData.contact}
+            onChange={(e) => setFormData(prev => ({ ...prev, contact: e.target.value }))}
+            className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+          />
+        </div>
+        <div>
+          <label className="block text-xs text-slate-500 mb-1">手机/电话</label>
+          <input
+            type="text"
+            value={formData.phone}
+            onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+            className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+          />
+        </div>
+        <div>
+          <label className="block text-xs text-slate-500 mb-1">地址</label>
+          <input
+            type="text"
+            value={formData.address}
+            onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
+            className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+          />
+        </div>
+      </div>
+      <div className="flex gap-2 mt-4">
+        <button onClick={handleSave} className="px-4 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700">保存</button>
+        <button onClick={closeDialog} className="px-4 py-1.5 text-sm text-slate-600 border border-slate-200 rounded-md hover:bg-slate-50">取消</button>
+      </div>
+    </>
+  );
 
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl font-bold text-slate-900">供应商管理</h1>
         <button
-          onClick={handleAdd}
+          onClick={openAdd}
           className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
           </svg>
           新增供应商
-        </button>
-        <button
-          onClick={() => { setImportOpen(true); }}
-          className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 text-sm font-medium rounded-md hover:bg-slate-200"
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-          </svg>
-          批量导入
         </button>
       </div>
 
@@ -102,55 +144,6 @@ export default function SuppliersPage() {
           className="w-full max-w-md px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
         />
       </div>
-
-      {/* 新增/编辑表单 */}
-      {(isAdding || editingSupplier) && (
-        <div className="bg-white rounded-lg border border-blue-200 p-5 mb-4">
-          <h3 className="text-sm font-medium text-slate-700 mb-3">{isAdding ? "新增供应商" : "编辑供应商"}</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div>
-              <label className="block text-xs text-slate-500 mb-1">供应商名称 <span className="text-red-500">*</span></label>
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-slate-500 mb-1">联系人</label>
-              <input
-                type="text"
-                value={formData.contact}
-                onChange={(e) => setFormData(prev => ({ ...prev, contact: e.target.value }))}
-                className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-slate-500 mb-1">手机/电话</label>
-              <input
-                type="text"
-                value={formData.phone}
-                onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-slate-500 mb-1">地址</label>
-              <input
-                type="text"
-                value={formData.address}
-                onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
-                className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-              />
-            </div>
-          </div>
-          <div className="flex gap-2 mt-4">
-            <button onClick={handleSave} className="px-4 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700">保存</button>
-            <button onClick={handleCancel} className="px-4 py-1.5 text-sm text-slate-600 border border-slate-200 rounded-md hover:bg-slate-50">取消</button>
-          </div>
-        </div>
-      )}
 
       {/* 表格 */}
       <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
@@ -178,7 +171,7 @@ export default function SuppliersPage() {
                   <td className="px-4 py-2">{supplier.address}</td>
                   <td className="px-4 py-2 text-center">
                     <div className="flex items-center justify-center gap-3">
-                      <button onClick={() => handleEdit(supplier)} className="text-amber-600 hover:text-amber-800 text-xs">编辑</button>
+                      <button onClick={() => openEdit(supplier)} className="text-amber-600 hover:text-amber-800 text-xs">编辑</button>
                       <button onClick={() => handleDelete(supplier.id)} className="text-red-500 hover:text-red-700 text-xs">删除</button>
                     </div>
                   </td>
@@ -193,7 +186,16 @@ export default function SuppliersPage() {
         共 {filtered.length} 条供应商记录
       </div>
 
-      {importOpen ? <ImportDialog kind="supplier" onClose={() => setImportOpen(false)} onImported={loadSuppliers} /> : null}
+      {dialogOpen ? (
+        <AddDialog
+          title={isAdding ? "新增供应商" : "编辑供应商"}
+          kind="supplier"
+          onClose={closeDialog}
+          onImported={loadSuppliers}
+        >
+          {form}
+        </AddDialog>
+      ) : null}
     </div>
   );
 }
