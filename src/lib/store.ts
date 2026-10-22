@@ -9,7 +9,7 @@ import { seedPurchaseOrders } from "./purchase-seed-data";
 import { plateProducts } from "./plate-seed-data";
 
 export type { Product, Supplier };
-export type { DeliveryCustomer, DeliveryProduct, DeliveryNote, DeliveryItem };
+export type { DeliveryCustomer, DeliveryProduct, DeliveryNote, DeliveryItem, DeliveryCompany };
 
 // 对帐单明细
 export interface ReconciliationItem {
