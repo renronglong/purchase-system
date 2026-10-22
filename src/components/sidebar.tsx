@@ -17,6 +17,7 @@ const navItems = [
   { href: "/reconciliation", label: "对帐单管理", icon: "document-check" },
   { href: "/contract", label: "购销合同管理", icon: "contract" },
   { href: "/customers", label: "客户管理", icon: "building" },
+  { href: "/import", label: "批量导入", icon: "upload" },
   { href: "/companies", label: "公司信息管理", icon: "building" },
   { href: "/customer-account", label: "客户往来记录", icon: "account" },
 ];
@@ -24,6 +25,12 @@ const navItems = [
 function NavIcon({ type, className }: { type: string; className?: string }) {
   const cls = cn("w-5 h-5", className);
   switch (type) {
+    case "upload":
+      return (
+        <svg className={cls} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+        </svg>
+      );
     case "clipboard":
       return (
         <svg className={cls} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
