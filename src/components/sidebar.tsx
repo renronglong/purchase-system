@@ -17,6 +17,7 @@ const navItems = [
   { href: "/reconciliation", label: "对帐单管理", icon: "document-check" },
   { href: "/contract", label: "购销合同管理", icon: "contract" },
   { href: "/customers", label: "客户管理", icon: "building" },
+  { href: "/companies", label: "公司信息管理", icon: "building" },
   { href: "/customer-account", label: "客户往来记录", icon: "account" },
 ];
 
