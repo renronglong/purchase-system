@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { deliveryCustomerStore, type DeliveryCustomer } from "@/lib/store";
+import ImportDialog from "@/components/import-dialog";
 
 function createEmpty(): Omit<DeliveryCustomer, "id"> {
   return { name: "", address: "", contact: "", phone: "", taxNo: "", legalPerson: "", email: "", paymentTerms: "" };
@@ -12,6 +13,7 @@ export default function CustomersPage() {
   const [search, setSearch] = useState("");
   const [editing, setEditing] = useState<DeliveryCustomer | null>(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
   const [formData, setFormData] = useState<DeliveryCustomer>({ id: "", ...createEmpty() });
 
   const load = useCallback(() => setCustomers(deliveryCustomerStore.getAll()), []);
@@ -48,6 +50,10 @@ export default function CustomersPage() {
         <button onClick={handleAdd} className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
           新增客户
+        </button>
+        <button onClick={() => { setImportOpen(true); }} className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 text-sm font-medium rounded-md hover:bg-slate-200">
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" /></svg>
+          批量导入
         </button>
       </div>
 
@@ -126,6 +132,8 @@ export default function CustomersPage() {
         </table>
       </div>
       <div className="mt-3 text-xs text-slate-400">共 {filtered.length} 条客户记录</div>
+
+      {importOpen ? <ImportDialog kind="customer" onClose={() => setImportOpen(false)} onImported={load} /> : null}
     </div>
   );
 }
