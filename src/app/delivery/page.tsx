@@ -3,11 +3,10 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import {
-  deliveryNoteStore, deliveryCustomerStore, deliveryProductStore, previewDeliveryOrderNo,
+  deliveryNoteStore, deliveryCustomerStore, deliveryProductStore, deliveryCompanyStore, previewDeliveryOrderNo,
   salesOrderStore,
   type DeliveryNote, type DeliveryItem, type SalesOrder,
 } from "@/lib/store";
-import { deliveryCompanies } from "@/lib/delivery-seed-data";
 import { exportInvoiceExcel, exportProjectTemplate } from "@/lib/export-invoice-excel";
 
 function genItemId(): string { return Math.random().toString(36).slice(2, 10); }
@@ -28,7 +27,7 @@ export default function DeliveryPage() {
   const [hidePrices, setHidePrices] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [noteNo, setNoteNo] = useState("");
-  const [company, setCompany] = useState(deliveryCompanies[0]);
+  const [company, setCompany] = useState<string>(deliveryCompanyStore.getAll()[0]?.name || "");
   const [customer, setCustomer] = useState("");
   const [orderNo, setOrderNo] = useState("");
   const [selectedOrder, setSelectedOrder] = useState<SalesOrder | null>(null);
@@ -38,6 +37,7 @@ export default function DeliveryPage() {
   const [maker, setMaker] = useState("易金兰");
 
   const customers = deliveryCustomerStore.getAll();
+  const companies = deliveryCompanyStore.getAll();
   const salesOrders = salesOrderStore.getAll().filter(o => o.items && o.items.length > 0);
 
   const load = useCallback(() => {
@@ -82,7 +82,7 @@ export default function DeliveryPage() {
   const openNew = () => {
     setEditId(null);
     setNoteNo(previewDeliveryOrderNo());
-    setCompany(deliveryCompanies[0]);
+    setCompany(companies[0]?.name || "");
     setCustomer(""); setOrderNo(""); setSelectedOrder(null);
     setDate(new Date().toISOString().slice(0, 10));
     setItems([emptyItem()]); setReconciled(""); setMaker("");
@@ -267,8 +267,17 @@ export default function DeliveryPage() {
               <input type="text" value={noteNo} readOnly className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md bg-slate-50 font-mono text-blue-600 font-medium" /></div>
             <div><label className="block text-xs text-slate-500 mb-1">发货公司</label>
               <select value={company} onChange={(e) => setCompany(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md">
-                {deliveryCompanies.map(c => <option key={c} value={c}>{c}</option>)}
-              </select></div>
+                <option value="">请选择公司</option>
+                {companies.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
+              </select>
+              {(() => { const cur = companies.find(c => c.name === company); return cur && (cur.address || cur.contact || cur.phone) ? (
+                <div className="mt-1 text-xs text-slate-500">
+                  {cur.address && <span>地址：{cur.address}</span>}{cur.address && (cur.contact || cur.phone) && <span className="mx-1">·</span>}
+                  {cur.contact && <span>联系人：{cur.contact}</span>}{cur.contact && cur.phone && <span className="mx-1">·</span>}
+                  {cur.phone && <span>电话：{cur.phone}</span>}
+                </div>
+              ) : null; })()}
+            </div>
             <div><label className="block text-xs text-slate-500 mb-1">日期</label>
               <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" /></div>
             <div><label className="block text-xs text-slate-500 mb-1">客户 <span className="text-red-500">*</span></label>
