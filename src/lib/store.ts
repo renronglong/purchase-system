@@ -2,8 +2,8 @@ import { userStorage } from "./user-storage";
 import { authStore } from "./auth-store";
 import { seedProducts, seedSuppliers, type Product, type Supplier } from "./seed-data";
 import {
-  deliveryCustomers, deliveryProducts, deliveryNotes,
-  type DeliveryCustomer, type DeliveryProduct, type DeliveryNote, type DeliveryItem,
+  deliveryCustomers, deliveryProducts, deliveryNotes, deliveryCompanies,
+  type DeliveryCustomer, type DeliveryProduct, type DeliveryNote, type DeliveryItem, type DeliveryCompany,
 } from "./delivery-seed-data";
 import { seedPurchaseOrders } from "./purchase-seed-data";
 import { plateProducts } from "./plate-seed-data";
@@ -173,6 +173,7 @@ const KEYS = {
   PURCHASE_ORDERS: "aluminum_purchase_orders",
   OUTSOURCING_ORDERS: "aluminum_outsourcing_orders",
   DELIVERY_CUSTOMERS: "delivery_customers",
+  DELIVERY_COMPANIES: "delivery_companies",
   DELIVERY_PRODUCTS: "delivery_products",
   DELIVERY_NOTES: "delivery_notes",
   RECONCILIATION_ORDERS: "reconciliation_orders",
@@ -228,6 +229,35 @@ export const deliveryCustomerStore = {
       c.name.toLowerCase().includes(kw) ||
       c.contact.toLowerCase().includes(kw)
     );
+  },
+};
+// 发货公司管理
+export const deliveryCompanyStore = {
+  getAll(): DeliveryCompany[] {
+    if (typeof window !== "undefined" && userStorage.getItem(KEYS.DELIVERY_COMPANIES) === null) {
+      saveAll(KEYS.DELIVERY_COMPANIES, deliveryCompanies.map(c => ({ ...c })));
+    }
+    return getAll<DeliveryCompany>(KEYS.DELIVERY_COMPANIES);
+  },
+  getById(id: string): DeliveryCompany | undefined {
+    return this.getAll().find(c => c.id === id);
+  },
+  add(c: Omit<DeliveryCompany, "id">): DeliveryCompany {
+    const list = this.getAll();
+    const nc = { ...c, id: generateId() };
+    list.push(nc); saveAll(KEYS.DELIVERY_COMPANIES, list); return nc;
+  },
+  update(id: string, data: Partial<DeliveryCompany>): DeliveryCompany | undefined {
+    const list = this.getAll();
+    const i = list.findIndex(c => c.id === id);
+    if (i === -1) return undefined;
+    list[i] = { ...list[i], ...data }; saveAll(KEYS.DELIVERY_COMPANIES, list); return list[i];
+  },
+  remove(id: string): boolean {
+    const list = this.getAll();
+    const f = list.filter(c => c.id !== id);
+    if (f.length === list.length) return false;
+    saveAll(KEYS.DELIVERY_COMPANIES, f); return true;
   },
 };
 
@@ -594,6 +624,7 @@ function initializeData(): void {
       userStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify(seedPurchaseOrders || []));
       userStorage.setItem(KEYS.OUTSOURCING_ORDERS, JSON.stringify([]));
       userStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify(deliveryCustomers));
+      userStorage.setItem(KEYS.DELIVERY_COMPANIES, JSON.stringify(deliveryCompanies));
       userStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify(deliveryProducts));
       userStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify(deliveryNotes));
       userStorage.setItem(KEYS.RECONCILIATION_ORDERS, JSON.stringify([]));
