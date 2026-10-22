@@ -33,7 +33,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
-        <span className="text-white text-sm font-medium">采购管理系统</span>
+        <span className="text-white text-sm font-medium">零配件生产销售管理系统</span>
         <span className="w-6" />
       </div>
 
