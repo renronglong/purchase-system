@@ -130,6 +130,10 @@ export default function ImportPage() {
           contact: c["联系人"] || "",
           phone: c["电话"] || "",
           address: c["地址"] || "",
+          taxNo: "",
+          legalPerson: "",
+          email: "",
+          paymentTerms: "",
         });
       }
       n++;
