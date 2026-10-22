@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
-import { deliveryNoteStore, deliveryCustomerStore, type DeliveryNote, type DeliveryCustomer } from "@/lib/store";
+import { deliveryNoteStore, deliveryCustomerStore, deliveryCompanyStore, type DeliveryNote, type DeliveryCustomer } from "@/lib/store";
 
 function numToCN(n: number): string {
   if (isNaN(n) || n === 0) return "零元整";
@@ -73,9 +73,11 @@ const DEFAULT_LAYOUT: LayoutConfig = {
 };
 
 function getCompanyAddress(companyName: string) {
-  if (companyName.includes("质稳")) return "广东省佛山市南海区狮山招大小坑尾坑尾园";
-  if (companyName.includes("碧利莱")) return "佛山市南海区狮山镇松岗办事处显纲村委会厦边村口首层";
-  return "";
+  return deliveryCompanyStore.getAll().find(c => c.name === companyName)?.address || "";
+}
+
+function getCompanyPhone(companyName: string) {
+  return deliveryCompanyStore.getAll().find(c => c.name === companyName)?.phone || "";
 }
 
 function loadLayout(company: string): LayoutConfig {
@@ -222,6 +224,7 @@ export default function PrintDeliveryPage() {
   });
 
   const companyAddress = layout.companyAddress || getCompanyAddress(order.company);
+  const companyPhone = getCompanyPhone(order.company);
 
   return (
     <>
@@ -369,6 +372,7 @@ export default function PrintDeliveryPage() {
             </div>
             <div style={{ marginBottom: "0.5mm", fontSize: "13px", fontFamily: "仿宋" }}>
               <span className="font-bold">公司地址：</span><EditableText value={companyAddress} fontSize={13} isEditing={isEditing} onBlur={v => updateLayout("companyAddress", v)} />
+              {companyPhone && <span className="ml-3"><span className="font-bold">联系电话：</span>{companyPhone}</span>}
             </div>
             <div className="flex justify-between" style={{ fontSize: "13px", fontFamily: "仿宋", paddingTop: "0.5mm" }}>
               <span><span className="font-bold"><EditableText value={layout.makerLabel} fontSize={13} isEditing={isEditing} onBlur={v => updateLayout("makerLabel", v)} />：</span><EditableText value={layout.maker} fontSize={13} isEditing={isEditing} onBlur={v => updateLayout("maker", v)} /></span>
