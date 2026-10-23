@@ -88,6 +88,46 @@ export interface PurchaseOrder {
   updatedAt: string;
 }
 
+// 报价单明细（对齐模板列：序号/产品编号/规格/名称/单位/材质/表面处理/单价未税/含税价/最小起订量/模具费/备注）
+export interface QuotationItem {
+  id: string;
+  productCode: string;
+  spec: string;
+  productName: string;
+  unit: string;
+  material: string;
+  surfaceTreatment: string;
+  unitPrice: number;      // 单价未税(元)
+  taxPrice: number;       // 含税价
+  minOrderQty: number;    // 最小起订量
+  moldFee: number;        // 模具费RMB(元)
+  remark: string;
+}
+
+// 报价单
+export interface Quotation {
+  id: string;
+  quoteNo: string;        // 报价单编号
+  quoteDate: string;      // 报价日期
+  // 供方（发货公司）
+  supplierCompany: string;
+  supplierContact: string;
+  supplierPhone: string;
+  supplierAddress: string;
+  // 客户
+  customerName: string;
+  customerContact: string;
+  customerPhone: string;
+  customerAddress: string;
+  // 明细
+  items: QuotationItem[];
+  grandTotal: number;     // 总计（型号/模具费合计等展示用途）
+  // 条款（备注区）
+  terms: string[];        // 按行：1开模送样 2含运费 3付款方式 4有效期 5开模时间
+  createdAt: string;
+  updatedAt: string;
+}
+
 // 委外加工单明细
 export interface OutsourcingItem {
   id: string;
@@ -178,6 +218,7 @@ const KEYS = {
   DELIVERY_NOTES: "delivery_notes",
   RECONCILIATION_ORDERS: "reconciliation_orders",
   SALES_ORDERS: "sales_orders",
+  QUOTATIONS: "quotations",
   STORAGE_VERSION: "aluminum_storage_version",
 };
 
@@ -687,6 +728,12 @@ export function previewOutsourcingOrderNo(): string {
   return generateOrderNo("WO", KEYS.OUTSOURCING_ORDERS);
 }
 
+// 预览下一个报价单号
+export function previewQuotationNo(): string {
+  if (typeof window === "undefined") return "";
+  return generateOrderNo("BJ", KEYS.QUOTATIONS);
+}
+
 // 产品管理
 export const productStore = {
   getAll(): Product[] {
@@ -844,6 +891,45 @@ export const outsourcingOrderStore = {
     const filtered = orders.filter(o => o.id !== id);
     if (filtered.length === orders.length) return false;
     saveAll(KEYS.OUTSOURCING_ORDERS, filtered);
+    return true;
+  },
+};
+
+// 报价单管理
+export const quotationStore = {
+  getAll(): Quotation[] {
+    return getAll<Quotation>(KEYS.QUOTATIONS);
+  },
+  getById(id: string): Quotation | undefined {
+    return this.getAll().find(q => q.id === id);
+  },
+  add(quote: Omit<Quotation, "id" | "quoteNo" | "createdAt" | "updatedAt">): Quotation {
+    const quotes = this.getAll();
+    const now = new Date().toISOString();
+    const newQuote: Quotation = {
+      ...quote,
+      id: generateId(),
+      quoteNo: generateOrderNo("BJ", KEYS.QUOTATIONS),
+      createdAt: now,
+      updatedAt: now,
+    };
+    quotes.push(newQuote);
+    saveAll(KEYS.QUOTATIONS, quotes);
+    return newQuote;
+  },
+  update(id: string, data: Partial<Quotation>): Quotation | undefined {
+    const quotes = this.getAll();
+    const idx = quotes.findIndex(q => q.id === id);
+    if (idx === -1) return undefined;
+    quotes[idx] = { ...quotes[idx], ...data, updatedAt: new Date().toISOString() };
+    saveAll(KEYS.QUOTATIONS, quotes);
+    return quotes[idx];
+  },
+  remove(id: string): boolean {
+    const quotes = this.getAll();
+    const filtered = quotes.filter(q => q.id !== id);
+    if (filtered.length === quotes.length) return false;
+    saveAll(KEYS.QUOTATIONS, filtered);
     return true;
   },
 };
