@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { purchaseOrderStore, type PurchaseOrder } from "@/lib/store";
 
@@ -10,6 +10,18 @@ export default function PurchaseOrderListPage() {
   const [searchDate, setSearchDate] = useState("");
   const [searchProduct, setSearchProduct] = useState("");
   const [showNewDropdown, setShowNewDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // 点击容器外部时关闭新建下拉（替代 onBlur，避免失焦竞态导致「点不开」）
+  useEffect(() => {
+    const onClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setShowNewDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", onClickOutside);
+    return () => document.removeEventListener("mousedown", onClickOutside);
+  }, []);
 
   const loadOrders = useCallback(() => {
     const all = purchaseOrderStore.getAll();
@@ -47,10 +59,9 @@ export default function PurchaseOrderListPage() {
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl font-bold text-slate-900">采购单管理</h1>
-        <div className="relative">
+        <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setShowNewDropdown(!showNewDropdown)}
-            onBlur={() => setTimeout(() => setShowNewDropdown(false), 200)}
             className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
