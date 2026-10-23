@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { productStore, type Product } from "@/lib/store";
+import { productStore, supplierStore, type Product } from "@/lib/store";
 import AddDialog from "@/components/add-dialog";
+
+// 与采购单页一致的材质选项
+const materialOptions = ["普通铝板", "5052", "6063", "1060", "3003"];
 
 function createEmptyProduct(): Product {
   return { id: "", name: "", spec: "", weightPerMeter: 0, material: "6063-T5", defaultSupplier: "", productType: "profile" };
@@ -130,21 +133,17 @@ export default function ProductsPage() {
         </div>
         <div>
           <label className="block text-xs text-slate-500 mb-1">材质</label>
-          <input
-            type="text"
-            value={formData.material}
-            onChange={(e) => setFormData(prev => ({ ...prev, material: e.target.value }))}
-            className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-          />
+          <input list="material-options" value={formData.material || ""} onChange={(e) => setFormData(prev => ({ ...prev, material: e.target.value }))} placeholder="选择或输入材质" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+          <datalist id="material-options">
+            {materialOptions.map(m => <option key={m} value={m} />)}
+          </datalist>
         </div>
         <div>
           <label className="block text-xs text-slate-500 mb-1">默认供应商</label>
-          <input
-            type="text"
-            value={formData.defaultSupplier}
-            onChange={(e) => setFormData(prev => ({ ...prev, defaultSupplier: e.target.value }))}
-            className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-          />
+          <input list="supplier-options" value={formData.defaultSupplier || ""} onChange={(e) => setFormData(prev => ({ ...prev, defaultSupplier: e.target.value }))} placeholder="选择或输入供应商" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+          <datalist id="supplier-options">
+            {supplierStore.getAll().map(s => <option key={s.id} value={s.name} />)}
+          </datalist>
         </div>
         {(formData.productType || "profile") === "plate" ? (
           <>
