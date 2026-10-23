@@ -58,7 +58,7 @@ function getCompanyAddress(companyName: string) {
   return "";
 }
 
-function loadLayout(company: string): LayoutConfig {
+function loadLayout(company: string, orderMaker?: string): LayoutConfig {
   try {
     const saved = localStorage.getItem(layoutKey(company));
     if (saved) {
@@ -69,10 +69,12 @@ function loadLayout(company: string): LayoutConfig {
         xcHeaderLabels: parsed.xcHeaderLabels || [...DEFAULT_XC_HEADERS],
         bcHeaderLabels: parsed.bcHeaderLabels || [...DEFAULT_BC_HEADERS],
         companyAddress: parsed.companyAddress || getCompanyAddress(company),
+        // 制单人优先跟随订单本身，避免被布局缓存里的旧值覆盖
+        maker: (orderMaker && orderMaker.trim()) ? orderMaker : (parsed.maker || DEFAULT_LAYOUT.maker),
       };
     }
   } catch {}
-  return { ...DEFAULT_LAYOUT, title: `${company || "佛山市质稳五金有限公司"}采购单`, companyAddress: getCompanyAddress(company) };
+  return { ...DEFAULT_LAYOUT, title: `${company || "佛山市质稳五金有限公司"}采购单`, companyAddress: getCompanyAddress(company), maker: (orderMaker && orderMaker.trim()) ? orderMaker : DEFAULT_LAYOUT.maker };
 }
 
 function loadXcColWidths(): number[] {
@@ -146,7 +148,7 @@ export default function PrintPurchasePage() {
     const found = purchaseOrderStore.getById(orderId);
     if (found) {
       setOrder(found);
-      setLayout(loadLayout(found.company));
+      setLayout(loadLayout(found.company, found.maker));
     }
   }, [orderId]);
 
