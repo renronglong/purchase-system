@@ -15,7 +15,11 @@ const DEFAULT_XC_COL_WIDTHS = [8, 36, 25, 24, 13, 14, 8, 20, 18, 22, 24];
 const DEFAULT_BC_COL_WIDTHS = [8, 38, 43, 19, 10, 19, 18, 24, 36];
 const XC_COL_WIDTHS_KEY = "purchase_xc_col_widths_v1";
 const BC_COL_WIDTHS_KEY = "purchase_bc_col_widths_v1";
-const LAYOUT_KEY = "purchase_layout_v1";
+const LAYOUT_KEY_PREFIX = "purchase_layout_";
+// 布局（含公司地址）按采购公司分别存放，避免不同公司地址互相串
+function layoutKey(company?: string): string {
+  return `${LAYOUT_KEY_PREFIX}${company || "default"}`;
+}
 
 interface LayoutConfig {
   title: string;
@@ -56,7 +60,7 @@ function getCompanyAddress(companyName: string) {
 
 function loadLayout(company: string): LayoutConfig {
   try {
-    const saved = localStorage.getItem(LAYOUT_KEY);
+    const saved = localStorage.getItem(layoutKey(company));
     if (saved) {
       const parsed = JSON.parse(saved);
       return {
@@ -195,7 +199,7 @@ export default function PrintPurchasePage() {
     setLayout(prev => {
       if (!prev) return prev;
       const next = { ...prev, [key]: value };
-      try { localStorage.setItem(LAYOUT_KEY, JSON.stringify(next)); } catch {}
+      try { localStorage.setItem(layoutKey(order?.company), JSON.stringify(next)); } catch {}
       return next;
     });
   };
@@ -206,7 +210,7 @@ export default function PrintPurchasePage() {
     setLayout(reset);
     setXcColWidths([...DEFAULT_XC_COL_WIDTHS]);
     setBcColWidths([...DEFAULT_BC_COL_WIDTHS]);
-    try { localStorage.removeItem(LAYOUT_KEY); localStorage.removeItem(XC_COL_WIDTHS_KEY); localStorage.removeItem(BC_COL_WIDTHS_KEY); } catch {}
+    try { localStorage.removeItem(layoutKey(order.company)); localStorage.removeItem(XC_COL_WIDTHS_KEY); localStorage.removeItem(BC_COL_WIDTHS_KEY); } catch {}
   };
 
   if (!order || !layout) return <div className="p-6 text-center text-slate-400">加载中...</div>;
