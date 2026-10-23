@@ -14,6 +14,7 @@ const navItems = [
   { href: "/outsourcing", label: "委外加工", icon: "settings" },
   { href: "/delivery", label: "送货单管理", icon: "truck" },
   { href: "/orders", label: "订单管理", icon: "cart" },
+  { href: "/quote", label: "报价单管理", icon: "document-quote" },
   { href: "/reconciliation", label: "对帐单管理", icon: "document-check" },
   { href: "/contract", label: "购销合同管理", icon: "contract" },
   { href: "/customers", label: "客户管理", icon: "building" },
@@ -90,6 +91,13 @@ function NavIcon({ type, className }: { type: string; className?: string }) {
       return (
         <svg className={cls} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+        </svg>
+      );
+    case "document-quote":
+      return (
+        <svg className={cls} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          <path strokeLinecap="round" strokeLinejoin="round" d="M14 3v4a1 1 0 001 1h4" />
         </svg>
       );
     case "cart":
