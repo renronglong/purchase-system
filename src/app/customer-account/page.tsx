@@ -125,17 +125,21 @@ export default function CustomerSummaryPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orders, timeMode, month, season, year, startDate, endDate, selectedSuppliers, selectedProducts]);
 
-  const rows = viewMode === "sales" ? salesRows : purchaseRows;
+  // 汇总行的统一类型（销售有 amount，采购有 weight，均含 unit）
+  type SummaryRow = { entity: string; productKey: string; productName: string; spec: string; unit: string; qty: number; amount: number; weight: number };
+  const rows: SummaryRow[] = viewMode === "sales"
+    ? salesRows.map(r => ({ ...r, weight: 0 }))
+    : purchaseRows.map(r => ({ ...r, amount: 0 }));
 
   // 按主体（客户/供应商）聚合
   const entitySummary = useMemo(() => {
-    const map = new Map<string, { entity: string; qty: number; amount: number; weight: number; productCount: number; rows: typeof rows }>();
+    const map = new Map<string, { entity: string; qty: number; amount: number; weight: number; productCount: number; rows: SummaryRow[] }>();
     rows.forEach(r => {
       if (!map.has(r.entity)) map.set(r.entity, { entity: r.entity, qty: 0, amount: 0, weight: 0, productCount: 0, rows: [] });
       const e = map.get(r.entity)!;
       e.qty += r.qty;
-      if (viewMode === "sales") e.amount += (r as any).amount || 0;
-      else e.weight += (r as any).weight || 0;
+      if (viewMode === "sales") e.amount += r.amount || 0;
+      else e.weight += r.weight || 0;
       if (!e.rows.find(x => x.productKey === r.productKey)) e.productCount++;
       e.rows.push(r);
     });
