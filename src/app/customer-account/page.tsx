@@ -187,12 +187,32 @@ export default function CustomerSummaryPage() {
   const allEntities = viewMode === "sales" ? allCustomers : allSuppliers;
   const entityLabel = viewMode === "sales" ? "客户" : "供应商";
 
-  // 搜索过滤后的可见客户/供应商（全选应基于此列表）
+  // 搜索过滤后的可见客户/供应商（全选应基于此列表），并受选中产品反向联动
   const visibleEntities = useMemo(() => {
-    if (!entitySearch) return allEntities;
-    const kw = entitySearch.toLowerCase();
-    return allEntities.filter(c => c.toLowerCase().includes(kw));
-  }, [allEntities, entitySearch]);
+    let list = allEntities;
+    // 已选产品 → 只保留这些产品对应的实体（反向联动）
+    if (selectedProducts.length > 0) {
+      const set = new Set<string>();
+      if (viewMode === "sales") {
+        notes.forEach(n => {
+          const has = n.items.some(it => selectedProducts.includes(`${it.productName}${it.spec ? " " + it.spec : ""}`));
+          if (has) set.add(n.customer);
+        });
+      } else {
+        orders.forEach(o => {
+          const has = o.items.some(it => selectedProducts.includes(`${it.productName}${it.spec ? " " + it.spec : ""}`));
+          if (has) set.add(o.supplierName);
+        });
+      }
+      list = list.filter(c => set.has(c));
+    }
+    if (entitySearch) {
+      const kw = entitySearch.toLowerCase();
+      list = list.filter(c => c.toLowerCase().includes(kw));
+    }
+    return list;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allEntities, entitySearch, selectedProducts, viewMode, notes, orders]);
 
   // 选中实体（客户/供应商）关联的产品（销售=客户名下产品的送货单、采购=供应商名下产品）
   const entityProducts = useMemo(() => {
