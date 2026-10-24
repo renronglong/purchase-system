@@ -35,6 +35,10 @@ export default function CustomerSummaryPage() {
   const [selectedSuppliers, setSelectedSuppliers] = useState<string[]>([]);
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
 
+  // 筛选区搜索框（客户/供应商、产品）
+  const [entitySearch, setEntitySearch] = useState("");
+  const [productSearch, setProductSearch] = useState("");
+
   // 明细展开
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
@@ -220,11 +224,22 @@ export default function CustomerSummaryPage() {
           )}
         </div>
 
-        {/* 主体 / 产品 多选条件 */}
+        {/* 主体 / 产品 多选条件（送货单式：搜索框 + 表格） */}
         <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-xs text-slate-500 mb-1">{entityLabel}（可多选，点击行或勾选，留空=全部）</label>
-            <div className="border border-slate-200 rounded-md overflow-hidden max-h-40 overflow-y-auto">
+          <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+            <div className="flex items-center gap-2 border-b border-slate-200 p-2">
+              <input
+                type="text"
+                value={entitySearch}
+                onChange={(e) => setEntitySearch(e.target.value)}
+                placeholder={`搜索${entityLabel}`}
+                className="flex-1 min-w-0 px-3 py-1.5 text-sm border border-slate-200 rounded-md"
+              />
+              <button
+                onClick={() => { setEntitySearch(""); setSelectedEntities([]); }}
+                className="text-xs text-blue-500 hover:underline whitespace-nowrap">清空</button>
+            </div>
+            <div className="max-h-44 overflow-y-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="bg-slate-50 border-b border-slate-200">
@@ -243,12 +258,12 @@ export default function CustomerSummaryPage() {
                 <tbody>
                   {allEntities.length === 0 ? (
                     <tr><td colSpan={2} className="text-center py-6 text-slate-400">暂无{entityLabel}</td></tr>
-                  ) : allEntities.map(c => {
+                  ) : allEntities.filter(c => !entitySearch || c.toLowerCase().includes(entitySearch.toLowerCase())).map(c => {
                     const isSel = selectedEntities.includes(c);
                     return (
                       <tr key={c} onClick={() => toggleSelect(selectedEntities, setSelectedEntities, c)}
                         className={`border-b border-slate-100 hover:bg-slate-50/50 cursor-pointer ${isSel ? "bg-blue-50/40" : ""}`}>
-                        <td className="text-center px-4 py-2">
+                        <td className="text-center px-4 py-2.5">
                           <input
                             type="checkbox"
                             checked={isSel}
@@ -257,7 +272,7 @@ export default function CustomerSummaryPage() {
                             className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
                           />
                         </td>
-                        <td className="px-4 py-2 truncate">{c}</td>
+                        <td className="px-4 py-2.5 truncate">{c}</td>
                       </tr>
                     );
                   })}
@@ -265,12 +280,25 @@ export default function CustomerSummaryPage() {
               </table>
             </div>
             {selectedEntities.length > 0 && (
-              <button onClick={() => setSelectedEntities([])} className="text-xs text-blue-500 mt-1 hover:underline">清空{entityLabel}筛选</button>
+              <div className="border-t border-slate-100 px-3 py-1.5 text-xs text-slate-500">
+                已选 {selectedEntities.length} 个，<button onClick={() => setSelectedEntities([])} className="text-blue-500 hover:underline">清空全部</button>
+              </div>
             )}
           </div>
-          <div>
-            <label className="block text-xs text-slate-500 mb-1">产品内容（可多选，点击行或勾选，留空=全部）</label>
-            <div className="border border-slate-200 rounded-md overflow-hidden max-h-40 overflow-y-auto">
+          <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+            <div className="flex items-center gap-2 border-b border-slate-200 p-2">
+              <input
+                type="text"
+                value={productSearch}
+                onChange={(e) => setProductSearch(e.target.value)}
+                placeholder="搜索产品名称/规格"
+                className="flex-1 min-w-0 px-3 py-1.5 text-sm border border-slate-200 rounded-md"
+              />
+              <button
+                onClick={() => { setProductSearch(""); setSelectedProducts([]); }}
+                className="text-xs text-blue-500 hover:underline whitespace-nowrap">清空</button>
+            </div>
+            <div className="max-h-44 overflow-y-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="bg-slate-50 border-b border-slate-200">
@@ -289,12 +317,12 @@ export default function CustomerSummaryPage() {
                 <tbody>
                   {allProducts.length === 0 ? (
                     <tr><td colSpan={2} className="text-center py-6 text-slate-400">暂无产品</td></tr>
-                  ) : allProducts.map(p => {
+                  ) : allProducts.filter(p => !productSearch || p.toLowerCase().includes(productSearch.toLowerCase())).map(p => {
                     const isSel = selectedProducts.includes(p);
                     return (
                       <tr key={p} onClick={() => toggleSelect(selectedProducts, setSelectedProducts, p)}
                         className={`border-b border-slate-100 hover:bg-slate-50/50 cursor-pointer ${isSel ? "bg-blue-50/40" : ""}`}>
-                        <td className="text-center px-4 py-2">
+                        <td className="text-center px-4 py-2.5">
                           <input
                             type="checkbox"
                             checked={isSel}
@@ -303,7 +331,7 @@ export default function CustomerSummaryPage() {
                             className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
                           />
                         </td>
-                        <td className="px-4 py-2 truncate">{p}</td>
+                        <td className="px-4 py-2.5 truncate">{p}</td>
                       </tr>
                     );
                   })}
@@ -311,7 +339,9 @@ export default function CustomerSummaryPage() {
               </table>
             </div>
             {selectedProducts.length > 0 && (
-              <button onClick={() => setSelectedProducts([])} className="text-xs text-blue-500 mt-1 hover:underline">清空产品筛选</button>
+              <div className="border-t border-slate-100 px-3 py-1.5 text-xs text-slate-500">
+                已选 {selectedProducts.length} 个，<button onClick={() => setSelectedProducts([])} className="text-blue-500 hover:underline">清空全部</button>
+              </div>
             )}
           </div>
         </div>
