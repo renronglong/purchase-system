@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
-  quotationStore, productStore, deliveryCustomerStore, previewQuotationNo,
+  quotationStore, productStore, deliveryCustomerStore, deliveryCompanyStore, previewQuotationNo,
   type Quotation, type QuotationItem,
 } from "@/lib/store";
 import { purchasingCompanies, surfaceTreatments } from "@/lib/seed-data";
@@ -47,6 +47,12 @@ const getCompanyAddress = (companyName: string) => {
   return "";
 };
 
+// 公司详细信息（来自 公司信息管理 deliveryCompanyStore）；未知公司返回空
+export const getCompanyInfo = (companyName: string, companies: { name: string; contact?: string; phone?: string; address?: string }[]) => {
+  const c = companies.find(x => x.name === companyName);
+  return c ? { contact: c.contact || "", phone: c.phone || "", address: c.address || "" } : null;
+};
+
 export default function QuotationForm({ quotation }: { quotation?: Quotation }) {
   const router = useRouter();
   const editing = !!quotation;
@@ -65,6 +71,8 @@ export default function QuotationForm({ quotation }: { quotation?: Quotation }) 
 
   const products = productStore.getAll();
   const customers = deliveryCustomerStore.getAll();
+  const companies = deliveryCompanyStore.getAll();
+  const supplierCompanyOptions = Array.from(new Set(companies.map(c => c.name)));
 
   const handleCustomerSelect = (name: string) => {
     setCustomerName(name);
@@ -78,10 +86,36 @@ export default function QuotationForm({ quotation }: { quotation?: Quotation }) 
 
   const handleSupplierCompanyChange = (c: string) => {
     setSupplierCompany(c);
-    const addr = getCompanyAddress(c);
-    if (addr) setSupplierAddress(addr);
-    if (!supplierAddress) setSupplierAddress(addr);
+    const info = getCompanyInfo(c, companies);
+    if (info) {
+      setSupplierContact(info.contact);
+      setSupplierPhone(info.phone);
+      setSupplierAddress(info.address || getCompanyAddress(c));
+    } else {
+      // 公司库无此公司时，兜底用内置映射带出地址
+      const addr = getCompanyAddress(c);
+      if (addr) setSupplierAddress(addr);
+    }
   };
+
+  // 挂载时：若供方公司库有信息且当前字段为空，补全联系人/电话/地址
+  useEffect(() => {
+    const info = getCompanyInfo(supplierCompany, companies);
+    if (info) {
+      if (info.contact) setSupplierContact(info.contact);
+      if (info.phone) setSupplierPhone(info.phone);
+      if (info.address) {
+        setSupplierAddress(info.address);
+      } else {
+        const addr = getCompanyAddress(supplierCompany);
+        if (addr) setSupplierAddress(addr);
+      }
+    } else {
+      const addr = getCompanyAddress(supplierCompany);
+      if (addr && !supplierAddress) setSupplierAddress(addr);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const updateItem = (index: number, field: keyof QuotationItem, value: string | number) => {
     setItems(prev => {
@@ -167,7 +201,7 @@ export default function QuotationForm({ quotation }: { quotation?: Quotation }) 
             <h3 className="text-xs font-medium text-slate-500 mb-2">供方（报价单位）</h3>
             <div className="space-y-3">
               <select value={supplierCompany} onChange={(e) => handleSupplierCompanyChange(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md">
-                {purchasingCompanies.map(c => <option key={c} value={c}>{c}</option>)}
+                {Array.from(new Set([...supplierCompanyOptions, ...purchasingCompanies])).map(c => <option key={c} value={c}>{c}</option>)}
               </select>
               <input type="text" value={supplierContact} onChange={(e) => setSupplierContact(e.target.value)} placeholder="联系人" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" />
               <input type="text" value={supplierPhone} onChange={(e) => setSupplierPhone(e.target.value)} placeholder="电话" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" />
