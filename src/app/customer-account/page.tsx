@@ -77,13 +77,6 @@ export default function CustomerSummaryPage() {
     return m;
   }, [notes, orders]);
 
-  // 搜索过滤后的可见产品（全选应基于此列表，而非全部产品）
-  const visibleProducts = useMemo(() => {
-    if (!productSearch) return allProducts;
-    const kw = productSearch.toLowerCase();
-    return allProducts.filter(p => p.toLowerCase().includes(kw) || (productCodeMap.get(p) || "").toLowerCase().includes(kw));
-  }, [allProducts, productSearch, productCodeMap]);
-
   // 时间筛选
   const inRange = (date: string): boolean => {
     if (!date) return false;
@@ -200,6 +193,33 @@ export default function CustomerSummaryPage() {
     const kw = entitySearch.toLowerCase();
     return allEntities.filter(c => c.toLowerCase().includes(kw));
   }, [allEntities, entitySearch]);
+
+  // 选中实体（客户/供应商）关联的产品（销售=客户名下产品的送货单、采购=供应商名下产品）
+  const entityProducts = useMemo(() => {
+    if (selectedEntities.length === 0) return allProducts;
+    const set = new Set<string>();
+    if (viewMode === "sales") {
+      notes.forEach(n => {
+        if (selectedEntities.includes(n.customer)) n.items.forEach(it => set.add(`${it.productName}${it.spec ? " " + it.spec : ""}`));
+      });
+    } else {
+      orders.forEach(o => {
+        if (selectedEntities.includes(o.supplierName)) o.items.forEach(it => set.add(`${it.productName}${it.spec ? " " + it.spec : ""}`));
+      });
+    }
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allProducts, selectedEntities, viewMode, notes, orders]);
+
+  // 搜索过滤后的可见产品（全选应基于此列表，而非全部产品），并受实体联动
+  const visibleProducts = useMemo(() => {
+    let base = entityProducts;
+    if (productSearch) {
+      const kw = productSearch.toLowerCase();
+      base = base.filter(p => p.toLowerCase().includes(kw) || (productCodeMap.get(p) || "").toLowerCase().includes(kw));
+    }
+    return base;
+  }, [entityProducts, productSearch, productCodeMap]);
 
   const timeLabel = timeMode === "month" ? month : timeMode === "season" ? seasonLabel(season) : timeMode === "year" ? year : `${startDate} ~ ${endDate}`;
 
