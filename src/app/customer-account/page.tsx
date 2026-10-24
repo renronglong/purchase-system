@@ -223,28 +223,92 @@ export default function CustomerSummaryPage() {
         {/* 主体 / 产品 多选条件 */}
         <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs text-slate-500 mb-1">{entityLabel}（可多选，留空=全部）</label>
-            <div className="border border-slate-200 rounded-md p-2 max-h-32 overflow-y-auto">
-              {allEntities.length === 0 ? <div className="text-xs text-slate-400 py-1">暂无{entityLabel}</div> : allEntities.map(c => (
-                <label key={c} className="flex items-center gap-2 py-1 text-sm cursor-pointer hover:bg-slate-50 px-1 rounded">
-                  <input type="checkbox" checked={selectedEntities.includes(c)} onChange={() => toggleSelect(selectedEntities, setSelectedEntities, c)} className="rounded" />
-                  <span className="truncate">{c}</span>
-                </label>
-              ))}
+            <label className="block text-xs text-slate-500 mb-1">{entityLabel}（可多选，点击行或勾选，留空=全部）</label>
+            <div className="border border-slate-200 rounded-md overflow-hidden max-h-40 overflow-y-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-200">
+                    <th className="text-center px-4 py-2 w-10">
+                      <input
+                        type="checkbox"
+                        checked={allEntities.length > 0 && allEntities.every(c => selectedEntities.includes(c))}
+                        onChange={() => setSelectedEntities(allEntities.every(c => selectedEntities.includes(c)) ? [] : allEntities)}
+                        className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                        title={`全选/取消全选${entityLabel}`}
+                      />
+                    </th>
+                    <th className="text-left px-4 py-2 font-medium text-slate-600">{entityLabel}名称</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {allEntities.length === 0 ? (
+                    <tr><td colSpan={2} className="text-center py-6 text-slate-400">暂无{entityLabel}</td></tr>
+                  ) : allEntities.map(c => {
+                    const isSel = selectedEntities.includes(c);
+                    return (
+                      <tr key={c} onClick={() => toggleSelect(selectedEntities, setSelectedEntities, c)}
+                        className={`border-b border-slate-100 hover:bg-slate-50/50 cursor-pointer ${isSel ? "bg-blue-50/40" : ""}`}>
+                        <td className="text-center px-4 py-2">
+                          <input
+                            type="checkbox"
+                            checked={isSel}
+                            onClick={(e) => e.stopPropagation()}
+                            onChange={() => toggleSelect(selectedEntities, setSelectedEntities, c)}
+                            className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                          />
+                        </td>
+                        <td className="px-4 py-2 truncate">{c}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
             {selectedEntities.length > 0 && (
               <button onClick={() => setSelectedEntities([])} className="text-xs text-blue-500 mt-1 hover:underline">清空{entityLabel}筛选</button>
             )}
           </div>
           <div>
-            <label className="block text-xs text-slate-500 mb-1">产品内容（可多选，留空=全部）</label>
-            <div className="border border-slate-200 rounded-md p-2 max-h-32 overflow-y-auto">
-              {allProducts.length === 0 ? <div className="text-xs text-slate-400 py-1">暂无产品</div> : allProducts.map(p => (
-                <label key={p} className="flex items-center gap-2 py-1 text-sm cursor-pointer hover:bg-slate-50 px-1 rounded">
-                  <input type="checkbox" checked={selectedProducts.includes(p)} onChange={() => toggleSelect(selectedProducts, setSelectedProducts, p)} className="rounded" />
-                  <span className="truncate">{p}</span>
-                </label>
-              ))}
+            <label className="block text-xs text-slate-500 mb-1">产品内容（可多选，点击行或勾选，留空=全部）</label>
+            <div className="border border-slate-200 rounded-md overflow-hidden max-h-40 overflow-y-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="bg-slate-50 border-b border-slate-200">
+                    <th className="text-center px-4 py-2 w-10">
+                      <input
+                        type="checkbox"
+                        checked={allProducts.length > 0 && allProducts.every(p => selectedProducts.includes(p))}
+                        onChange={() => setSelectedProducts(allProducts.every(p => selectedProducts.includes(p)) ? [] : allProducts)}
+                        className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                        title="全选/取消全选产品"
+                      />
+                    </th>
+                    <th className="text-left px-4 py-2 font-medium text-slate-600">产品名称 / 规格</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {allProducts.length === 0 ? (
+                    <tr><td colSpan={2} className="text-center py-6 text-slate-400">暂无产品</td></tr>
+                  ) : allProducts.map(p => {
+                    const isSel = selectedProducts.includes(p);
+                    return (
+                      <tr key={p} onClick={() => toggleSelect(selectedProducts, setSelectedProducts, p)}
+                        className={`border-b border-slate-100 hover:bg-slate-50/50 cursor-pointer ${isSel ? "bg-blue-50/40" : ""}`}>
+                        <td className="text-center px-4 py-2">
+                          <input
+                            type="checkbox"
+                            checked={isSel}
+                            onClick={(e) => e.stopPropagation()}
+                            onChange={() => toggleSelect(selectedProducts, setSelectedProducts, p)}
+                            className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+                          />
+                        </td>
+                        <td className="px-4 py-2 truncate">{p}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
             {selectedProducts.length > 0 && (
               <button onClick={() => setSelectedProducts([])} className="text-xs text-blue-500 mt-1 hover:underline">清空产品筛选</button>
