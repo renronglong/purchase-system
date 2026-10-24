@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useEffect, useCallback, Fragment, type Dispatch, type SetStateAction, type ReactNode } from "react";
 import { deliveryNoteStore, purchaseOrderStore, type DeliveryNote, type PurchaseOrder } from "@/lib/store";
+import { deliveryProducts, type DeliveryProduct } from "@/lib/delivery-seed-data";
 
 type TimeMode = "month" | "season" | "year" | "custom";
 type ViewMode = "sales" | "purchase";
@@ -41,6 +42,10 @@ export default function CustomerSummaryPage() {
 
   // 明细展开
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
+
+  // BOM 子配件：从产品信息中勾选加入（DeliveryProduct.id 列表）
+  const [bomSubs, setBomSubs] = useState<string[]>([]);
+  const [bomSearch, setBomSearch] = useState("");
 
   const load = useCallback(() => {
     setNotes(deliveryNoteStore.getAll());
@@ -417,6 +422,118 @@ export default function CustomerSummaryPage() {
               </div>
             )}
           </div>
+        </div>
+      </div>
+
+      {/* BOM 表（产品子件组成清单） */}
+      <div className="bg-white rounded-lg border border-slate-200 overflow-hidden mb-4">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200">
+          <h2 className="text-sm font-semibold text-slate-800">BOM 表 · 从产品信息调取子配件</h2>
+          <span className="text-xs text-slate-400">
+            选中{entityLabel}：{selectedEntities.length > 0 ? selectedEntities.join("、") : "（未选，展示全部）"}
+            {selectedProducts.length > 0 ? ` ｜ 产品：${selectedProducts.length} 项` : ""}
+          </span>
+        </div>
+
+        {/* 子配件候选区：从产品信息中搜索勾选 */}
+        <div className="px-4 py-3 border-b border-slate-100">
+          <div className="text-xs text-slate-500 mb-2">从产品信息中调取子配件（勾选加入 BOM）</div>
+          <div className="flex items-center gap-2 mb-2">
+            <input
+              value={bomSearch}
+              onChange={(e) => setBomSearch(e.target.value)}
+              placeholder="按编号 / 名称 / 规格搜索产品…"
+              className="flex-1 border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+            />
+            <button
+              onClick={() => setBomSubs([])}
+              className="text-sm text-blue-500 hover:underline"
+            >清空 BOM</button>
+          </div>
+          <div className="max-h-44 overflow-y-auto border border-slate-200 rounded-lg">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-slate-50 border-b border-slate-200">
+                  <th className="text-center px-3 py-2 w-10"></th>
+                  <th className="text-left px-3 py-2 font-medium text-slate-600">编号</th>
+                  <th className="text-left px-3 py-2 font-medium text-slate-600">名称</th>
+                  <th className="text-left px-3 py-2 font-medium text-slate-600">规格</th>
+                  <th className="text-left px-3 py-2 font-medium text-slate-600">表面处理</th>
+                  <th className="text-left px-3 py-2 font-medium text-slate-600">单位</th>
+                </tr>
+              </thead>
+              <tbody>
+                {deliveryProducts
+                  .filter(p => {
+                    if (!bomSearch) return true;
+                    const q = bomSearch.toLowerCase();
+                    return p.code.toLowerCase().includes(q) || p.name.toLowerCase().includes(q) || p.spec.toLowerCase().includes(q);
+                  })
+                  .map((p) => {
+                    const on = bomSubs.includes(p.id);
+                    return (
+                      <tr
+                        key={p.id}
+                        onClick={(e) => { e.stopPropagation(); setBomSubs(prev => on ? prev.filter(x => x !== p.id) : [...prev, p.id]); }}
+                        className={`border-b border-slate-100 cursor-pointer hover:bg-slate-50 ${on ? "bg-blue-50/40" : ""}`}
+                      >
+                        <td className="text-center px-3 py-2">
+                          <input type="checkbox" checked={on} readOnly className="accent-blue-500" />
+                        </td>
+                        <td className="px-3 py-2 font-mono text-xs text-slate-500">{p.code}</td>
+                        <td className="px-3 py-2">{p.name}</td>
+                        <td className="px-3 py-2 text-slate-500">{p.spec}</td>
+                        <td className="px-3 py-2 text-slate-500">{p.surface || "-"}</td>
+                        <td className="px-3 py-2 text-slate-500">{p.unit || "-"}</td>
+                      </tr>
+                    );
+                  })}
+                {deliveryProducts.filter(p => !bomSearch || p.code.toLowerCase().includes(bomSearch.toLowerCase()) || p.name.toLowerCase().includes(bomSearch.toLowerCase()) || p.spec.toLowerCase().includes(bomSearch.toLowerCase())).length === 0 && (
+                  <tr><td colSpan={6} className="text-center py-8 text-slate-400">无匹配产品</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+          <div className="text-xs text-slate-400 mt-2">已勾选 {bomSubs.length} 个子配件</div>
+        </div>
+
+        {/* BOM 子件表 */}
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-200">
+                <th className="text-center px-4 py-2.5 w-12 font-medium text-slate-600">序号</th>
+                <th className="text-left px-4 py-2.5 font-medium text-slate-600">子件编号</th>
+                <th className="text-left px-4 py-2.5 font-medium text-slate-600">子件名称</th>
+                <th className="text-left px-4 py-2.5 font-medium text-slate-600">规格</th>
+                <th className="text-left px-4 py-2.5 font-medium text-slate-600">表面处理</th>
+                <th className="text-center px-4 py-2.5 w-16 font-medium text-slate-600">单位</th>
+                <th className="text-center px-4 py-2.5 w-20 font-medium text-slate-600">用量</th>
+                <th className="text-center px-4 py-2.5 w-10 font-medium text-slate-600"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {deliveryProducts.filter(p => bomSubs.includes(p.id)).map((p, idx) => (
+                <tr key={p.id} className="border-b border-slate-100">
+                  <td className="text-center px-4 py-2.5 text-slate-400">{idx + 1}</td>
+                  <td className="px-4 py-2.5 font-mono text-xs text-slate-500">{p.code}</td>
+                  <td className="px-4 py-2.5">{p.name}</td>
+                  <td className="px-4 py-2.5 text-slate-500">{p.spec}</td>
+                  <td className="px-4 py-2.5 text-slate-500">{p.surface || "-"}</td>
+                  <td className="px-4 py-2.5 text-center text-slate-500">{p.unit || "-"}</td>
+                  <td className="px-4 py-2.5 text-center">
+                    <input type="number" min={0} step="any" defaultValue={1} className="w-16 border border-slate-300 rounded px-2 py-1 text-sm text-center focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
+                  </td>
+                  <td className="px-4 py-2.5 text-center">
+                    <button onClick={() => setBomSubs(prev => prev.filter(x => x !== p.id))} className="text-red-400 hover:text-red-600">✕</button>
+                  </td>
+                </tr>
+              ))}
+              {bomSubs.length === 0 && (
+                <tr><td colSpan={8} className="text-center py-10 text-slate-400">BOM 尚未添加子配件，请在上方从产品信息中勾选</td></tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
 
