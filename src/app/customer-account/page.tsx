@@ -77,6 +77,13 @@ export default function CustomerSummaryPage() {
     return m;
   }, [notes, orders]);
 
+  // 搜索过滤后的可见产品（全选应基于此列表，而非全部产品）
+  const visibleProducts = useMemo(() => {
+    if (!productSearch) return allProducts;
+    const kw = productSearch.toLowerCase();
+    return allProducts.filter(p => p.toLowerCase().includes(kw) || (productCodeMap.get(p) || "").toLowerCase().includes(kw));
+  }, [allProducts, productSearch, productCodeMap]);
+
   // 时间筛选
   const inRange = (date: string): boolean => {
     if (!date) return false;
@@ -187,6 +194,13 @@ export default function CustomerSummaryPage() {
   const allEntities = viewMode === "sales" ? allCustomers : allSuppliers;
   const entityLabel = viewMode === "sales" ? "客户" : "供应商";
 
+  // 搜索过滤后的可见客户/供应商（全选应基于此列表）
+  const visibleEntities = useMemo(() => {
+    if (!entitySearch) return allEntities;
+    const kw = entitySearch.toLowerCase();
+    return allEntities.filter(c => c.toLowerCase().includes(kw));
+  }, [allEntities, entitySearch]);
+
   const timeLabel = timeMode === "month" ? month : timeMode === "season" ? seasonLabel(season) : timeMode === "year" ? year : `${startDate} ~ ${endDate}`;
 
   return (
@@ -261,10 +275,10 @@ export default function CustomerSummaryPage() {
                     <th className="text-center px-4 py-2 w-10">
                       <input
                         type="checkbox"
-                        checked={allEntities.length > 0 && allEntities.every(c => selectedEntities.includes(c))}
-                        onChange={() => setSelectedEntities(allEntities.every(c => selectedEntities.includes(c)) ? [] : allEntities)}
+                        checked={visibleEntities.length > 0 && visibleEntities.every(c => selectedEntities.includes(c))}
+                        onChange={() => setSelectedEntities(visibleEntities.every(c => selectedEntities.includes(c)) ? [] : visibleEntities)}
                         className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                        title={`全选/取消全选${entityLabel}`}
+                        title={`全选/取消全选当前搜索到的${entityLabel}`}
                       />
                     </th>
                     <th className="text-center px-2 py-2 w-10 font-medium text-slate-600">序号</th>
@@ -272,9 +286,9 @@ export default function CustomerSummaryPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {allEntities.length === 0 ? (
-                    <tr><td colSpan={3} className="text-center py-6 text-slate-400">暂无{entityLabel}</td></tr>
-                  ) : allEntities.filter(c => !entitySearch || c.toLowerCase().includes(entitySearch.toLowerCase())).map((c, idx) => {
+                  {visibleEntities.length === 0 ? (
+                    <tr><td colSpan={3} className="text-center py-6 text-slate-400">{allEntities.length === 0 ? `暂无${entityLabel}` : "没有匹配的结果"}</td></tr>
+                  ) : visibleEntities.map((c, idx) => {
                     const isSel = selectedEntities.includes(c);
                     return (
                       <tr key={c} onClick={() => toggleSelect(selectedEntities, setSelectedEntities, c)}
@@ -322,10 +336,10 @@ export default function CustomerSummaryPage() {
                     <th className="text-center px-4 py-2 w-10">
                       <input
                         type="checkbox"
-                        checked={allProducts.length > 0 && allProducts.every(p => selectedProducts.includes(p))}
-                        onChange={() => setSelectedProducts(allProducts.every(p => selectedProducts.includes(p)) ? [] : allProducts)}
+                        checked={visibleProducts.length > 0 && visibleProducts.every(p => selectedProducts.includes(p))}
+                        onChange={() => setSelectedProducts(visibleProducts.every(p => selectedProducts.includes(p)) ? [] : visibleProducts)}
                         className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
-                        title="全选/取消全选产品"
+                        title="全选/取消全选当前搜索到的产品"
                       />
                     </th>
                     <th className="text-center px-2 py-2 w-24 font-medium text-slate-600">产品编号</th>
@@ -333,13 +347,9 @@ export default function CustomerSummaryPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {allProducts.length === 0 ? (
-                    <tr><td colSpan={3} className="text-center py-6 text-slate-400">暂无产品</td></tr>
-                  ) : allProducts.filter(p => {
-                    if (!productSearch) return true;
-                    const kw = productSearch.toLowerCase();
-                    return p.toLowerCase().includes(kw) || (productCodeMap.get(p) || "").toLowerCase().includes(kw);
-                  }).map((p) => {
+                  {visibleProducts.length === 0 ? (
+                    <tr><td colSpan={3} className="text-center py-6 text-slate-400">{allProducts.length === 0 ? "暂无产品" : "没有匹配的产品"}</td></tr>
+                  ) : visibleProducts.map((p) => {
                     const isSel = selectedProducts.includes(p);
                     return (
                       <tr key={p} onClick={() => toggleSelect(selectedProducts, setSelectedProducts, p)}
