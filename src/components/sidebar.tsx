@@ -10,6 +10,7 @@ const navItems = [
   { href: "/", label: "采购单管理", icon: "clipboard" },
   { href: "/inventory", label: "库存管理", icon: "inventory" },
   { href: "/products", label: "产品库", icon: "package" },
+  { href: "/bom", label: "BOM 表", icon: "package" },
   { href: "/suppliers", label: "供应商", icon: "users" },
   { href: "/outsourcing", label: "委外加工", icon: "settings" },
   { href: "/delivery", label: "送货单管理", icon: "truck" },
