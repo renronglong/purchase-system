@@ -93,7 +93,7 @@ export default function CustomerSummaryPage() {
           spec: it.spec || "",
           unit: it.unit || "",
           qty: it.qty || 0,
-          amount: it.amount ?? (it.qty * it.unitPrice) || 0,
+          amount: it.amount ?? (it.qty * it.unitPrice || 0),
         });
       });
     });
