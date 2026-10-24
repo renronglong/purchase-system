@@ -69,7 +69,7 @@ export default function CustomerSummaryPage() {
       if (code && !m.get(pk)) m.set(pk, code);
     };
     notes.forEach(n => n.items.forEach(it => {
-      set(`${it.productName}${it.spec ? " " + it.spec : ""}`, it.materialCode || it.productCode);
+      set(`${it.productName}${it.spec ? " " + it.spec : ""}`, it.materialCode || "");
     }));
     orders.forEach(o => o.items.forEach(it => {
       set(`${it.productName}${it.spec ? " " + it.spec : ""}`, it.productCode);
