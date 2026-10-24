@@ -93,7 +93,7 @@ export default function CustomerSummaryPage() {
           spec: it.spec || "",
           unit: it.unit || "",
           qty: it.qty || 0,
-          amount: it.amount ?? (it.qty * it.unitPrice || 0),
+          amount: typeof it.amount === "number" ? it.amount : (it.qty * it.unitPrice || 0),
         });
       });
     });
@@ -199,12 +199,12 @@ export default function CustomerSummaryPage() {
           )}
           {timeMode === "season" && (
             <select value={season} onChange={(e) => setSeason(e.target.value)} className="px-3 py-1.5 text-sm border border-slate-200 rounded-md">
-              {(() => { const opts: string[] = []; for (let y = new Date().getFullYear() - 2; y <= new Date().getFullYear() + 1; y++) for (let q = 1; q <= 4; q++) opts.push(`${y}-${q}`); return opts; })()}
+              {(() => { const opts: React.ReactNode[] = []; for (let y = new Date().getFullYear() - 2; y <= new Date().getFullYear() + 1; y++) for (let q = 1; q <= 4; q++) opts.push(<option key={`${y}-${q}`} value={`${y}-${q}`}>{`${y}年Q${q}`}</option>); return opts; })()}
             </select>
           )}
           {timeMode === "year" && (
             <select value={year} onChange={(e) => setYear(e.target.value)} className="px-3 py-1.5 text-sm border border-slate-200 rounded-md">
-              {(() => { const opts: string[] = []; for (let y = new Date().getFullYear() - 3; y <= new Date().getFullYear() + 1; y++) opts.push(String(y)); return opts; })()}
+              {(() => { const opts: React.ReactNode[] = []; for (let y = new Date().getFullYear() - 3; y <= new Date().getFullYear() + 1; y++) opts.push(<option key={y} value={String(y)}>{y}年</option>); return opts; })()}
             </select>
           )}
           {timeMode === "custom" && (
