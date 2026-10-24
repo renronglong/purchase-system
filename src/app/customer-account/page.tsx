@@ -1,133 +1,274 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { customerAccountStore, type CustomerAccountRecord } from "@/lib/store";
-import { deliveryCustomerStore } from "@/lib/store";
+import { useMemo, useState, useEffect, useCallback, Fragment, type Dispatch, type SetStateAction } from "react";
+import { deliveryNoteStore, purchaseOrderStore, type DeliveryNote, type PurchaseOrder } from "@/lib/store";
 
-export default function CustomerAccountPage() {
-  const [records, setRecords] = useState<CustomerAccountRecord[]>([]);
-  const [searchCustomer, setSearchCustomer] = useState("");
+type TimeMode = "month" | "season" | "year" | "custom";
+type ViewMode = "sales" | "purchase";
 
-  // 明细弹窗
-  const [detailCustomer, setDetailCustomer] = useState<string | null>(null);
+function seasonLabel(season: string): string {
+  const [y, q] = season.split("-");
+  return `${y}年 第${q}季度`;
+}
 
-  // 录入表单
-  const [showForm, setShowForm] = useState(false);
-  const [editId, setEditId] = useState<string | null>(null);
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10));
-  const [customer, setCustomer] = useState("");
-  const [type, setType] = useState<'income' | 'expense'>('income');
-  const [amount, setAmount] = useState(0);
-  const [remark, setRemark] = useState("");
-  const [relatedOrderNo, setRelatedOrderNo] = useState("");
+export default function CustomerSummaryPage() {
+  const [notes, setNotes] = useState<DeliveryNote[]>([]);
+  const [orders, setOrders] = useState<PurchaseOrder[]>([]);
 
-  const customers = deliveryCustomerStore.getAll();
-  const accountCustomers = customerAccountStore.getCustomers();
-  const allCustomers = Array.from(new Set([...customers.map(c => c.name), ...accountCustomers]));
+  // 视角
+  const [viewMode, setViewMode] = useState<ViewMode>("sales");
+
+  // 时间维度
+  const [timeMode, setTimeMode] = useState<TimeMode>("month");
+  const [month, setMonth] = useState(new Date().toISOString().slice(0, 7)); // YYYY-MM
+  const [season, setSeason] = useState(() => {
+    const now = new Date();
+    const q = Math.floor(now.getMonth() / 3) + 1;
+    return `${now.getFullYear()}-${q}`;
+  });
+  const [year, setYear] = useState(String(new Date().getFullYear()));
+  const [startDate, setStartDate] = useState(new Date().toISOString().slice(0, 10));
+  const [endDate, setEndDate] = useState(new Date().toISOString().slice(0, 10));
+
+  // 条件：主体（客户/供应商）/ 产品（多选）
+  const [selectedCustomers, setSelectedCustomers] = useState<string[]>([]);
+  const [selectedSuppliers, setSelectedSuppliers] = useState<string[]>([]);
+  const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
+
+  // 明细展开
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
   const load = useCallback(() => {
-    setRecords(customerAccountStore.getAll());
+    setNotes(deliveryNoteStore.getAll());
+    setOrders(purchaseOrderStore.getAll());
   }, []);
   useEffect(() => { load(); }, [load]);
 
-  // ---------- 汇总计算：按客户聚合 ----------
-  const summary = allCustomers
-    .map(c => {
-      const recs = records.filter(r => r.customer === c);
-      const income = recs.filter(r => r.type === 'income').reduce((s, r) => s + r.amount, 0);
-      const expense = recs.filter(r => r.type === 'expense').reduce((s, r) => s + r.amount, 0);
-      const balance = income - expense;
-      const lastDate = recs.length ? recs.map(r => r.date).sort((a, b) => b.localeCompare(a))[0] : "";
-      return { customer: c, income, expense, balance, count: recs.length, lastDate };
-    })
-    .filter(s => s.count > 0 && (!searchCustomer || s.customer.toLowerCase().includes(searchCustomer.toLowerCase())))
-    .sort((a, b) => a.customer.localeCompare(b.customer));
+  // 销售可选客户 / 采购可选供应商 / 产品（去重）
+  const allCustomers = useMemo(() =>
+    Array.from(new Set(notes.map(n => n.customer))).filter(Boolean).sort((a, b) => a.localeCompare(b)), [notes]);
 
-  const totalIncome = summary.reduce((s, x) => s + x.income, 0);
-  const totalExpense = summary.reduce((s, x) => s + x.expense, 0);
-  const netBalance = totalIncome - totalExpense;
+  const allSuppliers = useMemo(() =>
+    Array.from(new Set(orders.map(o => o.supplierName))).filter(Boolean).sort((a, b) => a.localeCompare(b)), [orders]);
 
-  // ---------- 录入 ----------
-  const openNew = (presetCustomer?: string) => {
-    setEditId(null);
-    setDate(new Date().toISOString().slice(0, 10));
-    setCustomer(presetCustomer || "");
-    setType('income');
-    setAmount(0);
-    setRemark("");
-    setRelatedOrderNo("");
-    setShowForm(true);
-  };
+  const allProducts = useMemo(() => {
+    const set = new Set<string>();
+    notes.forEach(n => n.items.forEach(it => set.add(`${it.productName}${it.spec ? " " + it.spec : ""}`)));
+    orders.forEach(o => o.items.forEach(it => set.add(`${it.productName}${it.spec ? " " + it.spec : ""}`)));
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }, [notes, orders]);
 
-  const openEdit = (record: CustomerAccountRecord) => {
-    setEditId(record.id);
-    setDate(record.date);
-    setCustomer(record.customer);
-    setType(record.type);
-    setAmount(record.amount);
-    setRemark(record.remark);
-    setRelatedOrderNo(record.relatedOrderNo || "");
-    setShowForm(true);
-  };
-
-  const handleSave = () => {
-    if (!customer) { alert("请填写客户名称"); return; }
-    if (amount <= 0) { alert("请填写金额"); return; }
-    const existingCustomers = deliveryCustomerStore.getAll();
-    if (!existingCustomers.find(c => c.name === customer)) {
-      deliveryCustomerStore.add({ name: customer, address: "", contact: "", phone: "", taxNo: "", legalPerson: "", email: "", paymentTerms: "" });
-    }
-    const data = { date, customer, type, amount, remark, relatedOrderNo };
-    if (editId) {
-      customerAccountStore.update(editId, data);
-    } else {
-      customerAccountStore.add(data);
-    }
-    setShowForm(false);
-    load();
-  };
-
-  const handleDeleteCustomer = (name: string) => {
-    if (confirm(`确定要删除客户「${name}」的全部往来记录吗？`)) {
-      customerAccountStore.getAll().filter(r => r.customer === name).forEach(r => customerAccountStore.remove(r.id));
-      load();
-      setDetailCustomer(null);
+  // 时间筛选
+  const inRange = (date: string): boolean => {
+    if (!date) return false;
+    switch (timeMode) {
+      case "month": return date.slice(0, 7) === month;
+      case "season": {
+        const m = parseInt(date.slice(5, 7), 10);
+        const y = date.slice(0, 4);
+        const [sy, sq] = season.split("-");
+        if (y !== sy) return false;
+        const q = Math.floor((m - 1) / 3) + 1;
+        return String(q) === sq;
+      }
+      case "year": return date.slice(0, 4) === year;
+      case "custom": return date >= startDate && date <= endDate;
+      default: return false;
     }
   };
 
-  const detailRecords = detailCustomer
-    ? records.filter(r => r.customer === detailCustomer).sort((a, b) => b.date.localeCompare(a.date))
-    : [];
+  // ---- 销售明细行（送货单）----
+  const salesRows = useMemo(() => {
+    const rows: { entity: string; productKey: string; productName: string; spec: string; unit: string; qty: number; amount: number }[] = [];
+    notes.forEach(n => {
+      if (!inRange(n.date)) return;
+      if (selectedCustomers.length > 0 && !selectedCustomers.includes(n.customer)) return;
+      n.items.forEach(it => {
+        const pk = `${it.productName}${it.spec ? " " + it.spec : ""}`;
+        if (selectedProducts.length > 0 && !selectedProducts.includes(pk)) return;
+        rows.push({
+          entity: n.customer,
+          productKey: pk,
+          productName: it.productName,
+          spec: it.spec || "",
+          unit: it.unit || "",
+          qty: it.qty || 0,
+          amount: it.amount ?? (it.qty * it.unitPrice) || 0,
+        });
+      });
+    });
+    return rows;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [notes, timeMode, month, season, year, startDate, endDate, selectedCustomers, selectedProducts]);
+
+  // ---- 采购明细行（采购单，按数量/重量汇总，无金额）----
+  const purchaseRows = useMemo(() => {
+    const rows: { entity: string; productKey: string; productName: string; spec: string; unit: string; qty: number; weight: number }[] = [];
+    orders.forEach(o => {
+      if (!inRange(o.orderDate)) return;
+      if (selectedSuppliers.length > 0 && !selectedSuppliers.includes(o.supplierName)) return;
+      o.items.forEach(it => {
+        const pk = `${it.productName}${it.spec ? " " + it.spec : ""}`;
+        if (selectedProducts.length > 0 && !selectedProducts.includes(pk)) return;
+        rows.push({
+          entity: o.supplierName,
+          productKey: pk,
+          productName: it.productName,
+          spec: it.spec || "",
+          unit: it.unit || "",
+          qty: it.quantity || 0,
+          weight: it.totalWeight || 0,
+        });
+      });
+    });
+    return rows;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orders, timeMode, month, season, year, startDate, endDate, selectedSuppliers, selectedProducts]);
+
+  const rows = viewMode === "sales" ? salesRows : purchaseRows;
+
+  // 按主体（客户/供应商）聚合
+  const entitySummary = useMemo(() => {
+    const map = new Map<string, { entity: string; qty: number; amount: number; weight: number; productCount: number; rows: typeof rows }>();
+    rows.forEach(r => {
+      if (!map.has(r.entity)) map.set(r.entity, { entity: r.entity, qty: 0, amount: 0, weight: 0, productCount: 0, rows: [] });
+      const e = map.get(r.entity)!;
+      e.qty += r.qty;
+      if (viewMode === "sales") e.amount += (r as any).amount || 0;
+      else e.weight += (r as any).weight || 0;
+      if (!e.rows.find(x => x.productKey === r.productKey)) e.productCount++;
+      e.rows.push(r);
+    });
+    const arr = Array.from(map.values());
+    arr.sort((a, b) => (viewMode === "sales" ? b.amount - a.amount : b.weight - a.weight));
+    return arr;
+  }, [rows, viewMode]);
+
+  const totalQty = entitySummary.reduce((s, x) => s + x.qty, 0);
+
+  const toggleEntity = (e: string) => {
+    setExpanded(prev => {
+      const next = new Set(prev);
+      if (next.has(e)) next.delete(e); else next.add(e);
+      return next;
+    });
+  };
+
+  const toggleSelect = (list: string[], setList: (v: string[]) => void, value: string) => {
+    if (list.includes(value)) setList(list.filter(v => v !== value));
+    else setList([...list, value]);
+  };
+
+  const selectedEntities = viewMode === "sales" ? selectedCustomers : selectedSuppliers;
+  const setSelectedEntities: Dispatch<SetStateAction<string[]>> = viewMode === "sales" ? setSelectedCustomers : setSelectedSuppliers;
+  const allEntities = viewMode === "sales" ? allCustomers : allSuppliers;
+  const entityLabel = viewMode === "sales" ? "客户" : "供应商";
+
+  const timeLabel = timeMode === "month" ? month : timeMode === "season" ? seasonLabel(season) : timeMode === "year" ? year : `${startDate} ~ ${endDate}`;
 
   return (
     <div className="p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-bold text-slate-900">客户往来记录</h1>
-        <button onClick={() => openNew()} className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700">
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
-          新增记录
-        </button>
+      <h1 className="text-xl font-bold text-slate-900 mb-6">客户往来记录 · 汇总表</h1>
+
+      {/* 视角切换 */}
+      <div className="flex gap-8 mb-4">
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input type="radio" checked={viewMode === "sales"} onChange={() => setViewMode("sales")} className="accent-blue-600" />
+          <span className="text-sm font-medium text-slate-700">销售汇总（按客户）</span>
+        </label>
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input type="radio" checked={viewMode === "purchase"} onChange={() => setViewMode("purchase")} className="accent-blue-600" />
+          <span className="text-sm font-medium text-slate-700">采购汇总（按供应商）</span>
+        </label>
       </div>
 
-      {/* 汇总概览卡片 */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-        <div className="bg-white rounded-lg border border-slate-200 p-4">
-          <div className="text-xs text-slate-500 mb-1">应收合计（收入）</div>
-          <div className="text-2xl font-bold font-mono text-emerald-600">¥{totalIncome.toFixed(2)}</div>
-        </div>
-        <div className="bg-white rounded-lg border border-slate-200 p-4">
-          <div className="text-xs text-slate-500 mb-1">应付合计（支出）</div>
-          <div className="text-2xl font-bold font-mono text-red-600">¥{totalExpense.toFixed(2)}</div>
-        </div>
-        <div className="bg-white rounded-lg border border-slate-200 p-4">
-          <div className="text-xs text-slate-500 mb-1">净结余</div>
-          <div className={`text-2xl font-bold font-mono ${netBalance >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>¥{netBalance.toFixed(2)}</div>
-        </div>
-      </div>
-
-      {/* 搜索 */}
+      {/* 时间维度 */}
       <div className="bg-white rounded-lg border border-slate-200 p-4 mb-4">
-        <input type="text" value={searchCustomer} onChange={(e) => setSearchCustomer(e.target.value)} placeholder="搜索客户名称" className="w-full max-w-md px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex gap-1 bg-slate-100 rounded-md p-1">
+            {([["month", "月报表"], ["season", "季报表"], ["year", "年报表"], ["custom", "自定义"]] as [TimeMode, string][]).map(([mode, label]) => (
+              <button key={mode} onClick={() => setTimeMode(mode)}
+                className={`px-3 py-1.5 text-sm rounded-md transition-colors ${timeMode === mode ? "bg-white text-blue-600 font-medium shadow-sm" : "text-slate-500 hover:text-slate-700"}`}>
+                {label}
+              </button>
+            ))}
+          </div>
+
+          {timeMode === "month" && (
+            <input type="month" value={month} onChange={(e) => setMonth(e.target.value)} className="px-3 py-1.5 text-sm border border-slate-200 rounded-md" />
+          )}
+          {timeMode === "season" && (
+            <select value={season} onChange={(e) => setSeason(e.target.value)} className="px-3 py-1.5 text-sm border border-slate-200 rounded-md">
+              {(() => { const opts: string[] = []; for (let y = new Date().getFullYear() - 2; y <= new Date().getFullYear() + 1; y++) for (let q = 1; q <= 4; q++) opts.push(`${y}-${q}`); return opts; })()}
+            </select>
+          )}
+          {timeMode === "year" && (
+            <select value={year} onChange={(e) => setYear(e.target.value)} className="px-3 py-1.5 text-sm border border-slate-200 rounded-md">
+              {(() => { const opts: string[] = []; for (let y = new Date().getFullYear() - 3; y <= new Date().getFullYear() + 1; y++) opts.push(String(y)); return opts; })()}
+            </select>
+          )}
+          {timeMode === "custom" && (
+            <div className="flex items-center gap-2">
+              <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="px-3 py-1.5 text-sm border border-slate-200 rounded-md" />
+              <span className="text-slate-400">至</span>
+              <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="px-3 py-1.5 text-sm border border-slate-200 rounded-md" />
+            </div>
+          )}
+        </div>
+
+        {/* 主体 / 产品 多选条件 */}
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs text-slate-500 mb-1">{entityLabel}（可多选，留空=全部）</label>
+            <div className="border border-slate-200 rounded-md p-2 max-h-32 overflow-y-auto">
+              {allEntities.length === 0 ? <div className="text-xs text-slate-400 py-1">暂无{entityLabel}</div> : allEntities.map(c => (
+                <label key={c} className="flex items-center gap-2 py-1 text-sm cursor-pointer hover:bg-slate-50 px-1 rounded">
+                  <input type="checkbox" checked={selectedEntities.includes(c)} onChange={() => toggleSelect(selectedEntities, setSelectedEntities, c)} className="rounded" />
+                  <span className="truncate">{c}</span>
+                </label>
+              ))}
+            </div>
+            {selectedEntities.length > 0 && (
+              <button onClick={() => setSelectedEntities([])} className="text-xs text-blue-500 mt-1 hover:underline">清空{entityLabel}筛选</button>
+            )}
+          </div>
+          <div>
+            <label className="block text-xs text-slate-500 mb-1">产品内容（可多选，留空=全部）</label>
+            <div className="border border-slate-200 rounded-md p-2 max-h-32 overflow-y-auto">
+              {allProducts.length === 0 ? <div className="text-xs text-slate-400 py-1">暂无产品</div> : allProducts.map(p => (
+                <label key={p} className="flex items-center gap-2 py-1 text-sm cursor-pointer hover:bg-slate-50 px-1 rounded">
+                  <input type="checkbox" checked={selectedProducts.includes(p)} onChange={() => toggleSelect(selectedProducts, setSelectedProducts, p)} className="rounded" />
+                  <span className="truncate">{p}</span>
+                </label>
+              ))}
+            </div>
+            {selectedProducts.length > 0 && (
+              <button onClick={() => setSelectedProducts([])} className="text-xs text-blue-500 mt-1 hover:underline">清空产品筛选</button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* 汇总概览 */}
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-4">
+        <div className="bg-white rounded-lg border border-slate-200 p-4">
+          <div className="text-xs text-slate-500 mb-1">统计区间</div>
+          <div className="text-sm font-bold text-slate-800">{timeLabel}</div>
+        </div>
+        <div className="bg-white rounded-lg border border-slate-200 p-4">
+          <div className="text-xs text-slate-500 mb-1">{entityLabel}数</div>
+          <div className="text-2xl font-bold font-mono text-slate-900">{entitySummary.length}</div>
+        </div>
+        <div className="bg-white rounded-lg border border-slate-200 p-4">
+          <div className="text-xs text-slate-500 mb-1">总数量</div>
+          <div className="text-2xl font-bold font-mono text-slate-900">{totalQty.toLocaleString()}</div>
+        </div>
+        <div className="bg-white rounded-lg border border-slate-200 p-4">
+          <div className="text-xs text-slate-500 mb-1">{viewMode === "sales" ? "总金额" : "总重量"}</div>
+          <div className={`text-2xl font-bold font-mono ${viewMode === "sales" ? "text-emerald-600" : "text-slate-800"}`}>
+            {viewMode === "sales" ? "¥" + (entitySummary.reduce((s, x) => s + x.amount, 0)).toFixed(2) : (entitySummary.reduce((s, x) => s + x.weight, 0)).toFixed(2)}
+          </div>
+        </div>
       </div>
 
       {/* 汇总表 */}
@@ -135,135 +276,51 @@ export default function CustomerAccountPage() {
         <table className="w-full text-sm">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200">
-              <th className="text-left px-4 py-2.5 font-medium text-slate-600">客户名称</th>
-              <th className="text-right px-4 py-2.5 font-medium text-slate-600">应收（收入）</th>
-              <th className="text-right px-4 py-2.5 font-medium text-slate-600">应付（支出）</th>
-              <th className="text-right px-4 py-2.5 font-medium text-slate-600">结余</th>
-              <th className="text-center px-4 py-2.5 font-medium text-slate-600">笔数</th>
-              <th className="text-left px-4 py-2.5 font-medium text-slate-600">最近往来日期</th>
-              <th className="text-center px-4 py-2.5 font-medium text-slate-600">操作</th>
+              <th className="text-left px-4 py-2.5 font-medium text-slate-600 w-8"></th>
+              <th className="text-left px-4 py-2.5 font-medium text-slate-600">{entityLabel}</th>
+              <th className="text-center px-4 py-2.5 font-medium text-slate-600">产品种类</th>
+              <th className="text-right px-4 py-2.5 font-medium text-slate-600">数量</th>
+              <th className="text-right px-4 py-2.5 font-medium text-slate-600">{viewMode === "sales" ? "金额" : "重量"}</th>
             </tr>
           </thead>
           <tbody>
-            {summary.length === 0 ? (
-              <tr><td colSpan={7} className="text-center py-12 text-slate-400">暂无往来记录</td></tr>
-            ) : summary.map(s => (
-              <tr key={s.customer} className="border-b border-slate-100 hover:bg-slate-50/50">
-                <td className="px-4 py-2.5 font-medium">{s.customer}</td>
-                <td className="px-4 py-2.5 text-right font-mono text-emerald-600">{s.income.toFixed(2)}</td>
-                <td className="px-4 py-2.5 text-right font-mono text-red-600">{s.expense.toFixed(2)}</td>
-                <td className={`px-4 py-2.5 text-right font-mono font-semibold ${s.balance >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>{s.balance.toFixed(2)}</td>
-                <td className="px-4 py-2.5 text-center font-mono text-slate-500">{s.count}</td>
-                <td className="px-4 py-2.5 text-xs text-slate-500">{s.lastDate || '-'}</td>
-                <td className="px-4 py-2.5 text-center">
-                  <div className="flex items-center justify-center gap-3">
-                    <button onClick={() => setDetailCustomer(s.customer)} className="text-blue-600 hover:text-blue-800 text-xs">明细</button>
-                    <button onClick={() => handleDeleteCustomer(s.customer)} className="text-red-500 hover:text-red-700 text-xs">删除</button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+            {entitySummary.length === 0 ? (
+              <tr><td colSpan={5} className="text-center py-12 text-slate-400">该区间暂无{viewMode === "sales" ? "销售" : "采购"}汇总数据</td></tr>
+            ) : entitySummary.map(s => {
+              const isExpanded = expanded.has(s.entity);
+              return (
+                <Fragment key={s.entity}>
+                <tr className="border-b border-slate-100 hover:bg-slate-50/50 cursor-pointer" onClick={() => toggleEntity(s.entity)}>
+                  <td className="px-4 py-2.5 text-slate-400">{isExpanded ? "▾" : "▸"}</td>
+                  <td className="px-4 py-2.5 font-medium">{s.entity}</td>
+                  <td className="px-4 py-2.5 text-center font-mono text-slate-500">{s.productCount}</td>
+                  <td className="px-4 py-2.5 text-right font-mono">{s.qty.toLocaleString()}</td>
+                  <td className={`px-4 py-2.5 text-right font-mono font-semibold ${viewMode === "sales" ? "text-emerald-600" : "text-slate-800"}`}>
+                    {viewMode === "sales" ? "¥" + s.amount.toFixed(2) : s.weight.toFixed(2)}
+                  </td>
+                </tr>
+                {isExpanded && (
+                  s.rows.map((r, idx) => (
+                    <tr key={`${s.entity}-${idx}-${r.productKey}`} className="bg-slate-50/50 border-b border-slate-100">
+                      <td className="px-4 py-1.5"></td>
+                      <td className="px-4 py-1.5 pl-10 text-slate-600">{r.productName}{r.spec ? ` ${r.spec}` : ""}</td>
+                      <td className="px-4 py-1.5 text-center text-xs text-slate-400">{r.unit}</td>
+                      <td className="px-4 py-1.5 text-right font-mono text-xs text-slate-500">{r.qty.toLocaleString()}</td>
+                      <td className="px-4 py-1.5 text-right font-mono text-xs text-slate-600">
+                        {viewMode === "sales" ? "¥" + ((r as any).amount || 0).toFixed(2) : ((r as any).weight || 0).toFixed(2)}
+                      </td>
+                    </tr>
+                  ))
+                )}
+                </Fragment>
+              );
+            })}
           </tbody>
         </table>
       </div>
-      <div className="mt-3 text-xs text-slate-400">共 {summary.length} 个客户有往来记录</div>
-
-      {/* 录入表单 */}
-      {showForm && (
-        <div className="bg-white rounded-lg border border-blue-200 p-5 mb-4">
-          <h3 className="text-sm font-medium text-slate-700 mb-3">{editId ? "编辑记录" : "新增记录"}</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
-            <div><label className="block text-xs text-slate-500 mb-1">日期</label>
-              <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" /></div>
-            <div><label className="block text-xs text-slate-500 mb-1">客户/供应商 <span className="text-red-500">*</span></label>
-              <input type="text" value={customer} onChange={(e) => setCustomer(e.target.value)}
-                className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" placeholder="客户名称" list="account-customer-list" />
-              <datalist id="account-customer-list">{allCustomers.map(c => <option key={c} value={c} />)}</datalist></div>
-            <div><label className="block text-xs text-slate-500 mb-1">类型</label>
-              <select value={type} onChange={(e) => setType(e.target.value as 'income' | 'expense')} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md">
-                <option value="income">收入</option>
-                <option value="expense">支出</option>
-              </select></div>
-            <div><label className="block text-xs text-slate-500 mb-1">金额 <span className="text-red-500">*</span></label>
-              <input type="number" step="0.01" value={amount || ""} onChange={(e) => setAmount(Number(e.target.value))}
-                className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" placeholder="0.00" /></div>
-            <div><label className="block text-xs text-slate-500 mb-1">关联订单号</label>
-              <input type="text" value={relatedOrderNo} onChange={(e) => setRelatedOrderNo(e.target.value)}
-                className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" placeholder="选填" /></div>
-            <div><label className="block text-xs text-slate-500 mb-1">备注</label>
-              <input type="text" value={remark} onChange={(e) => setRemark(e.target.value)}
-                className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" placeholder="选填" /></div>
-          </div>
-          <div className="flex gap-2">
-            <button onClick={handleSave} className="px-4 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700">保存</button>
-            <button onClick={() => setShowForm(false)} className="px-4 py-1.5 text-sm text-slate-600 border border-slate-200 rounded-md hover:bg-slate-50">取消</button>
-          </div>
-        </div>
-      )}
-
-      {/* 明细弹窗 */}
-      {detailCustomer && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-3xl max-h-[80vh] flex flex-col">
-            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200">
-              <div>
-                <h3 className="text-base font-bold text-slate-900">{detailCustomer}</h3>
-                <div className="text-xs text-slate-400 mt-0.5">
-                  {(() => {
-                    const recs = records.filter(r => r.customer === detailCustomer);
-                    const inc = recs.filter(r => r.type === 'income').reduce((s, r) => s + r.amount, 0);
-                    const exp = recs.filter(r => r.type === 'expense').reduce((s, r) => s + r.amount, 0);
-                    return `应收 ¥${inc.toFixed(2)} · 应付 ¥${exp.toFixed(2)} · 结余 ¥${(inc - exp).toFixed(2)} · 共 ${recs.length} 笔`;
-                  })()}
-                </div>
-              </div>
-              <button onClick={() => setDetailCustomer(null)} className="text-slate-400 hover:text-slate-600 text-xl leading-none">&times;</button>
-            </div>
-            <div className="overflow-y-auto flex-1 p-5">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="bg-slate-50 border-b border-slate-200">
-                    <th className="text-left px-3 py-2 font-medium text-slate-600">日期</th>
-                    <th className="text-center px-3 py-2 font-medium text-slate-600">类型</th>
-                    <th className="text-right px-3 py-2 font-medium text-slate-600">金额</th>
-                    <th className="text-left px-3 py-2 font-medium text-slate-600">关联订单</th>
-                    <th className="text-left px-3 py-2 font-medium text-slate-600">备注</th>
-                    <th className="text-center px-3 py-2 font-medium text-slate-600">操作</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {detailRecords.length === 0 ? (
-                    <tr><td colSpan={6} className="text-center py-8 text-slate-400">无记录</td></tr>
-                  ) : detailRecords.map(r => (
-                    <tr key={r.id} className="border-b border-slate-100">
-                      <td className="px-3 py-2">{r.date}</td>
-                      <td className="px-3 py-2 text-center">
-                        <span className={`inline-block px-2 py-0.5 text-xs rounded-full ${r.type === 'income' ? 'text-emerald-600 bg-emerald-50' : 'text-red-600 bg-red-50'}`}>
-                          {r.type === 'income' ? '收入' : '支出'}
-                        </span>
-                      </td>
-                      <td className={`px-3 py-2 text-right font-mono font-medium ${r.type === 'income' ? 'text-emerald-600' : 'text-red-600'}`}>
-                        {r.type === 'income' ? '+' : '-'}{r.amount.toFixed(2)}
-                      </td>
-                      <td className="px-3 py-2 text-xs text-slate-500">{r.relatedOrderNo || '-'}</td>
-                      <td className="px-3 py-2 text-xs text-slate-500">{r.remark || '-'}</td>
-                      <td className="px-3 py-2 text-center">
-                        <button onClick={() => { openEdit(r); setDetailCustomer(null); }} className="text-amber-600 hover:text-amber-800 text-xs mr-2">编辑</button>
-                        <button onClick={() => {
-                          if (confirm('确定删除此记录吗？')) { customerAccountStore.remove(r.id); load(); }
-                        }} className="text-red-500 hover:text-red-700 text-xs">删除</button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="px-5 py-3 border-t border-slate-200 flex justify-end">
-              <button onClick={() => { setDetailCustomer(null); openNew(detailCustomer); }} className="px-3 py-1.5 text-sm text-blue-600 border border-blue-200 rounded-md hover:bg-blue-50">为此客户新增记录</button>
-            </div>
-          </div>
-        </div>
-      )}
+      <div className="mt-3 text-xs text-slate-400">
+        按{entityLabel}汇总 {entitySummary.length} 项 · 明细可展开 · {timeLabel}
+      </div>
     </div>
   );
 }
