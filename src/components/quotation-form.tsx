@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
-  quotationStore, productStore, previewQuotationNo,
+  quotationStore, productStore, deliveryCustomerStore, previewQuotationNo,
   type Quotation, type QuotationItem,
 } from "@/lib/store";
 import { purchasingCompanies, surfaceTreatments } from "@/lib/seed-data";
@@ -64,6 +64,17 @@ export default function QuotationForm({ quotation }: { quotation?: Quotation }) 
   const [terms, setTerms] = useState<string[]>(editing && quotation.terms.length > 0 ? [...quotation.terms] : [...defaultTerms]);
 
   const products = productStore.getAll();
+  const customers = deliveryCustomerStore.getAll();
+
+  const handleCustomerSelect = (name: string) => {
+    setCustomerName(name);
+    const c = customers.find(x => x.name === name);
+    if (c) {
+      setCustomerContact(c.contact || "");
+      setCustomerPhone(c.phone || "");
+      setCustomerAddress(c.address || "");
+    }
+  };
 
   const handleSupplierCompanyChange = (c: string) => {
     setSupplierCompany(c);
@@ -166,7 +177,10 @@ export default function QuotationForm({ quotation }: { quotation?: Quotation }) 
           <div>
             <h3 className="text-xs font-medium text-slate-500 mb-2">客户</h3>
             <div className="space-y-3">
-              <input type="text" value={customerName} onChange={(e) => setCustomerName(e.target.value)} placeholder="客户名称 *" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" />
+              <input list="customer-list" type="text" value={customerName} onChange={(e) => handleCustomerSelect(e.target.value)} placeholder="客户名称 *（选择或输入）" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" />
+              <datalist id="customer-list">
+                {customers.map(c => <option key={c.id} value={c.name} />)}
+              </datalist>
               <input type="text" value={customerContact} onChange={(e) => setCustomerContact(e.target.value)} placeholder="联系人" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" />
               <input type="text" value={customerPhone} onChange={(e) => setCustomerPhone(e.target.value)} placeholder="电话" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" />
               <input type="text" value={customerAddress} onChange={(e) => setCustomerAddress(e.target.value)} placeholder="地址" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" />
