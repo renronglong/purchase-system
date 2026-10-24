@@ -177,10 +177,11 @@ export default function QuotationForm({ quotation }: { quotation?: Quotation }) 
           <div>
             <h3 className="text-xs font-medium text-slate-500 mb-2">客户</h3>
             <div className="space-y-3">
-              <input list="customer-list" type="text" value={customerName} onChange={(e) => handleCustomerSelect(e.target.value)} placeholder="客户名称 *（选择或输入）" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" />
-              <datalist id="customer-list">
-                {customers.map(c => <option key={c.id} value={c.name} />)}
-              </datalist>
+              <select value={customerName} onChange={(e) => handleCustomerSelect(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md">
+                <option value="">请选择客户名称 *</option>
+                {customers.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
+              </select>
+              <span className="block text-xs text-slate-400 -mt-2">选客户自动带出联系人/电话/地址；客户列表来自「客户管理」</span>
               <input type="text" value={customerContact} onChange={(e) => setCustomerContact(e.target.value)} placeholder="联系人" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" />
               <input type="text" value={customerPhone} onChange={(e) => setCustomerPhone(e.target.value)} placeholder="电话" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" />
               <input type="text" value={customerAddress} onChange={(e) => setCustomerAddress(e.target.value)} placeholder="地址" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" />
