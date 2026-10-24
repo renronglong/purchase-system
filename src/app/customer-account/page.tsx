@@ -335,7 +335,11 @@ export default function CustomerSummaryPage() {
                 <tbody>
                   {allProducts.length === 0 ? (
                     <tr><td colSpan={3} className="text-center py-6 text-slate-400">暂无产品</td></tr>
-                  ) : allProducts.filter(p => !productSearch || p.toLowerCase().includes(productSearch.toLowerCase())).map((p) => {
+                  ) : allProducts.filter(p => {
+                    if (!productSearch) return true;
+                    const kw = productSearch.toLowerCase();
+                    return p.toLowerCase().includes(kw) || (productCodeMap.get(p) || "").toLowerCase().includes(kw);
+                  }).map((p) => {
                     const isSel = selectedProducts.includes(p);
                     return (
                       <tr key={p} onClick={() => toggleSelect(selectedProducts, setSelectedProducts, p)}
