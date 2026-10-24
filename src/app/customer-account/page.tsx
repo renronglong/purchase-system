@@ -62,6 +62,21 @@ export default function CustomerSummaryPage() {
     return Array.from(set).sort((a, b) => a.localeCompare(b));
   }, [notes, orders]);
 
+  // 产品→编号 映射（送货单明细 materialCode / 采购单明细 productCode，取第一个非空）
+  const productCodeMap = useMemo(() => {
+    const m = new Map<string, string>();
+    const set = (pk: string, code: string | undefined) => {
+      if (code && !m.get(pk)) m.set(pk, code);
+    };
+    notes.forEach(n => n.items.forEach(it => {
+      set(`${it.productName}${it.spec ? " " + it.spec : ""}`, it.materialCode || it.productCode);
+    }));
+    orders.forEach(o => o.items.forEach(it => {
+      set(`${it.productName}${it.spec ? " " + it.spec : ""}`, it.productCode);
+    }));
+    return m;
+  }, [notes, orders]);
+
   // 时间筛选
   const inRange = (date: string): boolean => {
     if (!date) return false;
@@ -313,14 +328,14 @@ export default function CustomerSummaryPage() {
                         title="全选/取消全选产品"
                       />
                     </th>
-                    <th className="text-center px-2 py-2 w-10 font-medium text-slate-600">序号</th>
+                    <th className="text-center px-2 py-2 w-24 font-medium text-slate-600">产品编号</th>
                     <th className="text-left px-4 py-2 font-medium text-slate-600">产品名称 / 规格</th>
                   </tr>
                 </thead>
                 <tbody>
                   {allProducts.length === 0 ? (
                     <tr><td colSpan={3} className="text-center py-6 text-slate-400">暂无产品</td></tr>
-                  ) : allProducts.filter(p => !productSearch || p.toLowerCase().includes(productSearch.toLowerCase())).map((p, idx) => {
+                  ) : allProducts.filter(p => !productSearch || p.toLowerCase().includes(productSearch.toLowerCase())).map((p) => {
                     const isSel = selectedProducts.includes(p);
                     return (
                       <tr key={p} onClick={() => toggleSelect(selectedProducts, setSelectedProducts, p)}
@@ -334,7 +349,7 @@ export default function CustomerSummaryPage() {
                             className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
                           />
                         </td>
-                        <td className="text-center px-2 py-2.5 text-xs text-slate-400">{idx + 1}</td>
+                        <td className="text-center px-2 py-2.5 text-xs text-slate-500 font-mono">{productCodeMap.get(p) || "—"}</td>
                         <td className="px-4 py-2.5 truncate">{p}</td>
                       </tr>
                     );
