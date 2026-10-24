@@ -252,13 +252,14 @@ export default function CustomerSummaryPage() {
                         title={`全选/取消全选${entityLabel}`}
                       />
                     </th>
+                    <th className="text-center px-2 py-2 w-10 font-medium text-slate-600">序号</th>
                     <th className="text-left px-4 py-2 font-medium text-slate-600">{entityLabel}名称</th>
                   </tr>
                 </thead>
                 <tbody>
                   {allEntities.length === 0 ? (
-                    <tr><td colSpan={2} className="text-center py-6 text-slate-400">暂无{entityLabel}</td></tr>
-                  ) : allEntities.filter(c => !entitySearch || c.toLowerCase().includes(entitySearch.toLowerCase())).map(c => {
+                    <tr><td colSpan={3} className="text-center py-6 text-slate-400">暂无{entityLabel}</td></tr>
+                  ) : allEntities.filter(c => !entitySearch || c.toLowerCase().includes(entitySearch.toLowerCase())).map((c, idx) => {
                     const isSel = selectedEntities.includes(c);
                     return (
                       <tr key={c} onClick={() => toggleSelect(selectedEntities, setSelectedEntities, c)}
@@ -272,6 +273,7 @@ export default function CustomerSummaryPage() {
                             className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
                           />
                         </td>
+                        <td className="text-center px-2 py-2.5 text-xs text-slate-400">{idx + 1}</td>
                         <td className="px-4 py-2.5 truncate">{c}</td>
                       </tr>
                     );
@@ -311,13 +313,14 @@ export default function CustomerSummaryPage() {
                         title="全选/取消全选产品"
                       />
                     </th>
+                    <th className="text-center px-2 py-2 w-10 font-medium text-slate-600">序号</th>
                     <th className="text-left px-4 py-2 font-medium text-slate-600">产品名称 / 规格</th>
                   </tr>
                 </thead>
                 <tbody>
                   {allProducts.length === 0 ? (
-                    <tr><td colSpan={2} className="text-center py-6 text-slate-400">暂无产品</td></tr>
-                  ) : allProducts.filter(p => !productSearch || p.toLowerCase().includes(productSearch.toLowerCase())).map(p => {
+                    <tr><td colSpan={3} className="text-center py-6 text-slate-400">暂无产品</td></tr>
+                  ) : allProducts.filter(p => !productSearch || p.toLowerCase().includes(productSearch.toLowerCase())).map((p, idx) => {
                     const isSel = selectedProducts.includes(p);
                     return (
                       <tr key={p} onClick={() => toggleSelect(selectedProducts, setSelectedProducts, p)}
@@ -331,6 +334,7 @@ export default function CustomerSummaryPage() {
                             className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
                           />
                         </td>
+                        <td className="text-center px-2 py-2.5 text-xs text-slate-400">{idx + 1}</td>
                         <td className="px-4 py-2.5 truncate">{p}</td>
                       </tr>
                     );
