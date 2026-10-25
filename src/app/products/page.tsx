@@ -5,8 +5,10 @@ import { productStore, supplierStore, type Product } from "@/lib/store";
 import AddDialog from "@/components/add-dialog";
 
 const BOM_KEY = "aluminum_product_bom";
-// 产品编号 -> 子配件 id 列表
-type ProductBomMap = Record<string, string[]>;
+// 成品的一条组件明细：子配件产品 + 自动生成的组件编号/名称（可编辑）
+type BomItem = { productId: string; compCode: string; compName: string };
+// 产品编号 -> 组件明细列表
+type ProductBomMap = Record<string, BomItem[]>;
 
 function loadProductBom(): ProductBomMap {
   if (typeof window === "undefined") return {};
@@ -34,7 +36,8 @@ export default function ProductsPage() {
 
   // BOM（组件）配置，作为新增/编辑弹窗的第三个 tab
   const [productBom, setProductBom] = useState<ProductBomMap>({});
-  const [bomSubs, setBomSubs] = useState<string[]>([]);
+  const [bomItems, setBomItems] = useState<BomItem[]>([]);
+  const [bomPickerOpen, setBomPickerOpen] = useState(false);
   const [bomSearch, setBomSearch] = useState("");
 
   useEffect(() => { setProductBom(loadProductBom()); }, []);
@@ -43,12 +46,31 @@ export default function ProductsPage() {
   // 切换产品时同步该产品的组件
   useEffect(() => {
     setBomSearch("");
-    setBomSubs(formData.id ? (productBom[formData.id] || []) : []);
+    setBomItems(formData.id ? (productBom[formData.id] || []) : []);
   }, [formData.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // 自动生成下一个组件编号（按行序）与默认名称
+  const addBomItem = (p: Product) => {
+    const n = bomItems.length + 1;
+    const code = "子件" + String(n).padStart(2, "0");
+    setBomItems(prev => [...prev, { productId: p.id, compCode: code, compName: p.name || p.spec }]);
+  };
+
+  const updateBomItem = (idx: number, field: "compCode" | "compName", value: string) => {
+    setBomItems(prev => prev.map((it, i) => (i === idx ? { ...it, [field]: value } : it)));
+  };
+
+  const removeBomItem = (idx: number) => {
+    setBomItems(prev => {
+      const next = prev.filter((_, i) => i !== idx);
+      // 重新按行序生成编号，保持一致
+      return next.map((it, i) => ({ ...it, compCode: "子件" + String(i + 1).padStart(2, "0") }));
+    });
+  };
 
   const saveBom = () => {
     if (formData.id) {
-      setProductBom(prev => ({ ...prev, [formData.id]: bomSubs }));
+      setProductBom(prev => ({ ...prev, [formData.id]: bomItems }));
     }
   };
 
@@ -213,85 +235,105 @@ export default function ProductsPage() {
     </>
   );
 
-  // 组件（BOM）tab 内容
+  // 组件（BOM）tab 内容：像送货单明细一样逐行添加子配件产品
   const bomTabContent = (
     <div>
-      <div className="flex items-center gap-2 mb-3">
-        <input
-          value={bomSearch}
-          onChange={(e) => setBomSearch(e.target.value)}
-          placeholder="搜索产品（编号/名称/规格）点击加入为该产品组件…"
-          className="flex-1 border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-        />
-        <span className="text-xs text-slate-400">已选 {bomSubs.length} 个组件</span>
-      </div>
-
-      <div className="max-h-44 overflow-y-auto border border-slate-200 rounded-lg mb-4">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="bg-slate-50 border-b border-slate-200">
-              <th className="text-left px-3 py-1.5 font-medium text-slate-600">编号</th>
-              <th className="text-left px-3 py-1.5 font-medium text-slate-600">名称</th>
-              <th className="text-left px-3 py-1.5 font-medium text-slate-600">规格</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.filter(p => {
-              const q = bomSearch.toLowerCase();
-              return !q || p.id.toLowerCase().includes(q) || p.name.toLowerCase().includes(q) || p.spec.toLowerCase().includes(q);
-            }).slice(0, 50).map(p => {
-              const on = bomSubs.includes(p.id);
-              return (
-                <tr key={p.id} onClick={() => setBomSubs(prev => on ? prev.filter(x => x !== p.id) : [...prev, p.id])}
-                  className={`border-b border-slate-100 cursor-pointer hover:bg-blue-50/40 ${on ? "bg-blue-50/40" : ""}`}>
-                  <td className="px-3 py-1.5 font-mono text-xs text-slate-500">{p.id}</td>
-                  <td className="px-3 py-1.5">{p.name}</td>
-                  <td className="px-3 py-1.5 text-slate-500">{p.spec}</td>
-                </tr>
-              );
-            })}
-            {products.filter(p => !bomSearch || p.id.toLowerCase().includes(bomSearch.toLowerCase()) || p.name.toLowerCase().includes(bomSearch.toLowerCase()) || p.spec.toLowerCase().includes(bomSearch.toLowerCase())).length === 0 && (
-              <tr><td colSpan={3} className="text-center py-6 text-slate-400">无匹配产品</td></tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      <table className="w-full text-sm">
+      <table className="w-full text-sm mb-3">
         <thead>
           <tr className="bg-slate-50 border-b border-slate-200 text-slate-600">
             <th className="text-center px-3 py-2 w-12 font-medium">序号</th>
-            <th className="text-left px-3 py-2 font-medium">编号</th>
-            <th className="text-left px-3 py-2 font-medium">名称</th>
+            <th className="text-left px-3 py-2 font-medium">组件编号</th>
+            <th className="text-left px-3 py-2 font-medium">组件名称</th>
+            <th className="text-left px-3 py-2 font-medium">对应产品</th>
             <th className="text-left px-3 py-2 font-medium">规格</th>
             <th className="text-center px-3 py-2 w-10 font-medium"></th>
           </tr>
         </thead>
         <tbody>
-          {bomSubs.map((id, idx) => {
-            const p = products.find(x => x.id === id);
-            return p ? (
-              <tr key={id} className="border-b border-slate-100">
+          {bomItems.map((it, idx) => {
+            const p = products.find(x => x.id === it.productId);
+            return (
+              <tr key={idx} className="border-b border-slate-100">
                 <td className="text-center px-3 py-2 text-slate-400">{idx + 1}</td>
-                <td className="px-3 py-2 font-mono text-xs text-slate-600">{p.id}</td>
-                <td className="px-3 py-2">{p.name}</td>
-                <td className="px-3 py-2 text-slate-500">{p.spec}</td>
+                <td className="px-1 py-1.5">
+                  <input value={it.compCode} onChange={(e) => updateBomItem(idx, "compCode", e.target.value)}
+                    className="w-full border border-slate-200 rounded px-2 py-1 text-sm text-slate-700 focus:border-blue-500 focus:outline-none" />
+                </td>
+                <td className="px-1 py-1.5">
+                  <input value={it.compName} onChange={(e) => updateBomItem(idx, "compName", e.target.value)}
+                    className="w-full border border-slate-200 rounded px-2 py-1 text-sm text-slate-700 focus:border-blue-500 focus:outline-none" />
+                </td>
+                <td className="px-3 py-2 font-mono text-xs text-slate-600">{p ? p.id : it.productId}</td>
+                <td className="px-3 py-2 text-slate-500">{p?.spec || "-"}</td>
                 <td className="px-3 py-2 text-center">
-                  <button onClick={() => setBomSubs(prev => prev.filter(x => x !== id))} className="text-red-400 hover:text-red-600">✕</button>
+                  <button onClick={() => removeBomItem(idx)} className="text-red-400 hover:text-red-600">✕</button>
                 </td>
               </tr>
-            ) : null;
+            );
           })}
-          {bomSubs.length === 0 && (
-            <tr><td colSpan={5} className="text-center py-8 text-slate-400">尚未选择组件，请在上方点击产品或从产品信息中添加</td></tr>
+          {bomItems.length === 0 && (
+            <tr><td colSpan={6} className="text-center py-8 text-slate-400">尚未添加组件，点击下方「添加组件」从产品库选择子配件</td></tr>
           )}
         </tbody>
       </table>
 
-      <div className="flex items-center gap-2 mt-3">
-        <button onClick={saveBom} className="px-4 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700">保存组件</button>
-        <span className="text-xs text-slate-400">组件将随产品编号保存</span>
+      <div className="flex items-center gap-2 mb-2">
+        <button onClick={() => setBomPickerOpen(true)}
+          className="inline-flex items-center gap-1 px-3 py-1.5 text-sm bg-slate-100 text-slate-700 rounded-md hover:bg-slate-200 border border-slate-300">
+          <span className="text-base leading-none">＋</span> 添加组件
+        </button>
+        <button onClick={saveBom} className="px-3 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700">保存组件</button>
+        <span className="text-xs text-slate-400">组件将随产品编号保存，用于订单制作关联库存与采购</span>
       </div>
+
+      {/* 产品选择弹层：从产品库（含手工录入）挑选子配件 */}
+      {bomPickerOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setBomPickerOpen(false)}>
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-xl max-h-[80vh] flex flex-col" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200">
+              <span className="text-sm font-medium text-slate-800">选择子配件产品（自动生成组件编号/名称，可改）</span>
+              <button onClick={() => setBomPickerOpen(false)} className="text-slate-400 hover:text-slate-600">✕</button>
+            </div>
+            <div className="p-3 border-b border-slate-100">
+              <input value={bomSearch} onChange={(e) => setBomSearch(e.target.value)}
+                placeholder="搜索产品编号、名称、规格…"
+                className="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/50" />
+            </div>
+            <div className="overflow-y-auto flex-1">
+              <table className="w-full text-sm">
+                <thead className="sticky top-0 bg-slate-50">
+                  <tr className="border-b border-slate-200 text-slate-600">
+                    <th className="text-left px-3 py-1.5 font-medium">产品编号</th>
+                    <th className="text-left px-3 py-1.5 font-medium">名称</th>
+                    <th className="text-left px-3 py-1.5 font-medium">规格</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {products.filter(p => {
+                    const q = bomSearch.toLowerCase();
+                    return !bomItems.some(x => x.productId === p.id) && (!q || p.id.toLowerCase().includes(q) || p.name.toLowerCase().includes(q) || p.spec.toLowerCase().includes(q));
+                  }).map(p => (
+                    <tr key={p.id} onClick={() => { addBomItem(p); }}
+                      className="border-b border-slate-100 cursor-pointer hover:bg-blue-50/40">
+                      <td className="px-3 py-1.5 font-mono text-xs text-slate-600">{p.id}</td>
+                      <td className="px-3 py-1.5">{p.name}</td>
+                      <td className="px-3 py-1.5 text-slate-500">{p.spec}</td>
+                    </tr>
+                  ))}
+                  {products.filter(p => {
+                    const q = bomSearch.toLowerCase();
+                    return !bomItems.some(x => x.productId === p.id) && (!q || p.id.toLowerCase().includes(q) || p.name.toLowerCase().includes(q) || p.spec.toLowerCase().includes(q));
+                  }).length === 0 && (
+                    <tr><td colSpan={3} className="text-center py-8 text-slate-400">
+                      {products.length === 0 ? "产品库暂无产品" : "没有可添加的子配件（当前均已加入或搜索无匹配）"}
+                    </td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 
