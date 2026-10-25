@@ -101,15 +101,29 @@ export default function ProductsPage() {
   const bomTotalAmount = bomItems.reduce((s, i) => s + i.amount, 0);
 
   const saveBom = () => {
-    if (formData.id) {
-      const valid = bomItems.filter(i => i.materialCode || i.productName);
-      setProductBom(prev => ({ ...prev, [formData.id]: valid }));
-      // 组件单价 = 合计金额，保存到产品（成品）单价里
-      const total = valid.reduce((s, i) => s + i.amount, 0);
-      const next = { ...formData, unitPrice: total };
-      setFormData(next);
-      if (editingProduct) productStore.update(editingProduct.id, next); // 已有产品：立即落库
+    if (!formData.name || !formData.id) {
+      alert("请先填写产品编号和名称");
+      return;
     }
+    const valid = bomItems.filter(i => i.materialCode || i.productName);
+    setProductBom(prev => ({ ...prev, [formData.id]: valid }));
+    // 组件单价 = 合计金额，保存到产品（成品）单价里，并完成产品整体保存
+    const total = valid.reduce((s, i) => s + i.amount, 0);
+    const next = { ...formData, unitPrice: total };
+    saveProductAndClose(next);
+  };
+
+  // 统一的产品保存：落库 + 关闭弹窗 + 刷新列表
+  const saveProductAndClose = (data: Product) => {
+    if (isAdding) {
+      productStore.add(data);
+    } else if (editingProduct) {
+      productStore.update(editingProduct.id, data);
+    }
+    setDialogOpen(false);
+    setIsAdding(false);
+    setEditingProduct(null);
+    loadProducts();
   };
 
   const loadProducts = useCallback(() => {
@@ -147,15 +161,14 @@ export default function ProductsPage() {
       alert("请填写产品编号和名称");
       return;
     }
-    if (isAdding) {
-      productStore.add(formData);
-    } else if (editingProduct) {
-      productStore.update(editingProduct.id, formData);
+    // 若已配置组件 BOM，则单价 = 组件合计金额
+    const bomItemsFor = productBom[formData.id] || [];
+    if (bomItemsFor.length > 0) {
+      const total = bomItemsFor.reduce((s, i) => s + i.amount, 0);
+      saveProductAndClose({ ...formData, unitPrice: total });
+      return;
     }
-    setDialogOpen(false);
-    setIsAdding(false);
-    setEditingProduct(null);
-    loadProducts();
+    saveProductAndClose(formData);
   };
 
   const closeDialog = () => {
