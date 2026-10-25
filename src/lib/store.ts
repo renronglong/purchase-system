@@ -715,15 +715,17 @@ function initializeData(): void {
       const oldSales = localStorage.getItem(KEYS.SALES_ORDERS);
       if (oldSales) userStorage.setItem(KEYS.SALES_ORDERS, oldSales);
     } else {
-      // 全新用户：填充原始种子数据
-      userStorage.setItem(KEYS.PRODUCTS, JSON.stringify([...seedProducts, ...plateProducts]));
-      userStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(seedSuppliers));
-      userStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify(seedPurchaseOrders || []));
+      // 全新用户：基础数据留空，由各用户自行录入。
+      // 系统按用户隔离、不预填、不共享；如需要种子数据，
+      // 可通过界面上的「恢复原始数据」按钮手动恢复（见 restoreSeedData）。
+      userStorage.setItem(KEYS.PRODUCTS, JSON.stringify([]));
+      userStorage.setItem(KEYS.SUPPLIERS, JSON.stringify([]));
+      userStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([]));
       userStorage.setItem(KEYS.OUTSOURCING_ORDERS, JSON.stringify([]));
-      userStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify(deliveryCustomers));
-      userStorage.setItem(KEYS.DELIVERY_COMPANIES, JSON.stringify(deliveryCompanies));
-      userStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify(deliveryProducts));
-      userStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify(deliveryNotes));
+      userStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify([]));
+      userStorage.setItem(KEYS.DELIVERY_COMPANIES, JSON.stringify([]));
+      userStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify([]));
+      userStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify([]));
       userStorage.setItem(KEYS.RECONCILIATION_ORDERS, JSON.stringify([]));
       userStorage.setItem(KEYS.SALES_ORDERS, JSON.stringify([]));
     }
