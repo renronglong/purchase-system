@@ -14,7 +14,17 @@ function loadProductBom(): ProductBomMap {
   if (typeof window === "undefined") return {};
   try {
     const raw = window.localStorage.getItem(BOM_KEY);
-    return raw ? (JSON.parse(raw) as ProductBomMap) : {};
+    if (!raw) return {};
+    const parsed = JSON.parse(raw) as Record<string, unknown>;
+    // 只保留符合「BomItem 对象数组」格式的数据；旧数据（如 string[]）一律清零
+    const clean: ProductBomMap = {};
+    for (const key of Object.keys(parsed)) {
+      const v = parsed[key];
+      if (Array.isArray(v) && v.every(x => x && typeof x === "object" && typeof (x as BomItem).productId === "string")) {
+        clean[key] = v as BomItem[];
+      }
+    }
+    return clean;
   } catch { return {}; }
 }
 
