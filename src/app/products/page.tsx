@@ -72,11 +72,12 @@ export default function ProductsPage() {
   useEffect(() => { if (typeof window !== "undefined") window.localStorage.setItem(BOM_KEY, JSON.stringify(productBom)); }, [productBom]);
 
   // 切换产品时同步该产品的组件
+  // 打开成品编辑弹窗时加载该成品的组件 BOM
   useEffect(() => {
-    setBomItems(formData.id ? (productBom[formData.id] || []) : [emptyBomItem()]);
-  }, [formData.id]); // eslint-disable-line react-hooks/exhaustive-deps
+    setBomItems(deliveryForm ? (productBom[deliveryForm.id] || [emptyBomItem()]) : []);
+  }, [deliveryForm]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // 更新某一行的字段；输入物料编号时自动从成品（送货产品）带出名称/规格
+  // 更新某一行的字段；输入物料编号时自动从成品（送货产品）带出名称/规格/单价
   const updateBomItem = (idx: number, field: keyof BomItem, value: string | number) => {
     setBomItems(prev => {
       const next = prev.map(it => ({ ...it }));
@@ -92,9 +93,10 @@ export default function ProductsPage() {
         const prod = deliveryProducts.find(p => p.spec === value);
         if (prod) { item.productName = prod.name; }
       }
-      if (field === "qty" || field === "unitPrice") {
-        item.amount = Math.round(item.qty * item.unitPrice * 100) / 100;
-      }
+      // 任何字段变化后统一按 用量 × 单价 重算金额，避免金额滞留为 0
+      const q = Number(item.qty) || 0;
+      const p = Number(item.unitPrice) || 0;
+      item.amount = Math.round(q * p * 100) / 100;
       return next;
     });
   };
@@ -103,19 +105,6 @@ export default function ProductsPage() {
   const removeBomItem = (idx: number) => { if (bomItems.length <= 1) return; setBomItems(prev => prev.filter((_, i) => i !== idx)); };
 
   const bomTotalAmount = bomItems.reduce((s, i) => s + i.amount, 0);
-
-  const saveBom = () => {
-    if (!formData.name || !formData.id) {
-      alert("请先填写产品编号和名称");
-      return;
-    }
-    const valid = bomItems.filter(i => i.materialCode || i.productName);
-    setProductBom(prev => ({ ...prev, [formData.id]: valid }));
-    // 组件单价 = 合计金额，保存到产品（成品）单价里，并完成产品整体保存
-    const total = valid.reduce((s, i) => s + i.amount, 0);
-    const next = { ...formData, unitPrice: total };
-    saveProductAndClose(next);
-  };
 
   // 统一的产品保存：落库 + 关闭弹窗 + 刷新列表
   const saveProductAndClose = (data: Product) => {
@@ -165,13 +154,6 @@ export default function ProductsPage() {
       alert("请填写产品编号和名称");
       return;
     }
-    // 若已配置组件 BOM，则单价 = 组件合计金额
-    const bomItemsFor = productBom[formData.id] || [];
-    if (bomItemsFor.length > 0) {
-      const total = bomItemsFor.reduce((s, i) => s + i.amount, 0);
-      saveProductAndClose({ ...formData, unitPrice: total });
-      return;
-    }
     saveProductAndClose(formData);
   };
 
@@ -203,9 +185,18 @@ export default function ProductsPage() {
   const handleSaveDelivery = () => {
     if (!deliveryForm) return;
     if (!deliveryForm.name) { alert("请填写成品名称"); return; }
-    deliveryProductStore.update(deliveryForm.id, deliveryForm);
+    // 保存组件 BOM：过滤有效行（有物料或名称）
+    const valid = bomItems.filter(i => i.materialCode || i.productName);
+    if (deliveryForm.id) {
+      setProductBom(prev => ({ ...prev, [deliveryForm.id]: valid }));
+    }
+    // 组件单价 = 合计金额，写入成品单价
+    const total = valid.reduce((s, i) => s + (i.amount || 0), 0);
+    const next = { ...deliveryForm, unitPrice: total };
+    deliveryProductStore.update(next.id, next);
     setDeliveryDialogOpen(false);
     setDeliveryForm(null);
+    setBomItems([]);
     loadProducts();
   };
 
@@ -395,7 +386,6 @@ export default function ProductsPage() {
         <button onClick={() => setHideBomPrices(!hideBomPrices)} className={`px-3 py-1.5 text-xs rounded-md border ${hideBomPrices ? "bg-amber-600 text-white border-amber-600" : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"}`}>
           {hideBomPrices ? "显示价格" : "隐藏价格"}
         </button>
-        <button onClick={saveBom} className="px-4 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700">保存</button>
       </div>
     </div>
   );
@@ -580,6 +570,11 @@ export default function ProductsPage() {
                 <input type="text" value={deliveryForm.customer || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, customer: e.target.value }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
               </div>
             </div>
+            {/* 组件 BOM 明细：同一页面直接拼表，保存成品时单价 = 合计金额 */}
+            <div className="border-t border-slate-100 px-6 py-4">
+              <div className="text-sm font-semibold text-slate-700 mb-2">组件明细</div>
+              <div className="overflow-x-auto">{bomTabContent}</div>
+            </div>
             <div className="px-6 py-4 border-t border-slate-100 flex justify-end gap-2">
               <button onClick={() => setDeliveryDialogOpen(false)} className="px-4 py-1.5 text-sm text-slate-600 border border-slate-200 rounded-md hover:bg-slate-50">取消</button>
               <button onClick={handleSaveDelivery} className="px-4 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700">保存</button>
@@ -594,7 +589,6 @@ export default function ProductsPage() {
           kind="product"
           onClose={closeDialog}
           onImported={loadProducts}
-          extraTab={{ key: "bom", label: "组件", content: bomTabContent }}
         >
           {form}
         </AddDialog>
