@@ -1,4 +1,4 @@
-import { userStorage } from "./user-storage";
+﻿import { userStorage } from "./user-storage";
 import { authStore } from "./auth-store";
 import { seedProducts, seedSuppliers, type Product, type Supplier } from "./seed-data";
 import {
@@ -716,7 +716,7 @@ function initializeData(): void {
       if (oldSales) userStorage.setItem(KEYS.SALES_ORDERS, oldSales);
     } else {
       // 全新用户：填充原始种子数据
-      userStorage.setItem(KEYS.PRODUCTS, JSON.stringify(seedProducts));
+      userStorage.setItem(KEYS.PRODUCTS, JSON.stringify([...seedProducts, ...plateProducts]));
       userStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(seedSuppliers));
       userStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify(seedPurchaseOrders || []));
       userStorage.setItem(KEYS.OUTSOURCING_ORDERS, JSON.stringify([]));
@@ -793,25 +793,20 @@ export function previewQuotationNo(): string {
 // 产品管理
 export const productStore = {
   getAll(): Product[] {
-    const list = getAll<Product>(KEYS.PRODUCTS);
-    // 首次访问：把板材种子数据惰性合并进产品库（按 id 去重，避免重复写入）
-    if (plateProducts.length > 0 && !list.some(p => (p.productType || "profile") === "plate")) {
-      const existing = new Set(list.map(p => p.id));
-      const missing = plateProducts.filter(p => p.id && !existing.has(p.id));
-      if (missing.length > 0) {
-        const merged = [...list, ...missing];
-        saveAll(KEYS.PRODUCTS, merged);
-        return merged;
-      }
-    }
-    return list;
+    // 板材种子数据已在第一启动时一次性写入（见 initializeData），此处不再惰性回填，
+    // 以允许用户自由增删板材而不被自动恢复。
+    return getAll<Product>(KEYS.PRODUCTS);
   },
   getById(id: string): Product | undefined {
     return this.getAll().find(p => p.id === id);
   },
   add(product: Omit<Product, "id"> & { id?: string }): Product {
     const products = this.getAll();
-    const newProduct: Product = { ...product, id: (product.id && product.id.trim()) ? product.id.trim() : generateId() };
+    const id = (product.id && product.id.trim()) ? product.id.trim() : generateId();
+    // 编号查重：已存在相同编号时不重复写入，直接返回已有记录，避免产生两条同编号数据
+    const existing = products.find(p => p.id === id);
+    if (existing) return existing;
+    const newProduct: Product = { ...product, id };
     products.push(newProduct);
     saveAll(KEYS.PRODUCTS, products);
     return newProduct;
@@ -1008,8 +1003,8 @@ export function restoreSeedData(): void {
   userStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify(deliveryProducts));
   userStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify(deliveryNotes));
   
-  // 保存产品数据
-  userStorage.setItem(KEYS.PRODUCTS, JSON.stringify(seedProducts));
+  // 保存产品数据（含板材种子）
+  userStorage.setItem(KEYS.PRODUCTS, JSON.stringify([...seedProducts, ...plateProducts]));
   
   // 保存供应商数据
   userStorage.setItem(KEYS.SUPPLIERS, JSON.stringify(seedSuppliers));
