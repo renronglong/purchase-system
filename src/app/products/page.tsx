@@ -1,43 +1,11 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { productStore, supplierStore, deliveryProductStore, type Product, type DeliveryProduct } from "@/lib/store";
+import { productStore, supplierStore, deliveryProductStore, componentStore, type Product, type DeliveryProduct, type Component, type ComponentItem } from "@/lib/store";
 import AddDialog from "@/components/add-dialog";
 
-const BOM_KEY = "aluminum_product_bom";
-// 成品的一条组件明细：完全照送货单明细表结构
-type BomItem = {
-  id: string;          // 行唯一 id
-  materialCode: string; // 物料编号（关联产品库）
-  productName: string;  // 产品名称
-  spec: string;         // 规格
-  surface: string;      // 表面处理
-  unit: string;         // 单位
-  qty: number;          // 数量
-  unitPrice: number;    // 单价
-  amount: number;       // 金额
-  remark: string;       // 备注
-};
-// 产品编号 -> 组件明细列表
-type ProductBomMap = Record<string, BomItem[]>;
-
-function loadProductBom(): ProductBomMap {
-  if (typeof window === "undefined") return {};
-  try {
-    const raw = window.localStorage.getItem(BOM_KEY);
-    if (!raw) return {};
-    const parsed = JSON.parse(raw) as Record<string, unknown>;
-    // 只保留符合「BomItem 对象数组」格式的数据；旧数据（如 string[]）一律清零
-    const clean: ProductBomMap = {};
-    for (const key of Object.keys(parsed)) {
-      const v = parsed[key];
-      if (Array.isArray(v) && v.every(x => x && typeof x === "object" && typeof (x as BomItem).materialCode === "string")) {
-        clean[key] = v as BomItem[];
-      }
-    }
-    return clean;
-  } catch { return {}; }
-}
+// 物料明细行：从物料库挑的多条物料组成一个组件
+type BomItem = ComponentItem;
 
 // 与采购单页一致的材质选项
 const materialOptions = ["普通铝板", "5052", "6063", "1060", "3003"];
@@ -49,7 +17,7 @@ function createEmptyProduct(): Product {
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState("");
-  const [typeFilter, setTypeFilter] = useState<"all" | "profile" | "plate" | "delivery">("all");
+  const [typeFilter, setTypeFilter] = useState<"all" | "profile" | "plate" | "delivery" | "component">("all");
   const [deliveryProducts, setDeliveryProducts] = useState<DeliveryProduct[]>([]);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isAdding, setIsAdding] = useState(false);
@@ -61,24 +29,18 @@ export default function ProductsPage() {
   const [deliveryForm, setDeliveryForm] = useState<DeliveryProduct | null>(null);
   const [isAddingDelivery, setIsAddingDelivery] = useState(false);
 
-  // BOM（组件）配置，作为新增/编辑弹窗的第三个 tab：完全照送货单明细表
-  const [productBom, setProductBom] = useState<ProductBomMap>({});
+  // 组件（独立物料清单）
+  const [components, setComponents] = useState<Component[]>([]);
+  const [componentDialogOpen, setComponentDialogOpen] = useState(false);
+  const [componentForm, setComponentForm] = useState<Component | null>(null);
+  const [isAddingComponent, setIsAddingComponent] = useState(false);
   const [bomItems, setBomItems] = useState<BomItem[]>([]);
   const [hideBomPrices, setHideBomPrices] = useState(false);
 
   const genBomItemId = () => Math.random().toString(36).slice(2, 10);
   const emptyBomItem = (): BomItem => ({ id: genBomItemId(), materialCode: "", productName: "", spec: "", surface: "", unit: "", qty: 0, unitPrice: 0, amount: 0, remark: "" });
 
-  useEffect(() => { setProductBom(loadProductBom()); }, []);
-  useEffect(() => { if (typeof window !== "undefined") window.localStorage.setItem(BOM_KEY, JSON.stringify(productBom)); }, [productBom]);
-
-  // 切换产品时同步该产品的组件
-  // 切换产品时同步该产品的组件 BOM（从成品库挑多条成品）
-  useEffect(() => {
-    setBomItems(formData.id ? (productBom[formData.id] || [emptyBomItem()]) : [emptyBomItem()]);
-  }, [formData.id]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // 更新某一行的字段；输入物料编号时自动从成品（送货产品）带出名称/规格/单价
+  // 更新某一行的字段；输入物料编号时自动从物料库带出名称/规格/单价
   const updateBomItem = (idx: number, field: keyof BomItem, value: string | number) => {
     setBomItems(prev => {
       const next = prev.map(it => ({ ...it }));
@@ -123,6 +85,7 @@ export default function ProductsPage() {
   const loadProducts = useCallback(() => {
     setProducts(productStore.getAll());
     setDeliveryProducts(deliveryProductStore.getAll());
+    setComponents(componentStore.getAll());
   }, []);
 
   useEffect(() => {
@@ -155,11 +118,7 @@ export default function ProductsPage() {
       alert("请填写产品编号和名称");
       return;
     }
-    // 保存组件 BOM（从成品库挑的多条成品）并写入产品单价 = 组件合计金额
-    const valid = bomItems.filter(i => i.materialCode || i.productName);
-    setProductBom(prev => ({ ...prev, [formData.id]: valid }));
-    const total = valid.reduce((s, i) => s + (i.amount || 0), 0);
-    saveProductAndClose({ ...formData, unitPrice: total });
+    saveProductAndClose({ ...formData });
   };
 
   const closeDialog = () => {
@@ -218,6 +177,58 @@ export default function ProductsPage() {
     setIsAddingDelivery(false);
     setBomItems([]);
     loadProducts();
+  };
+
+  // 新增组件：独立的组件编号 + 从物料库挑多条明细组成
+  const openAddComponent = () => {
+    const id = `CMP_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+    setComponentForm({ id, name: "", items: [], unitPrice: 0 });
+    setIsAddingComponent(true);
+    setBomItems([emptyBomItem()]);
+    setComponentDialogOpen(true);
+  };
+
+  const openEditComponent = (c: Component) => {
+    setComponentForm({ ...c, items: c.items || [] });
+    setIsAddingComponent(false);
+    setBomItems((c.items && c.items.length > 0) ? c.items.map(i => ({ ...i })) : [emptyBomItem()]);
+    setComponentDialogOpen(true);
+  };
+
+  const handleSaveComponent = () => {
+    if (!componentForm) return;
+    if (!componentForm.name || !componentForm.id) { alert("请填写组件编号和名称"); return; }
+    const valid = bomItems.filter(i => i.materialCode || i.productName);
+    const total = valid.reduce((s, i) => s + (i.amount || 0), 0);
+    const payload: Component = {
+      ...componentForm,
+      items: valid,
+      unitPrice: Math.round(total * 100) / 100,
+    };
+    let saved: Component | undefined;
+    try {
+      if (isAddingComponent) {
+        saved = componentStore.add(payload);
+      } else {
+        saved = componentStore.update(componentForm.id, payload);
+      }
+    } catch (e) {
+      alert("保存失败：" + (e instanceof Error ? e.message : String(e)));
+      return;
+    }
+    if (!saved) { alert("保存失败：组件记录未找到"); return; }
+    setComponentDialogOpen(false);
+    setComponentForm(null);
+    setIsAddingComponent(false);
+    setBomItems([]);
+    loadProducts();
+  };
+
+  const handleDeleteComponent = (id: string) => {
+    if (confirm("确定要删除此组件吗？")) {
+      componentStore.remove(id);
+      loadProducts();
+    }
   };
 
   const form = (
@@ -406,7 +417,7 @@ export default function ProductsPage() {
         <button onClick={() => setHideBomPrices(!hideBomPrices)} className={`px-3 py-1.5 text-xs rounded-md border ${hideBomPrices ? "bg-amber-600 text-white border-amber-600" : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"}`}>
           {hideBomPrices ? "显示价格" : "隐藏价格"}
         </button>
-        <button onClick={handleSave} className="px-5 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700">保存</button>
+        <button onClick={handleSaveComponent} className="px-5 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700">保存</button>
       </div>
     </div>
   );
@@ -416,13 +427,13 @@ export default function ProductsPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl font-bold text-slate-900">产品库管理</h1>
         <button
-          onClick={typeFilter === "delivery" ? openAddDelivery : openAdd}
+          onClick={typeFilter === "delivery" ? openAddDelivery : typeFilter === "component" ? openAddComponent : openAdd}
           className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
           </svg>
-          {typeFilter === "delivery" ? "新增物料" : "新增产品"}
+          {typeFilter === "delivery" ? "新增物料" : typeFilter === "component" ? "新增组件" : "新增产品"}
         </button>
       </div>
 
@@ -440,6 +451,7 @@ export default function ProductsPage() {
             { key: "profile", label: "型材" },
             { key: "plate", label: "板材" },
             { key: "delivery", label: "物料" },
+            { key: "component", label: "组件" },
           ] as const).map(t => (
             <button
               key={t.key}
@@ -454,7 +466,43 @@ export default function ProductsPage() {
 
       {/* 表格 */}
       <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-        {typeFilter === "delivery" ? (
+        {typeFilter === "component" ? (
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-200">
+                <th className="text-left px-4 py-2.5 font-medium text-slate-600">组件编号</th>
+                <th className="text-left px-4 py-2.5 font-medium text-slate-600">组件名称</th>
+                <th className="text-left px-4 py-2.5 font-medium text-slate-600">组成物料</th>
+                <th className="text-right px-4 py-2.5 font-medium text-slate-600">组件单价</th>
+                <th className="text-center px-4 py-2.5 font-medium text-slate-600">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              {components.length === 0 ? (
+                <tr><td colSpan={5} className="text-center py-12 text-slate-400">暂无组件数据</td></tr>
+              ) : (
+                components.filter(c =>
+                  !search ||
+                  c.id.toLowerCase().includes(search.toLowerCase()) ||
+                  c.name.toLowerCase().includes(search.toLowerCase())
+                ).map((c) => (
+                  <tr key={c.id} className="border-b border-slate-100 hover:bg-slate-50/50">
+                    <td className="px-4 py-2 font-mono text-blue-600">{c.id}</td>
+                    <td className="px-4 py-2">{c.name}</td>
+                    <td className="px-4 py-2">{(c.items || []).length > 0 ? `${(c.items || []).length} 项` : "-"}</td>
+                    <td className="px-4 py-2 text-right font-mono">{c.unitPrice ? c.unitPrice.toFixed(2) : "-"}</td>
+                    <td className="px-4 py-2 text-center">
+                      <div className="flex items-center justify-center gap-3">
+                        <button onClick={() => openEditComponent(c)} className="text-amber-600 hover:text-amber-800 text-xs">编辑</button>
+                        <button onClick={() => handleDeleteComponent(c.id)} className="text-red-500 hover:text-red-700 text-xs">删除</button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        ) : typeFilter === "delivery" ? (
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
@@ -547,7 +595,7 @@ export default function ProductsPage() {
       </div>
 
       <div className="mt-3 text-xs text-slate-400">
-        共 {typeFilter === "delivery" ? deliveryProducts.length : filtered.length} 条{typeFilter === "delivery" ? "成" : "产品"}记录
+        共 {typeFilter === "delivery" ? deliveryProducts.length : typeFilter === "component" ? components.length : filtered.length} 条{typeFilter === "delivery" ? "物料" : typeFilter === "component" ? "组件" : "产品"}记录
       </div>
 
       {deliveryDialogOpen && deliveryForm ? (
@@ -605,10 +653,34 @@ export default function ProductsPage() {
           kind="product"
           onClose={closeDialog}
           onImported={loadProducts}
-          extraTab={{ key: "bom", label: "组件", content: bomTabContent }}
         >
           {form}
         </AddDialog>
+      ) : null}
+
+      {componentDialogOpen && componentForm ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-2" onClick={() => setComponentDialogOpen(false)}>
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-5xl flex flex-col max-h-[90vh]" onClick={(e) => e.stopPropagation()}>
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-slate-800">{isAddingComponent ? "新增组件" : "编辑组件"}</h2>
+              <button onClick={() => setComponentDialogOpen(false)} className="text-slate-400 hover:text-slate-600">✕</button>
+            </div>
+            <div className="px-6 py-4 grid grid-cols-2 gap-4 border-b border-slate-100">
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">组件编号 <span className="text-red-500">*</span></label>
+                <input type="text" value={componentForm.id || ""} onChange={(e) => setComponentForm(prev => ({ ...prev!, id: e.target.value }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" placeholder="如 CMP-001" />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">组件名称 <span className="text-red-500">*</span></label>
+                <input type="text" value={componentForm.name || ""} onChange={(e) => setComponentForm(prev => ({ ...prev!, name: e.target.value }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+              </div>
+            </div>
+            <div className="px-6 py-4 overflow-y-auto flex-1">
+              <div className="mb-3 text-sm font-medium text-slate-700">组成物料明细（从物料库挑选）</div>
+              {bomTabContent}
+            </div>
+          </div>
+        </div>
       ) : null}
     </div>
   );

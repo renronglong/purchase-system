@@ -11,6 +11,29 @@ import { plateProducts } from "./plate-seed-data";
 export type { Product, Supplier };
 export type { DeliveryCustomer, DeliveryProduct, DeliveryNote, DeliveryItem, DeliveryCompany };
 
+// 组件：一个独立的物料清单（从物料库挑多条物料组成），单价 = 各项合计
+export interface ComponentItem {
+  id: string;           // 行唯一 id
+  materialCode: string; // 物料编号（关联物料库）
+  productName: string;  // 物料名称
+  spec: string;         // 规格
+  surface: string;      // 表面处理
+  unit: string;         // 单位
+  qty: number;          // 用量
+  unitPrice: number;    // 单价
+  amount: number;       // 金额
+  remark: string;       // 备注
+}
+export interface Component {
+  id: string;      // 组件编号（用户填写）
+  name: string;    // 组件名称
+  items: ComponentItem[]; // 组成明细
+  unitPrice: number;      // 组件单价 = 各项合计
+  createdAt?: string;
+  updatedAt?: string;
+}
+export type { Component };
+
 // 对帐单明细
 export interface ReconciliationItem {
   id: string;
@@ -216,6 +239,7 @@ const KEYS = {
   DELIVERY_COMPANIES: "delivery_companies",
   DELIVERY_PRODUCTS: "delivery_products",
   DELIVERY_NOTES: "delivery_notes",
+  COMPONENTS: "aluminum_components",
   RECONCILIATION_ORDERS: "reconciliation_orders",
   SALES_ORDERS: "sales_orders",
   QUOTATIONS: "quotations",
@@ -339,6 +363,38 @@ export const deliveryProductStore = {
       p.name.toLowerCase().includes(kw) ||
       p.spec.toLowerCase().includes(kw)
     );
+  },
+};
+
+// 组件（独立物料清单）管理
+export const componentStore = {
+  getAll(): Component[] {
+    return getAll<Component>(KEYS.COMPONENTS);
+  },
+  getById(id: string): Component | undefined {
+    return this.getAll().find(c => c.id === id);
+  },
+  add(c: Omit<Component, "id"> & { id?: string }): Component {
+    const list = this.getAll();
+    const newC: Component = { ...c, id: (c.id && c.id.trim()) ? c.id.trim() : generateId() };
+    list.push(newC);
+    saveAll(KEYS.COMPONENTS, list);
+    return newC;
+  },
+  update(id: string, data: Partial<Component>): Component | undefined {
+    const list = this.getAll();
+    const idx = list.findIndex(c => c.id === id);
+    if (idx === -1) return undefined;
+    list[idx] = { ...list[idx], ...data };
+    saveAll(KEYS.COMPONENTS, list);
+    return list[idx];
+  },
+  remove(id: string): boolean {
+    const list = this.getAll();
+    const filtered = list.filter(c => c.id !== id);
+    if (filtered.length === list.length) return false;
+    saveAll(KEYS.COMPONENTS, filtered);
+    return true;
   },
 };
 
