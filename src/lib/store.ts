@@ -718,16 +718,20 @@ function initializeData(): void {
       // 全新用户：基础数据留空，由各用户自行录入。
       // 系统按用户隔离、不预填、不共享；如需要种子数据，
       // 可通过界面上的「恢复原始数据」按钮手动恢复（见 restoreSeedData）。
-      userStorage.setItem(KEYS.PRODUCTS, JSON.stringify([]));
-      userStorage.setItem(KEYS.SUPPLIERS, JSON.stringify([]));
-      userStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([]));
-      userStorage.setItem(KEYS.OUTSOURCING_ORDERS, JSON.stringify([]));
-      userStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify([]));
-      userStorage.setItem(KEYS.DELIVERY_COMPANIES, JSON.stringify([]));
-      userStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify([]));
-      userStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify([]));
-      userStorage.setItem(KEYS.RECONCILIATION_ORDERS, JSON.stringify([]));
-      userStorage.setItem(KEYS.SALES_ORDERS, JSON.stringify([]));
+      // 仅当用户此前没有任何产品数据时，才初始化为空；
+      // 若用户已有数据（例如旧版升级、STORAGE_VERSION 缺失），则不覆盖，保留其原有数据。
+      if (userStorage.getItem(KEYS.PRODUCTS) === null) {
+        userStorage.setItem(KEYS.PRODUCTS, JSON.stringify([]));
+        userStorage.setItem(KEYS.SUPPLIERS, JSON.stringify([]));
+        userStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([]));
+        userStorage.setItem(KEYS.OUTSOURCING_ORDERS, JSON.stringify([]));
+        userStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify([]));
+        userStorage.setItem(KEYS.DELIVERY_COMPANIES, JSON.stringify([]));
+        userStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify([]));
+        userStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify([]));
+        userStorage.setItem(KEYS.RECONCILIATION_ORDERS, JSON.stringify([]));
+        userStorage.setItem(KEYS.SALES_ORDERS, JSON.stringify([]));
+      }
     }
     userStorage.setItem(KEYS.STORAGE_VERSION, STORAGE_VERSION);
     return;
