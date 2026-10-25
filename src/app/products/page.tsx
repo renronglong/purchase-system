@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { productStore, supplierStore, type Product } from "@/lib/store";
+import { productStore, supplierStore, deliveryProductStore, type Product, type DeliveryProduct } from "@/lib/store";
 import AddDialog from "@/components/add-dialog";
 
 const BOM_KEY = "aluminum_product_bom";
@@ -49,7 +49,8 @@ function createEmptyProduct(): Product {
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState("");
-  const [typeFilter, setTypeFilter] = useState<"all" | "profile" | "plate">("all");
+  const [typeFilter, setTypeFilter] = useState<"all" | "profile" | "plate" | "delivery">("all");
+  const [deliveryProducts, setDeliveryProducts] = useState<DeliveryProduct[]>([]);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isAdding, setIsAdding] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -108,6 +109,7 @@ export default function ProductsPage() {
 
   const loadProducts = useCallback(() => {
     setProducts(productStore.getAll());
+    setDeliveryProducts(deliveryProductStore.getAll());
   }, []);
 
   useEffect(() => {
@@ -160,6 +162,13 @@ export default function ProductsPage() {
   const handleDelete = (id: string) => {
     if (confirm("确定要删除此产品吗？")) {
       productStore.remove(id);
+      loadProducts();
+    }
+  };
+
+  const handleDeleteDelivery = (id: string) => {
+    if (confirm("确定要删除此成品吗？该操作会影响送货单引用的产品。")) {
+      deliveryProductStore.remove(id);
       loadProducts();
     }
   };
@@ -362,10 +371,10 @@ export default function ProductsPage() {
           className="w-full max-w-md px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
         />
         <div className="flex gap-2 mt-3">
-          {([
-            { key: "all", label: "全部" },
+          {([{ key: "all", label: "全部" },
             { key: "profile", label: "型材" },
             { key: "plate", label: "板材" },
+            { key: "delivery", label: "成品" },
           ] as const).map(t => (
             <button
               key={t.key}
@@ -380,53 +389,97 @@ export default function ProductsPage() {
 
       {/* 表格 */}
       <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="bg-slate-50 border-b border-slate-200">
-              <th className="text-left px-4 py-2.5 font-medium text-slate-600">类型</th>
-              <th className="text-left px-4 py-2.5 font-medium text-slate-600">产品编号</th>
-              <th className="text-left px-4 py-2.5 font-medium text-slate-600">产品名称</th>
-              <th className="text-left px-4 py-2.5 font-medium text-slate-600">规格尺寸</th>
-              <th className="text-right px-4 py-2.5 font-medium text-slate-600">米重/重量(KG)</th>
-              <th className="text-left px-4 py-2.5 font-medium text-slate-600">材质</th>
-              <th className="text-left px-4 py-2.5 font-medium text-slate-600">默认供应商</th>
-              <th className="text-center px-4 py-2.5 font-medium text-slate-600">操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.length === 0 ? (
-              <tr>
-                <td colSpan={8} className="text-center py-12 text-slate-400">暂无产品数据</td>
+        {typeFilter === "delivery" ? (
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-200">
+                <th className="text-left px-4 py-2.5 font-medium text-slate-600">成品编号</th>
+                <th className="text-left px-4 py-2.5 font-medium text-slate-600">成品名称</th>
+                <th className="text-left px-4 py-2.5 font-medium text-slate-600">规格</th>
+                <th className="text-left px-4 py-2.5 font-medium text-slate-600">表面处理</th>
+                <th className="text-left px-4 py-2.5 font-medium text-slate-600">单位</th>
+                <th className="text-right px-4 py-2.5 font-medium text-slate-600">单价</th>
+                <th className="text-left px-4 py-2.5 font-medium text-slate-600">所属客户</th>
+                <th className="text-center px-4 py-2.5 font-medium text-slate-600">操作</th>
               </tr>
-            ) : (
-              filtered.map((product) => (
-                <tr key={product.id} className="border-b border-slate-100 hover:bg-slate-50/50">
-                  <td className="px-4 py-2">
-                    <span className={"px-2 py-0.5 text-xs rounded-full " + ((product.productType || "profile") === "plate" ? "bg-orange-100 text-orange-700" : "bg-blue-100 text-blue-700")}>
-                      {(product.productType || "profile") === "plate" ? "板材" : "型材"}
-                    </span>
-                  </td>
-                  <td className="px-4 py-2 font-mono text-blue-600">{product.id}</td>
-                  <td className="px-4 py-2">{product.name}</td>
-                  <td className="px-4 py-2">{product.spec}</td>
-                  <td className="px-4 py-2 text-right font-mono">{(product.weightPerMeter ?? product.weight ?? 0) ? ((product.weightPerMeter ?? product.weight ?? 0)).toFixed(3) : "-"}</td>
-                  <td className="px-4 py-2">{product.material}</td>
-                  <td className="px-4 py-2">{product.defaultSupplier}</td>
-                  <td className="px-4 py-2 text-center">
-                    <div className="flex items-center justify-center gap-3">
-                      <button onClick={() => openEdit(product)} className="text-amber-600 hover:text-amber-800 text-xs">编辑</button>
-                      <button onClick={() => handleDelete(product.id)} className="text-red-500 hover:text-red-700 text-xs">删除</button>
-                    </div>
-                  </td>
+            </thead>
+            <tbody>
+              {deliveryProducts.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="text-center py-12 text-slate-400">暂无成品数据</td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                deliveryProducts.filter(p =>
+                  !search ||
+                  p.code.toLowerCase().includes(search.toLowerCase()) ||
+                  p.name.toLowerCase().includes(search.toLowerCase()) ||
+                  p.spec.toLowerCase().includes(search.toLowerCase())
+                ).map((product) => (
+                  <tr key={product.id} className="border-b border-slate-100 hover:bg-slate-50/50">
+                    <td className="px-4 py-2 font-mono text-blue-600">{product.code || "-"}</td>
+                    <td className="px-4 py-2">{product.name}</td>
+                    <td className="px-4 py-2">{product.spec}</td>
+                    <td className="px-4 py-2">{product.surface || "-"}</td>
+                    <td className="px-4 py-2">{product.unit || "-"}</td>
+                    <td className="px-4 py-2 text-right font-mono">{product.unitPrice ? product.unitPrice.toFixed(2) : "-"}</td>
+                    <td className="px-4 py-2">{product.customer || "-"}</td>
+                    <td className="px-4 py-2 text-center">
+                      <button onClick={() => handleDeleteDelivery(product.id)} className="text-red-500 hover:text-red-700 text-xs">删除</button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        ) : (
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-200">
+                <th className="text-left px-4 py-2.5 font-medium text-slate-600">类型</th>
+                <th className="text-left px-4 py-2.5 font-medium text-slate-600">产品编号</th>
+                <th className="text-left px-4 py-2.5 font-medium text-slate-600">产品名称</th>
+                <th className="text-left px-4 py-2.5 font-medium text-slate-600">规格尺寸</th>
+                <th className="text-right px-4 py-2.5 font-medium text-slate-600">米重/重量(KG)</th>
+                <th className="text-left px-4 py-2.5 font-medium text-slate-600">材质</th>
+                <th className="text-left px-4 py-2.5 font-medium text-slate-600">默认供应商</th>
+                <th className="text-center px-4 py-2.5 font-medium text-slate-600">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="text-center py-12 text-slate-400">暂无产品数据</td>
+                </tr>
+              ) : (
+                filtered.map((product) => (
+                  <tr key={product.id} className="border-b border-slate-100 hover:bg-slate-50/50">
+                    <td className="px-4 py-2">
+                      <span className={"px-2 py-0.5 text-xs rounded-full " + ((product.productType || "profile") === "plate" ? "bg-orange-100 text-orange-700" : "bg-blue-100 text-blue-700")}>
+                        {(product.productType || "profile") === "plate" ? "板材" : "型材"}
+                      </span>
+                    </td>
+                    <td className="px-4 py-2 font-mono text-blue-600">{product.id}</td>
+                    <td className="px-4 py-2">{product.name}</td>
+                    <td className="px-4 py-2">{product.spec}</td>
+                    <td className="px-4 py-2 text-right font-mono">{(product.weightPerMeter ?? product.weight ?? 0) ? ((product.weightPerMeter ?? product.weight ?? 0)).toFixed(3) : "-"}</td>
+                    <td className="px-4 py-2">{product.material}</td>
+                    <td className="px-4 py-2">{product.defaultSupplier}</td>
+                    <td className="px-4 py-2 text-center">
+                      <div className="flex items-center justify-center gap-3">
+                        <button onClick={() => openEdit(product)} className="text-amber-600 hover:text-amber-800 text-xs">编辑</button>
+                        <button onClick={() => handleDelete(product.id)} className="text-red-500 hover:text-red-700 text-xs">删除</button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        )}
       </div>
 
       <div className="mt-3 text-xs text-slate-400">
-        共 {filtered.length} 条产品记录
+        共 {typeFilter === "delivery" ? deliveryProducts.length : filtered.length} 条{typeFilter === "delivery" ? "成" : "产品"}记录
       </div>
 
       {dialogOpen ? (
