@@ -72,20 +72,20 @@ export default function ProductsPage() {
     setBomItems(formData.id ? (productBom[formData.id] || []) : [emptyBomItem()]);
   }, [formData.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // 更新某一行的字段；输入物料编号时自动从产品库带出名称/规格
+  // 更新某一行的字段；输入物料编号时自动从成品（送货产品）带出名称/规格
   const updateBomItem = (idx: number, field: keyof BomItem, value: string | number) => {
     setBomItems(prev => {
       const next = prev.map(it => ({ ...it }));
       const item = next[idx];
       (item as Record<string, unknown>)[field] = value;
       if (field === "materialCode") {
-        const prod = products.find(p => p.id === value);
-        if (prod) { item.materialCode = prod.id; item.productName = prod.name; item.spec = prod.spec; }
+        const prod = deliveryProducts.find(p => p.code === value);
+        if (prod) { item.materialCode = prod.code; item.productName = prod.name; item.spec = prod.spec; item.surface = prod.surface; item.unit = prod.unit; item.unitPrice = prod.unitPrice || 0; }
       } else if (field === "productName") {
-        const prod = products.find(p => p.name === value);
-        if (prod) { item.materialCode = prod.id; item.spec = prod.spec; }
+        const prod = deliveryProducts.find(p => p.name === value);
+        if (prod) { item.materialCode = prod.code; item.spec = prod.spec; }
       } else if (field === "spec") {
-        const prod = products.find(p => p.spec === value);
+        const prod = deliveryProducts.find(p => p.spec === value);
         if (prod) { item.productName = prod.name; }
       }
       if (field === "qty" || field === "unitPrice") {
@@ -325,15 +325,15 @@ export default function ProductsPage() {
         </tfoot>
       </table>
 
-      {/* 产品库 datalist 提示 */}
+      {/* 成品 datalist 提示 */}
       <datalist id="bom-product-list">
-        {products.map(p => <option key={p.id} value={p.id} label={`${p.name || ""} ${p.spec || ""}`.trim()} />)}
+        {deliveryProducts.map(p => <option key={p.id} value={p.code || ""} label={`${p.name || ""} ${p.spec || ""}`.trim()} />)}
       </datalist>
       <datalist id="bom-product-name-list">
-        {Array.from(new Set(products.map(p => p.name).filter(Boolean))).map(n => <option key={n} value={n} />)}
+        {Array.from(new Set(deliveryProducts.map(p => p.name).filter(Boolean))).map(n => <option key={n} value={n} />)}
       </datalist>
       <datalist id="bom-product-spec-list">
-        {Array.from(new Set(products.map(p => p.spec).filter(Boolean))).map(s => <option key={s} value={s} />)}
+        {Array.from(new Set(deliveryProducts.map(p => p.spec).filter(Boolean))).map(s => <option key={s} value={s} />)}
       </datalist>
 
       <div className="flex gap-2 mt-4">
