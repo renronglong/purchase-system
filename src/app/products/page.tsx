@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { productStore, supplierStore, type Product } from "@/lib/store";
 import AddDialog from "@/components/add-dialog";
-import { deliveryProducts, type DeliveryProduct } from "@/lib/delivery-seed-data";
 
 const BOM_KEY = "aluminum_product_bom";
 // 产品编号 -> 子配件 id 列表
@@ -234,29 +233,25 @@ export default function ProductsPage() {
               <th className="text-left px-3 py-1.5 font-medium text-slate-600">编号</th>
               <th className="text-left px-3 py-1.5 font-medium text-slate-600">名称</th>
               <th className="text-left px-3 py-1.5 font-medium text-slate-600">规格</th>
-              <th className="text-left px-3 py-1.5 font-medium text-slate-600">表面处理</th>
-              <th className="text-left px-3 py-1.5 font-medium text-slate-600">单位</th>
             </tr>
           </thead>
           <tbody>
-            {deliveryProducts.filter(p => {
+            {products.filter(p => {
               const q = bomSearch.toLowerCase();
-              return !q || p.code.toLowerCase().includes(q) || p.name.toLowerCase().includes(q) || p.spec.toLowerCase().includes(q);
+              return !q || p.id.toLowerCase().includes(q) || p.name.toLowerCase().includes(q) || p.spec.toLowerCase().includes(q);
             }).slice(0, 50).map(p => {
               const on = bomSubs.includes(p.id);
               return (
                 <tr key={p.id} onClick={() => setBomSubs(prev => on ? prev.filter(x => x !== p.id) : [...prev, p.id])}
                   className={`border-b border-slate-100 cursor-pointer hover:bg-blue-50/40 ${on ? "bg-blue-50/40" : ""}`}>
-                  <td className="px-3 py-1.5 font-mono text-xs text-slate-500">{p.code}</td>
+                  <td className="px-3 py-1.5 font-mono text-xs text-slate-500">{p.id}</td>
                   <td className="px-3 py-1.5">{p.name}</td>
                   <td className="px-3 py-1.5 text-slate-500">{p.spec}</td>
-                  <td className="px-3 py-1.5 text-slate-500">{p.surface || "-"}</td>
-                  <td className="px-3 py-1.5 text-slate-500">{p.unit || "-"}</td>
                 </tr>
               );
             })}
-            {deliveryProducts.filter(p => !bomSearch || p.code.toLowerCase().includes(bomSearch.toLowerCase()) || p.name.toLowerCase().includes(bomSearch.toLowerCase()) || p.spec.toLowerCase().includes(bomSearch.toLowerCase())).length === 0 && (
-              <tr><td colSpan={5} className="text-center py-6 text-slate-400">无匹配产品</td></tr>
+            {products.filter(p => !bomSearch || p.id.toLowerCase().includes(bomSearch.toLowerCase()) || p.name.toLowerCase().includes(bomSearch.toLowerCase()) || p.spec.toLowerCase().includes(bomSearch.toLowerCase())).length === 0 && (
+              <tr><td colSpan={3} className="text-center py-6 text-slate-400">无匹配产品</td></tr>
             )}
           </tbody>
         </table>
@@ -269,22 +264,18 @@ export default function ProductsPage() {
             <th className="text-left px-3 py-2 font-medium">编号</th>
             <th className="text-left px-3 py-2 font-medium">名称</th>
             <th className="text-left px-3 py-2 font-medium">规格</th>
-            <th className="text-left px-3 py-2 font-medium">表面处理</th>
-            <th className="text-left px-3 py-2 font-medium">单位</th>
             <th className="text-center px-3 py-2 w-10 font-medium"></th>
           </tr>
         </thead>
         <tbody>
           {bomSubs.map((id, idx) => {
-            const p = deliveryProducts.find(x => x.id === id);
+            const p = products.find(x => x.id === id);
             return p ? (
               <tr key={id} className="border-b border-slate-100">
                 <td className="text-center px-3 py-2 text-slate-400">{idx + 1}</td>
-                <td className="px-3 py-2 font-mono text-xs text-slate-600">{p.code}</td>
+                <td className="px-3 py-2 font-mono text-xs text-slate-600">{p.id}</td>
                 <td className="px-3 py-2">{p.name}</td>
                 <td className="px-3 py-2 text-slate-500">{p.spec}</td>
-                <td className="px-3 py-2 text-slate-500">{p.surface || "-"}</td>
-                <td className="px-3 py-2 text-slate-500">{p.unit || "-"}</td>
                 <td className="px-3 py-2 text-center">
                   <button onClick={() => setBomSubs(prev => prev.filter(x => x !== id))} className="text-red-400 hover:text-red-600">✕</button>
                 </td>
@@ -292,7 +283,7 @@ export default function ProductsPage() {
             ) : null;
           })}
           {bomSubs.length === 0 && (
-            <tr><td colSpan={7} className="text-center py-8 text-slate-400">尚未选择组件，请在上方点击产品或从产品信息中添加</td></tr>
+            <tr><td colSpan={5} className="text-center py-8 text-slate-400">尚未选择组件，请在上方点击产品或从产品信息中添加</td></tr>
           )}
         </tbody>
       </table>
