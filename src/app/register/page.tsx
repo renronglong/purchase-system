@@ -7,8 +7,6 @@ import { useAuth } from "@/components/auth-provider";
 export default function RegisterPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [displayName, setDisplayName] = useState("");
-  const [company, setCompany] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
@@ -20,7 +18,7 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      const result = await register(username, password, displayName, company);
+      const result = await register(username, password);
       if (result.success) {
         router.push("/");
       } else {
@@ -38,7 +36,6 @@ export default function RegisterPage() {
       <div className="w-full max-w-md px-6">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-white mb-2">零配件生产销售管理系统</h1>
-          <p className="text-blue-300 text-sm">佛山市碧利金属</p>
         </div>
 
         <div className="bg-white rounded-xl shadow-2xl p-8">
@@ -47,33 +44,6 @@ export default function RegisterPage() {
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">
-                显示名称
-              </label>
-              <input
-                type="text"
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
-                className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                placeholder="你的名字"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-600 mb-1">
-                公司名称
-              </label>
-              <input
-                type="text"
-                value={company}
-                onChange={(e) => setCompany(e.target.value)}
-                className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                placeholder="你的公司名称"
-              />
-            </div>
-
             <div>
               <label className="block text-sm font-medium text-slate-600 mb-1">
                 用户名

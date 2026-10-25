@@ -18,6 +18,7 @@ export interface Product {
   bladeCount?: number;      // 刀数
   outputPerTime?: number;   // 一次出数量
   productType?: 'profile' | 'plate';  // 产品类型
+  unitPrice?: number;  // 组件单价（当配置了组件 BOM 时 = 组件合计金额）
 }
 
 export const seedProducts: Product[] = [

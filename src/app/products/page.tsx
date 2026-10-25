@@ -104,6 +104,11 @@ export default function ProductsPage() {
     if (formData.id) {
       const valid = bomItems.filter(i => i.materialCode || i.productName);
       setProductBom(prev => ({ ...prev, [formData.id]: valid }));
+      // 组件单价 = 合计金额，保存到产品（成品）单价里
+      const total = valid.reduce((s, i) => s + i.amount, 0);
+      const next = { ...formData, unitPrice: total };
+      setFormData(next);
+      if (editingProduct) productStore.update(editingProduct.id, next); // 已有产品：立即落库
     }
   };
 
@@ -304,8 +309,18 @@ export default function ProductsPage() {
               <td className="px-2 py-1"><input type="text" value={item.materialCode} onChange={(e) => updateBomItem(idx, "materialCode", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" placeholder="物料编号" list="bom-product-list" /></td>
               <td className="px-2 py-1"><input type="text" value={item.productName} onChange={(e) => updateBomItem(idx, "productName", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" list="bom-product-name-list" /></td>
               <td className="px-2 py-1"><input type="text" value={item.spec} onChange={(e) => updateBomItem(idx, "spec", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" list="bom-product-spec-list" /></td>
-              <td className="px-2 py-1"><input type="text" value={item.surface} onChange={(e) => updateBomItem(idx, "surface", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" placeholder="铁灰" list="bom-surface-list" /></td>
-              <td className="px-2 py-1"><input type="text" value={item.unit} onChange={(e) => updateBomItem(idx, "unit", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" placeholder="个" list="bom-unit-list" /></td>
+              <td className="px-2 py-1">
+                <select value={item.surface} onChange={(e) => updateBomItem(idx, "surface", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded bg-white">
+                  <option value="">—</option>
+                  {bomSurfaceOptions.map(s => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </td>
+              <td className="px-2 py-1">
+                <select value={item.unit} onChange={(e) => updateBomItem(idx, "unit", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded bg-white">
+                  <option value="">—</option>
+                  {bomUnitOptions.map(u => <option key={u} value={u}>{u}</option>)}
+                </select>
+              </td>
               <td className="px-2 py-1"><input type="number" value={item.qty || ""} onChange={(e) => updateBomItem(idx, "qty", Number(e.target.value))} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
               <td className="px-2 py-1">{hideBomPrices ? <span className="text-slate-400">***</span> : <input type="number" step="0.01" value={item.unitPrice || ""} onChange={(e) => updateBomItem(idx, "unitPrice", Number(e.target.value))} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" />}</td>
               <td className="px-2 py-1 text-right font-mono font-medium">{hideBomPrices ? "***" : item.amount.toFixed(2)}</td>
@@ -320,7 +335,7 @@ export default function ProductsPage() {
         </tbody>
         <tfoot>
           <tr className="bg-slate-50 border-t border-slate-200">
-            <td colSpan={8} className="px-2 py-2 text-right font-medium text-slate-600">合计金额</td>
+            <td colSpan={8} className="px-2 py-2 text-right font-medium text-slate-600">组件单价（合计金额）</td>
             <td className="px-2 py-2 text-right font-mono font-bold text-blue-600">{hideBomPrices ? "***" : bomTotalAmount.toFixed(2)}</td>
             <td colSpan={2}></td>
           </tr>
