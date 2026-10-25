@@ -59,6 +59,7 @@ export default function ProductsPage() {
   // 成品（DeliveryProduct）编辑状态
   const [deliveryDialogOpen, setDeliveryDialogOpen] = useState(false);
   const [deliveryForm, setDeliveryForm] = useState<DeliveryProduct | null>(null);
+  const [isAddingDelivery, setIsAddingDelivery] = useState(false);
 
   // BOM（组件）配置，作为新增/编辑弹窗的第三个 tab：完全照送货单明细表
   const [productBom, setProductBom] = useState<ProductBomMap>({});
@@ -179,23 +180,39 @@ export default function ProductsPage() {
 
   const openEditDelivery = (product: DeliveryProduct) => {
     setDeliveryForm({ ...product });
+    setIsAddingDelivery(false);
+    setDeliveryDialogOpen(true);
+  };
+
+  // 新增成品：弹出一个带唯一 id 的空成品，供填写并配置组件 BOM
+  const openAddDelivery = () => {
+    const id = `deliv_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+    setDeliveryForm({ id, code: "", name: "", spec: "", surface: "", unit: "", weightPerMeter: 0, unitPrice: 0, customer: "" });
+    setIsAddingDelivery(true);
+    setBomItems([emptyBomItem()]);
     setDeliveryDialogOpen(true);
   };
 
   const handleSaveDelivery = () => {
     if (!deliveryForm) return;
     if (!deliveryForm.name) { alert("请填写成品名称"); return; }
-    // 保存组件 BOM：过滤有效行（有物料或名称）
-    const valid = bomItems.filter(i => i.materialCode || i.productName);
-    if (deliveryForm.id) {
-      setProductBom(prev => ({ ...prev, [deliveryForm.id]: valid }));
-    }
     // 组件单价 = 合计金额，写入成品单价
+    const valid = bomItems.filter(i => i.materialCode || i.productName);
     const total = valid.reduce((s, i) => s + (i.amount || 0), 0);
-    const next = { ...deliveryForm, unitPrice: total };
-    deliveryProductStore.update(next.id, next);
+    const payload = { ...deliveryForm, unitPrice: total };
+    let saved: DeliveryProduct | undefined;
+    if (isAddingDelivery) {
+      saved = deliveryProductStore.add(payload);
+    } else {
+      saved = deliveryProductStore.update(deliveryForm.id, payload);
+    }
+    // 用最终落库的 id 保存组件 BOM
+    if (saved) {
+      setProductBom(prev => ({ ...prev, [saved.id]: valid }));
+    }
     setDeliveryDialogOpen(false);
     setDeliveryForm(null);
+    setIsAddingDelivery(false);
     setBomItems([]);
     loadProducts();
   };
@@ -395,13 +412,13 @@ export default function ProductsPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl font-bold text-slate-900">产品库管理</h1>
         <button
-          onClick={openAdd}
+          onClick={typeFilter === "delivery" ? openAddDelivery : openAdd}
           className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
           </svg>
-          新增产品
+          {typeFilter === "delivery" ? "新增成品" : "新增产品"}
         </button>
       </div>
 
@@ -533,7 +550,7 @@ export default function ProductsPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-2" onClick={() => setDeliveryDialogOpen(false)}>
           <div className="bg-white rounded-xl shadow-xl w-full max-w-lg flex flex-col" onClick={(e) => e.stopPropagation()}>
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-slate-800">编辑成品</h2>
+              <h2 className="text-lg font-semibold text-slate-800">{isAddingDelivery ? "新增成品" : "编辑成品"}</h2>
               <button onClick={() => setDeliveryDialogOpen(false)} className="text-slate-400 hover:text-slate-600">✕</button>
             </div>
             <div className="p-6 grid grid-cols-2 gap-4">
