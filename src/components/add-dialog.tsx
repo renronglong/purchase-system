@@ -8,15 +8,17 @@ export default function AddDialog({
   kind,
   onClose,
   onImported,
+  extraTab,
   children,
 }: {
   title: string;
   kind: Kind;
   onClose: () => void;
   onImported?: () => void;
+  extraTab?: { key: string; label: string; content: ReactNode };
   children: ReactNode;
 }) {
-  const [tab, setTab] = useState<"manual" | "import">("manual");
+  const [tab, setTab] = useState<"manual" | "import" | string>("manual");
 
   const switchTab = (t: "manual" | "import") => {
     setTab(t);
@@ -43,10 +45,18 @@ export default function AddDialog({
           >
             批量导入
           </button>
+          {extraTab ? (
+            <button
+              onClick={() => switchTab(extraTab.key)}
+              className={"px-4 py-2 text-sm font-medium rounded-t-md " + (tab === extraTab.key ? "text-blue-600 border-b-2 border-blue-600" : "text-slate-500 hover:text-slate-700")}
+            >
+              {extraTab.label}
+            </button>
+          ) : null}
         </div>
 
         <div className="p-5 overflow-y-auto">
-          {tab === "manual" ? children : <ImportPanel kind={kind} onImported={onImported} />}
+          {tab === "manual" ? children : tab === "import" ? <ImportPanel kind={kind} onImported={onImported} /> : extraTab ? extraTab.content : null}
         </div>
       </div>
     </div>
