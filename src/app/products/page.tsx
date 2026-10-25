@@ -402,7 +402,7 @@ export default function ProductsPage() {
           kind="product"
           onClose={closeDialog}
           onImported={loadProducts}
-          extraTab={formData.id ? { key: "bom", label: "组件", content: bomTabContent } : undefined}
+          extraTab={{ key: "bom", label: "组件", content: bomTabContent }}
         >
           {form}
         </AddDialog>
