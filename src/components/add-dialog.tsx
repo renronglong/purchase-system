@@ -20,7 +20,7 @@ export default function AddDialog({
 }) {
   const [tab, setTab] = useState<"manual" | "import" | string>("manual");
 
-  const switchTab = (t: "manual" | "import") => {
+  const switchTab = (t: "manual" | "import" | string) => {
     setTab(t);
   };
 
