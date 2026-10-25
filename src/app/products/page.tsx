@@ -73,10 +73,10 @@ export default function ProductsPage() {
   useEffect(() => { if (typeof window !== "undefined") window.localStorage.setItem(BOM_KEY, JSON.stringify(productBom)); }, [productBom]);
 
   // 切换产品时同步该产品的组件
-  // 打开成品编辑弹窗时加载该成品的组件 BOM
+  // 切换产品时同步该产品的组件 BOM（从成品库挑多条成品）
   useEffect(() => {
-    setBomItems(deliveryForm ? (productBom[deliveryForm.id] || [emptyBomItem()]) : []);
-  }, [deliveryForm]); // eslint-disable-line react-hooks/exhaustive-deps
+    setBomItems(formData.id ? (productBom[formData.id] || [emptyBomItem()]) : [emptyBomItem()]);
+  }, [formData.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // 更新某一行的字段；输入物料编号时自动从成品（送货产品）带出名称/规格/单价
   const updateBomItem = (idx: number, field: keyof BomItem, value: string | number) => {
@@ -155,7 +155,11 @@ export default function ProductsPage() {
       alert("请填写产品编号和名称");
       return;
     }
-    saveProductAndClose(formData);
+    // 保存组件 BOM（从成品库挑的多条成品）并写入产品单价 = 组件合计金额
+    const valid = bomItems.filter(i => i.materialCode || i.productName);
+    setProductBom(prev => ({ ...prev, [formData.id]: valid }));
+    const total = valid.reduce((s, i) => s + (i.amount || 0), 0);
+    saveProductAndClose({ ...formData, unitPrice: total });
   };
 
   const closeDialog = () => {
@@ -172,7 +176,7 @@ export default function ProductsPage() {
   };
 
   const handleDeleteDelivery = (id: string) => {
-    if (confirm("确定要删除此成品吗？该操作会影响送货单引用的产品。")) {
+    if (confirm("确定要删除此物料吗？该操作会影响送货单引用的产品。")) {
       deliveryProductStore.remove(id);
       loadProducts();
     }
@@ -195,21 +199,20 @@ export default function ProductsPage() {
 
   const handleSaveDelivery = () => {
     if (!deliveryForm) return;
-    if (!deliveryForm.name) { alert("请填写成品名称"); return; }
-    // 组件单价 = 合计金额，写入成品单价
-    const valid = bomItems.filter(i => i.materialCode || i.productName);
-    const total = valid.reduce((s, i) => s + (i.amount || 0), 0);
-    const payload = { ...deliveryForm, unitPrice: total };
+    if (!deliveryForm.name) { alert("请填写物料名称"); return; }
+    const payload = { ...deliveryForm };
     let saved: DeliveryProduct | undefined;
-    if (isAddingDelivery) {
-      saved = deliveryProductStore.add(payload);
-    } else {
-      saved = deliveryProductStore.update(deliveryForm.id, payload);
+    try {
+      if (isAddingDelivery) {
+        saved = deliveryProductStore.add(payload);
+      } else {
+        saved = deliveryProductStore.update(deliveryForm.id, payload);
+      }
+    } catch (e) {
+      alert("保存失败：" + (e instanceof Error ? e.message : String(e)));
+      return;
     }
-    // 用最终落库的 id 保存组件 BOM
-    if (saved) {
-      setProductBom(prev => ({ ...prev, [saved.id]: valid }));
-    }
+    if (!saved) { alert("保存失败：物料记录未找到"); return; }
     setDeliveryDialogOpen(false);
     setDeliveryForm(null);
     setIsAddingDelivery(false);
@@ -418,7 +421,7 @@ export default function ProductsPage() {
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
           </svg>
-          {typeFilter === "delivery" ? "新增成品" : "新增产品"}
+          {typeFilter === "delivery" ? "新增物料" : "新增产品"}
         </button>
       </div>
 
@@ -435,7 +438,7 @@ export default function ProductsPage() {
           {([{ key: "all", label: "全部" },
             { key: "profile", label: "型材" },
             { key: "plate", label: "板材" },
-            { key: "delivery", label: "成品" },
+            { key: "delivery", label: "物料" },
           ] as const).map(t => (
             <button
               key={t.key}
@@ -454,8 +457,8 @@ export default function ProductsPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
-                <th className="text-left px-4 py-2.5 font-medium text-slate-600">成品编号</th>
-                <th className="text-left px-4 py-2.5 font-medium text-slate-600">成品名称</th>
+                <th className="text-left px-4 py-2.5 font-medium text-slate-600">物料编号</th>
+                <th className="text-left px-4 py-2.5 font-medium text-slate-600">物料名称</th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">规格</th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">表面处理</th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">单位</th>
@@ -467,7 +470,7 @@ export default function ProductsPage() {
             <tbody>
               {deliveryProducts.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="text-center py-12 text-slate-400">暂无成品数据</td>
+                  <td colSpan={8} className="text-center py-12 text-slate-400">暂无物料数据</td>
                 </tr>
               ) : (
                 deliveryProducts.filter(p =>
@@ -550,16 +553,16 @@ export default function ProductsPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-2" onClick={() => setDeliveryDialogOpen(false)}>
           <div className="bg-white rounded-xl shadow-xl w-full max-w-lg flex flex-col" onClick={(e) => e.stopPropagation()}>
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-slate-800">{isAddingDelivery ? "新增成品" : "编辑成品"}</h2>
+              <h2 className="text-lg font-semibold text-slate-800">{isAddingDelivery ? "新增物料" : "编辑物料"}</h2>
               <button onClick={() => setDeliveryDialogOpen(false)} className="text-slate-400 hover:text-slate-600">✕</button>
             </div>
             <div className="p-6 grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs text-slate-500 mb-1">成品编号</label>
+                <label className="block text-xs text-slate-500 mb-1">物料编号</label>
                 <input type="text" value={deliveryForm.code || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, code: e.target.value }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
               </div>
               <div>
-                <label className="block text-xs text-slate-500 mb-1">成品名称 <span className="text-red-500">*</span></label>
+                <label className="block text-xs text-slate-500 mb-1">物料名称 <span className="text-red-500">*</span></label>
                 <input type="text" value={deliveryForm.name} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, name: e.target.value }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
               </div>
               <div>
@@ -587,11 +590,6 @@ export default function ProductsPage() {
                 <input type="text" value={deliveryForm.customer || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, customer: e.target.value }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
               </div>
             </div>
-            {/* 组件 BOM 明细：同一页面直接拼表，保存成品时单价 = 合计金额 */}
-            <div className="border-t border-slate-100 px-6 py-4">
-              <div className="text-sm font-semibold text-slate-700 mb-2">组件明细</div>
-              <div className="overflow-x-auto">{bomTabContent}</div>
-            </div>
             <div className="px-6 py-4 border-t border-slate-100 flex justify-end gap-2">
               <button onClick={() => setDeliveryDialogOpen(false)} className="px-4 py-1.5 text-sm text-slate-600 border border-slate-200 rounded-md hover:bg-slate-50">取消</button>
               <button onClick={handleSaveDelivery} className="px-4 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700">保存</button>
@@ -606,6 +604,7 @@ export default function ProductsPage() {
           kind="product"
           onClose={closeDialog}
           onImported={loadProducts}
+          extraTab={{ key: "bom", label: "组件", content: bomTabContent }}
         >
           {form}
         </AddDialog>
