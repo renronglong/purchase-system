@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { productStore, supplierStore, deliveryProductStore, componentStore, type Product, type DeliveryProduct, type Component, type ComponentItem } from "@/lib/store";
+import { productStore, supplierStore, deliveryProductStore, componentStore, purchaseOrderStore, quotationStore, salesOrderStore, type Product, type DeliveryProduct, type Component, type ComponentItem } from "@/lib/store";
 import AddDialog from "@/components/add-dialog";
 
 // 物料明细行：从物料库挑的多条物料组成一个组件
@@ -118,7 +118,18 @@ export default function ProductsPage() {
       alert("请填写产品编号和名称");
       return;
     }
-    saveProductAndClose({ ...formData });
+    // 编号查重：新增时若编号已存在，提示避免覆盖/重复
+    if (isAdding && productStore.getAll().some(p => p.id === formData.id.trim())) {
+      alert("产品编号已存在，请更换一个编号");
+      return;
+    }
+    // 米重校验：必须为不小于 0 的数字
+    const w = Number(formData.weightPerMeter);
+    if (!Number.isFinite(w) || w < 0) {
+      alert("米重必须为不小于 0 的数字");
+      return;
+    }
+    saveProductAndClose({ ...formData, weightPerMeter: w });
   };
 
   const closeDialog = () => {
@@ -127,11 +138,34 @@ export default function ProductsPage() {
     setEditingProduct(null);
   };
 
+  // 删除产品前，扫描被哪些业务单据引用，避免产生悬空关联
+  const findProductReferences = (productId: string): { module: string; count: number }[] => {
+    const refs: { module: string; count: number }[] = [];
+    const poCount = purchaseOrderStore.getAll().reduce(
+      (n, o) => n + o.items.filter(i => i.productCode === productId).length, 0
+    );
+    if (poCount > 0) refs.push({ module: "采购单", count: poCount });
+    const qCount = quotationStore.getAll().reduce(
+      (n, q) => n + q.items.filter(i => i.productCode === productId).length, 0
+    );
+    if (qCount > 0) refs.push({ module: "报价单", count: qCount });
+    const soCount = salesOrderStore.getAll().reduce(
+      (n, o) => n + o.items.filter(i => i.materialCode === productId).length, 0
+    );
+    if (soCount > 0) refs.push({ module: "销售订单", count: soCount });
+    return refs;
+  };
+
   const handleDelete = (id: string) => {
-    if (confirm("确定要删除此产品吗？")) {
-      productStore.remove(id);
-      loadProducts();
+    const refs = findProductReferences(id);
+    if (refs.length > 0) {
+      const detail = refs.map(r => `${r.module}(${r.count})`).join("、");
+      if (!confirm(`该产品被以下单据引用：${detail}。删除后这些引用将变成无效关联，确定要删除吗？`)) return;
+    } else {
+      if (!confirm("确定要删除此产品吗？")) return;
     }
+    productStore.remove(id);
+    loadProducts();
   };
 
   const handleDeleteDelivery = (id: string) => {
@@ -159,6 +193,8 @@ export default function ProductsPage() {
   const handleSaveDelivery = () => {
     if (!deliveryForm) return;
     if (!deliveryForm.name) { alert("请填写物料名称"); return; }
+    const dw = Number(deliveryForm.weightPerMeter);
+    if (!Number.isFinite(dw) || dw < 0) { alert("米重必须为不小于 0 的数字"); return; }
     const payload = { ...deliveryForm };
     let saved: DeliveryProduct | undefined;
     try {
@@ -279,6 +315,7 @@ export default function ProductsPage() {
           <input
             type="number"
             step="0.001"
+            min="0"
             value={formData.weightPerMeter || ""}
             onChange={(e) => setFormData(prev => ({ ...prev, weightPerMeter: Number(e.target.value) }))}
             className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
@@ -302,27 +339,27 @@ export default function ProductsPage() {
           <>
             <div>
               <label className="block text-xs text-slate-500 mb-1">剪板宽度(mm)</label>
-              <input type="number" step="0.1" value={formData.plateWidth ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, plateWidth: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+              <input type="number" step="0.1" min="0" value={formData.plateWidth ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, plateWidth: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
             </div>
             <div>
               <label className="block text-xs text-slate-500 mb-1">厚度(mm)</label>
-              <input type="number" step="0.1" value={formData.thickness ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, thickness: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+              <input type="number" step="0.1" min="0" value={formData.thickness ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, thickness: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
             </div>
             <div>
               <label className="block text-xs text-slate-500 mb-1">步距(mm)</label>
-              <input type="number" step="0.1" value={formData.step ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, step: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+              <input type="number" step="0.1" min="0" value={formData.step ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, step: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
             </div>
             <div>
               <label className="block text-xs text-slate-500 mb-1">每张板数量</label>
-              <input type="number" value={formData.piecesPerSheet ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, piecesPerSheet: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+              <input type="number" min="0" value={formData.piecesPerSheet ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, piecesPerSheet: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
             </div>
             <div>
               <label className="block text-xs text-slate-500 mb-1">重量(KG)</label>
-              <input type="number" step="0.001" value={formData.weight ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, weight: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+              <input type="number" step="0.001" min="0" value={formData.weight ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, weight: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
             </div>
             <div>
               <label className="block text-xs text-slate-500 mb-1">刀数</label>
-              <input type="number" value={formData.bladeCount ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, bladeCount: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+              <input type="number" min="0" value={formData.bladeCount ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, bladeCount: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
             </div>
           </>
         ) : null}
@@ -577,7 +614,7 @@ export default function ProductsPage() {
                     <td className="px-4 py-2 font-mono text-blue-600">{product.id}</td>
                     <td className="px-4 py-2">{product.name}</td>
                     <td className="px-4 py-2">{product.spec}</td>
-                    <td className="px-4 py-2 text-right font-mono">{(product.weightPerMeter ?? product.weight ?? 0) ? ((product.weightPerMeter ?? product.weight ?? 0)).toFixed(3) : "-"}</td>
+                    <td className="px-4 py-2 text-right font-mono">{(() => { const w = product.weightPerMeter ?? product.weight; return w != null ? w.toFixed(3) : "-"; })()}</td>
                     <td className="px-4 py-2">{product.material}</td>
                     <td className="px-4 py-2">{product.defaultSupplier}</td>
                     <td className="px-4 py-2 text-center">
@@ -628,7 +665,7 @@ export default function ProductsPage() {
               </div>
               <div>
                 <label className="block text-xs text-slate-500 mb-1">米重(KG)</label>
-                <input type="number" step="0.001" value={deliveryForm.weightPerMeter || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, weightPerMeter: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+                <input type="number" step="0.001" min="0" value={deliveryForm.weightPerMeter || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, weightPerMeter: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
               </div>
               <div>
                 <label className="block text-xs text-slate-500 mb-1">单价</label>
