@@ -56,6 +56,10 @@ export default function ProductsPage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [formData, setFormData] = useState<Product>(createEmptyProduct());
 
+  // 成品（DeliveryProduct）编辑状态
+  const [deliveryDialogOpen, setDeliveryDialogOpen] = useState(false);
+  const [deliveryForm, setDeliveryForm] = useState<DeliveryProduct | null>(null);
+
   // BOM（组件）配置，作为新增/编辑弹窗的第三个 tab：完全照送货单明细表
   const [productBom, setProductBom] = useState<ProductBomMap>({});
   const [bomItems, setBomItems] = useState<BomItem[]>([]);
@@ -189,6 +193,20 @@ export default function ProductsPage() {
       deliveryProductStore.remove(id);
       loadProducts();
     }
+  };
+
+  const openEditDelivery = (product: DeliveryProduct) => {
+    setDeliveryForm({ ...product });
+    setDeliveryDialogOpen(true);
+  };
+
+  const handleSaveDelivery = () => {
+    if (!deliveryForm) return;
+    if (!deliveryForm.name) { alert("请填写成品名称"); return; }
+    deliveryProductStore.update(deliveryForm.id, deliveryForm);
+    setDeliveryDialogOpen(false);
+    setDeliveryForm(null);
+    loadProducts();
   };
 
   const form = (
@@ -460,7 +478,10 @@ export default function ProductsPage() {
                     <td className="px-4 py-2 text-right font-mono">{product.unitPrice ? product.unitPrice.toFixed(2) : "-"}</td>
                     <td className="px-4 py-2">{product.customer || "-"}</td>
                     <td className="px-4 py-2 text-center">
-                      <button onClick={() => handleDeleteDelivery(product.id)} className="text-red-500 hover:text-red-700 text-xs">删除</button>
+                      <div className="flex items-center justify-center gap-3">
+                        <button onClick={() => openEditDelivery(product)} className="text-amber-600 hover:text-amber-800 text-xs">编辑</button>
+                        <button onClick={() => handleDeleteDelivery(product.id)} className="text-red-500 hover:text-red-700 text-xs">删除</button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -517,6 +538,55 @@ export default function ProductsPage() {
       <div className="mt-3 text-xs text-slate-400">
         共 {typeFilter === "delivery" ? deliveryProducts.length : filtered.length} 条{typeFilter === "delivery" ? "成" : "产品"}记录
       </div>
+
+      {deliveryDialogOpen && deliveryForm ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-2" onClick={() => setDeliveryDialogOpen(false)}>
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-lg flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-slate-800">编辑成品</h2>
+              <button onClick={() => setDeliveryDialogOpen(false)} className="text-slate-400 hover:text-slate-600">✕</button>
+            </div>
+            <div className="p-6 grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">成品编号</label>
+                <input type="text" value={deliveryForm.code || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, code: e.target.value }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">成品名称 <span className="text-red-500">*</span></label>
+                <input type="text" value={deliveryForm.name} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, name: e.target.value }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">规格</label>
+                <input type="text" value={deliveryForm.spec || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, spec: e.target.value }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">表面处理</label>
+                <input type="text" value={deliveryForm.surface || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, surface: e.target.value }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">单位</label>
+                <input type="text" value={deliveryForm.unit || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, unit: e.target.value }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">米重(KG)</label>
+                <input type="number" step="0.001" value={deliveryForm.weightPerMeter || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, weightPerMeter: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">单价</label>
+                <input type="number" step="0.01" value={deliveryForm.unitPrice || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, unitPrice: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">所属客户</label>
+                <input type="text" value={deliveryForm.customer || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, customer: e.target.value }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+              </div>
+            </div>
+            <div className="px-6 py-4 border-t border-slate-100 flex justify-end gap-2">
+              <button onClick={() => setDeliveryDialogOpen(false)} className="px-4 py-1.5 text-sm text-slate-600 border border-slate-200 rounded-md hover:bg-slate-50">取消</button>
+              <button onClick={handleSaveDelivery} className="px-4 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700">保存</button>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       {dialogOpen ? (
         <AddDialog
