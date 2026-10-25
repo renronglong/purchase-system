@@ -277,6 +277,8 @@ export default function ProductsPage() {
   );
 
   // 组件（BOM）tab 内容：完全照送货单明细表
+  const bomSurfaceOptions = Array.from(new Set(deliveryProducts.map(p => p.surface).filter(Boolean)));
+  const bomUnitOptions = Array.from(new Set(deliveryProducts.map(p => p.unit).filter(Boolean)));
   const bomTabContent = (
     <div className="overflow-x-auto">
       <table className="w-full text-xs min-w-[1000px]">
@@ -288,7 +290,7 @@ export default function ProductsPage() {
             <th className="px-2 py-2 font-medium text-slate-600 w-28">规格</th>
             <th className="px-2 py-2 font-medium text-slate-600 w-20">表面处理</th>
             <th className="px-2 py-2 font-medium text-slate-600 w-12">单位</th>
-            <th className="px-2 py-2 font-medium text-slate-600 w-16">数量</th>
+            <th className="px-2 py-2 font-medium text-slate-600 w-16">用量</th>
             <th className="px-2 py-2 font-medium text-slate-600 w-16">单价</th>
             <th className="px-2 py-2 font-medium text-slate-600 w-20">金额</th>
             <th className="px-2 py-2 font-medium text-slate-600 w-24">备注</th>
@@ -298,12 +300,12 @@ export default function ProductsPage() {
         <tbody>
           {bomItems.map((item, idx) => (
             <tr key={item.id} className="border-b border-slate-100">
-              <td className="px-2 py-1 text-center text-slate-500">{idx + 1}</td>
+              <td className="px-2 py-1 text-center text-slate-500">{idx}</td>
               <td className="px-2 py-1"><input type="text" value={item.materialCode} onChange={(e) => updateBomItem(idx, "materialCode", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" placeholder="物料编号" list="bom-product-list" /></td>
               <td className="px-2 py-1"><input type="text" value={item.productName} onChange={(e) => updateBomItem(idx, "productName", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" list="bom-product-name-list" /></td>
               <td className="px-2 py-1"><input type="text" value={item.spec} onChange={(e) => updateBomItem(idx, "spec", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" list="bom-product-spec-list" /></td>
-              <td className="px-2 py-1"><input type="text" value={item.surface} onChange={(e) => updateBomItem(idx, "surface", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
-              <td className="px-2 py-1"><input type="text" value={item.unit} onChange={(e) => updateBomItem(idx, "unit", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
+              <td className="px-2 py-1"><input type="text" value={item.surface} onChange={(e) => updateBomItem(idx, "surface", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" placeholder="铁灰" list="bom-surface-list" /></td>
+              <td className="px-2 py-1"><input type="text" value={item.unit} onChange={(e) => updateBomItem(idx, "unit", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" placeholder="个" list="bom-unit-list" /></td>
               <td className="px-2 py-1"><input type="number" value={item.qty || ""} onChange={(e) => updateBomItem(idx, "qty", Number(e.target.value))} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
               <td className="px-2 py-1">{hideBomPrices ? <span className="text-slate-400">***</span> : <input type="number" step="0.01" value={item.unitPrice || ""} onChange={(e) => updateBomItem(idx, "unitPrice", Number(e.target.value))} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" />}</td>
               <td className="px-2 py-1 text-right font-mono font-medium">{hideBomPrices ? "***" : item.amount.toFixed(2)}</td>
@@ -334,6 +336,12 @@ export default function ProductsPage() {
       </datalist>
       <datalist id="bom-product-spec-list">
         {Array.from(new Set(deliveryProducts.map(p => p.spec).filter(Boolean))).map(s => <option key={s} value={s} />)}
+      </datalist>
+      <datalist id="bom-surface-list">
+        {bomSurfaceOptions.map(s => <option key={s} value={s} />)}
+      </datalist>
+      <datalist id="bom-unit-list">
+        {bomUnitOptions.map(u => <option key={u} value={u} />)}
       </datalist>
 
       <div className="flex gap-2 mt-4">
