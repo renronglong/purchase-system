@@ -406,6 +406,7 @@ export default function ProductsPage() {
         <button onClick={() => setHideBomPrices(!hideBomPrices)} className={`px-3 py-1.5 text-xs rounded-md border ${hideBomPrices ? "bg-amber-600 text-white border-amber-600" : "bg-white text-slate-700 border-slate-200 hover:bg-slate-50"}`}>
           {hideBomPrices ? "显示价格" : "隐藏价格"}
         </button>
+        <button onClick={handleSave} className="px-5 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700">保存</button>
       </div>
     </div>
   );
