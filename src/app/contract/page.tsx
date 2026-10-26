@@ -37,14 +37,14 @@ function emptyItem(): ContractItem {
   return { id: genItemId(), code: "", name: "", spec: "", surface: "", quantity: 0, unit: "条", unitPrice: 0, amount: 0, remark: "" };
 }
 
-// 默认供方信息（碧利莱）
+// 默认供方信息：新用户不预填，由各用户自行填写本公司（供方）资料
 const DEFAULT_SUPPLIER = {
-  supplierName: "佛山市碧利莱照明有限公司",
-  supplierAddress: "佛山市南海区狮山镇松岗办事处显纲村委会厦边村口首层之六",
-  supplierContact: "龙任荣",
-  supplierPhone: "18929979760",
-  supplierFax: "85609935",
-  supplierTaxNo: "91440605MACUYJRB5C",
+  supplierName: "",
+  supplierAddress: "",
+  supplierContact: "",
+  supplierPhone: "",
+  supplierFax: "",
+  supplierTaxNo: "",
 };
 
 export default function ContractPage() {

@@ -298,9 +298,6 @@ export const deliveryCustomerStore = {
 // 发货公司管理
 export const deliveryCompanyStore = {
   getAll(): DeliveryCompany[] {
-    if (typeof window !== "undefined" && userStorage.getItem(KEYS.DELIVERY_COMPANIES) === null) {
-      saveAll(KEYS.DELIVERY_COMPANIES, deliveryCompanies.map(c => ({ ...c })));
-    }
     return getAll<DeliveryCompany>(KEYS.DELIVERY_COMPANIES);
   },
   getById(id: string): DeliveryCompany | undefined {
