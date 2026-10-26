@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { contractSeedData, type ContractData, type ContractItem } from "@/lib/contract-seed-data";
+import { type ContractData, type ContractItem } from "@/lib/contract-seed-data";
 import { deliveryCustomerStore, deliveryProductStore } from "@/lib/store";
 
 function genItemId(): string { return Math.random().toString(36).slice(2, 10); }
@@ -82,13 +82,11 @@ export default function ContractPage() {
   const products = typeof window !== "undefined" ? deliveryProductStore.getAll() : [];
 
   const load = useCallback(() => {
-    // 合并种子数据 + localStorage，local覆盖种子
+    // 仅读取本地已保存的合同；不再自动补种子数据。
+    // 新用户基础数据留空、各用户自行录入；老用户已保存的真实合同保持不变。
     const localRaw = typeof window !== "undefined" ? localStorage.getItem("contracts_local") : null;
     const localContracts: ContractData[] = localRaw ? JSON.parse(localRaw) : [];
-    const localIds = new Set(localContracts.map(c => c.id));
-    // 种子数据中不在local里的
-    const fromSeed = contractSeedData.filter(c => !localIds.has(c.id));
-    const all = [...fromSeed, ...localContracts];
+    const all = [...localContracts];
     all.sort((a, b) => b.signDate.localeCompare(a.signDate));
     setContracts(all.map(fixSupplierInfo));
   }, []);
