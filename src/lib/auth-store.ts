@@ -100,4 +100,27 @@ export const authStore = {
   getAllUsers(): AppUser[] {
     return getUsers();
   },
+
+  // 删除指定用户：从 app_users 移除，并清除该用户隔离存储下的全部业务数据（u_{userId}_* 前缀）
+  deleteUser(userId: string): { success: boolean; error?: string } {
+    const users = getUsers();
+    const user = users.find(u => u.id === userId);
+    if (!user) return { success: false, error: "用户不存在" };
+
+    // 1) 从全局用户列表中移除
+    const filtered = users.filter(u => u.id !== userId);
+    saveUsers(filtered);
+
+    // 2) 清除该用户隔离存储下的所有业务数据（键前缀 u_{userId}_）。
+    //    注意：合同等使用裸 localStorage 键（如 contracts_local）不含此前缀，不会被误删。
+    const prefix = `u_${userId}_`;
+    const keysToRemove: string[] = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && k.startsWith(prefix)) keysToRemove.push(k);
+    }
+    keysToRemove.forEach(k => localStorage.removeItem(k));
+
+    return { success: true };
+  },
 };
