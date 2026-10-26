@@ -32,7 +32,6 @@ export interface Component {
   createdAt?: string;
   updatedAt?: string;
 }
-export type { Component };
 
 // 对帐单明细
 export interface ReconciliationItem {
