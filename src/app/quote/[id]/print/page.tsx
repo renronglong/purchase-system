@@ -29,8 +29,7 @@ export default function QuotationPrintPage() {
       ["电话：" + (q.supplierPhone || "")],                                   // 5: A6
       ["地址：" + (q.supplierAddress || "")],                                 // 6: A7
       ["报价单编号：" + (q.quoteNo || "")],                                   // 7: A8
-      [],                                                                     // 8 空行（表头前）
-      ["序号", "产品编号", "规格尺寸mm", "产品名称", "单位", "材质", "表面处理", "单价未税(元)", "含税价", "最小起订量", "模具费RMB(元)", "备注"], // 9: 表头
+      ["序号", "产品编号", "规格尺寸mm", "产品名称", "单位", "材质", "表面处理", "单价未税(元)", "含税价", "最小起订量", "模具费RMB(元)", "备注"], // 8: 表头(A9)
     ];
     // 明细行：模板明细从第10行(0-based 10)开始
     for (let i = 0; i < detailRows; i++) {
@@ -64,8 +63,8 @@ export default function QuotationPrintPage() {
       "4：此报价单有效期为x天",
       "5：开模时间x个工作日，出样x个工作日",
     ];
-    rows.push([]);
     terms.forEach((t, i) => rows.push([t]));
+    rows.push([]);
     rows.push([]);
     rows.push(["需方（签章）"]);
     rows.push([]);
@@ -82,8 +81,8 @@ export default function QuotationPrintPage() {
       { wch: 10 }, { wch: 13 },
     ];
 
-    // 表头行 = 9
-    const headRow = 9;
+    // 表头行 = 8（A9）
+    const headRow = 8;
     const totalRow = headRow + detailRows + 1; // 明细后是总计
 
     // 边框（细线黑）
@@ -147,6 +146,11 @@ export default function QuotationPrintPage() {
       { s: { r: 7, c: 0 }, e: { r: 7, c: 5 } },         // 报价单编号 A8:F8
       { s: { r: 7, c: 6 }, e: { r: 7, c: 11 } },        // 报价日期 G8:L8
       { s: { r: totalRow, c: 0 }, e: { r: totalRow, c: 5 } },  // 总计 A:G合并
+      // 条款行 + 条款后空行：A26:L26 ... A31:L31 全行合并
+      ...(Array.from({ length: 6 }, (_, k) => ({
+        s: { r: totalRow + 1 + k, c: 0 },
+        e: { r: totalRow + 1 + k, c: 11 },
+      })) as { s: { r: number; c: number }; e: { r: number; c: number } }[]),
       { s: { r: r, c: 0 }, e: { r: r, c: 6 } },         // 需方签章 A:G
       { s: { r: r, c: 7 }, e: { r: r, c: 11 } },        // 供方签章 H:L
     ];
