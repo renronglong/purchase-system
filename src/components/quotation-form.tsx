@@ -69,8 +69,24 @@ export default function QuotationForm({ quotation }: { quotation?: Quotation }) 
   const [items, setItems] = useState<QuotationItem[]>(editing ? quotation.items.map(i => ({ ...i })) : [createEmptyItem()]);
   const [terms, setTerms] = useState<string[]>(editing && quotation.terms.length > 0 ? [...quotation.terms] : [...defaultTerms]);
 
+  // 物料/产品选择器状态
+  const [pickOpen, setPickOpen] = useState(false);      // 选择面板是否打开
+  const [pickIndex, setPickIndex] = useState(-1);        // 正在为第几行选择
+  const [pickSearch, setPickSearch] = useState("");      // 面板内搜索词
+
   const products = productStore.getAll();
   const deliveryProducts = deliveryProductStore.getAll();
+  // 合并物料 + 产品；物料取 code 作为编号，产品取 id 作为编号
+  const pickList = [
+    ...deliveryProducts.filter(m => m.code).map(m => ({ key: "m_" + m.id, code: m.code, name: m.name || "", spec: m.spec || "", unit: m.unit || "", surface: m.surface || "", material: "", price: m.unitPrice || 0, kind: "物料" as const })),
+    ...products.map(p => ({ key: "p_" + p.id, code: p.id, name: p.name || "", spec: p.spec || "", unit: p.unit || "", surface: "", material: p.material || "", price: p.unitPrice || 0, kind: "产品" as const })),
+  ];
+  const pickFiltered = pickList.filter(x =>
+    !pickSearch ||
+    x.code.toLowerCase().includes(pickSearch.toLowerCase()) ||
+    x.name.toLowerCase().includes(pickSearch.toLowerCase()) ||
+    x.spec.toLowerCase().includes(pickSearch.toLowerCase())
+  );
   const customers = deliveryCustomerStore.getAll();
   const companies = deliveryCompanyStore.getAll();
   const supplierCompanyOptions = Array.from(new Set(companies.map(c => c.name)));
@@ -155,6 +171,27 @@ export default function QuotationForm({ quotation }: { quotation?: Quotation }) 
       }
       return next;
     });
+  };
+
+  const openPicker = (index: number) => { setPickIndex(index); setPickSearch(""); setPickOpen(true); };
+
+  const pickFromList = (entry: { code: string; name: string; spec: string; unit: string; surface: string; material: string; price: number }) => {
+    if (pickIndex < 0) return;
+    setItems(prev => {
+      const next = [...prev];
+      const row = { ...next[pickIndex] };
+      row.productCode = entry.code;
+      row.productName = entry.name;
+      row.spec = entry.spec;
+      row.unit = entry.unit;
+      row.material = entry.material;
+      row.surfaceTreatment = entry.surface;
+      if (entry.price) row.unitPrice = entry.price;
+      next[pickIndex] = row;
+      return next;
+    });
+    setPickOpen(false);
+    setPickIndex(-1);
   };
 
   const addRow = () => setItems(prev => [...prev, createEmptyItem()]);
@@ -269,7 +306,12 @@ export default function QuotationForm({ quotation }: { quotation?: Quotation }) 
                 <tr key={it.id} className="border-b border-slate-100">
                   <td className="px-2 py-1.5 text-slate-500">{idx + 1}</td>
                   <td className="px-2 py-1.5">
-                    <input list="product-list" value={it.productCode} onChange={(e) => { updateItem(idx, "productCode", e.target.value); handleProductSelect(idx, e.target.value); }} placeholder="编号" className="w-28 px-2 py-1 text-sm border border-slate-200 rounded-md" />
+                    <div className="flex items-center gap-1">
+                      <input list="product-list" value={it.productCode} onChange={(e) => { updateItem(idx, "productCode", e.target.value); handleProductSelect(idx, e.target.value); }} placeholder="编号" className="w-28 px-2 py-1 text-sm border border-slate-200 rounded-md" />
+                      <button type="button" onClick={() => openPicker(idx)} title="从物料/产品库选择" className="w-7 h-7 shrink-0 flex items-center justify-center border border-blue-200 text-blue-600 rounded-md hover:bg-blue-50">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+                      </button>
+                    </div>
                   </td>
                   <td className="px-2 py-1.5"><input value={it.spec} onChange={(e) => updateItem(idx, "spec", e.target.value)} className="w-28 px-2 py-1 text-sm border border-slate-200 rounded-md" /></td>
                   <td className="px-2 py-1.5"><input value={it.productName} onChange={(e) => updateItem(idx, "productName", e.target.value)} className="w-32 px-2 py-1 text-sm border border-slate-200 rounded-md" /></td>
@@ -305,6 +347,59 @@ export default function QuotationForm({ quotation }: { quotation?: Quotation }) 
         <datalist id="material-options">
           {materialOptions.map(m => <option key={m} value={m} />)}
         </datalist>
+
+        {/* 物料/产品选择器弹层 */}
+        {pickOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setPickOpen(false)}>
+            <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl flex flex-col max-h-[80vh]" onClick={(e) => e.stopPropagation()}>
+              <div className="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
+                <h3 className="text-base font-semibold text-slate-800">选择物料 / 产品</h3>
+                <button onClick={() => setPickOpen(false)} className="text-slate-400 hover:text-slate-600">✕</button>
+              </div>
+              <div className="px-5 py-3 border-b border-slate-100">
+                <input
+                  autoFocus
+                  value={pickSearch}
+                  onChange={(e) => setPickSearch(e.target.value)}
+                  placeholder="输入编号、名称或规格搜索…"
+                  className="w-full px-3 py-2 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                />
+              </div>
+              <div className="overflow-y-auto flex-1">
+                {pickFiltered.length === 0 ? (
+                  <div className="text-center py-12 text-slate-400">未找到匹配项</div>
+                ) : (
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-slate-50 border-b border-slate-200 sticky top-0">
+                        <th className="text-left px-4 py-2 font-medium text-slate-600 w-14">类型</th>
+                        <th className="text-left px-4 py-2 font-medium text-slate-600">编号</th>
+                        <th className="text-left px-4 py-2 font-medium text-slate-600">名称</th>
+                        <th className="text-left px-4 py-2 font-medium text-slate-600">规格</th>
+                        <th className="text-left px-4 py-2 font-medium text-slate-600">单位</th>
+                        <th className="text-right px-4 py-2 font-medium text-slate-600">单价</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {pickFiltered.map((x) => (
+                        <tr key={x.key} onClick={() => pickFromList(x)} className="border-b border-slate-100 hover:bg-blue-50/50 cursor-pointer">
+                          <td className="px-4 py-2">
+                            <span className={"px-1.5 py-0.5 text-xs rounded " + (x.kind === "物料" ? "bg-emerald-100 text-emerald-700" : "bg-blue-100 text-blue-700")}>{x.kind}</span>
+                          </td>
+                          <td className="px-4 py-2 font-mono text-blue-600">{x.code}</td>
+                          <td className="px-4 py-2">{x.name || "-"}</td>
+                          <td className="px-4 py-2">{x.spec || "-"}</td>
+                          <td className="px-4 py-2">{x.unit || "-"}</td>
+                          <td className="px-4 py-2 text-right font-mono">{x.price ? x.price.toFixed(2) : "-"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
         <div className="flex justify-end gap-8 mt-3 text-sm">
           <span className="text-slate-600">单价合计：<span className="font-semibold text-slate-900">¥{grandTotal.toFixed(2)}</span></span>
           <span className="text-slate-600">模具费合计：<span className="font-semibold text-slate-900">¥{moldTotal.toFixed(2)}</span></span>
