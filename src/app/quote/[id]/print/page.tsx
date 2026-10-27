@@ -13,117 +13,145 @@ export default function QuotationPrintPage() {
   }
 
   const handleExportExcel = () => {
-    const units = q.items.map((it) => it.unit || "");
-    const sameUnit = units.length > 0 && units.every((u) => u === units[0]) && units[0] !== "";
+    const items = q.items;
 
-    // 数据：row0-1 标题，row3-6 供需双方，row8 编号日期，row10 表头，之后明细、总计、条款
+    // 按模板 A1:L36 精确布局构建行（0-based 行号）
+    // 明细固定 15 行（模板 A10:L24），不足补空，超出追加
+    const maxDetailRows = 15;
+    const detailRows = items.length > maxDetailRows ? items.length : maxDetailRows;
+
     const rows: (string | number)[][] = [
-      [q.supplierCompany],
-      ["报 价 单"],
+      [q.supplierCompany],                                                     // 0: A1 公司名
+      ["报 价 单"],                                                           // 1: A2 标题
       [],
-      ["供方", q.supplierCompany, "客户名称", q.customerName],
-      ["联系人", q.supplierContact, "联系人", q.customerContact],
-      ["电话", q.supplierPhone, "电话", q.customerPhone],
-      ["地址", q.supplierAddress, "地址", q.customerAddress],
-      [],
-      ["报价单编号", q.quoteNo, "报价日期", q.quoteDate],
-      [],
-      ["序号", "产品编号", "规格尺寸mm", "产品名称", "单位", "材质", "表面处理", "单价未税(元)", "含税价", "最小起订量", "模具费(元)", "备注"],
-      ...q.items.map((it, idx) => [
-        idx + 1,
-        it.productCode || "",
-        it.spec || "",
-        it.productName || "",
-        sameUnit ? "" : (it.unit || ""),
-        it.material || "",
-        it.surfaceTreatment || "",
-        it.unitPrice ? it.unitPrice : "",
-        it.taxPrice ? it.taxPrice : "",
-        it.minOrderQty || "",
-        it.moldFee ? it.moldFee : "",
-        it.remark || "",
-      ]),
-      [],
-      ["总计", "", "", "", "", "", "", (q.grandTotal || 0), "", "", "", ""],
-      [],
-      ...q.terms.map((t) => [t]),
+      ["供方：" + (q.supplierCompany || "")],                                 // 3: A4
+      ["联系人：" + (q.supplierContact || "")],                               // 4: A5
+      ["电话：" + (q.supplierPhone || "")],                                   // 5: A6
+      ["地址：" + (q.supplierAddress || "")],                                 // 6: A7
+      ["报价单编号：" + (q.quoteNo || "")],                                   // 7: A8
+      [],                                                                     // 8 空行（表头前）
+      ["序号", "产品编号", "规格尺寸mm", "产品名称", "单位", "材质", "表面处理", "单价未税(元)", "含税价", "最小起订量", "模具费RMB(元)", "备注"], // 9: 表头
     ];
+    // 明细行：模板明细从第10行(0-based 10)开始
+    for (let i = 0; i < detailRows; i++) {
+      const it = items[i];
+      if (i < items.length) {
+        rows.push([
+          i + 1,
+          it.productCode || "",
+          it.spec || "",
+          it.productName || "",
+          it.unit || "",
+          it.material || "",
+          it.surfaceTreatment || "",
+          it.unitPrice ? it.unitPrice : "",
+          it.taxPrice ? it.taxPrice : "",
+          it.minOrderQty || "",
+          it.moldFee ? it.moldFee : "",
+          it.remark || "",
+        ]);
+      } else {
+        rows.push([i + 1, "", "", "", "", "", "", "", "", "", "", ""]);
+      }
+    }
+    // 总计行
+    rows.push(["总计", "", "", "", "", "", (q.grandTotal || 0), "", "", "", "", ""]);
+    // 条款说明
+    const terms = q.terms && q.terms.length ? q.terms : [
+      "1：依照图纸进行开模及送样。",
+      "2：此报价含运费",
+      "3：付款方式：",
+      "4：此报价单有效期为x天",
+      "5：开模时间x个工作日，出样x个工作日",
+    ];
+    rows.push([]);
+    terms.forEach((t, i) => rows.push([t]));
+    rows.push([]);
+    rows.push(["需方（签章）"]);
+    rows.push([]);
+    rows.push([]);
+    rows.push(["日期:"]);
 
     const ws = XLSX.utils.aoa_to_sheet(rows);
-    ws["!ref"] = XLSX.utils.encode_range({ s: { r: 0, c: 0 }, e: { r: rows.length - 1, c: 11 } });
-
     const cell = (r: number, c: number) => XLSX.utils.encode_cell({ r, c });
 
-    // 标题：居中加粗加大
-    const titleStyle = { font: { bold: true, sz: 16 }, alignment: { horizontal: "center", vertical: "middle" } };
-    const title2Style = { font: { bold: true, sz: 20 }, alignment: { horizontal: "center", vertical: "middle" } };
-    if (ws[cell(0, 0)]) ws[cell(0, 0)].s = titleStyle as any;
-    if (ws[cell(1, 0)]) ws[cell(1, 0)].s = title2Style as any;
+    // 列宽（对照模板）
+    ws["!cols"] = [
+      { wch: 6.5 }, { wch: 15 }, { wch: 19 }, { wch: 24 }, { wch: 5.5 },
+      { wch: 10 }, { wch: 8 }, { wch: 12 }, { wch: 11 }, { wch: 12 },
+      { wch: 10 }, { wch: 13 },
+    ];
 
-    // 供需双方信息区：标签加粗
-    for (let r = 3; r <= 6; r++) {
-      for (const c of [0, 2]) {
-        if (ws[cell(r, c)]) ws[cell(r, c)].s = { font: { bold: true } } as any;
-      }
-    }
-    if (ws[cell(8, 0)]) ws[cell(8, 0)].s = { font: { bold: true } } as any;
-    if (ws[cell(8, 2)]) ws[cell(8, 2)].s = { font: { bold: true } } as any;
+    // 表头行 = 9
+    const headRow = 9;
+    const totalRow = headRow + detailRows + 1; // 明细后是总计
 
-    // 明细表区域：row10(表头) 至 总计行 row13+items.length-1
-    const headRow = 10;
-    const totalRow = headRow + q.items.length + 1; // 明细后空一行再总计
-    const tableStart = headRow;
-    const tableEnd = totalRow;
-    const border = {
-      top: { style: "thin", color: { rgb: "000000" } },
-      bottom: { style: "thin", color: { rgb: "000000" } },
-      left: { style: "thin", color: { rgb: "000000" } },
-      right: { style: "thin", color: { rgb: "000000" } },
+    // 边框（细线黑）
+    const thin = {
+      style: "thin" as const,
+      color: { rgb: "000000" },
     };
-    // 表头：底色 + 加粗 + 居中
-    for (let c = 0; c <= 11; c++) {
-      const addr = cell(headRow, c);
+    const border = { top: thin, bottom: thin, left: thin, right: thin };
+
+    // 表头 + 明细 + 总计：加边框、垂直居中
+    const styleCell = (r: number, c: number, horizontal: string, bold?: boolean, bg?: string) => {
+      const addr = cell(r, c);
       if (!ws[addr]) ws[addr] = { t: "s", v: "" };
-      ws[addr].s = { font: { bold: true }, alignment: { horizontal: "center", vertical: "middle" }, fill: { fgColor: { rgb: "D9E1F2" } }, border } as any;
-    }
-    // 明细 + 总计行：边框、垂直居中
-    for (let r = tableStart; r <= tableEnd; r++) {
+      ws[addr].s = {
+        alignment: { horizontal, vertical: "middle", wrapText: true },
+        border,
+        ...(bold ? { font: { bold: true } } : {}),
+        ...(bg ? { fill: { fgColor: { rgb: bg } } } : {}),
+      } as any;
+    };
+
+    // 表头行：居中加粗浅色底
+    for (let c = 0; c <= 11; c++) styleCell(headRow, c, "center", true, "D9E1F2");
+    // 明细行
+    for (let r = headRow + 1; r <= totalRow; r++) {
       for (let c = 0; c <= 11; c++) {
-        const addr = cell(r, c);
-        if (!ws[addr]) ws[addr] = { t: "s", v: "" };
-        const prev = ws[addr].s || {};
-        ws[addr].s = {
-          ...(prev as object),
-          vertical: "middle",
-          alignment: { horizontal: c === 7 || c === 8 || c === 10 ? "right" : "center", vertical: "middle" },
-          border,
-        } as any;
+        styleCell(r, c, c === 0 || c === 4 || c === 5 || c === 6 ? "center" : "left");
       }
     }
-    // 总计行：加粗
+    // 总计行加粗
     for (let c = 0; c <= 11; c++) {
       const addr = cell(totalRow, c);
-      if (ws[addr]) ws[addr].s = { ...(ws[addr].s as object), font: { bold: true } } as any;
+      styleCell(totalRow, c, c === 6 ? "right" : "left", true);
     }
 
-    // 合并：标题跨列 + 单位列纵向合并
+    // 标题：居中加粗加大
+    const titleStyle = { font: { bold: true, sz: 16 }, alignment: { horizontal: "center", vertical: "middle" } } as any;
+    if (ws[cell(0, 0)]) ws[cell(0, 0)].s = titleStyle;
+    if (ws[cell(1, 0)]) ws[cell(1, 0)].s = { ...titleStyle, font: { bold: true, sz: 20 } };
+    // 信息区标签加粗
+    for (let r = 3; r <= 7; r++) {
+      if (ws[cell(r, 0)]) ws[cell(r, 0)].s = { font: { bold: true } } as any;
+    }
+    // 需方/供方签章加粗
+    // 签章行：总计行 + 条款前空1 + 条款 + 条款后空1 + 1 = totalRow + terms.length + 3
+    let r = totalRow + terms.length + 3;
+    if (ws[cell(r, 0)]) ws[cell(r, 0)].s = { font: { bold: true } } as any;
+
+    // 合并跨列：
     const merges: { s: { r: number; c: number }; e: { r: number; c: number } }[] = [
-      { s: { r: 0, c: 0 }, e: { r: 0, c: 11 } },
-      { s: { r: 1, c: 0 }, e: { r: 1, c: 11 } },
+      { s: { r: 0, c: 0 }, e: { r: 0, c: 11 } },        // 公司名 A1:L1
+      { s: { r: 1, c: 0 }, e: { r: 1, c: 11 } },        // 报价单 A2:L2
+      { s: { r: 3, c: 0 }, e: { r: 3, c: 5 } },         // 供方 A4:F4
+      { s: { r: 3, c: 6 }, e: { r: 3, c: 11 } },        // 客户名称 G4:L4
+      { s: { r: 4, c: 0 }, e: { r: 4, c: 5 } },
+      { s: { r: 4, c: 6 }, e: { r: 4, c: 11 } },
+      { s: { r: 5, c: 0 }, e: { r: 5, c: 5 } },
+      { s: { r: 5, c: 6 }, e: { r: 5, c: 11 } },
+      { s: { r: 6, c: 0 }, e: { r: 6, c: 5 } },
+      { s: { r: 6, c: 6 }, e: { r: 6, c: 11 } },
+      { s: { r: 7, c: 0 }, e: { r: 7, c: 5 } },         // 报价单编号 A8:F8
+      { s: { r: 7, c: 6 }, e: { r: 7, c: 11 } },        // 报价日期 G8:L8
+      { s: { r: totalRow, c: 0 }, e: { r: totalRow, c: 5 } },  // 总计 A:G合并
+      { s: { r: r, c: 0 }, e: { r: r, c: 6 } },         // 需方签章 A:G
+      { s: { r: r, c: 7 }, e: { r: r, c: 11 } },        // 供方签章 H:L
     ];
-    if (sameUnit) {
-      merges.push({ s: { r: headRow + 1, c: 4 }, e: { r: headRow + q.items.length, c: 4 } });
-      const unitCell = cell(headRow + 1, 4);
-      ws[unitCell] = { t: "s", v: units[0] };
-    }
+    // 明细表头到总计加边框
     ws["!merges"] = merges as any;
-
-    // 列宽
-    ws["!cols"] = [
-      { wch: 8 }, { wch: 18 }, { wch: 14 }, { wch: 24 }, { wch: 6 },
-      { wch: 10 }, { wch: 14 }, { wch: 14 }, { wch: 12 }, { wch: 12 },
-      { wch: 12 }, { wch: 24 },
-    ];
 
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "报价单");
