@@ -308,9 +308,7 @@ export default function QuotationForm({ quotation }: { quotation?: Quotation }) 
                   <td className="px-2 py-1.5">
                     <div className="flex items-center gap-1">
                       <input list="product-list" value={it.productCode} onChange={(e) => { updateItem(idx, "productCode", e.target.value); handleProductSelect(idx, e.target.value); }} placeholder="编号" className="w-28 px-2 py-1 text-sm border border-slate-200 rounded-md" />
-                      <button type="button" onClick={() => openPicker(idx)} title="从物料/产品库选择" className="w-7 h-7 shrink-0 flex items-center justify-center border border-blue-200 text-blue-600 rounded-md hover:bg-blue-50">
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-                      </button>
+                      <button type="button" onClick={() => openPicker(idx)} className="shrink-0 px-2.5 h-8 bg-blue-600 text-white text-xs font-medium rounded-md hover:bg-blue-700">选</button>
                     </div>
                   </td>
                   <td className="px-2 py-1.5"><input value={it.spec} onChange={(e) => updateItem(idx, "spec", e.target.value)} className="w-28 px-2 py-1 text-sm border border-slate-200 rounded-md" /></td>
