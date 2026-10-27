@@ -79,7 +79,7 @@ export default function QuotationForm({ quotation }: { quotation?: Quotation }) 
   // 合并物料 + 产品；物料取 code 作为编号，产品取 id 作为编号
   const pickList = [
     ...deliveryProducts.filter(m => m.code).map(m => ({ key: "m_" + m.id, code: m.code, name: m.name || "", spec: m.spec || "", unit: m.unit || "", surface: m.surface || "", material: "", price: m.unitPrice || 0, kind: "物料" as const })),
-    ...products.map(p => ({ key: "p_" + p.id, code: p.id, name: p.name || "", spec: p.spec || "", unit: p.unit || "", surface: "", material: p.material || "", price: p.unitPrice || 0, kind: "产品" as const })),
+    ...products.map(p => ({ key: "p_" + p.id, code: p.id, name: p.name || "", spec: p.spec || "", unit: "", surface: "", material: p.material || "", price: p.unitPrice || 0, kind: "产品" as const })),
   ];
   const pickFiltered = pickList.filter(x =>
     !pickSearch ||
