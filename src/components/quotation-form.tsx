@@ -318,9 +318,9 @@ export default function QuotationForm({ quotation }: { quotation?: Quotation }) 
                     <input list="material-options" value={it.material} onChange={(e) => updateItem(idx, "material", e.target.value)} className="w-20 px-2 py-1 text-sm border border-slate-200 rounded-md" />
                   </td>
                   <td className="px-2 py-1.5">
-                    <select value={it.surfaceTreatment} onChange={(e) => updateItem(idx, "surfaceTreatment", e.target.value)} className="w-24 px-2 py-1 text-sm border border-slate-200 rounded-md">
+                    <select value={it.surfaceTreatment} onChange={(e) => updateItem(idx, "surfaceTreatment", e.target.value)} className="w-28 px-2 py-1 text-sm border border-slate-200 rounded-md">
                       <option value="">请选择</option>
-                      {surfaceTreatments.map(t => <option key={t} value={t}>{t}</option>)}
+                      {[...new Set([...surfaceTreatments, ...deliveryProducts.map(m => m.surface).filter(Boolean)])].map(t => <option key={t} value={t}>{t}</option>)}
                     </select>
                   </td>
                   <td className="px-2 py-1.5"><input type="number" step="0.01" value={it.unitPrice || ""} onChange={(e) => updateItem(idx, "unitPrice", Number(e.target.value))} className="w-20 px-2 py-1 text-sm border border-slate-200 rounded-md text-right" /></td>
