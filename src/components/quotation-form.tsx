@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
-  quotationStore, productStore, deliveryCustomerStore, deliveryCompanyStore, previewQuotationNo,
+  quotationStore, productStore, deliveryProductStore, deliveryCustomerStore, deliveryCompanyStore, previewQuotationNo,
   type Quotation, type QuotationItem,
 } from "@/lib/store";
 import { purchasingCompanies, surfaceTreatments } from "@/lib/seed-data";
@@ -70,6 +70,7 @@ export default function QuotationForm({ quotation }: { quotation?: Quotation }) 
   const [terms, setTerms] = useState<string[]>(editing && quotation.terms.length > 0 ? [...quotation.terms] : [...defaultTerms]);
 
   const products = productStore.getAll();
+  const deliveryProducts = deliveryProductStore.getAll();
   const customers = deliveryCustomerStore.getAll();
   const companies = deliveryCompanyStore.getAll();
   const supplierCompanyOptions = Array.from(new Set(companies.map(c => c.name)));
@@ -128,16 +129,30 @@ export default function QuotationForm({ quotation }: { quotation?: Quotation }) 
   const handleProductSelect = (index: number, productCode: string) => {
     if (!productCode) return;
     const product = products.find(p => p.id === productCode);
-    if (!product) return;
+    const material = deliveryProducts.find(m => m.code === productCode);
+    if (!product && !material) return;
     setItems(prev => {
       const next = [...prev];
-      next[index] = {
-        ...next[index],
-        productCode: product.id,
-        productName: product.name || "",
-        spec: product.spec || "",
-        material: product.material || "",
-      };
+      if (product) {
+        next[index] = {
+          ...next[index],
+          productCode: product.id,
+          productName: product.name || "",
+          spec: product.spec || "",
+          material: product.material || "",
+          unitPrice: product.unitPrice || 0,
+        };
+      } else if (material) {
+        next[index] = {
+          ...next[index],
+          productCode: material.code,
+          productName: material.name || "",
+          spec: material.spec || "",
+          unit: material.unit || "",
+          surfaceTreatment: material.surface || "",
+          unitPrice: material.unitPrice || 0,
+        };
+      }
       return next;
     });
   };
@@ -284,7 +299,8 @@ export default function QuotationForm({ quotation }: { quotation?: Quotation }) 
           </table>
         </div>
         <datalist id="product-list">
-          {products.map(p => <option key={p.id} value={p.id}>{p.name} {p.spec}</option>)}
+          {products.map(p => <option key={"p_" + p.id} value={p.id}>{p.name} {p.spec}</option>)}
+          {deliveryProducts.filter(m => m.code).map(m => <option key={"m_" + m.id} value={m.code}>{m.name} {m.spec}</option>)}
         </datalist>
         <datalist id="material-options">
           {materialOptions.map(m => <option key={m} value={m} />)}
