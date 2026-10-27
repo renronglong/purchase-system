@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { productStore, supplierStore, deliveryProductStore, componentStore, purchaseOrderStore, quotationStore, salesOrderStore, type Product, type DeliveryProduct, type Component, type ComponentItem } from "@/lib/store";
+import { productStore, supplierStore, deliveryProductStore, componentStore, purchaseOrderStore, quotationStore, salesOrderStore, deliveryCustomerStore, type Product, type DeliveryProduct, type Component, type ComponentItem } from "@/lib/store";
 import AddDialog from "@/components/add-dialog";
 
 // 物料明细行：从物料库挑的多条物料组成一个组件
@@ -657,11 +657,17 @@ export default function ProductsPage() {
               </div>
               <div>
                 <label className="block text-xs text-slate-500 mb-1">表面处理</label>
-                <input type="text" value={deliveryForm.surface || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, surface: e.target.value }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+                <select value={deliveryForm.surface || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, surface: e.target.value }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white">
+                  <option value="">- 请选择 -</option>
+                  {bomSurfaceOptions.map(s => <option key={s} value={s}>{s}</option>)}
+                </select>
               </div>
               <div>
                 <label className="block text-xs text-slate-500 mb-1">单位</label>
-                <input type="text" value={deliveryForm.unit || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, unit: e.target.value }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+                <select value={deliveryForm.unit || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, unit: e.target.value }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white">
+                  <option value="">- 请选择 -</option>
+                  {bomUnitOptions.map(u => <option key={u} value={u}>{u}</option>)}
+                </select>
               </div>
               <div>
                 <label className="block text-xs text-slate-500 mb-1">米重(KG)</label>
@@ -673,7 +679,10 @@ export default function ProductsPage() {
               </div>
               <div>
                 <label className="block text-xs text-slate-500 mb-1">所属客户</label>
-                <input type="text" value={deliveryForm.customer || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, customer: e.target.value }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+                <select value={deliveryForm.customer || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, customer: e.target.value }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white">
+                  <option value="">- 请选择 -</option>
+                  {deliveryCustomerStore.getAll().map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
+                </select>
               </div>
             </div>
             <div className="px-6 py-4 border-t border-slate-100 flex justify-end gap-2">
