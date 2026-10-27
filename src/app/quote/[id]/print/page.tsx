@@ -1,6 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import * as XLSX from "xlsx";
 import { quotationStore } from "@/lib/store";
 
 export default function QuotationPrintPage() {
@@ -11,9 +12,57 @@ export default function QuotationPrintPage() {
     return <div className="p-6 text-center text-slate-400 py-24">未找到此报价单</div>;
   }
 
+  const handleExportExcel = () => {
+    // 汇总行数据
+    const data: (string | number)[][] = [
+      [q.supplierCompany],
+      ["报 价 单"],
+      [],
+      ["供方", "", "客户名称", q.customerName],
+      ["联系人", q.supplierContact, "联系人", q.customerContact],
+      ["电话", q.supplierPhone, "电话", q.customerPhone],
+      ["地址", q.supplierAddress, "地址", q.customerAddress],
+      [],
+      ["报价单编号", q.quoteNo, "报价日期", q.quoteDate],
+      [],
+      ["序号", "产品编号", "规格尺寸mm", "产品名称", "单位", "材质", "表面处理", "单价未税(元)", "含税价", "最小起订量", "模具费(元)", "备注"],
+      ...q.items.map((it, idx) => [
+        idx + 1,
+        it.productCode || "",
+        it.spec || "",
+        it.productName || "",
+        it.unit || "",
+        it.material || "",
+        it.surfaceTreatment || "",
+        it.unitPrice ? it.unitPrice : "",
+        it.taxPrice ? it.taxPrice : "",
+        it.minOrderQty || "",
+        it.moldFee ? it.moldFee : "",
+        it.remark || "",
+      ]),
+      [],
+      ["总计", "", "", "", "", "", "", (q.grandTotal || 0), "", "", "", ""],
+      [],
+      ...q.terms.map((t) => [t]),
+    ];
+
+    const ws = XLSX.utils.aoa_to_sheet(data);
+    // 设置列宽
+    ws["!cols"] = [
+      { wch: 6 }, { wch: 16 }, { wch: 14 }, { wch: 18 }, { wch: 6 },
+      { wch: 10 }, { wch: 12 }, { wch: 14 }, { wch: 12 }, { wch: 12 },
+      { wch: 12 }, { wch: 20 },
+    ];
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "报价单");
+    const filename = `${q.quoteNo || "报价单"}.xlsx`;
+    XLSX.writeFile(wb, filename);
+  };
+
   return (
     <div className="p-8 bg-slate-100 min-h-screen">
-      <div className="max-w-[980px] mx-auto flex justify-end mb-4 no-print">
+      <div className="max-w-[980px] mx-auto flex justify-end gap-2 mb-4 no-print">
+        <button onClick={handleExportExcel} className="px-4 py-2 bg-emerald-600 text-white text-sm rounded-md hover:bg-emerald-700">导出Excel</button>
         <button onClick={() => window.print()} className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700">打印</button>
       </div>
 
