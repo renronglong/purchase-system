@@ -13,7 +13,10 @@ export default function QuotationPrintPage() {
   }
 
   const handleExportExcel = () => {
-    // 汇总行数据
+    // 判断单位是否全部一致（用于纵向合并单位列）
+    const units = q.items.map((it) => it.unit || "");
+    const sameUnit = units.length > 0 && units.every((u) => u === units[0]) && units[0] !== "";
+
     const data: (string | number)[][] = [
       [q.supplierCompany],
       ["报 价 单"],
@@ -23,7 +26,7 @@ export default function QuotationPrintPage() {
       ["电话", q.supplierPhone, "电话", q.customerPhone],
       ["地址", q.supplierAddress, "地址", q.customerAddress],
       [],
-      ["报价单编号", q.quoteNo, "报价日期", q.quoteDate],
+      ["报价单", q.quoteNo, "报价日期", q.quoteDate],
       [],
       ["序号", "产品编号", "规格尺寸mm", "产品名称", "单位", "材质", "表面处理", "单价未税(元)", "含税价", "最小起订量", "模具费(元)", "备注"],
       ...q.items.map((it, idx) => [
@@ -31,7 +34,7 @@ export default function QuotationPrintPage() {
         it.productCode || "",
         it.spec || "",
         it.productName || "",
-        it.unit || "",
+        sameUnit ? "" : (it.unit || ""),
         it.material || "",
         it.surfaceTreatment || "",
         it.unitPrice ? it.unitPrice : "",
@@ -47,12 +50,36 @@ export default function QuotationPrintPage() {
     ];
 
     const ws = XLSX.utils.aoa_to_sheet(data);
+    const startRow = 12; // 表头行(1-based)：序号那一行
+    // 单位列(E)纵向合并：明细从 startRow+1 开始，共 q.items.length 行，第6列(索引5) = 单位
+    if (sameUnit) {
+      const merges = [{ s: { r: startRow, c: 4 }, e: { r: startRow + q.items.length - 1, c: 4 } }];
+      ws["!merges"] = merges as any;
+      // 单位值放到合并区首行
+      const cellAddr = XLSX.utils.encode_cell({ r: startRow, c: 4 });
+      ws[cellAddr] = { t: "s", v: units[0] };
+    }
+    // 标题跨列合并居中（公司名 + "报 价 单"）
+    ws["!merges"] = [
+      ...(ws["!merges"] || []),
+      { s: { r: 0, c: 0 }, e: { r: 0, c: 11 } },
+      { s: { r: 1, c: 0 }, e: { r: 1, c: 11 } },
+    ];
+    // 边框：明细表区域加边框
+    const range = XLSX.utils.decode_range(ws["!ref"] || "A1");
+    for (let r = range.s.r; r <= range.e.r; r++) {
+      for (let c = range.s.c; c <= range.e.c; c++) {
+        const addr = XLSX.utils.encode_cell({ r, c });
+        if (ws[addr]) ws[addr].s = { alignment: { horizontal: "center", vertical: "middle" } };
+      }
+    }
     // 设置列宽
     ws["!cols"] = [
-      { wch: 6 }, { wch: 16 }, { wch: 14 }, { wch: 18 }, { wch: 6 },
+      { wch: 8 }, { wch: 16 }, { wch: 14 }, { wch: 22 }, { wch: 6 },
       { wch: 10 }, { wch: 12 }, { wch: 14 }, { wch: 12 }, { wch: 12 },
-      { wch: 12 }, { wch: 20 },
+      { wch: 12 }, { wch: 22 },
     ];
+    // 行高：明细行稍高
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "报价单");
     const filename = `${q.quoteNo || "报价单"}.xlsx`;
