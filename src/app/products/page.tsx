@@ -400,16 +400,10 @@ export default function ProductsPage() {
               <td className="px-2 py-1"><input type="text" value={item.productName} onChange={(e) => updateBomItem(idx, "productName", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" list="bom-product-name-list" /></td>
               <td className="px-2 py-1"><input type="text" value={item.spec} onChange={(e) => updateBomItem(idx, "spec", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" list="bom-product-spec-list" /></td>
               <td className="px-2 py-1">
-                <select value={item.surface} onChange={(e) => updateBomItem(idx, "surface", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded bg-white">
-                  <option value="">—</option>
-                  {bomSurfaceOptions.map(s => <option key={s} value={s}>{s}</option>)}
-                </select>
+                <input type="text" value={item.surface} onChange={(e) => updateBomItem(idx, "surface", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" list="bom-surface-list" placeholder="—" />
               </td>
               <td className="px-2 py-1">
-                <select value={item.unit} onChange={(e) => updateBomItem(idx, "unit", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded bg-white">
-                  <option value="">—</option>
-                  {bomUnitOptions.map(u => <option key={u} value={u}>{u}</option>)}
-                </select>
+                <input type="text" value={item.unit} onChange={(e) => updateBomItem(idx, "unit", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" list="bom-unit-list" placeholder="—" />
               </td>
               <td className="px-2 py-1"><input type="number" value={item.qty || ""} onChange={(e) => updateBomItem(idx, "qty", Number(e.target.value))} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
               <td className="px-2 py-1">{hideBomPrices ? <span className="text-slate-400">***</span> : <input type="number" step="0.01" value={item.unitPrice || ""} onChange={(e) => updateBomItem(idx, "unitPrice", Number(e.target.value))} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" />}</td>
@@ -657,17 +651,11 @@ export default function ProductsPage() {
               </div>
               <div>
                 <label className="block text-xs text-slate-500 mb-1">表面处理</label>
-                <select value={deliveryForm.surface || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, surface: e.target.value }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white">
-                  <option value="">- 请选择 -</option>
-                  {bomSurfaceOptions.map(s => <option key={s} value={s}>{s}</option>)}
-                </select>
+                <input type="text" list="bom-surface-list" value={deliveryForm.surface || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, surface: e.target.value }))} placeholder="- 选择或输入 -" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
               </div>
               <div>
                 <label className="block text-xs text-slate-500 mb-1">单位</label>
-                <select value={deliveryForm.unit || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, unit: e.target.value }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white">
-                  <option value="">- 请选择 -</option>
-                  {bomUnitOptions.map(u => <option key={u} value={u}>{u}</option>)}
-                </select>
+                <input type="text" list="bom-unit-list" value={deliveryForm.unit || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, unit: e.target.value }))} placeholder="- 选择或输入 -" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
               </div>
               <div>
                 <label className="block text-xs text-slate-500 mb-1">米重(KG)</label>
