@@ -372,8 +372,17 @@ export default function ProductsPage() {
   );
 
   // 组件（BOM）tab 内容：完全照送货单明细表
-  const bomSurfaceOptions = Array.from(new Set(deliveryProducts.map(p => p.surface).filter(Boolean)));
-  const bomUnitOptions = Array.from(new Set(deliveryProducts.map(p => p.unit).filter(Boolean)));
+  // 单位/表面处理选项来源：物料库 + 组件库明细（有手动输入新值并保存后自动收录）
+  const allSurfaceValues = [
+    ...deliveryProducts.map(p => p.surface),
+    ...components.flatMap(c => (c.items || []).map(i => i.surface)),
+  ].filter(Boolean);
+  const allUnitValues = [
+    ...deliveryProducts.map(p => p.unit),
+    ...components.flatMap(c => (c.items || []).map(i => i.unit)),
+  ].filter(Boolean);
+  const bomSurfaceOptions = Array.from(new Set(allSurfaceValues));
+  const bomUnitOptions = Array.from(new Set(allUnitValues));
   const bomTabContent = (
     <div className="overflow-x-auto">
       <table className="w-full text-xs min-w-[1000px]">
