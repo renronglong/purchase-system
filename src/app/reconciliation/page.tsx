@@ -11,7 +11,7 @@ import {
 function genItemId(): string { return Math.random().toString(36).slice(2, 10); }
 
 function emptyItem(): ReconciliationItem {
-  return { id: genItemId(), deliveryNoteNo: "", deliveryDate: "", materialCode: "", productName: "", spec: "", surface: "", unit: "", qty: 0, unitPrice: 0, amount: 0 };
+  return { id: genItemId(), deliveryNoteNo: "", orderNo: "", deliveryDate: "", materialCode: "", productName: "", spec: "", surface: "", unit: "", qty: 0, unitPrice: 0, amount: 0 };
 }
 
 export default function ReconciliationPage() {
@@ -84,6 +84,7 @@ export default function ReconciliationPage() {
         fetched.push({
           id: genItemId(),
           deliveryNoteNo: note.noteNo,
+          orderNo: note.orderNo,
           deliveryDate: note.date,
           materialCode: di.materialCode,
           productName: di.productName,
@@ -298,6 +299,7 @@ export default function ReconciliationPage() {
                     <tr className="bg-slate-50 border-b border-slate-200">
                       <th className="px-2 py-2 font-medium text-slate-600 w-8">序号</th>
                       <th className="px-2 py-2 font-medium text-slate-600 w-24">送货单号</th>
+                      <th className="px-2 py-2 font-medium text-slate-600 w-24">采购单号</th>
                       <th className="px-2 py-2 font-medium text-slate-600 w-20">送货日期</th>
                       <th className="px-2 py-2 font-medium text-slate-600 w-24">物料编号</th>
                       <th className="px-2 py-2 font-medium text-slate-600 w-24">产品名称</th>
@@ -312,12 +314,13 @@ export default function ReconciliationPage() {
                   </thead>
                   <tbody>
                     {items.length === 0 && (
-                      <tr><td colSpan={12} className="px-2 py-6 text-center text-slate-400">请选择客户和日期范围后点击"拉取明细"，或手动添加</td></tr>
+                      <tr><td colSpan={13} className="px-2 py-6 text-center text-slate-400">请选择客户和日期范围后点击"拉取明细"，或手动添加</td></tr>
                     )}
                     {items.map((item, idx) => (
                       <tr key={item.id} className="border-b border-slate-100">
                         <td className="px-2 py-1 text-center text-slate-500">{idx + 1}</td>
                         <td className="px-2 py-1"><input type="text" value={item.deliveryNoteNo} onChange={e => updateItem(idx, "deliveryNoteNo", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
+                        <td className="px-2 py-1"><input type="text" value={item.orderNo || ""} onChange={e => updateItem(idx, "orderNo", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
                         <td className="px-2 py-1"><input type="date" value={item.deliveryDate} onChange={e => updateItem(idx, "deliveryDate", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
                         <td className="px-2 py-1"><input type="text" value={item.materialCode} onChange={e => updateItem(idx, "materialCode", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>
                         <td className="px-2 py-1"><input type="text" value={item.productName} onChange={e => updateItem(idx, "productName", e.target.value)} className="w-full px-1 py-0.5 text-xs border border-slate-200 rounded" /></td>

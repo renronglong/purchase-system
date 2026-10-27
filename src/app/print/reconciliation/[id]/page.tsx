@@ -21,9 +21,9 @@ function saveMakerName(name: string) {
 
 const BORDER_COLOR = "#2563eb";
 const CONTENT_WIDTH = "190mm";
-const DEFAULT_COL_WIDTHS = [7, 22, 18, 22, 22, 20, 16, 10, 12, 14, 17];
-const COL_WIDTHS_KEY = "reconciliation_col_widths_v1";
-const LAYOUT_KEY = "reconciliation_layout_v1";
+const DEFAULT_COL_WIDTHS = [7, 22, 22, 18, 22, 22, 20, 16, 10, 12, 14, 17];
+const COL_WIDTHS_KEY = "reconciliation_col_widths_v2";
+const LAYOUT_KEY = "reconciliation_layout_v2";
 
 interface LayoutConfig {
   title: string;
@@ -41,7 +41,7 @@ const DEFAULT_LAYOUT: LayoutConfig = {
   titleFontSize: 22,
   labelFontSize: 15,
   cellFontSize: 14,
-  headerLabels: ["序号", "送货单号", "送货日期", "物料编号", "产品名称", "规格", "表面处理", "单位", "数量", "单价", "金额"],
+  headerLabels: ["序号", "送货单号", "采购单号", "送货日期", "物料编号", "产品名称", "规格", "表面处理", "单位", "数量", "单价", "金额"],
   makerLabel: "制单人",
   maker: "易金兰",
   signLabel: "客户确认签字",
@@ -363,6 +363,7 @@ export default function PrintReconciliationPage() {
                 <tr key={item.id} style={{ height: "7mm" }}>
                   <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "center", verticalAlign: "middle", padding: "1px 0", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{idx + 1}</td>
                   <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", whiteSpace: "nowrap", overflow: "visible", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.deliveryNoteNo}</td>
+                  <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", whiteSpace: "nowrap", overflow: "visible", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.orderNo || ""}</td>
                   <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.deliveryDate}</td>
                   <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", whiteSpace: "nowrap", overflow: "visible", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋", fontWeight: "bold" }}>{item.materialCode}</td>
                   <td style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.productName}</td>
@@ -377,7 +378,7 @@ export default function PrintReconciliationPage() {
             </tbody>
             <tfoot>
               <tr style={{ height: "6mm" }}>
-                <td colSpan={8} style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 2mm", verticalAlign: "middle", fontSize: `${layout.cellFontSize + 1}px`, fontFamily: "仿宋", textAlign: "right" }}>
+                <td colSpan={9} style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 2mm", verticalAlign: "middle", fontSize: `${layout.cellFontSize + 1}px`, fontFamily: "仿宋", textAlign: "right" }}>
                   <span style={{ fontWeight: "bold" }}>合计</span>
                 </td>
                 <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize + 1}px`, fontFamily: "仿宋", fontWeight: "bold" }}>{totalQty}</td>
@@ -385,7 +386,7 @@ export default function PrintReconciliationPage() {
                 <td style={{ border: `1px solid ${BORDER_COLOR}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize + 1}px`, fontFamily: "仿宋", fontWeight: "bold" }}>{totalAmount.toFixed(2)}</td>
               </tr>
               <tr style={{ height: "6mm" }}>
-                <td colSpan={11} style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 2mm", verticalAlign: "middle", fontSize: `${layout.cellFontSize + 1}px`, fontFamily: "仿宋" }}>
+                <td colSpan={12} style={{ border: `1px solid ${BORDER_COLOR}`, padding: "0 2mm", verticalAlign: "middle", fontSize: `${layout.cellFontSize + 1}px`, fontFamily: "仿宋" }}>
                   <div className="flex justify-between items-center">
                     <div className="flex"><span style={{ fontWeight: "bold" }}>合计金额（大写）：</span><span>{hidePrices ? "***" : amountToChinese(totalAmount)}</span></div>
                     <div className="flex"><span style={{ fontWeight: "bold" }}>（小写）：</span><span style={{ fontFamily: "monospace" }}>¥{totalAmount.toFixed(2)}</span></div>

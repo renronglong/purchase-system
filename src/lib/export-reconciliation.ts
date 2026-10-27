@@ -4,6 +4,7 @@ import { deliveryCustomerStore, deliveryNoteStore } from "./store";
 interface ReconciliationItem {
   id: string;
   deliveryNoteNo: string;
+  orderNo?: string;
   deliveryDate: string;
   materialCode: string;
   productName: string;
@@ -83,7 +84,7 @@ async function buildSheet(
       ? [
           it.deliveryDate || "",
           it.deliveryNoteNo || "",
-          "", // 采购单号
+          it.orderNo || "", // 采购单号
           "", // 退货单
           it.materialCode || "",
           it.productName || "",

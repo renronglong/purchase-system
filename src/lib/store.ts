@@ -37,6 +37,7 @@ export interface Component {
 export interface ReconciliationItem {
   id: string;
   deliveryNoteNo: string;
+  orderNo?: string;
   deliveryDate: string;
   materialCode: string;
   productName: string;
