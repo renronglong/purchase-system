@@ -7,13 +7,13 @@ import { deliveryCustomerStore, deliveryProductStore } from "@/lib/store";
 function genItemId(): string { return Math.random().toString(36).slice(2, 10); }
 function genContractId(): string { return "ct" + Date.now().toString(36); }
 
-// 自动生成合同编号：BL + 年月日 + 序号
+// 自动生成合同编号：HT(合同) + 年月日 + 序号
 function genContractNo(existing: ContractData[]): string {
   const now = new Date();
   const y = now.getFullYear();
   const m = String(now.getMonth() + 1).padStart(2, "0");
   const d = String(now.getDate()).padStart(2, "0");
-  const prefix = `BL${y}${m}${d}`;
+  const prefix = `HT${y}${m}${d}`;
   // 找今天已有合同的最大序号
   let maxSeq = 0;
   for (const c of existing) {
@@ -23,14 +23,6 @@ function genContractNo(existing: ContractData[]): string {
     }
   }
   return `${prefix}${String(maxSeq + 1).padStart(2, "0")}`;
-}
-
-// 碧利莱供方信息按最新开票资料自动纠正（覆盖旧的localStorage缓存）
-function fixSupplierInfo<T extends { supplierName?: string; supplierAddress?: string; supplierPhone?: string; supplierTaxNo?: string }>(c: T): T {
-  if (c.supplierName && c.supplierName.includes("碧利莱")) {
-    return { ...c, supplierAddress: "佛山市南海区狮山镇松岗办事处显纲村委会厦边村口首层之六", supplierPhone: "18929979760", supplierTaxNo: "91440605MACUYJRB5C" };
-  }
-  return c;
 }
 
 function emptyItem(): ContractItem {
@@ -88,7 +80,7 @@ export default function ContractPage() {
     const localContracts: ContractData[] = localRaw ? JSON.parse(localRaw) : [];
     const all = [...localContracts];
     all.sort((a, b) => b.signDate.localeCompare(a.signDate));
-    setContracts(all.map(fixSupplierInfo));
+    setContracts(all);
   }, []);
 
   useEffect(() => { load(); }, [load]);

@@ -31,7 +31,7 @@ interface ReconciliationOrder {
 
 const WIDTHS = [9.25, 13.5, 15.125, 18.26, 14.25, 18.625, 48.5, 5.1, 6.63, 8.5, 11.375];
 
-// 单份对账单按「质稳对账单」模板 A1:K55 生成
+// 单份对账单按模板 A1:K55 生成
 async function buildSheet(
   ws: ExcelJS.Worksheet,
   order: ReconciliationOrder,
@@ -204,10 +204,10 @@ export async function exportReconciliationExcel(orders: ReconciliationOrder[]) {
   }
 
   const wb = new ExcelJS.Workbook();
-  wb.creator = "质稳五金";
+  wb.creator = "恒达金属";
 
-  // 公司名：从第一张送货单取 company，默认佛山市质稳五金有限公司
-  let companyName = "佛山市质稳五金有限公司";
+  // 公司名：从第一张送货单取 company，默认佛山市恒达金属制品有限公司
+  let companyName = "佛山市恒达金属制品有限公司";
   try {
     const firstNoteNo = orders[0]?.items?.[0]?.deliveryNoteNo;
     const note = deliveryNoteStore

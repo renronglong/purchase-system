@@ -6,7 +6,7 @@ import { AuthProvider, AuthGuard } from '@/components/auth-provider';
 
 export const metadata: Metadata = {
   title: '零配件生产销售管理系统',
-  description: '零配件生产销售管理系统 - 佛山市碧利金属',
+  description: '零配件生产销售管理系统',
 };
 
 export default function RootLayout({

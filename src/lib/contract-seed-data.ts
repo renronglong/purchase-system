@@ -50,7 +50,7 @@ export const contractSeedData: ContractData[] = [
     customerContact: '王淑红',
     customerPhone: '18503056541',
     customerTaxNo: '',
-    supplierName: '佛山市碧利莱照明有限公司',
+    supplierName: '佛山市恒达金属制品有限公司',
     supplierAddress: '佛山市南海区狮山镇松岗办事处显纲村委会厦边村口首层之六',
     supplierContact: '龙任荣',
     supplierPhone: '18929979760',

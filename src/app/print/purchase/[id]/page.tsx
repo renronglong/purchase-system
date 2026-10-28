@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
-import { purchaseOrderStore, type PurchaseOrder } from "@/lib/store";
+import { purchaseOrderStore, deliveryCompanyStore, type PurchaseOrder } from "@/lib/store";
 
 const BORDER_COLOR = "#2563eb";
 const BORDER_COLOR_PLATE = "#ea580c";
@@ -53,9 +53,9 @@ const DEFAULT_LAYOUT: LayoutConfig = {
 };
 
 function getCompanyAddress(companyName: string) {
-  if (companyName.includes("质稳")) return "广东省佛山市南海区狮山招大小坑尾坑尾园";
-  if (companyName.includes("碧利莱")) return "佛山市南海区狮山镇松岗办事处显纲村委会厦边村口首层";
-  return "";
+  if (!companyName) return "";
+  const c = deliveryCompanyStore.getAll().find(x => x.name === companyName);
+  return c?.address || "";
 }
 
 function loadLayout(company: string, orderMaker?: string): LayoutConfig {
@@ -74,7 +74,7 @@ function loadLayout(company: string, orderMaker?: string): LayoutConfig {
       };
     }
   } catch {}
-  return { ...DEFAULT_LAYOUT, title: `${company || "佛山市质稳五金有限公司"}采购单`, companyAddress: getCompanyAddress(company), maker: (orderMaker && orderMaker.trim()) ? orderMaker : DEFAULT_LAYOUT.maker };
+  return { ...DEFAULT_LAYOUT, title: company ? `${company}采购单` : "采购单", companyAddress: getCompanyAddress(company), maker: (orderMaker && orderMaker.trim()) ? orderMaker : DEFAULT_LAYOUT.maker };
 }
 
 function loadXcColWidths(): number[] {
@@ -208,7 +208,7 @@ export default function PrintPurchasePage() {
 
   const resetAll = () => {
     if (!order) return;
-    const reset = { ...DEFAULT_LAYOUT, title: `${order.company || "佛山市质稳五金有限公司"}采购单`, companyAddress: getCompanyAddress(order.company) };
+    const reset = { ...DEFAULT_LAYOUT, title: order.company ? `${order.company}采购单` : "采购单", companyAddress: getCompanyAddress(order.company) };
     setLayout(reset);
     setXcColWidths([...DEFAULT_XC_COL_WIDTHS]);
     setBcColWidths([...DEFAULT_BC_COL_WIDTHS]);
@@ -314,7 +314,7 @@ export default function PrintPurchasePage() {
           {/* 标题 */}
           <div className="flex items-center justify-center" style={{ height: "10mm", flexShrink: 0, marginBottom: "5mm" }}>
             <h1 style={{ fontSize: `${layout.titleFontSize}px`, fontFamily: "仿宋", fontWeight: "bold", margin: 0, letterSpacing: "2px" }}>
-              <EditableText value={(order.company || "佛山市质稳五金有限公司") + "采购单"} fontSize={layout.titleFontSize} style={{ fontWeight: "bold", letterSpacing: "2px" }} isEditing={isEditing} onBlur={v => updateLayout("title", v)} />
+              <EditableText value={order.company ? order.company + "采购单" : "采购单"} fontSize={layout.titleFontSize} style={{ fontWeight: "bold", letterSpacing: "2px" }} isEditing={isEditing} onBlur={v => updateLayout("title", v)} />
               {isPlate && <EditableText value={layout.plateLabel} fontSize={14} style={{ color: bc, marginLeft: "8px" }} isEditing={isEditing} onBlur={v => updateLayout("plateLabel", v)} />}
             </h1>
           </div>

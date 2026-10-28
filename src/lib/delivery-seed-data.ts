@@ -564,92 +564,92 @@ export interface DeliveryNote {
 }
 
 export const deliveryNotes: DeliveryNote[] = [
-  { id: 'dn1', noteNo: 'BL45670003', date: '2025-01-13', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn1', noteNo: 'BL45670003', date: '2025-01-13', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di1', materialCode: 'YG25.3*1.15', productName: '铝管6063', spec: '25.3*23*4000', unit: 'kg', qty: 841, surface: '本色', unitPrice: 32, amount: 26912, remark: '' }
   ]},
-  { id: 'dn2', noteNo: 'BL45670004', date: '2025-01-13', customer: '深圳市凯明节能设备有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn2', noteNo: 'BL45670004', date: '2025-01-13', customer: '深圳市凯明节能设备有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di2', materialCode: 'YL-014-95', productName: '电源外壳', spec: '71.5*41.7*95', unit: 'pcs', qty: 1155, surface: '铁灰', unitPrice: 6, amount: 6930, remark: '' }
   ]},
-  { id: 'dn3', noteNo: 'BL45668005', date: '2025-01-11', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn3', noteNo: 'BL45668005', date: '2025-01-11', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di3', materialCode: 'YL-054-160', productName: '电源外壳', spec: '28.8*20.1*160', unit: 'pcs', qty: 400, surface: '铁灰', unitPrice: 1.3, amount: 520, remark: '' }
   ]},
-  { id: 'dn4', noteNo: 'BL45671006', date: '2025-01-14', customer: '深圳市乐家乐建筑材料有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn4', noteNo: 'BL45671006', date: '2025-01-14', customer: '深圳市乐家乐建筑材料有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di4', materialCode: '弯角BL-006-2380', productName: '弯角', spec: '80*80*2380', unit: 'kg', qty: 1841.4535, surface: '', unitPrice: 25.66, amount: 47251.69681, remark: '84*10+1' },
     { id: 'di5', materialCode: '弯角BL-006-2600', productName: '弯角', spec: '80*80*2600', unit: '', qty: 0, surface: '', unitPrice: 0, amount: 0, remark: '1*5' },
     { id: 'di6', materialCode: '弯角BL-006-2450', productName: '弯角', spec: '80*80*2450', unit: '', qty: 0, surface: '', unitPrice: 0, amount: 0, remark: '1*6' }
   ]},
-  { id: 'dn5', noteNo: 'BL45672009', date: '2025-01-15', customer: '深圳华唐锐照明电器有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn5', noteNo: 'BL45672009', date: '2025-01-15', customer: '深圳华唐锐照明电器有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di7', materialCode: '1.04.01.0135', productName: 'TODAY 40W端盖', spec: '47X29X13mmΦ10', unit: 'pcs', qty: 660, surface: '氧化黑色', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di8', materialCode: '1.04.01.0136', productName: 'TODAY 40W端盖', spec: '47X29X13mmΦ7.4', unit: 'pcs', qty: 660, surface: '氧化黑色', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di9', materialCode: '1.04.01.0159. 0001', productName: 'today 30W电源壳体', spec: '46.6X29X102.5mm', unit: 'pcs', qty: 261, surface: '氧化黑色', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn6', noteNo: 'BL456750012', date: '2025-01-18', customer: '深圳华唐锐照明电器有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn6', noteNo: 'BL456750012', date: '2025-01-18', customer: '深圳华唐锐照明电器有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di10', materialCode: '1.04.01.0135', productName: 'TODAY 40W端盖', spec: '47X29X13mmΦ10', unit: 'pcs', qty: 719, surface: '氧化黑色', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di11', materialCode: '1.04.01.0136', productName: 'TODAY 40W端盖', spec: '47X29X13mmΦ7.4', unit: 'pcs', qty: 428, surface: '氧化黑色', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di12', materialCode: '1.04.01.0159. 0001', productName: 'today 30W电源壳体', spec: '46.6X29X102.5mm', unit: 'pcs', qty: 768, surface: '氧化黑色', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn7', noteNo: 'BL456750015', date: '2025-01-18', customer: '深圳华唐锐照明电器有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn7', noteNo: 'BL456750015', date: '2025-01-18', customer: '深圳华唐锐照明电器有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di13', materialCode: '1.04.01.1112.0002', productName: 'TURBO-40-1200-型材', spec: 'ø37X21.5X1140mm', unit: 'pcs', qty: 68, surface: '银白', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di14', materialCode: '1.04.01.1116.0002', productName: 'TURBO-75-1200-型材', spec: 'ø71X34.3X1140mm', unit: 'pcs', qty: 118, surface: '银白', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di15', materialCode: '1.04.01.1334.0001', productName: 'TURBO-75-1200-小角度-型材', spec: 'ø71X34.3X1112mm', unit: 'pcs', qty: 120, surface: '银白', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di16', materialCode: '1.04.01.1108.5302', productName: 'TURBO-40-左-免螺丝端盖', spec: 'ø40.3X30.2mm', unit: 'pcs', qty: 60, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di17', materialCode: '1.04.01.1109.5302', productName: 'TURBO-40-右端盖', spec: 'ø40.3X30.2mm', unit: 'pcs', qty: 65, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn8', noteNo: 'BL456750020', date: '2025-01-18', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn8', noteNo: 'BL456750020', date: '2025-01-18', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di18', materialCode: 'BL-126-140', productName: '底板', spec: '52*1.5*140mm', unit: 'pcs', qty: 5548, surface: '氧化雾银', unitPrice: 1.2, amount: 6657.6, remark: '' }
   ]},
-  { id: 'dn9', noteNo: 'BL457070021', date: '2025-02-19', customer: '广东中为导光科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn9', noteNo: 'BL457070021', date: '2025-02-19', customer: '广东中为导光科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di19', materialCode: '5.5.000233', productName: 'ZWLF420x130x3BW 铝条', spec: '129.7*21*9mm', unit: 'pcs', qty: 3400, surface: '本色', unitPrice: 0.2, amount: 680, remark: '' },
     { id: 'di20', materialCode: '车费', productName: '', spec: '', unit: '趟', qty: 1, surface: '', unitPrice: 58, amount: 58, remark: '' }
   ]},
-  { id: 'dn10', noteNo: 'BL457150023', date: '2025-02-27', customer: '深圳华唐锐照明电器有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn10', noteNo: 'BL457150023', date: '2025-02-27', customer: '深圳华唐锐照明电器有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di21', materialCode: '1.04.01.1099. 9903', productName: '', spec: '', unit: 'pcs', qty: 100, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di22', materialCode: '1.04.01.1100. 9903', productName: '', spec: '', unit: 'pcs', qty: 100, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di23', materialCode: '1.04.01.1128. 9903', productName: 'IGUASSU单灯主体端盖-1', spec: '42.4*99.5*2.0', unit: 'pcs', qty: 100, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di24', materialCode: '1.04.01.1129. 9903', productName: 'IGUASSU单灯主体端盖-2', spec: '42.4*99.5*2.0', unit: 'pcs', qty: 100, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn11', noteNo: 'BL457160027', date: '2025-02-28', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn11', noteNo: 'BL457160027', date: '2025-02-28', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di25', materialCode: 'YG25.3*1.15', productName: '铝管6063', spec: '25.3*23*4000', unit: 'KG', qty: 543, surface: '本色', unitPrice: 32, amount: 17376, remark: '516支' }
   ]},
-  { id: 'dn12', noteNo: 'BL457200028', date: '2025-03-04', customer: '深圳市卓仪光电科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn12', noteNo: 'BL457200028', date: '2025-03-04', customer: '深圳市卓仪光电科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di26', materialCode: 'YL-054-160', productName: '电源外壳', spec: '28.8*20.1*160', unit: 'pcs', qty: 971, surface: '氧化雾银', unitPrice: 1.3, amount: 1262.3, remark: '' }
   ]},
-  { id: 'dn13', noteNo: 'BL457200029', date: '2025-03-04', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn13', noteNo: 'BL457200029', date: '2025-03-04', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di27', materialCode: '550186-A00', productName: '散热片上盖', spec: '107.4*57.8*29', unit: 'pcs', qty: 2976, surface: '砂白', unitPrice: 1.6, amount: 4761.6, remark: '' }
   ]},
-  { id: 'dn14', noteNo: 'BL457200030', date: '2025-03-04', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn14', noteNo: 'BL457200030', date: '2025-03-04', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di28', materialCode: '550188', productName: '', spec: '', unit: 'pcs', qty: 1000, surface: '砂白', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di29', materialCode: '550189', productName: '', spec: '', unit: 'pcs', qty: 1000, surface: '砂白', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn15', noteNo: 'BL457210032', date: '2025-03-05', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn15', noteNo: 'BL457210032', date: '2025-03-05', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di30', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: 'pcs', qty: 2244, surface: '铁灰', unitPrice: 1, amount: 2244, remark: '' }
   ]},
-  { id: 'dn16', noteNo: 'BL457230033', date: '2025-03-07', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn16', noteNo: 'BL457230033', date: '2025-03-07', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di31', materialCode: 'YL-054-160', productName: '电源外壳', spec: '28.8*20.1*160', unit: 'pcs', qty: 885, surface: '铁灰', unitPrice: 1.3, amount: 1150.5, remark: '' }
   ]},
-  { id: 'dn17', noteNo: 'BL457250034', date: '2025-03-09', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn17', noteNo: 'BL457250034', date: '2025-03-09', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di32', materialCode: 'YL-054-130', productName: '电源外壳', spec: '28.8*20.1*130', unit: 'pcs', qty: 655, surface: '铁灰', unitPrice: 1, amount: 655, remark: '' }
   ]},
-  { id: 'dn18', noteNo: 'BL457280035', date: '2025-03-12', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn18', noteNo: 'BL457280035', date: '2025-03-12', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di33', materialCode: '550188', productName: '', spec: '', unit: 'pcs', qty: 1835, surface: '砂白', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di34', materialCode: '550189', productName: '', spec: '', unit: 'pcs', qty: 1056, surface: '砂白', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn19', noteNo: 'BL457280037', date: '2025-03-12', customer: '深圳市卓仪光电科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn19', noteNo: 'BL457280037', date: '2025-03-12', customer: '深圳市卓仪光电科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di35', materialCode: 'YL-054-160', productName: '电源外壳', spec: '28.8*20.1*160', unit: 'pcs', qty: 1000, surface: '铁灰', unitPrice: 1.3, amount: 1300, remark: '' }
   ]},
-  { id: 'dn20', noteNo: 'BL457290038', date: '2025-03-13', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn20', noteNo: 'BL457290038', date: '2025-03-13', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di36', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: 'pcs', qty: 5984, surface: '铁灰', unitPrice: 1, amount: 5984, remark: '' },
     { id: 'di37', materialCode: 'YL-054-160', productName: '电源外壳', spec: '28.8*20.1*160', unit: 'pcs', qty: 1593, surface: '铁灰', unitPrice: 1.3, amount: 2070.9, remark: '' }
   ]},
-  { id: 'dn21', noteNo: 'BL457330040', date: '2025-03-17', customer: '深圳富达金技术有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn21', noteNo: 'BL457330040', date: '2025-03-17', customer: '深圳富达金技术有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di38', materialCode: '9150-1136', productName: '半圆型材', spec: '40*24.5*2450', unit: 'kg', qty: 285, surface: '本色', unitPrice: 0, amount: 0, remark: '391支' },
     { id: 'di39', materialCode: '9150-1140', productName: '主体型材', spec: '61*25*2450', unit: 'kg', qty: 331, surface: '本色', unitPrice: 0, amount: 0, remark: '275支' },
     { id: 'di40', materialCode: '9150-1144', productName: '电气仓盖型材', spec: '47.5*5.06*2450', unit: 'kg', qty: 135, surface: '本色', unitPrice: 0, amount: 0, remark: '318支' }
   ]},
-  { id: 'dn22', noteNo: 'BL457330043', date: '2025-03-17', customer: '深圳富达金技术有限公司', orderNo: 'PO925030021', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn22', noteNo: 'BL457330043', date: '2025-03-17', customer: '深圳富达金技术有限公司', orderNo: 'PO925030021', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di41', materialCode: 'D8150-0814', productName: '铝型材上机费', spec: '', unit: '次', qty: 1, surface: '', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn23', noteNo: 'BL457340044', date: '2025-03-18', customer: '江苏镭科照明科技有限公司', orderNo: '002090/002136/002168', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn23', noteNo: 'BL457340044', date: '2025-03-18', customer: '江苏镭科照明科技有限公司', orderNo: '002090/002136/002168', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di42', materialCode: 'LZ-001-00', productName: '铝支撑', spec: '500*80*160', unit: '套', qty: 1480, surface: '本色', unitPrice: 32, amount: 47360, remark: '20个*74箱' },
     { id: 'di43', materialCode: 'LZ-002', productName: 'L型特殊铝块', spec: '70*70*20.4', unit: 'pcs', qty: 12740, surface: '本色', unitPrice: 3.17, amount: 40385.8, remark: '196个*65箱' },
     { id: 'di44', materialCode: 'LZ-003', productName: '铝板3.0mm', spec: '180*80*3.0', unit: 'pcs', qty: 7400, surface: '本色', unitPrice: 4.23, amount: 31302, remark: '200个*37箱' },
@@ -657,16 +657,16 @@ export const deliveryNotes: DeliveryNote[] = [
     { id: 'di46', materialCode: 'LZ-004', productName: '方铝片2.3mm', spec: '178*82*2.3', unit: 'pcs', qty: 930, surface: '本色', unitPrice: 3.2, amount: 2976, remark: '' },
     { id: 'di47', materialCode: 'LZ-004', productName: '方铝片2.3mm', spec: '178*82*2.3', unit: 'pcs', qty: -101, surface: '本色', unitPrice: 3.2, amount: -323.2, remark: '25*25方管磅差' }
   ]},
-  { id: 'dn24', noteNo: 'BL457340050', date: '2025-03-18', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn24', noteNo: 'BL457340050', date: '2025-03-18', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di48', materialCode: '405-00731', productName: '铝管6063', spec: 'ø32.7*ø29.5*4000', unit: 'kg', qty: 525, surface: '本色', unitPrice: 32, amount: 16800, remark: '' }
   ]},
-  { id: 'dn25', noteNo: 'BL457350051', date: '2025-03-19', customer: '深圳华唐锐照明电器有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn25', noteNo: 'BL457350051', date: '2025-03-19', customer: '深圳华唐锐照明电器有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di49', materialCode: '1.04.01.0158.0001', productName: 'today 30W电源壳体', spec: '46.6X29X102.5mm', unit: 'pcs', qty: 2730, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn26', noteNo: 'BL457350052', date: '2025-03-19', customer: '东方一号电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn26', noteNo: 'BL457350052', date: '2025-03-19', customer: '东方一号电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di50', materialCode: 'yl-270-230', productName: '电源主体', spec: '40*22*230', unit: 'pcs', qty: 1050, surface: '氧化雾银', unitPrice: 2.1, amount: 2205, remark: '' }
   ]},
-  { id: 'dn27', noteNo: 'BL457370053', date: '2025-03-21', customer: '深圳市乐家乐建筑材料有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn27', noteNo: 'BL457370053', date: '2025-03-21', customer: '深圳市乐家乐建筑材料有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di51', materialCode: '100*100*R50*3500', productName: '100*100*R50弯角', spec: '100*100*R50*3500', unit: '支', qty: 1, surface: '', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di52', materialCode: '100*100*R50*3400', productName: '100*100*R50弯角', spec: '100*100*R50*3400', unit: '支', qty: 5, surface: '', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di53', materialCode: '100*100*R50*3300', productName: '100*100*R50弯角', spec: '100*100*R50*3300', unit: '支', qty: 26, surface: '', unitPrice: 0, amount: 0, remark: '' },
@@ -689,7 +689,7 @@ export const deliveryNotes: DeliveryNote[] = [
     { id: 'di70', materialCode: '100*100*R50*3100', productName: '100*100*R50弯角', spec: '100*100*R50*3100', unit: '支', qty: 46, surface: '', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di71', materialCode: '100*100*R50*4000', productName: '', spec: '', unit: '支', qty: 1, surface: '', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn28', noteNo: 'BL457370074', date: '2025-03-21', customer: '深圳市乐家乐建筑材料有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn28', noteNo: 'BL457370074', date: '2025-03-21', customer: '深圳市乐家乐建筑材料有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di72', materialCode: '80*80*R28*3000', productName: '80*80*R28弯角', spec: '80*80*R28*3000', unit: '支', qty: 22, surface: '', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di73', materialCode: '80*80*R28*1250', productName: '80*80*R28弯角', spec: '80*80*R28*1250', unit: '支', qty: 172, surface: '', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di74', materialCode: '80*80*R28*1350', productName: '80*80*R28弯角', spec: '80*80*R28*1350', unit: '支', qty: 2, surface: '', unitPrice: 0, amount: 0, remark: '' },
@@ -717,299 +717,299 @@ export const deliveryNotes: DeliveryNote[] = [
     { id: 'di96', materialCode: '100*100*R50*3100', productName: '100*100*R50弯角', spec: '100*100*R50*3100', unit: '支', qty: 195, surface: '', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di97', materialCode: '100*100*R50*2800', productName: '100*100*R50弯角', spec: '100*100*R50*2800', unit: '支', qty: 9, surface: '', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn29', noteNo: 'BL4573700100', date: '2025-03-21', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn29', noteNo: 'BL4573700100', date: '2025-03-21', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di98', materialCode: '550188', productName: '散热片A', spec: '116*25*3', unit: 'pcs', qty: 1500, surface: '砂白', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di99', materialCode: '550189', productName: '散热片B', spec: '116*25*3', unit: 'pcs', qty: 1500, surface: '砂白', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn30', noteNo: 'BL4572100102', date: '2025-03-05', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn30', noteNo: 'BL4572100102', date: '2025-03-05', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di100', materialCode: 'yl-270堵头', productName: '堵头', spec: '40*22*20', unit: 'pcs', qty: 20000, surface: '白色', unitPrice: 0.1, amount: 2000, remark: '' }
   ]},
-  { id: 'dn31', noteNo: 'BL4574600103', date: '2025-03-30', customer: '深圳美因联电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn31', noteNo: 'BL4574600103', date: '2025-03-30', customer: '深圳美因联电子有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di101', materialCode: 'YL-079-85', productName: '', spec: '', unit: '套', qty: 1200, surface: '氧化黑色', unitPrice: 3.7, amount: 4440, remark: '' }
   ]},
-  { id: 'dn32', noteNo: 'BL4574100104', date: '2025-03-25', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn32', noteNo: 'BL4574100104', date: '2025-03-25', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di102', materialCode: 'yl-270-100', productName: '电源外壳', spec: '40*22*100', unit: 'pcs', qty: 883, surface: '铁灰', unitPrice: 0.9, amount: 794.7, remark: '' }
   ]},
-  { id: 'dn33', noteNo: 'BL4574100105', date: '2025-03-25', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn33', noteNo: 'BL4574100105', date: '2025-03-25', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di103', materialCode: '550188', productName: '散热片A', spec: '116*25*3', unit: 'pcs', qty: 1200, surface: '砂白', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di104', materialCode: '550189', productName: '散热片B', spec: '116*25*3', unit: 'pcs', qty: 450, surface: '砂白', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn34', noteNo: 'BL4574500107', date: '2025-03-29', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn34', noteNo: 'BL4574500107', date: '2025-03-29', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di105', materialCode: 'JG-Φ31.25×Φ27.95', productName: '铝管6063', spec: 'Φ31.25*Φ27.95*4000', unit: 'kg', qty: 303, surface: '本色', unitPrice: 32, amount: 9696, remark: '195支' }
   ]},
-  { id: 'dn35', noteNo: 'BL4574400108', date: '2025-03-28', customer: '广东中为导光科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn35', noteNo: 'BL4574400108', date: '2025-03-28', customer: '广东中为导光科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di106', materialCode: '5.5.000164', productName: 'ZWL500*100x33ARGB', spec: '100*33*500', unit: 'pcs', qty: 4, surface: '氧化雾银', unitPrice: 5.4, amount: 21.6, remark: '' },
     { id: 'di107', materialCode: '5.5.000158', productName: 'ZWL600*100x33ARGB', spec: '100*33*600', unit: 'pcs', qty: 32, surface: '氧化雾银', unitPrice: 5.4, amount: 172.8, remark: '' },
     { id: 'di108', materialCode: '5.5.000210', productName: 'ZWLP400x100x33ARGB', spec: '400*100*33mm', unit: 'pcs', qty: 4, surface: '氧化雾银', unitPrice: 5.4, amount: 21.6, remark: '' }
   ]},
-  { id: 'dn36', noteNo: 'BL4574700111', date: '2025-03-31', customer: '深圳市凯明节能设备有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn36', noteNo: 'BL4574700111', date: '2025-03-31', customer: '深圳市凯明节能设备有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di109', materialCode: 'YL-014-95', productName: '电源外壳', spec: '71.5*41.7*95', unit: 'pcs', qty: 1000, surface: '铁灰', unitPrice: 6, amount: 6000, remark: '欠档板' }
   ]},
-  { id: 'dn37', noteNo: 'BL4574700112', date: '2025-03-31', customer: '深圳市巨磁王科技有限责任公司', orderNo: 'PO20250320007', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn37', noteNo: 'BL4574700112', date: '2025-03-31', customer: '深圳市巨磁王科技有限责任公司', orderNo: 'PO20250320007', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di110', materialCode: '4130131', productName: '外壳', spec: 'L184*40*22mm', unit: '套', qty: 100, surface: '氧化雾银', unitPrice: 2.2, amount: 220, remark: '' }
   ]},
-  { id: 'dn38', noteNo: 'BL4574900113', date: '2025-04-02', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn38', noteNo: 'BL4574900113', date: '2025-04-02', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di111', materialCode: 'LZ-001-00', productName: '铝支撑', spec: '500*80*160', unit: '套', qty: 1520, surface: '本色', unitPrice: 32, amount: 48640, remark: '' },
     { id: 'di112', materialCode: 'LZ-002', productName: 'L型特殊铝块', spec: '70*70*20.4', unit: 'pcs', qty: 12260, surface: '本色', unitPrice: 3.17, amount: 38864.2, remark: '' },
     { id: 'di113', materialCode: 'LZ-003', productName: '铝板3.0mm', spec: '180*80*3.0', unit: 'pcs', qty: 7590, surface: '本色', unitPrice: 4.23, amount: 32105.7, remark: '' }
   ]},
-  { id: 'dn39', noteNo: 'BL00116', date: '', customer: '', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn39', noteNo: 'BL00116', date: '', customer: '', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di114', materialCode: 'LZ-004', productName: '方铝片2.3mm', spec: '178*82*2.3', unit: 'pcs', qty: 160, surface: '本色', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn40', noteNo: 'BL00117', date: '', customer: '', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn40', noteNo: 'BL00117', date: '', customer: '', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di115', materialCode: 'LZ-005', productName: 'U型铝', spec: '70*36*30', unit: 'pcs', qty: 5000, surface: '本色', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn41', noteNo: 'BL4575700118', date: '2025-04-10', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn41', noteNo: 'BL4575700118', date: '2025-04-10', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di116', materialCode: 'BL-126-144', productName: '底板', spec: '55*1.5*144mm', unit: 'pcs', qty: 3000, surface: '砂白', unitPrice: 1.2, amount: 3600, remark: '' }
   ]},
-  { id: 'dn42', noteNo: 'BL4575700119', date: '2025-04-10', customer: '丁先生', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn42', noteNo: 'BL4575700119', date: '2025-04-10', customer: '丁先生', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di117', materialCode: 'YL-014-200', productName: '电源外壳', spec: '71.5*41.7*200', unit: 'pcs', qty: 122, surface: '铁灰', unitPrice: 7, amount: 854, remark: '' }
   ]},
-  { id: 'dn43', noteNo: 'BL4575800120', date: '2025-04-11', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn43', noteNo: 'BL4575800120', date: '2025-04-11', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di118', materialCode: 'YG25.3*1.15', productName: '铝管6063', spec: '25.3*23*4000', unit: 'kg', qty: 854.5, surface: '本色', unitPrice: 32, amount: 27344, remark: '' }
   ]},
-  { id: 'dn44', noteNo: 'BL4576500121', date: '2025-04-18', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn44', noteNo: 'BL4576500121', date: '2025-04-18', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di119', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: 'pcs', qty: 4465, surface: '氧化雾银', unitPrice: 1.1, amount: 4911.5, remark: '' }
   ]},
-  { id: 'dn45', noteNo: 'BL4576500122', date: '2025-04-18', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn45', noteNo: 'BL4576500122', date: '2025-04-18', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di120', materialCode: 'LZ-005', productName: 'U型铝', spec: '70*36*30', unit: 'pcs', qty: 5000, surface: '本色', unitPrice: 2.9, amount: 14500, remark: '' },
     { id: 'di121', materialCode: 'LZ-004', productName: '方铝片2.3mm', spec: '178*82*2.3', unit: 'pcs', qty: 190, surface: '本色', unitPrice: 3.2, amount: 608, remark: '' }
   ]},
-  { id: 'dn46', noteNo: 'BL4576600124', date: '2025-04-19', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn46', noteNo: 'BL4576600124', date: '2025-04-19', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di122', materialCode: 'BL-126-140', productName: '底板', spec: '52*1.5*140mm', unit: 'pcs', qty: 2660, surface: '氧化雾银', unitPrice: 1.5, amount: 3990, remark: '' }
   ]},
-  { id: 'dn47', noteNo: 'BL4589700125', date: '2025-08-28', customer: '深圳市凯明节能设备有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn47', noteNo: 'BL4589700125', date: '2025-08-28', customer: '深圳市凯明节能设备有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di123', materialCode: 'YL-014-95', productName: '电源外壳', spec: '71.5*41.7*95', unit: '套', qty: 2000, surface: '铁灰', unitPrice: 5.5, amount: 11000, remark: '' }
   ]},
-  { id: 'dn48', noteNo: 'BL4575700126', date: '2025-04-10', customer: '和鸿电气股份有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn48', noteNo: 'BL4575700126', date: '2025-04-10', customer: '和鸿电气股份有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di124', materialCode: '25*3*45', productName: '散热片', spec: '25*3*45', unit: 'pcs', qty: 20, surface: '本色', unitPrice: 2.5, amount: 50, remark: '' },
     { id: 'di125', materialCode: '25*3*55', productName: '散热片', spec: '25*3*55', unit: 'pcs', qty: 20, surface: '本色', unitPrice: 3.5, amount: 70, remark: '' },
     { id: 'di126', materialCode: '25*3*65', productName: '散热片', spec: '25*3*65', unit: 'pcs', qty: 20, surface: '本色', unitPrice: 4, amount: 80, remark: '' }
   ]},
-  { id: 'dn49', noteNo: 'BL4577200129', date: '2025-04-25', customer: '东方一号电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn49', noteNo: 'BL4577200129', date: '2025-04-25', customer: '东方一号电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di127', materialCode: 'YL-054-280', productName: '电源外壳', spec: '28.8*20.1*280', unit: 'pcs', qty: 273, surface: '白色', unitPrice: 2.1, amount: 573.3, remark: '' }
   ]},
-  { id: 'dn50', noteNo: 'BL4577200130', date: '2025-04-25', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn50', noteNo: 'BL4577200130', date: '2025-04-25', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di128', materialCode: 'BL-126-140', productName: '底板', spec: '52*1.5*140mm', unit: 'pcs', qty: 250, surface: '砂白', unitPrice: 1.5, amount: 375, remark: '' }
   ]},
-  { id: 'dn51', noteNo: 'BL4577200131', date: '2025-04-25', customer: '广东中为导光科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn51', noteNo: 'BL4577200131', date: '2025-04-25', customer: '广东中为导光科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di129', materialCode: '5.5.000229', productName: '铝合金', spec: '34.8*0.9*580', unit: 'pcs', qty: 155, surface: '本色', unitPrice: 3, amount: 465, remark: '' },
     { id: 'di130', materialCode: '运费', productName: '', spec: '', unit: '趟', qty: 1, surface: '', unitPrice: 62, amount: 62, remark: '' }
   ]},
-  { id: 'dn52', noteNo: 'BL4577600133', date: '2025-04-29', customer: '佛山市三水弘美电器配件有限公司', orderNo: 'HM202503310003', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn52', noteNo: 'BL4577600133', date: '2025-04-29', customer: '佛山市三水弘美电器配件有限公司', orderNo: 'HM202503310003', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di131', materialCode: '405-00731', productName: '铝管6063', spec: 'ø32.7*ø29.5*4000', unit: 'kg', qty: 320, surface: '本色', unitPrice: 32, amount: 10240, remark: '' }
   ]},
-  { id: 'dn53', noteNo: 'BL4578300134', date: '2025-05-06', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn53', noteNo: 'BL4578300134', date: '2025-05-06', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di132', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: 'pcs', qty: 2254, surface: '氧化雾银', unitPrice: 1.1, amount: 2479.4, remark: '' }
   ]},
-  { id: 'dn54', noteNo: 'BL4578700135', date: '2025-05-10', customer: '深圳华唐锐照明电器有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn54', noteNo: 'BL4578700135', date: '2025-05-10', customer: '深圳华唐锐照明电器有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di133', materialCode: '1.04.01.1260. 9901', productName: '滑轨', spec: '60x23x6.3mm', unit: 'pcs', qty: 2000, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn55', noteNo: 'BL4578900136', date: '2025-05-12', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn55', noteNo: 'BL4578900136', date: '2025-05-12', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di134', materialCode: 'BL-126-140', productName: '底板', spec: '52*1.5*140mm', unit: 'pcs', qty: 3652, surface: '氧化雾银', unitPrice: 1.5, amount: 5478, remark: '' }
   ]},
-  { id: 'dn56', noteNo: 'BL4576900137', date: '2025-04-22', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn56', noteNo: 'BL4576900137', date: '2025-04-22', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di135', materialCode: 'BL-126-144', productName: '底板', spec: '55*1.5*144mm', unit: 'pcs', qty: -270, surface: '', unitPrice: 1.2, amount: -324, remark: '' }
   ]},
-  { id: 'dn57', noteNo: 'BL4579500139', date: '2025-05-18', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn57', noteNo: 'BL4579500139', date: '2025-05-18', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di136', materialCode: 'YL-054-160', productName: '电源外壳', spec: '28.8*20.1*160', unit: 'pcs', qty: 2097, surface: '铁灰', unitPrice: 1.3, amount: 2726.1, remark: '' }
   ]},
-  { id: 'dn58', noteNo: 'BL4579500140', date: '2025-05-18', customer: '深圳市卓仪光电科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn58', noteNo: 'BL4579500140', date: '2025-05-18', customer: '深圳市卓仪光电科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di137', materialCode: 'YL-054-160', productName: '电源外壳', spec: '28.8*20.1*160', unit: 'pcs', qty: 1025, surface: '氧化雾银', unitPrice: 1.3, amount: 1332.5, remark: '' }
   ]},
-  { id: 'dn59', noteNo: 'BL4580200141', date: '2025-05-25', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn59', noteNo: 'BL4580200141', date: '2025-05-25', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di138', materialCode: 'YL-054堵头6.2', productName: '', spec: '28.8*20.1*10', unit: 'pcs', qty: 8000, surface: '白色', unitPrice: 0.08, amount: 640, remark: '' },
     { id: 'di139', materialCode: 'YL-054-130', productName: '电源外壳', spec: '28.8*20.1*130', unit: 'pcs', qty: 2000, surface: '铁灰', unitPrice: 1, amount: 2000, remark: '' }
   ]},
-  { id: 'dn60', noteNo: 'BL4611200143', date: '2026-03-31', customer: '深圳市凯明节能设备有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn60', noteNo: 'BL4611200143', date: '2026-03-31', customer: '深圳市凯明节能设备有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di140', materialCode: 'YL-014-95', productName: '电源外壳', spec: '71.5*41.7*95', unit: '套', qty: 808, surface: '铁灰', unitPrice: 5.7, amount: 4605.6, remark: '' }
   ]},
-  { id: 'dn61', noteNo: 'BL4579500144', date: '2025-05-18', customer: '盛世', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn61', noteNo: 'BL4579500144', date: '2025-05-18', customer: '盛世', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di141', materialCode: 'ZW-849', productName: '', spec: '80*80*4050', unit: 'kg', qty: 578.5, surface: '本色', unitPrice: 21.98, amount: 12715.43, remark: '38支' },
     { id: 'di142', materialCode: 'ZW-849', productName: '', spec: '80*80*4050', unit: 'kg', qty: -552.6, surface: '本色', unitPrice: 21.98, amount: -12146.148, remark: '36支' }
   ]},
-  { id: 'dn62', noteNo: 'BL4581500146', date: '2025-06-07', customer: '广东中为导光科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn62', noteNo: 'BL4581500146', date: '2025-06-07', customer: '广东中为导光科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di143', materialCode: '5.5.000158', productName: 'ZWL600*100x33ARGB', spec: '100*33*600', unit: 'pcs', qty: 28, surface: '氧化雾银', unitPrice: 30, amount: 840, remark: '' },
     { id: 'di144', materialCode: '5.5.000210', productName: 'ZWLP400x100x33ARGB', spec: '400*100*33mm', unit: 'pcs', qty: 3, surface: '氧化雾银', unitPrice: 22, amount: 66, remark: '' }
   ]},
-  { id: 'dn63', noteNo: 'BL4582600148', date: '2025-06-18', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn63', noteNo: 'BL4582600148', date: '2025-06-18', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di145', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: 'pcs', qty: 1400, surface: '铁灰', unitPrice: 1, amount: 1400, remark: '' }
   ]},
-  { id: 'dn64', noteNo: 'BL4583000149', date: '2025-06-22', customer: '深圳华唐锐照明电器有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn64', noteNo: 'BL4583000149', date: '2025-06-22', customer: '深圳华唐锐照明电器有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di146', materialCode: '1.04.01.0096', productName: 'Q2-45W端盖', spec: '47X29X13mm，Φ10', unit: 'pcs', qty: 1800, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di147', materialCode: '1.04.01.0097', productName: 'Q2-45W端盖', spec: '47X29X13mm，Φ7.4', unit: 'pcs', qty: 275, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn65', noteNo: 'BL4583000151', date: '2025-06-22', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn65', noteNo: 'BL4583000151', date: '2025-06-22', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di148', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: 'pcs', qty: 4150, surface: '铁灰', unitPrice: 1, amount: 4150, remark: '' }
   ]},
-  { id: 'dn66', noteNo: 'BL4580300152', date: '2025-05-26', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn66', noteNo: 'BL4580300152', date: '2025-05-26', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di149', materialCode: 'BL-126-140', productName: '底板', spec: '52*1.5*140mm', unit: 'pcs', qty: -1845, surface: '', unitPrice: 1.5, amount: -2767.5, remark: '' }
   ]},
-  { id: 'dn67', noteNo: 'BL4586600153', date: '2025-07-28', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn67', noteNo: 'BL4586600153', date: '2025-07-28', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di150', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: 'pcs', qty: 3035, surface: '银白', unitPrice: 1.1, amount: 3338.5, remark: '' }
   ]},
-  { id: 'dn68', noteNo: 'BL4586600154', date: '2025-07-28', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn68', noteNo: 'BL4586600154', date: '2025-07-28', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di151', materialCode: 'BL-126-144', productName: '底板', spec: '55*1.5*144mm', unit: 'pcs', qty: 2100, surface: '银白', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn69', noteNo: 'BL4586600155', date: '2025-07-28', customer: '东方一号电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn69', noteNo: 'BL4586600155', date: '2025-07-28', customer: '东方一号电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di152', materialCode: 'yl-270-230', productName: '电源主体', spec: '40*22*230', unit: 'pcs', qty: 1000, surface: '银白', unitPrice: 2.1, amount: 2100, remark: '' },
     { id: 'di153', materialCode: 'yl-270-230', productName: '电源主体', spec: '40*22*230', unit: 'pcs', qty: 380, surface: '银白', unitPrice: 2.1, amount: 798, remark: '' },
     { id: 'di154', materialCode: 'YL-054-280', productName: '电源外壳', spec: '28.8*20.1*280', unit: 'pcs', qty: -42, surface: '银白', unitPrice: 2.1, amount: -88.2, remark: '' }
   ]},
-  { id: 'dn70', noteNo: 'BL4587300158', date: '2025-08-04', customer: '深圳市科普睿电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn70', noteNo: 'BL4587300158', date: '2025-08-04', customer: '深圳市科普睿电子有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di155', materialCode: 'YL-054-97', productName: '电源外壳', spec: '28.8*20.1*97', unit: 'pcs', qty: 1050, surface: '银白', unitPrice: 0.88, amount: 924, remark: '' }
   ]},
-  { id: 'dn71', noteNo: 'BL4587400159', date: '2025-08-05', customer: '珠海市明庆电子有限分司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn71', noteNo: 'BL4587400159', date: '2025-08-05', customer: '珠海市明庆电子有限分司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di156', materialCode: 'YL-054-48', productName: '电源外壳', spec: '28.8*20.1*48', unit: 'pcs', qty: 10000, surface: '银白', unitPrice: 0.36, amount: 3600, remark: '' }
   ]},
-  { id: 'dn72', noteNo: 'BL4588300160', date: '2025-08-14', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn72', noteNo: 'BL4588300160', date: '2025-08-14', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di157', materialCode: '405-00731', productName: '铝管6063', spec: 'ø32.7*ø29.5*4000', unit: 'kg', qty: 580, surface: '本色', unitPrice: 32, amount: 18560, remark: '' }
   ]},
-  { id: 'dn73', noteNo: 'BL4588400161', date: '2025-08-15', customer: '凯明智汇科技（东莞）有限公司', orderNo: 'CG20250731048', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn73', noteNo: 'BL4588400161', date: '2025-08-15', customer: '凯明智汇科技（东莞）有限公司', orderNo: 'CG20250731048', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di158', materialCode: 'YL-014-95', productName: '电源外壳', spec: '71.5*41.7*95', unit: '套', qty: 1000, surface: '铁灰', unitPrice: 5.5, amount: 5500, remark: '' }
   ]},
-  { id: 'dn74', noteNo: 'BL4589000162', date: '2025-08-21', customer: '东方一号电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn74', noteNo: 'BL4589000162', date: '2025-08-21', customer: '东方一号电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di159', materialCode: 'yl-270-230', productName: '电源主体', spec: '40*22*230', unit: '套', qty: 640, surface: '白色', unitPrice: 2.1, amount: 1344, remark: '8/17发320' }
   ]},
-  { id: 'dn75', noteNo: 'BL4588900163', date: '2025-08-20', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn75', noteNo: 'BL4588900163', date: '2025-08-20', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di160', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: '套', qty: 1012, surface: '铁灰', unitPrice: 1.1, amount: 1113.2, remark: '' },
     { id: 'di161', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: '套', qty: 2968, surface: '银白', unitPrice: 1.1, amount: 3264.8, remark: '' }
   ]},
-  { id: 'dn76', noteNo: 'BL458890165', date: '2025-08-20', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn76', noteNo: 'BL458890165', date: '2025-08-20', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di162', materialCode: 'yl-270-100', productName: '电源外壳', spec: '', unit: 'pcs', qty: 2000, surface: '铁灰', unitPrice: 0.9, amount: 1800, remark: '' },
     { id: 'di163', materialCode: 'yl-270堵头', productName: '堵头', spec: '40*22*20', unit: 'pcs', qty: 5000, surface: '白色', unitPrice: 0.1, amount: 500, remark: 'ø5.7' },
     { id: 'di164', materialCode: 'yl-270堵头', productName: '堵头', spec: '40*22*20', unit: 'pcs', qty: 10000, surface: '白色', unitPrice: 0.1, amount: 1000, remark: 'ø6.1' },
     { id: 'di165', materialCode: 'yl-270堵头', productName: '堵头', spec: '40*22*20', unit: 'pcs', qty: 3900, surface: '白色', unitPrice: 0.1, amount: 390, remark: 'ø4.7' }
   ]},
-  { id: 'dn77', noteNo: 'BL459070169', date: '2025-09-07', customer: '惠州市子阳光电照明有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn77', noteNo: 'BL459070169', date: '2025-09-07', customer: '惠州市子阳光电照明有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di166', materialCode: '2400626', productName: 'F0铝支架0623', spec: '36.9*10.5', unit: '次', qty: 1, surface: '氧化黑色', unitPrice: 600, amount: 600, remark: '样品' }
   ]},
-  { id: 'dn78', noteNo: 'BL459130170', date: '2025-09-13', customer: '东方一号电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn78', noteNo: 'BL459130170', date: '2025-09-13', customer: '东方一号电子有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di167', materialCode: 'yl-270-230', productName: '电源主体', spec: '40*22*230', unit: 'pcs', qty: 1000, surface: '氧化雾银', unitPrice: 2.1, amount: 2100, remark: '' }
   ]},
-  { id: 'dn79', noteNo: 'BL459170171', date: '2025-09-17', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn79', noteNo: 'BL459170171', date: '2025-09-17', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di168', materialCode: 'JG-Φ31.25×Φ27.95', productName: '铝管6063', spec: 'Φ31.25*Φ27.95*4000', unit: 'kg', qty: 344, surface: '本色', unitPrice: 32, amount: 11008, remark: '222支' },
     { id: 'di169', materialCode: 'YG25.3*1.15', productName: '铝管6063', spec: '25.3*23*4000', unit: 'kg', qty: 432, surface: '本色', unitPrice: 32, amount: 13824, remark: '423支' }
   ]},
-  { id: 'dn80', noteNo: 'BL458960173', date: '2025-08-27', customer: '和鸿电气股份有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn80', noteNo: 'BL458960173', date: '2025-08-27', customer: '和鸿电气股份有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di170', materialCode: '45*22*4', productName: '散热片', spec: '45*22*4', unit: 'pcs', qty: 80, surface: '本色', unitPrice: 1.5, amount: 120, remark: '' },
     { id: 'di171', materialCode: '85*25*4', productName: '散热片', spec: '85*25*4', unit: 'pcs', qty: 80, surface: '本色', unitPrice: 2, amount: 160, remark: '' }
   ]},
-  { id: 'dn81', noteNo: 'BL459260175', date: '2025-09-26', customer: '深圳市卓仪光电科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn81', noteNo: 'BL459260175', date: '2025-09-26', customer: '深圳市卓仪光电科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di172', materialCode: 'YL-054-160', productName: '电源外壳', spec: '28.8*20.1*160', unit: 'pcs', qty: 1000, surface: '氧化雾银', unitPrice: 1.3, amount: 1300, remark: '' }
   ]},
-  { id: 'dn82', noteNo: 'BL459260176', date: '2025-09-26', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn82', noteNo: 'BL459260176', date: '2025-09-26', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di173', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: '套', qty: 1586, surface: '氧化雾银', unitPrice: 1.1, amount: 1744.6, remark: '' }
   ]},
-  { id: 'dn83', noteNo: 'BL459270177', date: '2025-09-27', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn83', noteNo: 'BL459270177', date: '2025-09-27', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di174', materialCode: '550186-A00', productName: '散热片上盖', spec: '107.4*57.8*29', unit: 'pcs', qty: 5000, surface: '氧化雾银', unitPrice: 1.8, amount: 9000, remark: '' }
   ]},
-  { id: 'dn84', noteNo: 'BL459280178', date: '2025-09-28', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn84', noteNo: 'BL459280178', date: '2025-09-28', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di175', materialCode: 'YL-107-260', productName: '电源外壳', spec: '95*50*260mm', unit: 'pcs', qty: 323, surface: '铁灰', unitPrice: 26, amount: 8398, remark: '' }
   ]},
-  { id: 'dn85', noteNo: 'BL459440179', date: '2025-10-14', customer: '开普勒灯具', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn85', noteNo: 'BL459440179', date: '2025-10-14', customer: '开普勒灯具', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di176', materialCode: 'yl-270-95', productName: '电源外壳', spec: '40*22*95', unit: 'pcs', qty: 500, surface: '铁灰', unitPrice: 1.2, amount: 600, remark: '' }
   ]},
-  { id: 'dn86', noteNo: 'BL459530180', date: '2025-10-23', customer: '珠海市明庆电子有限分司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn86', noteNo: 'BL459530180', date: '2025-10-23', customer: '珠海市明庆电子有限分司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di177', materialCode: 'YL-054-48', productName: '电源外壳', spec: '28.8*20.1*48', unit: 'pcs', qty: 9980, surface: '氧化雾银', unitPrice: 0.36, amount: 3592.8, remark: '' }
   ]},
-  { id: 'dn87', noteNo: 'BL459530181', date: '2025-10-23', customer: '东莞市百川慧通科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn87', noteNo: 'BL459530181', date: '2025-10-23', customer: '东莞市百川慧通科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di178', materialCode: 'BL-003', productName: '小边框', spec: '51.8*11.1*3000', unit: '支', qty: 1701, surface: '砂纹白', unitPrice: 12.5, amount: 21262.5, remark: '' },
     { id: 'di179', materialCode: '预付款', productName: '', spec: '', unit: '', qty: 1, surface: '', unitPrice: -3000, amount: -3000, remark: '' }
   ]},
-  { id: 'dn88', noteNo: 'BL459540183', date: '2025-10-24', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn88', noteNo: 'BL459540183', date: '2025-10-24', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di180', materialCode: 'YG25.3*1.15', productName: '铝管6063', spec: '25.3*23*4000', unit: 'kg', qty: 190, surface: '本色', unitPrice: 32, amount: 6080, remark: '' },
     { id: 'di181', materialCode: '405-00731', productName: '铝管6063', spec: 'ø32.7*ø29.5*4000', unit: 'kg', qty: 535, surface: '本色', unitPrice: 32, amount: 17120, remark: '' }
   ]},
-  { id: 'dn89', noteNo: 'BL459800185', date: '2025-11-19', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn89', noteNo: 'BL459800185', date: '2025-11-19', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di182', materialCode: '1.04.01.0136', productName: 'TODAY 40W端盖', spec: '47X29X13mmΦ7.4', unit: 'pcs', qty: 1000, surface: '氧化黑色', unitPrice: 0.7, amount: 700, remark: '' },
     { id: 'di183', materialCode: '1.04.01.0159. 0001', productName: 'today 30W电源壳体', spec: '46.6X29X102.5mm', unit: 'pcs', qty: 1000, surface: '氧化黑色', unitPrice: 2.8, amount: 2800, remark: '' },
     { id: 'di184', materialCode: '1.04.01.0097', productName: 'Q2-45W端盖', spec: '47X29X13mm，Φ7.4', unit: 'pcs', qty: 1150, surface: '银白', unitPrice: 0.7, amount: 805, remark: '' },
     { id: 'di185', materialCode: '1.04.01.0158.0001', productName: 'today 30W电源壳体', spec: '46.6X29X102.5mm', unit: 'pcs', qty: 1250, surface: '银白', unitPrice: 2, amount: 2500, remark: '' }
   ]},
-  { id: 'dn90', noteNo: 'BL459800189', date: '2025-11-19', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn90', noteNo: 'BL459800189', date: '2025-11-19', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di186', materialCode: '1.04.01.0136', productName: 'TODAY 40W端盖', spec: '47X29X13mmΦ7.4', unit: 'pcs', qty: 324, surface: '氧化黑色', unitPrice: 0.7, amount: 226.8, remark: '' },
     { id: 'di187', materialCode: '1.04.01.0159. 0001', productName: 'today 30W电源壳体', spec: '46.6X29X102.5mm', unit: 'pcs', qty: 351, surface: '氧化黑色', unitPrice: 2.8, amount: 982.8, remark: '' },
     { id: 'di188', materialCode: '1.04.01.0097', productName: 'Q2-45W端盖', spec: '47X29X13mm，Φ7.4', unit: 'pcs', qty: 450, surface: '银白', unitPrice: 0.7, amount: 315, remark: '' },
     { id: 'di189', materialCode: '1.04.01.0158.0001', productName: 'today 30W电源壳体', spec: '46.6X29X102.5mm', unit: 'pcs', qty: 763, surface: '银白', unitPrice: 2, amount: 1526, remark: '' }
   ]},
-  { id: 'dn91', noteNo: 'BL459790193', date: '2025-11-18', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn91', noteNo: 'BL459790193', date: '2025-11-18', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di190', materialCode: 'JG-Φ31.25×Φ27.95', productName: '铝管6063', spec: 'Φ31.25*Φ27.95*4000', unit: 'kg', qty: 205.5, surface: '', unitPrice: 32, amount: 6576, remark: '' },
     { id: 'di191', materialCode: 'YG25.3*1.15', productName: '铝管6063', spec: '25.3*23*4000', unit: 'kg', qty: 278.5, surface: '', unitPrice: 32, amount: 8912, remark: '' }
   ]},
-  { id: 'dn92', noteNo: 'BL459810195', date: '2025-11-20', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn92', noteNo: 'BL459810195', date: '2025-11-20', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di192', materialCode: 'YL-054-75', productName: '电源外壳', spec: '28.8*20.1*75', unit: 'pcs', qty: 220, surface: '', unitPrice: 0.5, amount: 110, remark: '' },
     { id: 'di193', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: '套', qty: 2399, surface: '', unitPrice: 1.1, amount: 2638.9, remark: '' },
     { id: 'di194', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: '套', qty: 604, surface: '', unitPrice: 1.1, amount: 664.4, remark: '补11-16单' }
   ]},
-  { id: 'dn93', noteNo: 'BL459810198', date: '2025-11-20', customer: '玖嘉久电子科技', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn93', noteNo: 'BL459810198', date: '2025-11-20', customer: '玖嘉久电子科技', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di195', materialCode: 'YL-869-1', productName: '上盖板', spec: '116*22.9*174.5', unit: '', qty: 109, surface: '', unitPrice: 35.54, amount: 3873.86, remark: '' },
     { id: 'di196', materialCode: 'YL-869-2', productName: '下盖板', spec: '107*6.2*173.4', unit: '', qty: 109, surface: '', unitPrice: 31.33, amount: 3414.97, remark: '' },
     { id: 'di197', materialCode: 'YL-869-3', productName: '按键', spec: '4*3*26.4', unit: '', qty: 109, surface: '', unitPrice: 2.98, amount: 324.82, remark: '' }
   ]},
-  { id: 'dn94', noteNo: 'BL459850201', date: '2025-11-24', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn94', noteNo: 'BL459850201', date: '2025-11-24', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di198', materialCode: 'JG-Φ31.25×Φ27.95', productName: '铝管6063', spec: 'Φ31.25*Φ27.95*4000', unit: 'kg', qty: 0, surface: '', unitPrice: 32, amount: 0, remark: '' }
   ]},
-  { id: 'dn95', noteNo: 'BL459840202', date: '2025-11-23', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn95', noteNo: 'BL459840202', date: '2025-11-23', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di199', materialCode: '1.04.01.0096', productName: 'Q2-45W端盖', spec: '47X29X13mm，Φ10', unit: 'pcs', qty: 1000, surface: '银白', unitPrice: 2, amount: 2000, remark: '' }
   ]},
-  { id: 'dn96', noteNo: 'BL459880203', date: '2025-11-27', customer: '东方一号电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn96', noteNo: 'BL459880203', date: '2025-11-27', customer: '东方一号电子有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di200', materialCode: 'yl-270-230', productName: '电源主体', spec: '40*22*230', unit: 'pcs', qty: 1650, surface: '氧化雾银', unitPrice: 2.1, amount: 3465, remark: '' }
   ]},
-  { id: 'dn97', noteNo: 'BL459880204', date: '2025-11-27', customer: '和鸿电气股份有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn97', noteNo: 'BL459880204', date: '2025-11-27', customer: '和鸿电气股份有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di201', materialCode: '1021772', productName: 'D7散热片', spec: '56*25*4mm', unit: 'pcs', qty: 200, surface: '本色', unitPrice: 0.95, amount: 190, remark: '' },
     { id: 'di202', materialCode: '1021773', productName: 'MOS散热片', spec: '52*25*4mm', unit: 'pcs', qty: 200, surface: '本色', unitPrice: 0.85, amount: 170, remark: '' }
   ]},
-  { id: 'dn98', noteNo: 'BL460030206', date: '2025-12-12', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn98', noteNo: 'BL460030206', date: '2025-12-12', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di203', materialCode: 'JG-Φ31.25×Φ27.95', productName: '铝管6063', spec: 'Φ31.25*Φ27.95*4000', unit: 'kg', qty: 990, surface: '本色', unitPrice: 35, amount: 34650, remark: '' }
   ]},
-  { id: 'dn99', noteNo: 'BL460100207', date: '2025-12-19', customer: '深圳市卓仪光电科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn99', noteNo: 'BL460100207', date: '2025-12-19', customer: '深圳市卓仪光电科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di204', materialCode: 'YL-054-160', productName: '电源外壳', spec: '28.8*20.1*160', unit: '套', qty: 1000, surface: '银白', unitPrice: 1.3, amount: 1300, remark: '' },
     { id: 'di205', materialCode: 'YL-054-95', productName: '电源外壳', spec: '28.8*20.1*95', unit: '套', qty: 300, surface: '银白', unitPrice: 1, amount: 300, remark: '' }
   ]},
-  { id: 'dn100', noteNo: 'BL460000209', date: '2025-12-09', customer: '东方一号电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn100', noteNo: 'BL460000209', date: '2025-12-09', customer: '东方一号电子有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di206', materialCode: 'YL-054-198', productName: '电源外壳', spec: '28.8*20.1*198', unit: 'pcs', qty: 529, surface: '银白', unitPrice: 1, amount: 529, remark: '' },
     { id: 'di207', materialCode: '模具费', productName: '', spec: '', unit: '套', qty: 1, surface: '', unitPrice: 1000, amount: 1000, remark: '' }
   ]},
-  { id: 'dn101', noteNo: 'BL460210211', date: '2025-12-30', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn101', noteNo: 'BL460210211', date: '2025-12-30', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di208', materialCode: '405-00731', productName: '铝管6063', spec: 'ø32.7*ø29.5*4000', unit: 'kg', qty: 540, surface: '', unitPrice: 35, amount: 18900, remark: '' }
   ]},
-  { id: 'dn102', noteNo: 'BL460340212', date: '2026-01-12', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn102', noteNo: 'BL460340212', date: '2026-01-12', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di209', materialCode: '405-00731', productName: '铝管6063', spec: 'ø32.7*ø29.5*4000', unit: 'kg', qty: 495, surface: '', unitPrice: 35, amount: 17325, remark: '' },
     { id: 'di210', materialCode: 'YG25.3*1.15', productName: '铝管6063', spec: '25.3*23*4000', unit: 'kg', qty: 685, surface: '', unitPrice: 35, amount: 23975, remark: '' }
   ]},
-  { id: 'dn103', noteNo: 'BL460380214', date: '2026-01-16', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn103', noteNo: 'BL460380214', date: '2026-01-16', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di211', materialCode: '方铝管25*25*2.0', productName: '铝管6063', spec: '25*25*4040', unit: 'kg', qty: 2436, surface: '本色', unitPrice: 28.4, amount: 69182.4, remark: '1256支' }
   ]},
-  { id: 'dn104', noteNo: 'BL460400215', date: '2026-01-18', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn104', noteNo: 'BL460400215', date: '2026-01-18', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di212', materialCode: '1.04.01.0096', productName: 'Q2-45W端盖', spec: '47X29X13mm，Φ10', unit: 'pcs', qty: 1000, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn105', noteNo: 'BL460420216', date: '2026-01-20', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn105', noteNo: 'BL460420216', date: '2026-01-20', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di213', materialCode: 'YL-054-45', productName: '电源外壳', spec: '28.8*20.1*45', unit: 'pcs', qty: 5000, surface: '银白', unitPrice: 0.32, amount: 1600, remark: '' },
     { id: 'di214', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: 'pcs', qty: 470, surface: '银白', unitPrice: 1.1, amount: 517, remark: '' }
   ]},
-  { id: 'dn106', noteNo: 'BL460430218', date: '2026-01-21', customer: '凯明智汇科技（东莞）有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn106', noteNo: 'BL460430218', date: '2026-01-21', customer: '凯明智汇科技（东莞）有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di215', materialCode: 'YL-014-95', productName: '电源外壳', spec: '71.5*41.7*95', unit: '套', qty: 1000, surface: '铁灰', unitPrice: 5.5, amount: 5500, remark: '' }
   ]},
-  { id: 'dn107', noteNo: 'BL460460219', date: '2026-01-24', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn107', noteNo: 'BL460460219', date: '2026-01-24', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di216', materialCode: '51.04.01.1418.0002', productName: 'Reach型材', spec: '18*3.4*1122.6', unit: '支', qty: 32, surface: '', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di217', materialCode: '51.04.01.1480.0001', productName: 'LIRO光源支架', spec: '1080.7X67X6.9', unit: '支', qty: 36, surface: '', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di218', materialCode: '上机费', productName: '', spec: '', unit: '次', qty: 2, surface: '', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn108', noteNo: 'BL460460222', date: '2026-01-24', customer: '深圳美因联电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn108', noteNo: 'BL460460222', date: '2026-01-24', customer: '深圳美因联电子有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di219', materialCode: 'YL-079-80', productName: '电源外壳', spec: '', unit: '套', qty: 1000, surface: '', unitPrice: 3.9, amount: 3900, remark: '' }
   ]},
-  { id: 'dn109', noteNo: 'XK-1-T-2026-2-5-12', date: '2026-02-05', customer: '佛山市奕旺照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市碧利莱照明有限公司', items: [
+  { id: 'dn109', noteNo: 'XK-1-T-2026-2-5-12', date: '2026-02-05', customer: '佛山市奕旺照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di220', materialCode: '304 -16不锈钢', productName: '十字圆头半牙螺钉', spec: 'M5X 16', unit: 'pcs', qty: 50578, surface: '', unitPrice: 0.14, amount: 7080.92, remark: '' },
     { id: 'di221', materialCode: '304 -17不锈钢', productName: '十字圆头半牙螺钉', spec: 'M5X 17', unit: 'pcs', qty: 51969, surface: '', unitPrice: 0.14, amount: 7275.66, remark: '' }
   ]},
-  { id: 'dn110', noteNo: 'BL460590225', date: '2026-02-06', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn110', noteNo: 'BL460590225', date: '2026-02-06', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di222', materialCode: 'LZ-001-00', productName: '铝支撑', spec: '500*80*160', unit: '', qty: 2000, surface: '', unitPrice: 35, amount: 70000, remark: '' },
     { id: 'di223', materialCode: 'LZ-002', productName: 'L型特殊铝块', spec: '70*70*20.4', unit: '', qty: 25000, surface: '', unitPrice: 3.17, amount: 79250, remark: '' },
     { id: 'di224', materialCode: 'LZ-003', productName: '铝板3.0mm', spec: '180*80*3.0', unit: '', qty: 2000, surface: '', unitPrice: 4.23, amount: 8460, remark: '' },
     { id: 'di225', materialCode: 'LZ-004', productName: '方铝片2.3mm', spec: '178*82*2.3', unit: '', qty: 2150, surface: '', unitPrice: 3.2, amount: 6880, remark: '' }
   ]},
-  { id: 'dn111', noteNo: 'BL0229', date: '', customer: '刘先生', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn111', noteNo: 'BL0229', date: '', customer: '刘先生', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di226', materialCode: '48*35', productName: '', spec: '', unit: '', qty: 400, surface: '', unitPrice: 9, amount: 3600, remark: '' },
     { id: 'di227', materialCode: '48*58', productName: '', spec: '', unit: '', qty: 400, surface: '', unitPrice: 9.5, amount: 3800, remark: '' },
     { id: 'di228', materialCode: '48*60', productName: '', spec: '', unit: '', qty: 2000, surface: '', unitPrice: 10, amount: 20000, remark: '' },
@@ -1022,7 +1022,7 @@ export const deliveryNotes: DeliveryNote[] = [
     { id: 'di235', materialCode: '27.8*78.1样品', productName: '', spec: '', unit: '', qty: 10, surface: '', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di236', materialCode: '36*21样品', productName: '', spec: '', unit: '', qty: 10, surface: '', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn112', noteNo: 'BL0240', date: '', customer: '', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn112', noteNo: 'BL0240', date: '', customer: '', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di237', materialCode: '48*35', productName: '', spec: '', unit: '', qty: 400, surface: '', unitPrice: 9, amount: 3600, remark: '' },
     { id: 'di238', materialCode: '48*58', productName: '', spec: '', unit: '', qty: 400, surface: '', unitPrice: 6.8, amount: 2720, remark: '' },
     { id: 'di239', materialCode: '48*60', productName: '', spec: '', unit: '', qty: 2000, surface: '', unitPrice: 9, amount: 18000, remark: '' },
@@ -1033,33 +1033,33 @@ export const deliveryNotes: DeliveryNote[] = [
     { id: 'di244', materialCode: '33.8*78.1', productName: '', spec: '', unit: '', qty: 500, surface: '', unitPrice: 10.5, amount: 5250, remark: '' },
     { id: 'di245', materialCode: '36*52', productName: '', spec: '', unit: '', qty: 100, surface: '', unitPrice: 6, amount: 600, remark: '' }
   ]},
-  { id: 'dn113', noteNo: 'BL460970249', date: '2026-03-16', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn113', noteNo: 'BL460970249', date: '2026-03-16', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di246', materialCode: 'LZ-001-00', productName: '铝支撑', spec: '500*80*160', unit: 'pcs', qty: 2000, surface: '', unitPrice: 0, amount: 0, remark: '3月12日发100个' },
     { id: 'di247', materialCode: 'LZ-002', productName: 'L型特殊铝块', spec: '70*70*20.4', unit: 'pcs', qty: 25000, surface: '', unitPrice: 0, amount: 0, remark: '3月12日发200个' },
     { id: 'di248', materialCode: 'LZ-003', productName: '铝板3.0mm', spec: '180*80*3.0', unit: 'pcs', qty: 2000, surface: '', unitPrice: 0, amount: 0, remark: '3月12日发200个' }
   ]},
-  { id: 'dn114', noteNo: 'BL0252', date: '', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn114', noteNo: 'BL0252', date: '', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di249', materialCode: 'LZ-004', productName: '方铝片2.3mm', spec: '178*82*2.3', unit: 'pcs', qty: 2150, surface: '', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di250', materialCode: 'yl-872', productName: '带挂钩的铝块', spec: '20.4*20.2*99.6', unit: '', qty: 100, surface: '拉丝', unitPrice: 4.98, amount: 498, remark: '' }
   ]},
-  { id: 'dn115', noteNo: 'BL460980254', date: '2026-03-17', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn115', noteNo: 'BL460980254', date: '2026-03-17', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di251', materialCode: 'YG25.3*1.15', productName: '铝管6063', spec: '25.3*23*4000', unit: '', qty: 440, surface: '', unitPrice: 35, amount: 15400, remark: '' }
   ]},
-  { id: 'dn116', noteNo: 'BL460970255', date: '2026-03-16', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn116', noteNo: 'BL460970255', date: '2026-03-16', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di252', materialCode: 'YL-036-151', productName: '电源外壳', spec: '69.8*42.6*151', unit: '', qty: 100, surface: '氧化雾银', unitPrice: 11, amount: 1100, remark: '' }
   ]},
-  { id: 'dn117', noteNo: 'BL460990256', date: '2026-03-18', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn117', noteNo: 'BL460990256', date: '2026-03-18', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di253', materialCode: '1.04.01.1099. 9902', productName: 'IGUASSU支架端盖-1', spec: '42.4*47.9*2.0', unit: '个', qty: 100, surface: '砂白', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di254', materialCode: '1.04.01.1100. 9902', productName: 'IGUASSU支架端盖-2', spec: '42.4*47.9*2.0', unit: '个', qty: 100, surface: '砂白', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn118', noteNo: 'BL461060258', date: '2026-03-25', customer: '珠海市明庆电子有限分司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn118', noteNo: 'BL461060258', date: '2026-03-25', customer: '珠海市明庆电子有限分司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di255', materialCode: 'YL-054-48', productName: '电源外壳', spec: '28.8*20.1*48', unit: '个', qty: 3032, surface: '', unitPrice: 0.41, amount: 1243.12, remark: '2026/3/24发848' }
   ]},
-  { id: 'dn119', noteNo: 'BL461070259', date: '2026-03-26', customer: '深圳市卓仪光电科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn119', noteNo: 'BL461070259', date: '2026-03-26', customer: '深圳市卓仪光电科技有限公司', orderNo: '', reconciled: '已对帐', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di256', materialCode: 'YL-054-160', productName: '电源外壳', spec: '28.8*20.1*160', unit: '套', qty: 1000, surface: '铁灰', unitPrice: 1.4, amount: 1400, remark: '' },
     { id: 'di257', materialCode: 'YL-054-160', productName: '电源外壳', spec: '28.8*20.1*160', unit: '套', qty: 1000, surface: '氧化雾银', unitPrice: 1.4, amount: 1400, remark: '' }
   ]},
-  { id: 'dn120', noteNo: 'BL461140261', date: '2026-04-02', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn120', noteNo: 'BL461140261', date: '2026-04-02', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di258', materialCode: 'yl-872', productName: '带挂钩的铝块', spec: '20.4*20.2*99.6', unit: '套', qty: 100, surface: '拉丝', unitPrice: 4.98, amount: 498, remark: '' },
     { id: 'di259', materialCode: 'YL-036-151', productName: '电源外壳', spec: '69.8*42.6*151', unit: '套', qty: 100, surface: '氧化雾银', unitPrice: 11, amount: 1100, remark: '' },
     { id: 'di260', materialCode: 'LZ-012', productName: '卡箍用卡扣', spec: '42*20.8*10', unit: '套', qty: 150, surface: '镀白锌', unitPrice: 125, amount: 18750, remark: '' },
@@ -1068,100 +1068,100 @@ export const deliveryNotes: DeliveryNote[] = [
     { id: 'di263', materialCode: 'LZ-010', productName: 'U型制动钳', spec: '33.3*8.3*18', unit: 'pcs', qty: 15000, surface: '镀彩锌', unitPrice: 0.7, amount: 10500, remark: '' },
     { id: 'di264', materialCode: 'LZ-002', productName: 'L型特殊铝块', spec: '70*70*20.4', unit: 'pcs', qty: 5000, surface: '', unitPrice: 3.17, amount: 15850, remark: '' }
   ]},
-  { id: 'dn121', noteNo: 'BL461120268', date: '2026-03-31', customer: '凯明智汇科技（东莞）有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn121', noteNo: 'BL461120268', date: '2026-03-31', customer: '凯明智汇科技（东莞）有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di265', materialCode: 'YL-014-95', productName: '电源外壳', spec: '71.5*41.7*95', unit: '套', qty: 808, surface: '铁灰', unitPrice: 5.7, amount: 4605.6, remark: '欠主体192个' },
     { id: 'di266', materialCode: 'YL-014-95', productName: '主体', spec: '71.5*41.7*95', unit: 'pcs', qty: 808, surface: '铁灰', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di267', materialCode: 'yl-015-95', productName: '盖板', spec: '62.7*1.5*95', unit: 'pcs', qty: 1035, surface: '铁灰', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di268', materialCode: 'yl-014-13地线孔', productName: '堵头', spec: '72*42*13', unit: 'pcs', qty: 1079, surface: '铁灰', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di269', materialCode: 'yl-014-13', productName: '堵头', spec: '72*42*13', unit: 'pcs', qty: 1022, surface: '铁灰', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn122', noteNo: 'BL461140273', date: '2026-04-02', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn122', noteNo: 'BL461140273', date: '2026-04-02', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di270', materialCode: 'BL-126-144', productName: '底板', spec: '55*1.5*144mm', unit: 'pcs', qty: 800, surface: '银白', unitPrice: 2.3, amount: 1840, remark: '' }
   ]},
-  { id: 'dn123', noteNo: 'BL461130274', date: '2026-04-01', customer: '珠海市明庆电子有限分司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn123', noteNo: 'BL461130274', date: '2026-04-01', customer: '珠海市明庆电子有限分司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di271', materialCode: 'YL-054-48', productName: '电源外壳', spec: '28.8*20.1*48', unit: 'pcs', qty: 4368, surface: '氧化雾银', unitPrice: 0.41, amount: 1790.88, remark: '' }
   ]},
-  { id: 'dn124', noteNo: 'BL461140275', date: '2026-04-02', customer: '珠海市明庆电子有限分司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn124', noteNo: 'BL461140275', date: '2026-04-02', customer: '珠海市明庆电子有限分司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di272', materialCode: 'YL-054-48', productName: '电源外壳', spec: '28.8*20.1*48', unit: 'pcs', qty: 2184, surface: '氧化雾银', unitPrice: 0.41, amount: 895.44, remark: '' }
   ]},
-  { id: 'dn125', noteNo: 'BL461160276', date: '2026-04-04', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn125', noteNo: 'BL461160276', date: '2026-04-04', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di273', materialCode: 'LZ-010', productName: 'U型制动钳', spec: '33.3*8.3*18', unit: 'pcs', qty: 15000, surface: '镀彩锌', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di274', materialCode: 'YL-874', productName: '只型铝板', spec: '70*49.4*100.2', unit: 'pcs', qty: 3000, surface: '', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di275', materialCode: 'YL-036-151', productName: '电源外壳', spec: '69.8*42.6*151', unit: '套', qty: 100, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di276', materialCode: 'YL-872', productName: '带挂钩的铝块', spec: '20.4*20.2*99.6', unit: '套', qty: 100, surface: '拉丝', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di277', materialCode: 'LZ-002', productName: 'L型特殊铝块', spec: '70*70*20.4', unit: 'pcs', qty: 5000, surface: '', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn126', noteNo: 'BL461200281', date: '2026-04-08', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn126', noteNo: 'BL461200281', date: '2026-04-08', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di278', materialCode: 'YL-054-95', productName: '电源外壳', spec: '28.8*20.1*95', unit: 'pcs', qty: 1020, surface: '氧化雾银', unitPrice: 0.6, amount: 612, remark: '' }
   ]},
-  { id: 'dn127', noteNo: 'BL461260282', date: '2026-04-14', customer: '珠海市明庆电子有限分司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn127', noteNo: 'BL461260282', date: '2026-04-14', customer: '珠海市明庆电子有限分司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di279', materialCode: 'YL-054-48', productName: '电源外壳', spec: '28.8*20.1*48', unit: 'pcs', qty: 10586, surface: '氧化雾银', unitPrice: 0.41, amount: 4340.26, remark: '' }
   ]},
-  { id: 'dn128', noteNo: 'BL0283', date: '', customer: '东莞市百川慧通科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn128', noteNo: 'BL0283', date: '', customer: '东莞市百川慧通科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di280', materialCode: 'BL-003-2000', productName: '小边框', spec: '51.8*11.1*2000', unit: '支', qty: 3095, surface: '喷涂', unitPrice: 10, amount: 30950, remark: '' }
   ]},
-  { id: 'dn129', noteNo: 'BL461330284', date: '2026-04-21', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn129', noteNo: 'BL461330284', date: '2026-04-21', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di281', materialCode: 'YL-107-260', productName: '电源外壳', spec: '95*50*260mm', unit: 'pcs', qty: 255, surface: '铁灰', unitPrice: 28, amount: 7140, remark: '' },
     { id: 'di282', materialCode: 'YL-107-1', productName: '堵头+地线孔', spec: '95*13*50', unit: 'pcs', qty: 153, surface: '铁灰', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di283', materialCode: 'YL-107-2', productName: '堵头', spec: '95*13*50', unit: 'pcs', qty: 153, surface: '铁灰', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di284', materialCode: 'YL-108-260', productName: '盖板', spec: '260*80*3', unit: 'pcs', qty: 233, surface: '铁灰', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn130', noteNo: 'BL461350288', date: '2026-04-23', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn130', noteNo: 'BL461350288', date: '2026-04-23', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di285', materialCode: '方铝管25*25*2.0', productName: '铝管6063', spec: '25*25*4040', unit: 'KG', qty: 1514, surface: '本色', unitPrice: 29.15, amount: 44133.1, remark: '' }
   ]},
-  { id: 'dn131', noteNo: 'BL461350289', date: '2026-04-23', customer: '廖先生', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn131', noteNo: 'BL461350289', date: '2026-04-23', customer: '廖先生', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di286', materialCode: '外径46.80*59.30（7.8内孔）', productName: '碗', spec: 'ø46.8*59.3', unit: '', qty: 20, surface: '', unitPrice: 11, amount: 220, remark: '4月19日发' },
     { id: 'di287', materialCode: '外径46.80*59.30（7.8内孔）', productName: '碗', spec: 'ø46.8*59.3', unit: '', qty: 1680, surface: '', unitPrice: 11, amount: 18480, remark: '' },
     { id: 'di288', materialCode: '外径31*21', productName: '堵头', spec: 'ø31*21', unit: '', qty: 1007, surface: '', unitPrice: 3.5, amount: 3524.5, remark: '' }
   ]},
-  { id: 'dn132', noteNo: 'BL461370292', date: '2026-04-25', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn132', noteNo: 'BL461370292', date: '2026-04-25', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di289', materialCode: 'BL-126-144', productName: '底板', spec: '55*1.5*144mm', unit: 'pcs', qty: 5920, surface: '', unitPrice: 1.5, amount: 8880, remark: '' }
   ]},
-  { id: 'dn133', noteNo: 'BL461420293', date: '2026-04-30', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn133', noteNo: 'BL461420293', date: '2026-04-30', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di290', materialCode: '405-00731', productName: '铝管6063', spec: 'ø32.7*ø29.5*4000', unit: 'kg', qty: 525, surface: '', unitPrice: 35, amount: 18375, remark: '' }
   ]},
-  { id: 'dn134', noteNo: 'BL461480294', date: '2026-05-06', customer: '廖先生', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn134', noteNo: 'BL461480294', date: '2026-05-06', customer: '廖先生', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di291', materialCode: '外径46.80*59.30（7.8内孔）', productName: '碗', spec: 'ø46.8*59.3', unit: '', qty: 700, surface: '', unitPrice: 11, amount: 7700, remark: '' },
     { id: 'di292', materialCode: '外径46.80*59.30（9.0内孔）', productName: '碗', spec: 'ø46.8*59.3', unit: '', qty: 750, surface: '', unitPrice: 11, amount: 8250, remark: '' }
   ]},
-  { id: 'dn135', noteNo: 'BL461480298', date: '2026-05-06', customer: '江门深华港湾照明有限公司', orderNo: '5PO-2026-03-0246', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn135', noteNo: 'BL461480298', date: '2026-05-06', customer: '江门深华港湾照明有限公司', orderNo: '5PO-2026-03-0246', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di293', materialCode: '1.04.01.1099. 9902', productName: 'IGUASSU支架端盖-1', spec: '42.4*47.9*2.0', unit: 'pcs', qty: 500, surface: '砂白', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di294', materialCode: '1.04.01.1100. 9902', productName: 'IGUASSU支架端盖-2', spec: '42.4*47.9*2.0', unit: 'pcs', qty: 500, surface: '砂白', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di295', materialCode: '1.04.01.1128. 9903', productName: 'IGUASSU单灯主体端盖-1', spec: '42.4*99.5*2.0', unit: 'pcs', qty: 400, surface: '砂白', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di296', materialCode: '1.04.01.1129. 9903', productName: 'IGUASSU单灯主体端盖-2', spec: '42.4*99.5*2.0', unit: 'pcs', qty: 400, surface: '砂白', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn136', noteNo: 'BL461500302', date: '2026-05-08', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn136', noteNo: 'BL461500302', date: '2026-05-08', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di297', materialCode: '51.04.01.1524.0001', productName: '黄灯管-铝型材', spec: '1135x23.8x11', unit: 'pcs', qty: 80, surface: '本色', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn137', noteNo: 'BL461540303', date: '2026-05-12', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn137', noteNo: 'BL461540303', date: '2026-05-12', customer: '江苏镭科照明科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di298', materialCode: 'LZ-006', productName: '铝架配件', spec: '54.5*27.3*50', unit: 'pcs', qty: 2330, surface: '', unitPrice: 2.8, amount: 6524, remark: '' }
   ]},
-  { id: 'dn138', noteNo: 'BL457930304', date: '2025-05-16', customer: '东莞市希迈精密制造有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn138', noteNo: 'BL457930304', date: '2025-05-16', customer: '东莞市希迈精密制造有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di299', materialCode: 'LZ-006', productName: '铝架配件', spec: '54.5*27.3*50', unit: 'pcs', qty: 800, surface: '本色', unitPrice: 2.8, amount: 2240, remark: '' }
   ]},
-  { id: 'dn139', noteNo: 'BL461550306', date: '2026-05-13', customer: '廖先生', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn139', noteNo: 'BL461550306', date: '2026-05-13', customer: '廖先生', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di300', materialCode: '外径50*127.5', productName: '短管', spec: '', unit: 'pcs', qty: 204, surface: '', unitPrice: 18, amount: 3672, remark: '' },
     { id: 'di301', materialCode: '外径28.9*67', productName: '接头', spec: '', unit: 'pcs', qty: 500, surface: '', unitPrice: 13, amount: 6500, remark: '旧款6槽' },
     { id: 'di302', materialCode: '外径50*147.5', productName: '长管', spec: '', unit: 'pcs', qty: 150, surface: '', unitPrice: 19, amount: 2850, remark: '' },
     { id: 'di303', materialCode: '外径50*13', productName: '大接头', spec: 'ø50*13', unit: 'pcs', qty: 750, surface: '', unitPrice: 8.6, amount: 6450, remark: '' }
   ]},
-  { id: 'dn140', noteNo: 'BL461590310', date: '2026-05-17', customer: '廖先生', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn140', noteNo: 'BL461590310', date: '2026-05-17', customer: '廖先生', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di304', materialCode: '外径50*40（7.8孔）', productName: '碗', spec: 'ø50*40', unit: 'pcs', qty: 114, surface: '', unitPrice: 14.6, amount: 1664.4, remark: '' },
     { id: 'di305', materialCode: '外径28.9*59', productName: '接头', spec: '', unit: 'pcs', qty: 500, surface: '', unitPrice: 13, amount: 6500, remark: '' },
     { id: 'di306', materialCode: '外径42*13', productName: '小接头', spec: '', unit: 'pcs', qty: 600, surface: '', unitPrice: 7.5, amount: 4500, remark: '' }
   ]},
-  { id: 'dn141', noteNo: 'BL461600313', date: '2026-05-18', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn141', noteNo: 'BL461600313', date: '2026-05-18', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di307', materialCode: 'YG25.3*1.15', productName: '铝管6063', spec: '25.3*23*4000', unit: 'kg', qty: 463, surface: '', unitPrice: 35, amount: 16205, remark: '' }
   ]},
-  { id: 'dn142', noteNo: 'BL461600314', date: '2026-05-18', customer: '珠海市启阳电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn142', noteNo: 'BL461600314', date: '2026-05-18', customer: '珠海市启阳电子有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di308', materialCode: 'YL-871-200', productName: '电源外壳', spec: '39.6*21.33*200', unit: 'pcs', qty: 232, surface: '氧化雾银', unitPrice: 1.91, amount: 443.12, remark: '' },
     { id: 'di309', materialCode: 'YL-054-65', productName: '电源外壳', spec: '20.3*29.3*65', unit: 'pcs', qty: 1238, surface: '氧化雾银', unitPrice: 0.59, amount: 730.42, remark: '' }
   ]},
-  { id: 'dn143', noteNo: 'BL461630316', date: '2026-05-21', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn143', noteNo: 'BL461630316', date: '2026-05-21', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di310', materialCode: '51.04.01.1522.0001', productName: 'LIFA-4OW滑轨', spec: '60x23x7.2mm,', unit: 'pcs', qty: 991, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di311', materialCode: '51.04.01.1523.0001', productName: 'LIFA一15OW滑轨', spec: '80x23x7.2mm,', unit: 'pcs', qty: 1000, surface: '氧化雾银', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn144', noteNo: 'BL461650318', date: '2026-05-23', customer: '廖先生', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn144', noteNo: 'BL461650318', date: '2026-05-23', customer: '廖先生', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di312', materialCode: '外径50*127.5', productName: '短管', spec: '', unit: 'pcs', qty: 183, surface: '', unitPrice: 0, amount: 0, remark: '补退货' },
     { id: 'di313', materialCode: '外径39*59.30（7.8内孔）', productName: '碗', spec: '', unit: 'pcs', qty: 384, surface: '', unitPrice: 10, amount: 3840, remark: '' },
     { id: 'di314', materialCode: '外径42*145.70', productName: '小长管', spec: '', unit: 'pcs', qty: 600, surface: '', unitPrice: 16, amount: 9600, remark: '' },
@@ -1169,72 +1169,72 @@ export const deliveryNotes: DeliveryNote[] = [
     { id: 'di316', materialCode: '外径50*40（7.8孔）', productName: '碗', spec: 'ø50*40', unit: 'pcs', qty: 600, surface: '', unitPrice: 14.6, amount: 8760, remark: '' },
     { id: 'di317', materialCode: '外径50*40（9.0孔）', productName: '碗', spec: 'ø50*40', unit: 'pcs', qty: 150, surface: '', unitPrice: 14.6, amount: 2190, remark: '' }
   ]},
-  { id: 'dn145', noteNo: 'BL461750324', date: '2026-06-02', customer: '凯明智汇科技（东莞）有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn145', noteNo: 'BL461750324', date: '2026-06-02', customer: '凯明智汇科技（东莞）有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di318', materialCode: 'YL-014-95', productName: '电源外壳', spec: '71.5*41.7*95', unit: '套', qty: 1192, surface: '铁灰', unitPrice: 5.7, amount: 6794.4, remark: '' },
     { id: 'di319', materialCode: 'YL-014-123', productName: '电源外壳', spec: '71.5*41.7*123', unit: '套', qty: 500, surface: '铁灰', unitPrice: 7.5, amount: 3750, remark: '' }
   ]},
-  { id: 'dn146', noteNo: 'BL461740326', date: '2026-06-01', customer: '廖先生', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn146', noteNo: 'BL461740326', date: '2026-06-01', customer: '廖先生', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di320', materialCode: '外径39*59.30（7.8内孔）', productName: '碗', spec: '', unit: '', qty: 2632, surface: '', unitPrice: 10, amount: 26320, remark: '' }
   ]},
-  { id: 'dn147', noteNo: 'BL461530327', date: '2026-05-11', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn147', noteNo: 'BL461530327', date: '2026-05-11', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di321', materialCode: '550186-A00', productName: '散热片上盖', spec: '107.4*57.8*29', unit: 'pcs', qty: 2000, surface: '砂白', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn148', noteNo: 'BL461780328', date: '2026-06-05', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn148', noteNo: 'BL461780328', date: '2026-06-05', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di322', materialCode: '550186-A00', productName: '散热片上盖', spec: '107.4*57.8*29', unit: 'pcs', qty: 1936, surface: '砂白', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn149', noteNo: 'BL461830329', date: '2026-06-10', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn149', noteNo: 'BL461830329', date: '2026-06-10', customer: '江苏联康电子有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di323', materialCode: '550186-A00', productName: '散热片上盖', spec: '107.4*57.8*29', unit: 'pcs', qty: 3048, surface: '砂白', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn150', noteNo: 'BL461830330', date: '2026-06-10', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn150', noteNo: 'BL461830330', date: '2026-06-10', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di324', materialCode: 'YG25.3*1.15', productName: '铝管6063', spec: '25.3*23*4000', unit: 'pcs', qty: 650, surface: '', unitPrice: 35, amount: 22750, remark: '' }
   ]},
-  { id: 'dn151', noteNo: 'BL461830331', date: '2026-06-10', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn151', noteNo: 'BL461830331', date: '2026-06-10', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di325', materialCode: '51.04.01.1524.0001', productName: '黄灯管-铝型材', spec: '1135x23.8x11', unit: '支', qty: 1050, surface: '本色', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di326', materialCode: '51.04.01.1524.0001', productName: '黄灯管-铝型材', spec: '1135x23.8x11', unit: '支', qty: 75, surface: '本色', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn152', noteNo: 'BL461830333', date: '2026-06-10', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn152', noteNo: 'BL461830333', date: '2026-06-10', customer: '广州凯佳电子有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di327', materialCode: 'BL-126-140', productName: '底板', spec: '52*1.5*140mm', unit: 'pcs', qty: -673, surface: '氧化雾银', unitPrice: 1.5, amount: -1009.5, remark: '2846364' }
   ]},
-  { id: 'dn153', noteNo: 'BL461840334', date: '2026-06-11', customer: '江门深华港湾照明有限公司', orderNo: '5PO-2026-04-0175', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn153', noteNo: 'BL461840334', date: '2026-06-11', customer: '江门深华港湾照明有限公司', orderNo: '5PO-2026-04-0175', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di328', materialCode: '1.04.01.0097', productName: 'Q2-45W端盖', spec: '47X29X13mm，Φ7.4', unit: 'pcs', qty: 1000, surface: '氧化雾银', unitPrice: 0.7, amount: 700, remark: '' },
     { id: 'di329', materialCode: '1.04.01.0135', productName: 'TODAY 40W端盖', spec: '47X29X13mmΦ10', unit: 'pcs', qty: 1000, surface: '氧化黑色', unitPrice: 0.7, amount: 700, remark: '' }
   ]},
-  { id: 'dn154', noteNo: 'BL461910336', date: '2026-06-18', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn154', noteNo: 'BL461910336', date: '2026-06-18', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di330', materialCode: '405-00731', productName: '铝管6063', spec: 'ø32.7*ø29.5*4000', unit: 'kg', qty: 495.5, surface: '本色', unitPrice: 35, amount: 17342.5, remark: '' }
   ]},
-  { id: 'dn155', noteNo: 'BL461780337', date: '2026-06-05', customer: '合肥智测电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn155', noteNo: 'BL461780337', date: '2026-06-05', customer: '合肥智测电子有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di331', materialCode: 'yl-424', productName: '散热器', spec: '130.7*38.4*219', unit: 'pcs', qty: 100, surface: '砂银', unitPrice: 97.5, amount: 9750, remark: '' }
   ]},
-  { id: 'dn156', noteNo: 'BL461550338', date: '2026-05-13', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn156', noteNo: 'BL461550338', date: '2026-05-13', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di332', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: 'pcs', qty: 3116, surface: '氧化雾银', unitPrice: 1.1, amount: 3427.6, remark: '' }
   ]},
-  { id: 'dn157', noteNo: 'BL462090339', date: '2026-07-06', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn157', noteNo: 'BL462090339', date: '2026-07-06', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di333', materialCode: 'YL-107-260', productName: '电源外壳', spec: '95*50*260mm', unit: 'pcs', qty: 599, surface: '铁灰', unitPrice: 28, amount: 16772, remark: '' },
     { id: 'di334', materialCode: 'YL-108-260', productName: '盖板', spec: '260*80*3', unit: 'pcs', qty: 506, surface: '铁灰', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di335', materialCode: 'YL-107-1', productName: '堵头+地线孔', spec: '95*13*50', unit: 'pcs', qty: 722, surface: '铁灰', unitPrice: 0, amount: 0, remark: '' },
     { id: 'di336', materialCode: 'YL-107-2', productName: '堵头', spec: '95*13*50', unit: 'pcs', qty: 696, surface: '铁灰', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn158', noteNo: 'BL462260343', date: '2026-07-23', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn158', noteNo: 'BL462260343', date: '2026-07-23', customer: '江门深华港湾照明有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di337', materialCode: '51.04.01.1480.0001', productName: 'LIRO光源支架', spec: '1080.7X67X6.9', unit: '条', qty: 555, surface: '本色', unitPrice: 8.5, amount: 4717.5, remark: '' }
   ]},
-  { id: 'dn159', noteNo: 'BL462280344', date: '2026-07-25', customer: '东方一号电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn159', noteNo: 'BL462280344', date: '2026-07-25', customer: '东方一号电子有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di338', materialCode: 'yl-270-230', productName: '电源主体', spec: '40*22*230', unit: '套', qty: 1620, surface: '本色', unitPrice: 2.1, amount: 3402, remark: '' }
   ]},
-  { id: 'dn160', noteNo: 'BL462450345', date: '2026-08-11', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn160', noteNo: 'BL462450345', date: '2026-08-11', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di339', materialCode: 'YL-054-117', productName: '电源外壳', spec: '28.8*20.1*117', unit: 'pcs', qty: 6047, surface: '氧化雾银', unitPrice: 0.75, amount: 4535.25, remark: '' }
   ]},
-  { id: 'dn161', noteNo: 'BL462510346', date: '2026-08-17', customer: '东方一号电子有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn161', noteNo: 'BL462510346', date: '2026-08-17', customer: '东方一号电子有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di340', materialCode: 'YL-054-280', productName: '电源外壳', spec: '28.8*20.1*280', unit: 'pcs', qty: 274, surface: '氧化雾银', unitPrice: 2.1, amount: 575.4, remark: '' }
   ]},
-  { id: 'dn162', noteNo: 'BL462530347', date: '2026-08-19', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn162', noteNo: 'BL462530347', date: '2026-08-19', customer: '东莞市莱斯特电源科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di341', materialCode: 'YL-054-220', productName: '电源外壳', spec: '20.3*29.3*220', unit: 'pcs', qty: 102, surface: '氧化黑色', unitPrice: 3, amount: 306, remark: '' },
     { id: 'di342', materialCode: 'YL-108-260', productName: '盖板', spec: '260*80*3', unit: 'pcs', qty: 219, surface: '铁灰', unitPrice: 0, amount: 0, remark: '' }
   ]},
-  { id: 'dn163', noteNo: 'BL462610349', date: '2026-08-27', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn163', noteNo: 'BL462610349', date: '2026-08-27', customer: '佛山市三水弘美电器配件有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di343', materialCode: '405-00731', productName: '铝管6063', spec: 'ø32.7*ø29.5*4000', unit: 'KG', qty: 347, surface: '', unitPrice: 35, amount: 12145, remark: '' },
     { id: 'di344', materialCode: '405-00731', productName: '铝管6063', spec: 'ø32.7*ø29.5*4000', unit: 'KG', qty: -45, surface: '', unitPrice: 35, amount: -1575, remark: '' }
   ]},
-  { id: 'dn164', noteNo: 'BL462610352', date: '2026-08-27', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市质稳五金有限公司', items: [
+  { id: 'dn164', noteNo: 'BL462610352', date: '2026-08-27', customer: '珠海金逸电子科技有限公司', orderNo: '', reconciled: '', company: '佛山市恒达金属制品有限公司', items: [
     { id: 'di345', materialCode: 'yl-270-130', productName: '电源外壳', spec: '40*22*130', unit: '套', qty: 1006, surface: '氧化雾银', unitPrice: 1.1, amount: 1106.6, remark: '' },
     { id: 'di346', materialCode: '1.04.01.1260. 9901', productName: '', spec: '', unit: 'pcs', qty: 2000, surface: '氧化雾银', unitPrice: 2000, amount: 0, remark: '' }
   ]},
@@ -1250,6 +1250,6 @@ export interface DeliveryCompany {
 
 // 发货公司
 export const deliveryCompanies: DeliveryCompany[] = [
-  { id: "dcomp1", name: "佛山市质稳五金有限公司", address: "广东省佛山市南海区狮山招大小坑尾坑尾园", contact: "", phone: "" },
-  { id: "dcomp2", name: "佛山市碧利莱照明有限公司", address: "佛山市南海区狮山镇松岗办事处显纲村委会厦边村口首层", contact: "", phone: "" },
+  { id: "dcomp1", name: "佛山市恒达金属制品有限公司", address: "广东省佛山市南海区狮山招大小坑尾坑尾园", contact: "", phone: "" },
+  { id: "dcomp2", name: "佛山市恒达金属制品有限公司", address: "佛山市南海区狮山镇松岗办事处显纲村委会厦边村口首层", contact: "", phone: "" },
 ];

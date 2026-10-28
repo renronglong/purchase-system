@@ -41,10 +41,9 @@ const defaultTerms = [
 ];
 
 const getCompanyAddress = (companyName: string) => {
-  if (companyName.includes("质稳")) return "广东省佛山市南海区狮山招大小坑尾坑尾园";
-  if (companyName.includes("碧利莱")) return "佛山市南海区狮山镇松岗办事处显纲村委会厦边村口首层";
-  if (companyName.includes("碧利金属")) return "佛山市南海区狮山镇松岗显纲村";
-  return "";
+  if (!companyName) return "";
+  const c = deliveryCompanyStore.getAll().find(x => x.name === companyName);
+  return c?.address || "";
 };
 
 // 公司详细信息（来自 公司信息管理 deliveryCompanyStore）；未知公司返回空

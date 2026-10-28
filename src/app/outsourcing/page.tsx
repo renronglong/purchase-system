@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { outsourcingOrderStore, supplierStore, deliveryProductStore, previewOutsourcingOrderNo, type OutsourcingOrder, type OutsourcingItem } from "@/lib/store";
+import { outsourcingOrderStore, supplierStore, deliveryProductStore, deliveryCompanyStore, previewOutsourcingOrderNo, type OutsourcingOrder, type OutsourcingItem } from "@/lib/store";
 import { exportOutsourcingExcel } from "@/lib/export-outsourcing";
 
 function generateItemId(): string {
@@ -35,7 +35,7 @@ export default function OutsourcingPage() {
   const [showForm, setShowForm] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [outsourcingOrderNo, setOutsourcingOrderNo] = useState("");
-  const [company, setCompany] = useState("佛山市质稳五金有限公司");
+  const [company, setCompany] = useState(() => deliveryCompanyStore.getAll()[0]?.name || "");
   const [supplierId, setSupplierId] = useState("");
   const [supplierName, setSupplierName] = useState("");
   const [contact, setContact] = useState("");
@@ -253,9 +253,10 @@ export default function OutsourcingPage() {
                 onChange={(e) => setCompany(e.target.value)}
                 className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md"
               >
-                <option>佛山市质稳五金有限公司</option>
-                <option>佛山市碧利莱照明有限公司</option>
-                <option>佛山市碧利金属制品有限公司</option>
+                <option value="">请选择公司</option>
+                {deliveryCompanyStore.getAll().map(c => (
+                  <option key={c.id} value={c.name}>{c.name}</option>
+                ))}
               </select>
             </div>
             <div>

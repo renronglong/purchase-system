@@ -396,9 +396,9 @@ export const seedSuppliers: Supplier[] = [
 
 // 采购公司列表
 export const purchasingCompanies = [
-  "佛山市质稳五金有限公司",
-  "佛山市碧利莱照明有限公司",
-  "佛山市碧利金属制品有限公司",
+  "佛山市恒达金属制品有限公司",
+  "佛山市恒达金属制品有限公司",
+  "佛山市恒达金属制品有限公司",
 ];
 
 // 表面处理选项

@@ -141,7 +141,7 @@ export default function PrintReconciliationPage() {
       const note = allNotes.find(n => n.noteNo === firstNoteNo);
       if (note?.company) return note.company;
     }
-    return "佛山市质稳五金有限公司";
+    return "";
   };
 
   const handleMakerChange = (val: string) => {

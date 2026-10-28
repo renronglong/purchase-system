@@ -560,7 +560,7 @@ export const seedPlatePurchaseOrders: PurchaseOrder[] = [
   {
     id: 'plate-po-1',
     orderNo: 'PO-B2025021001',
-    company: '佛山市质稳五金有限公司',
+    company: '佛山市恒达金属制品有限公司',
     supplierId: 's-plate-1',
     supplierName: '铝板供应商',
     contact: '张经理',
@@ -600,7 +600,7 @@ export const seedPlatePurchaseOrders: PurchaseOrder[] = [
   {
     id: 'plate-po-2',
     orderNo: 'PO-B2025021002',
-    company: '佛山市质稳五金有限公司',
+    company: '佛山市恒达金属制品有限公司',
     supplierId: 's-plate-1',
     supplierName: '铝板供应商',
     contact: '张经理',
@@ -640,7 +640,7 @@ export const seedPlatePurchaseOrders: PurchaseOrder[] = [
   {
     id: 'plate-po-3',
     orderNo: 'PO-B2025021003',
-    company: '佛山市质稳五金有限公司',
+    company: '佛山市恒达金属制品有限公司',
     supplierId: 's-plate-1',
     supplierName: '铝板供应商',
     contact: '张经理',

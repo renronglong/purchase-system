@@ -4,14 +4,6 @@ import { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { contractSeedData, type ContractData } from "@/lib/contract-seed-data";
 
-// 碧利莱供方信息按最新开票资料自动纠正（覆盖旧的localStorage缓存）
-function fixSupplierInfo<T extends { supplierName?: string; supplierAddress?: string; supplierPhone?: string; supplierTaxNo?: string }>(c: T): T {
-  if (c.supplierName && c.supplierName.includes("碧利莱")) {
-    return { ...c, supplierAddress: "佛山市南海区狮山镇松岗办事处显纲村委会厦边村口首层之六", supplierPhone: "18929979760", supplierTaxNo: "91440605MACUYJRB5C" };
-  }
-  return c;
-}
-
 // 数字转中文大写金额
 function numberToChinese(num: number): string {
   const digits = ['零', '壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖'];
@@ -75,12 +67,12 @@ export default function ContractPrintPage() {
       if (localRaw) {
         const localContracts: ContractData[] = JSON.parse(localRaw);
         const localFound = localContracts.find(c => c.id === contractId);
-        if (localFound) { setContract(fixSupplierInfo(localFound)); return; }
+        if (localFound) { setContract(localFound); return; }
       }
     } catch { /* ignore */ }
     // 回退到种子数据
     const found = contractSeedData.find(c => c.id === contractId);
-    if (found) setContract(fixSupplierInfo(found));
+    if (found) setContract(found);
   }, [contractId]);
 
   useEffect(() => {
@@ -185,7 +177,7 @@ export default function ContractPrintPage() {
         fontSize: "14px",
         lineHeight: "1.5",
       }}>
-        {/* 牌头 + 标题（碧利莱） */}
+        {/* 牌头 + 标题 */}
         <div style={{ textAlign: "center", marginBottom: "3mm", flexShrink: 0 }}>
           <div style={{ fontSize: "20px", fontWeight: "bold", letterSpacing: "2px", marginBottom: "1mm" }}>{contract.supplierName}</div>
           <h1 style={{ fontSize: "24px", fontWeight: "bold", margin: 0, letterSpacing: "6px" }}>购 销 合 同</h1>

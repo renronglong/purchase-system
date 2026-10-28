@@ -9,7 +9,7 @@ export const seedPurchaseOrders: PurchaseOrder[] = [
   {
     id: 'cg1',
     orderNo: 'CG-20260625-002',
-    company: '佛山市质稳五金有限公司',
+    company: '佛山市恒达金属制品有限公司',
     supplierId: 's1',
     supplierName: '佛山市三水凤铝铝业有限公司',
     contact: '梁经理',
@@ -55,7 +55,7 @@ export const seedPurchaseOrders: PurchaseOrder[] = [
   {
     id: 'cg2',
     orderNo: 'CG-20260628-001',
-    company: '佛山市碧利金属制品有限公司',
+    company: '佛山市恒达金属制品有限公司',
     supplierId: 's2',
     supplierName: '广东兴发铝业有限公司',
     contact: '王总',
