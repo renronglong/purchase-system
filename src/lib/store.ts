@@ -1,5 +1,9 @@
-﻿import { userStorage } from "./user-storage";
+import { userStorage } from "./user-storage";
 import { authStore } from "./auth-store";
+import {
+  getServerCache, setServerCache, clearServerCache,
+  loadCollection, saveServerData,
+} from "./db-sync";
 import { seedProducts, seedSuppliers, type Product, type Supplier } from "./seed-data";
 import {
   deliveryCustomers, deliveryProducts, deliveryNotes, deliveryCompanies,
@@ -679,77 +683,25 @@ export const seedPlatePurchaseOrders: PurchaseOrder[] = [
   }
 ];
 
-// 初始化数据
-function initializeData(): void {
-  if (typeof window === "undefined") return;
-
-  const currentVersion = userStorage.getItem(KEYS.STORAGE_VERSION);
-
-  // 首次访问：判断是「旧版升级用户」还是「全新用户」
-  if (currentVersion === null) {
-    // 只有当 auth 系统中已有其他用户存在时，才认为是旧版升级 → 迁移全局数据
-    const allUsers = authStore.getAllUsers();
-    const existingUsers = allUsers.filter(u => u.id !== authStore.getCurrentUser()?.id);
-    const oldProducts = localStorage.getItem(KEYS.PRODUCTS);
-    
-    if (existingUsers.length > 0 && oldProducts) {
-      // 旧版升级：将全局数据迁移到当前用户空间
-      userStorage.setItem(KEYS.PRODUCTS, oldProducts);
-      const oldSuppliers = localStorage.getItem(KEYS.SUPPLIERS);
-      if (oldSuppliers) userStorage.setItem(KEYS.SUPPLIERS, oldSuppliers);
-      const oldPO = localStorage.getItem(KEYS.PURCHASE_ORDERS);
-      if (oldPO) userStorage.setItem(KEYS.PURCHASE_ORDERS, oldPO);
-      const oldOutsource = localStorage.getItem(KEYS.OUTSOURCING_ORDERS);
-      if (oldOutsource) userStorage.setItem(KEYS.OUTSOURCING_ORDERS, oldOutsource);
-      const oldCust = localStorage.getItem(KEYS.DELIVERY_CUSTOMERS);
-      if (oldCust) userStorage.setItem(KEYS.DELIVERY_CUSTOMERS, oldCust);
-      const oldDProd = localStorage.getItem(KEYS.DELIVERY_PRODUCTS);
-      if (oldDProd) userStorage.setItem(KEYS.DELIVERY_PRODUCTS, oldDProd);
-      const oldDNotes = localStorage.getItem(KEYS.DELIVERY_NOTES);
-      if (oldDNotes) userStorage.setItem(KEYS.DELIVERY_NOTES, oldDNotes);
-      const oldRecon = localStorage.getItem(KEYS.RECONCILIATION_ORDERS);
-      if (oldRecon) userStorage.setItem(KEYS.RECONCILIATION_ORDERS, oldRecon);
-      const oldSales = localStorage.getItem(KEYS.SALES_ORDERS);
-      if (oldSales) userStorage.setItem(KEYS.SALES_ORDERS, oldSales);
-    } else {
-      // 全新用户：基础数据留空，由各用户自行录入。
-      // 系统按用户隔离、不预填、不共享；如需要种子数据，
-      // 可通过界面上的「恢复原始数据」按钮手动恢复（见 restoreSeedData）。
-      // 仅当用户此前没有任何产品数据时，才初始化为空；
-      // 若用户已有数据（例如旧版升级、STORAGE_VERSION 缺失），则不覆盖，保留其原有数据。
-      if (userStorage.getItem(KEYS.PRODUCTS) === null) {
-        userStorage.setItem(KEYS.PRODUCTS, JSON.stringify([]));
-        userStorage.setItem(KEYS.SUPPLIERS, JSON.stringify([]));
-        userStorage.setItem(KEYS.PURCHASE_ORDERS, JSON.stringify([]));
-        userStorage.setItem(KEYS.OUTSOURCING_ORDERS, JSON.stringify([]));
-        userStorage.setItem(KEYS.DELIVERY_CUSTOMERS, JSON.stringify([]));
-        userStorage.setItem(KEYS.DELIVERY_COMPANIES, JSON.stringify([]));
-        userStorage.setItem(KEYS.DELIVERY_PRODUCTS, JSON.stringify([]));
-        userStorage.setItem(KEYS.DELIVERY_NOTES, JSON.stringify([]));
-        userStorage.setItem(KEYS.RECONCILIATION_ORDERS, JSON.stringify([]));
-        userStorage.setItem(KEYS.SALES_ORDERS, JSON.stringify([]));
-      }
-    }
-    userStorage.setItem(KEYS.STORAGE_VERSION, STORAGE_VERSION);
-    return;
-  }
-
-  // 版本号不匹配：只更新版本号，保留用户已有数据
-  if (currentVersion !== STORAGE_VERSION) {
-    userStorage.setItem(KEYS.STORAGE_VERSION, STORAGE_VERSION);
-  }
-}
 
 // 通用 CRUD
 function getAll<T>(key: string): T[] {
   if (typeof window === "undefined") return [];
+  // 服务端桥接：优先读内存缓存（由 db-sync 从服务端加载填充）
+  const cached = getServerCache<T>(key);
+  if (cached.length > 0) return cached;
+  // 回退 localStorage 离线缓存
   const data = userStorage.getItem(key);
   return data ? JSON.parse(data) : [];
 }
 
 function saveAll<T>(key: string, data: T[]): void {
   if (typeof window === "undefined") return;
+  // 更新内存缓存 + localStorage 离线缓存
+  setServerCache(key, data);
   userStorage.setItem(key, JSON.stringify(data));
+  // 异步推送到服务端（账号隔离由 route 层保证）
+  void saveServerData(key, data);
 }
 
 function generateId(): string {
@@ -990,7 +942,39 @@ export const quotationStore = {
 
 // 初始化
 export function initData(): void {
-  initializeData();
+  // 数据服务端化：登录后从服务端加载各集合到内存缓存。
+  // 改为异步拉取，不阻塞页面（页面首次读时若尚未加载将回退 localStorage 缓存）。
+  void loadAllFromServer();
+}
+
+const ALL_KEYS = [
+  KEYS.PRODUCTS,
+  KEYS.SUPPLIERS,
+  KEYS.PURCHASE_ORDERS,
+  KEYS.OUTSOURCING_ORDERS,
+  KEYS.DELIVERY_CUSTOMERS,
+  KEYS.DELIVERY_COMPANIES,
+  KEYS.DELIVERY_PRODUCTS,
+  KEYS.DELIVERY_NOTES,
+  KEYS.COMPONENTS,
+  KEYS.RECONCILIATION_ORDERS,
+  KEYS.SALES_ORDERS,
+  KEYS.QUOTATIONS,
+  KEYS_EXTENDED.CUSTOMER_ACCOUNTS,
+];
+
+async function loadAllFromServer(): Promise<void> {
+  if (typeof window === "undefined") return;
+  clearServerCache();
+  await Promise.all(
+    ALL_KEYS.map((k) =>
+      loadCollection(k).then((data) => {
+        setServerCache(k, data);
+        // 同步写回 localStorage 离线缓存
+        userStorage.setItem(k, JSON.stringify(data));
+      })
+    )
+  );
 }
 
 

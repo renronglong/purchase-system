@@ -1,7 +1,6 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
-import { usePathname } from "next/navigation";
 import { authStore, type AppUser } from "@/lib/auth-store";
 import { setCurrentUserId } from "@/lib/user-storage";
 import { initData } from "@/lib/store";
@@ -9,8 +8,8 @@ import { initData } from "@/lib/store";
 interface AuthContextType {
   currentUser: AppUser | null;
   loading: boolean;
-  login: (username: string, password: string) => Promise<{ success: boolean; error?: string }>;
-  register: (username: string, password: string, displayName: string, company: string) => Promise<{ success: boolean; error?: string }>;
+  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  register: (email: string, password: string, displayName: string, company: string) => Promise<{ success: boolean; error?: string; emailConfirmRequired?: boolean }>;
   logout: () => void;
 }
 
@@ -28,34 +27,42 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loadFailed, setLoadFailed] = useState(false);
 
   useEffect(() => {
-    // R05 加载超时兜底：8 秒内未完成（存储被禁/异常）则给出重试入口
-    const timer = setTimeout(() => {
-      setLoadFailed(true);
-      setLoading(false);
-    }, 8000);
-    try {
-      const user = authStore.getCurrentUser();
-      if (user) {
-        setCurrentUserId(user.id);
-        initData();
+    let cancelled = false;
+    async function boot() {
+      try {
+        const user = await authStore.getCurrentUser();
+        if (cancelled) return;
+        if (user) {
+          setCurrentUserId(user.id);
+          initData();
+        }
+        setCurrentUser(user);
+      } catch {
+        if (cancelled) return;
+        setLoadFailed(true);
+      } finally {
+        if (!cancelled) setLoading(false);
       }
-      setCurrentUser(user);
-      setLoading(false);
-      clearTimeout(timer);
-    } catch {
-      setLoadFailed(true);
-      setLoading(false);
-      clearTimeout(timer);
     }
-    return () => clearTimeout(timer);
+    const timer = setTimeout(() => {
+      if (!cancelled) {
+        setLoadFailed(true);
+        setLoading(false);
+      }
+    }, 15000);
+    boot();
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
   }, []);
 
   if (loadFailed) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-slate-50">
-        <div className="text-center">
+        <div className="text-center max-w-sm px-6">
           <p className="text-slate-500 text-sm mb-4">
-            加载失败，可能是浏览器存储被禁用
+            加载失败，可能是网络或认证服务异常
           </p>
           <button
             onClick={() => window.location.reload()}
@@ -68,8 +75,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     );
   }
 
-  const login = useCallback(async (username: string, password: string) => {
-    const result = await authStore.login(username, password);
+  const login = useCallback(async (email: string, password: string) => {
+    const result = await authStore.login(email, password);
     if (result.success && result.user) {
       setCurrentUserId(result.user.id);
       initData();
@@ -79,28 +86,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return { success: false, error: result.error };
   }, []);
 
-  const register = useCallback(async (username: string, password: string, displayName: string, company: string) => {
-    const result = await authStore.register(username, password, displayName, company);
+  const register = useCallback(async (email: string, password: string, displayName: string, company: string) => {
+    const result = await authStore.register(email, password, displayName, company);
     if (result.success && result.user) {
       setCurrentUserId(result.user.id);
       initData();
       setCurrentUser(result.user);
       return { success: true };
     }
-    return { success: false, error: result.error };
+    return { success: false, error: result.error, emailConfirmRequired: result.emailConfirmRequired };
   }, []);
 
   const logout = useCallback(() => {
-    authStore.logout();
-    setCurrentUser(null);
-    setCurrentUserId(null);
-    window.location.href = "/login";
+    authStore.logout().then(() => {
+      setCurrentUser(null);
+      setCurrentUserId(null);
+      window.location.href = "/login";
+    });
   }, []);
 
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-slate-50">
-        <div className="text-slate-400 text-sm">加载中...</div>
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-3" />
+          <p className="text-slate-400 text-sm">加载中...</p>
+        </div>
       </div>
     );
   }
@@ -109,44 +120,5 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     <AuthContext.Provider value={{ currentUser, loading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
-  );
-}
-
-export function AuthGuard({ children }: { children: React.ReactNode }) {
-  const { currentUser } = useAuth();
-  const pathname = usePathname();
-
-  // 登录页 / 注册页不需要鉴权，直接渲染
-  if (pathname === "/login" || pathname === "/register") {
-    return <>{children}</>;
-  }
-
-  if (!currentUser) {
-    // 未登录，跳转到登录页
-    if (typeof window !== "undefined") {
-      window.location.href = "/login";
-    }
-    return null;
-  }
-
-  return (
-    <>
-      <div className="fixed top-0 right-0 z-50 flex items-center gap-2 px-4 py-2 bg-white/80 backdrop-blur border-b border-l border-slate-200 rounded-bl-lg shadow-sm">
-        <span className="text-xs text-slate-500">当前用户：</span>
-        <span className="text-xs font-medium text-slate-700">{currentUser.displayName}</span>
-        <span className="text-xs text-slate-400">({currentUser.company})</span>
-        <button
-          onClick={() => {
-            authStore.logout();
-            setCurrentUserId(null);
-            window.location.href = "/login";
-          }}
-          className="text-xs text-red-500 hover:text-red-700 ml-2"
-        >
-          退出
-        </button>
-      </div>
-      {children}
-    </>
   );
 }

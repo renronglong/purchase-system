@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/auth-provider";
 
 export default function RegisterPage() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
   const router = useRouter();
@@ -15,12 +17,15 @@ export default function RegisterPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    setSuccess("");
     setLoading(true);
 
     try {
-      const result = await register(username, password, username, "");
+      const result = await register(email, password, displayName || email.split("@")[0], "");
       if (result.success) {
         router.push("/");
+      } else if (result.emailConfirmRequired) {
+        setSuccess(result.error || "");
       } else {
         setError(result.error || "操作失败");
       }
@@ -46,15 +51,28 @@ export default function RegisterPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-slate-600 mb-1">
-                用户名
+                邮箱
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                placeholder="请输入邮箱（作为登录账号）"
+                required
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-600 mb-1">
+                显示名称
               </label>
               <input
                 type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
                 className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                placeholder="请输入用户名"
-                required
+                placeholder="显示在侧边栏的名称"
               />
             </div>
 
@@ -67,7 +85,7 @@ export default function RegisterPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-                placeholder="请输入密码（至少4位）"
+                placeholder="请输入密码（至少6位）"
                 required
               />
             </div>
@@ -75,6 +93,11 @@ export default function RegisterPage() {
             {error && (
               <div className="text-red-500 text-sm text-center bg-red-50 rounded-lg py-2">
                 {error}
+              </div>
+            )}
+            {success && (
+              <div className="text-blue-600 text-sm text-center bg-blue-50 rounded-lg py-2">
+                {success}
               </div>
             )}
 

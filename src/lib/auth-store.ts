@@ -1,126 +1,112 @@
-// Authentication store - manages user accounts and sessions
-// User accounts are stored globally (not per-user) in localStorage
+// Authentication store - 数据服务端化后改用 Supabase Auth
+// 账号/会话不再存 localStorage，由 Supabase 托管，跨设备登录一致。
+//
+// 接口保持与旧版兼容（register/login/logout/getCurrentUser/AppUser），
+// 但登录账号从「用户名」升级为「邮箱」（Supabase Auth 的强制要求）。
 
-import { setCurrentUserId } from "./user-storage";
+import { getSupabaseBrowser } from "./supabase-client";
+import { setCurrentUserId, getCurrentUserId } from "./user-storage";
 
 export interface AppUser {
-  id: string;
-  username: string;
-  passwordHash: string;
+  id: string; // Supabase auth.users.id
+  username: string; // 兼容字段 = email
+  email: string;
   displayName: string;
   company: string;
   createdAt: string;
 }
 
-const USERS_KEY = "app_users";
-const SESSION_KEY = "app_current_user";
-
-function generateId(): string {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
-}
-
-// Simple hash function (not cryptographically secure, but sufficient for client-side app)
-async function hashPassword(password: string): Promise<string> {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(password + "_salt_baojia_2024");
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
-}
-
-function getUsers(): AppUser[] {
-  if (typeof window === "undefined") return [];
-  const data = localStorage.getItem(USERS_KEY);
-  return data ? JSON.parse(data) : [];
-}
-
-function saveUsers(users: AppUser[]): void {
-  if (typeof window === "undefined") return;
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+function mapUser(u: any): AppUser {
+  return {
+    id: u.id,
+    username: u.email || "",
+    email: u.email || "",
+    displayName: (u.user_metadata?.displayName as string) || u.email?.split("@")[0] || "",
+    company: (u.user_metadata?.company as string) || "",
+    createdAt: u.created_at || "",
+  };
 }
 
 export const authStore = {
-  async register(username: string, password: string, displayName: string, company: string): Promise<{ success: boolean; error?: string; user?: AppUser }> {
-    if (!username.trim()) return { success: false, error: "用户名不能为空" };
-    if (password.length < 4) return { success: false, error: "密码至少4位" };
+  async register(email: string, password: string, displayName: string, company: string) {
+    const sb = getSupabaseBrowser();
+    if (!email.trim()) return { success: false, error: "邮箱不能为空" };
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      return { success: false, error: "请输入有效的邮箱地址" };
+    }
+    if (password.length < 6) return { success: false, error: "密码至少6位" };
     if (!displayName.trim()) return { success: false, error: "显示名称不能为空" };
 
-    const users = getUsers();
-    if (users.some(u => u.username === username.trim())) {
-      return { success: false, error: "用户名已存在" };
-    }
+    const { data, error } = await sb.auth.signUp({
+      email: email.trim(),
+      password,
+      options: {
+        data: { displayName: displayName.trim(), company: company.trim() },
+      },
+    });
 
-    const passwordHash = await hashPassword(password);
-    const newUser: AppUser = {
-      id: generateId(),
-      username: username.trim(),
-      passwordHash,
-      displayName: displayName.trim(),
-      company: company.trim(),
-      createdAt: new Date().toISOString(),
+    if (error) return { success: false, error: error.message };
+
+    const user = data.user;
+    if (!user) return { success: false, error: "注册失败，请重试" };
+
+    // 若 Supabase 未开启邮箱确认，signUp 后会自动建立会话
+    const session = data.session;
+    if (session?.user) {
+      setCurrentUserId(session.user.id);
+      syncToken(session.access_token);
+      return { success: true, user: mapUser(session.user) };
+    }
+    // 开启了邮箱确认：返回提示，用户需先验证邮箱再登录
+    return {
+      success: false,
+      emailConfirmRequired: true,
+      error: "注册成功，请前往邮箱完成验证后登录",
     };
-
-    users.push(newUser);
-    saveUsers(users);
-
-    // Auto login after registration
-    localStorage.setItem(SESSION_KEY, newUser.id);
-    setCurrentUserId(newUser.id);
-
-    return { success: true, user: newUser };
   },
 
-  async login(username: string, password: string): Promise<{ success: boolean; error?: string; user?: AppUser }> {
-    const users = getUsers();
-    const user = users.find(u => u.username === username.trim());
-    if (!user) return { success: false, error: "用户名或密码错误" };
+  async login(email: string, password: string) {
+    const sb = getSupabaseBrowser();
+    if (!email.trim() || !password) return { success: false, error: "请输入邮箱和密码" };
 
-    const passwordHash = await hashPassword(password);
-    if (user.passwordHash !== passwordHash) return { success: false, error: "用户名或密码错误" };
+    const { data, error } = await sb.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    });
+    if (error) return { success: false, error: error.message };
 
-    localStorage.setItem(SESSION_KEY, user.id);
+    const user = data.user;
+    if (!user) return { success: false, error: "登录失败，请重试" };
+
     setCurrentUserId(user.id);
-
-    return { success: true, user };
+    syncToken(data.session.access_token);
+    return { success: true, user: mapUser(user) };
   },
 
-  logout(): void {
-    localStorage.removeItem(SESSION_KEY);
+  async getCurrentUser(): Promise<AppUser | null> {
+    const sb = getSupabaseBrowser();
+    const { data } = await sb.auth.getSession();
+    const session = data.session;
+    if (!session?.user) return null;
+    setCurrentUserId(session.user.id);
+    syncToken(session.access_token);
+    return mapUser(session.user);
+  },
+
+  async logout(): Promise<void> {
+    const sb = getSupabaseBrowser();
     setCurrentUserId(null);
-  },
-
-  getCurrentUser(): AppUser | null {
-    if (typeof window === "undefined") return null;
-    const userId = localStorage.getItem(SESSION_KEY);
-    if (!userId) return null;
-    const users = getUsers();
-    return users.find(u => u.id === userId) || null;
-  },
-
-  getAllUsers(): AppUser[] {
-    return getUsers();
-  },
-
-  // 删除指定用户：从 app_users 移除，并清除该用户隔离存储下的全部业务数据（u_{userId}_* 前缀）
-  deleteUser(userId: string): { success: boolean; error?: string } {
-    const users = getUsers();
-    const user = users.find(u => u.id === userId);
-    if (!user) return { success: false, error: "用户不存在" };
-
-    // 1) 从全局用户列表中移除
-    const filtered = users.filter(u => u.id !== userId);
-    saveUsers(filtered);
-
-    // 2) 清除该用户隔离存储下的所有业务数据（键前缀 u_{userId}_）。
-    //    注意：合同等使用裸 localStorage 键（如 contracts_local）不含此前缀，不会被误删。
-    const prefix = `u_${userId}_`;
-    const keysToRemove: string[] = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      const k = localStorage.key(i);
-      if (k && k.startsWith(prefix)) keysToRemove.push(k);
-    }
-    keysToRemove.forEach(k => localStorage.removeItem(k));
-
-    return { success: true };
+    syncToken(null);
+    await sb.auth.signOut();
   },
 };
+
+/** 把 Supabase 会话 token 同步到数据层 API 客户端使用的 key */
+function syncToken(token: string | null) {
+  if (typeof window === "undefined") return;
+  if (token) localStorage.setItem("sb-access-token", token);
+  else localStorage.removeItem("sb-access-token");
+}
+
+// 导出 getCurrentUserId 以便兼容（user-storage 内部依赖）
+export const getSessionUserId = getCurrentUserId;

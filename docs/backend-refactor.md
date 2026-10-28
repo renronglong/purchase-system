@@ -14,8 +14,11 @@
 | 服务端 Supabase 客户端 | `src/lib/supabase-server.ts` | service_role 客户端（绕过 RLS），`SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` |
 | 通用 CRUD 工厂 | `src/lib/api/crud.ts` | `makeCrud({table})` → GET/POST/PUT/DELETE；强制 user_id=auth.uid()，业务主键多重过滤 |
 | 14 个 Route Handler | `src/app/api/<api>/route.ts` | 覆盖全部业务集合 |
+| 前端 Supabase 客户端 | `src/lib/supabase-client.ts` | 浏览器端 Auth 客户端（anon key） |
 | 前端 API 客户端 | `src/lib/api/client.ts` | 封装 GET/POST/PUT/DELETE，带 Bearer token |
-| RLS 策略 SQL | `scripts/rls.sql` | 每表启用 RLS + `auth.uid() = user_id` 隔离策略 |
+| 认证改造 | `src/lib/auth-store.ts` + `auth-provider.tsx` + login/register 页 | 邮箱+密码 → Supabase Auth，token 同步 |
+| 数据层桥接 | `src/lib/db-sync.ts` | 内存缓存 + 服务端拉取/回写，页面同步调用零改动 |
+| RLS 策略 SQL | `scripts/rls.sql` + `scripts/schema.sql` | 建表 + 每表 RLS 隔离策略 |
 
 Route 映射：`products / suppliers / purchase-orders / outsourcing-orders / delivery-customers / delivery-companies / delivery-products / delivery-notes / components / reconciliation-orders / sales-orders / quotations / customer-accounts / companies`（schema 中表名均为下划线复数）。
 
