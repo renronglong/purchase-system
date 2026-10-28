@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabaseServer } from "./supabase-server";
+import { getSupabaseServer } from "../supabase-server";
 
 /**
  * 通用 CRUD 路由工厂
