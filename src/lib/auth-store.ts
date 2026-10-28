@@ -16,12 +16,17 @@ export interface AppUser {
   createdAt: string;
 }
 
-async function postJson<T>(path: string, body: any): Promise<T> {
-  const res = await fetch(path, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
+async function post<T>(path: string, body: any): Promise<T> {
+  let res: Response;
+  try {
+    res = await fetch(path, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+  } catch {
+    throw new Error("无法连接服务器，请检查网络");
+  }
   let data: any = {};
   try {
     data = await res.json();
@@ -44,7 +49,7 @@ export const authStore = {
     if (!displayName.trim()) return { success: false, error: "显示名称不能为空" };
 
     try {
-      await postJson("/api/auth/register", {
+      await post("/api/auth/register", {
         email: email.trim(),
         password,
         displayName: displayName.trim(),
@@ -66,7 +71,7 @@ export const authStore = {
     if (!email.trim() || !password)
       return { success: false, error: "请输入邮箱和密码" };
     try {
-      const data = await postJson<{ token: string; user: AppUser }>("/api/auth/login", {
+      const data = await post<{ token: string; user: AppUser }>("/api/auth/login", {
         email: email.trim(),
         password,
       });
