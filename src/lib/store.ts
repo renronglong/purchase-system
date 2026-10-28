@@ -960,7 +960,7 @@ const ALL_KEYS = [
   KEYS.RECONCILIATION_ORDERS,
   KEYS.SALES_ORDERS,
   KEYS.QUOTATIONS,
-  KEYS_EXTENDED.CUSTOMER_ACCOUNTS,
+  "customer_accounts",
 ];
 
 async function loadAllFromServer(): Promise<void> {
