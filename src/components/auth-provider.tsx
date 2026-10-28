@@ -46,7 +46,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setCurrentUser(result.user);
       return { success: true };
     }
-    return { success: false, error: result.error, emailConfirmRequired: result.emailConfirmRequired };
+    return { success: false, error: result.error };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

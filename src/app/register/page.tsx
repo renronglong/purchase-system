@@ -24,8 +24,6 @@ export default function RegisterPage() {
       const result = await register(email, password, displayName || email.split("@")[0], "");
       if (result.success) {
         router.push("/");
-      } else if (result.emailConfirmRequired) {
-        setSuccess(result.error || "");
       } else {
         setError(result.error || "操作失败");
       }
