@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import { authStore, type AppUser } from "@/lib/auth-store";
 import { setCurrentUserId } from "@/lib/user-storage";
 import { initData } from "@/lib/store";
@@ -121,4 +122,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       {children}
     </AuthContext.Provider>
   );
+}
+
+// 路由守卫：未登录访问受保护页面 → 重定向到 /login
+// /login 与 /register 除外（本身就是未登录入口）
+export function AuthGuard({ children }: { children: React.ReactNode }) {
+  const { currentUser, loading } = useAuth();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (loading) return;
+    if (!currentUser && pathname !== "/login" && pathname !== "/register") {
+      router.replace("/login");
+    }
+  }, [currentUser, loading, pathname, router]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-slate-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-3" />
+          <p className="text-slate-400 text-sm">加载中...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return <>{children}</>;
 }
