@@ -41,6 +41,10 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "注册失败" }, { status: 500 });
+    const cause = e?.cause;
+    const detail = cause?.message
+      ? `${e.message || ""} [${cause.code || ""} ${cause.hostname || ""} ${cause.message}]`
+      : (e.message || "注册失败");
+    return NextResponse.json({ error: `注册失败：${detail}` }, { status: 500 });
   }
 }

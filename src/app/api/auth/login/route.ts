@@ -28,6 +28,11 @@ export async function POST(req: NextRequest) {
     const user = mapServerUser(data.user);
     return NextResponse.json({ token, user });
   } catch (e: any) {
-    return NextResponse.json({ error: e.message || "登录失败" }, { status: 500 });
+    // 诊断：把底层网络错误的具体原因（DNS/ECONNREFUSED 等）带出来，便于定位连不上 supabase 的真实原因
+    const cause = e?.cause;
+    const detail = cause?.message
+      ? `${e.message || ""} [${cause.code || ""} ${cause.hostname || ""} ${cause.message}]`
+      : (e.message || "登录失败");
+    return NextResponse.json({ error: `登录失败：${detail}` }, { status: 500 });
   }
 }
