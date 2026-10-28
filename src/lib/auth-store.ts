@@ -84,13 +84,20 @@ export const authStore = {
   },
 
   async getCurrentUser(): Promise<AppUser | null> {
-    const sb = getSupabaseBrowser();
-    const { data } = await sb.auth.getSession();
-    const session = data.session;
-    if (!session?.user) return null;
-    setCurrentUserId(session.user.id);
-    syncToken(session.access_token);
-    return mapUser(session.user);
+    try {
+      const sb = getSupabaseBrowser();
+      const { data } = await sb.auth.getSession();
+      const session = data.session;
+      if (!session?.user) return null;
+      setCurrentUserId(session.user.id);
+      syncToken(session.access_token);
+      return mapUser(session.user);
+    } catch (e) {
+      // 会话恢复偶发网络失败/本地 token 陈旧：一律按未登录处理，
+      // 避免占用一个本可正常显示的表单页（尤其 /register、/login）整页白屏。
+      console.warn("getCurrentUser 会话恢复失败，按未登录处理", e);
+      return null;
+    }
   },
 
   async logout(): Promise<void> {
