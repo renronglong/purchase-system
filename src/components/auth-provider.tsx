@@ -25,7 +25,6 @@ export function useAuth() {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<AppUser | null>(null);
   const [loading, setLoading] = useState(true);
-  const [loadFailed, setLoadFailed] = useState(false);
 
   const login = useCallback(async (email: string, password: string) => {
     const result = await authStore.login(email, password);
@@ -62,51 +61,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     let cancelled = false;
     async function boot() {
-      try {
-        const user = await authStore.getCurrentUser();
-        if (cancelled) return;
-        if (user) {
-          setCurrentUserId(user.id);
-          initData();
-        }
-        setCurrentUser(user);
-      } catch {
-        if (cancelled) return;
-        setLoadFailed(true);
-      } finally {
-        if (!cancelled) setLoading(false);
+      // getCurrentUser 内部已对会话恢复异常兜底为"未登录"（不抛错、5秒超时），
+      // 这里即使再出现任何意外，也按未登录继续渲染表单，绝不让 /register、/login 整页失败。
+      const user = await authStore.getCurrentUser().catch(() => null);
+      if (cancelled) return;
+      if (user) {
+        setCurrentUserId(user.id);
+        initData();
       }
+      setCurrentUser(user);
+      if (!cancelled) setLoading(false);
     }
-    const timer = setTimeout(() => {
-      if (!cancelled) {
-        setLoadFailed(true);
-        setLoading(false);
-      }
-    }, 15000);
     boot();
     return () => {
       cancelled = true;
-      clearTimeout(timer);
     };
   }, []);
-
-  if (loadFailed) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-50">
-        <div className="text-center max-w-sm px-6">
-          <p className="text-slate-500 text-sm mb-4">
-            加载失败，可能是网络或认证服务异常
-          </p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700"
-          >
-            重试
-          </button>
-        </div>
-      </div>
-    );
-  }
 
   if (loading) {
     return (
