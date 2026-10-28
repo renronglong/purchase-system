@@ -245,7 +245,7 @@ export default function CustomerSummaryPage() {
 
   return (
     <div className="p-6">
-      <h1 className="text-xl font-bold text-slate-900 mb-6">客户往来记录 · 汇总表</h1>
+      <h1 className="text-xl font-bold text-slate-900 mb-6">汇总表</h1>
 
       {/* 视角切换 */}
       <div className="flex gap-8 mb-4">

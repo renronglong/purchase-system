@@ -19,7 +19,7 @@ const navItems = [
   { href: "/contract", label: "购销合同管理", icon: "contract" },
   { href: "/customers", label: "客户管理", icon: "building" },
   { href: "/companies", label: "公司信息管理", icon: "building" },
-  { href: "/customer-account", label: "客户往来记录", icon: "account" },
+  { href: "/customer-account", label: "汇总表", icon: "account" },
 ];
 
 function NavIcon({ type, className }: { type: string; className?: string }) {
