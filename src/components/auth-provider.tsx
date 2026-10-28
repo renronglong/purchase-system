@@ -27,6 +27,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [loadFailed, setLoadFailed] = useState(false);
 
+  const login = useCallback(async (email: string, password: string) => {
+    const result = await authStore.login(email, password);
+    if (result.success && result.user) {
+      setCurrentUserId(result.user.id);
+      initData();
+      setCurrentUser(result.user);
+      return { success: true };
+    }
+    return { success: false, error: result.error };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const register = useCallback(async (email: string, password: string, displayName: string, company: string) => {
+    const result = await authStore.register(email, password, displayName, company);
+    if (result.success && result.user) {
+      setCurrentUserId(result.user.id);
+      initData();
+      setCurrentUser(result.user);
+      return { success: true };
+    }
+    return { success: false, error: result.error, emailConfirmRequired: result.emailConfirmRequired };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const logout = useCallback(() => {
+    authStore.logout().then(() => {
+      setCurrentUser(null);
+      setCurrentUserId(null);
+      window.location.href = "/login";
+    });
+  }, []);
+
   useEffect(() => {
     let cancelled = false;
     async function boot() {
@@ -75,36 +107,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       </div>
     );
   }
-
-  const login = useCallback(async (email: string, password: string) => {
-    const result = await authStore.login(email, password);
-    if (result.success && result.user) {
-      setCurrentUserId(result.user.id);
-      initData();
-      setCurrentUser(result.user);
-      return { success: true };
-    }
-    return { success: false, error: result.error };
-  }, []);
-
-  const register = useCallback(async (email: string, password: string, displayName: string, company: string) => {
-    const result = await authStore.register(email, password, displayName, company);
-    if (result.success && result.user) {
-      setCurrentUserId(result.user.id);
-      initData();
-      setCurrentUser(result.user);
-      return { success: true };
-    }
-    return { success: false, error: result.error, emailConfirmRequired: result.emailConfirmRequired };
-  }, []);
-
-  const logout = useCallback(() => {
-    authStore.logout().then(() => {
-      setCurrentUser(null);
-      setCurrentUserId(null);
-      window.location.href = "/login";
-    });
-  }, []);
 
   if (loading) {
     return (
