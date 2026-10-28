@@ -86,7 +86,14 @@ export const authStore = {
   async getCurrentUser(): Promise<AppUser | null> {
     try {
       const sb = getSupabaseBrowser();
-      const { data } = await sb.auth.getSession();
+      // 会话恢复可能因网络到 Supabase 卡顿而长时间挂起（既不成功也不报错）。
+      // 用 5 秒超时兜底：超时一律视为“未登录”，保证注册/登录页能秒出表单，不被卡到 15 秒白屏。
+      const { data } = (await Promise.race([
+        sb.auth.getSession(),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error("getSession timeout")), 5000)
+        ),
+      ])) as Awaited<ReturnType<typeof sb.auth.getSession>>;
       const session = data.session;
       if (!session?.user) return null;
       setCurrentUserId(session.user.id);
