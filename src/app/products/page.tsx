@@ -18,7 +18,7 @@ function createEmptyProduct(): Product {
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState("");
-  const [typeFilter, setTypeFilter] = useState<"profile" | "plate" | "delivery" | "component">("profile");
+  const [typeFilter, setTypeFilter] = useState<"all" | "profile" | "plate" | "delivery" | "component">("all");
   const [deliveryProducts, setDeliveryProducts] = useState<DeliveryProduct[]>([]);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isAdding, setIsAdding] = useState(false);
@@ -96,7 +96,7 @@ export default function ProductsPage() {
   }, [loadProducts]);
 
   const filtered = products.filter(p =>
-    ((p.productType || "profile") === typeFilter) &&
+    (typeFilter === "all" || (p.productType || "profile") === typeFilter) &&
     (p.id.toLowerCase().includes(search.toLowerCase()) ||
     p.name.toLowerCase().includes(search.toLowerCase()) ||
     p.spec.toLowerCase().includes(search.toLowerCase()))
@@ -470,7 +470,7 @@ export default function ProductsPage() {
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl font-bold text-slate-900">产品库管理</h1>
         <div className="flex gap-2">
-          {typeFilter !== "component" ? (
+          {typeFilter !== "component" && typeFilter !== "all" ? (
           <button
             onClick={() => { setImportKind(typeFilter === "plate" ? "plate" : typeFilter === "delivery" ? "delivery" : "profile"); setImportOpen(true); }}
             className="inline-flex items-center gap-2 px-4 py-2 bg-white text-slate-700 text-sm font-medium rounded-md border border-slate-300 hover:bg-slate-50"
@@ -503,7 +503,8 @@ export default function ProductsPage() {
           className="w-full max-w-md px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
         />
         <div className="flex gap-2 mt-3">
-          {([{ key: "profile", label: "型材" },
+          {([{ key: "all", label: "全部" },
+            { key: "profile", label: "型材" },
             { key: "plate", label: "板材" },
             { key: "delivery", label: "物料" },
             { key: "component", label: "组件" },
