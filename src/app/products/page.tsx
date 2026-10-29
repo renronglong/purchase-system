@@ -589,12 +589,10 @@ export default function ProductsPage() {
               </tr>
             </thead>
             <tbody>
-              {components.length === 0 ? (
-                <tr><td colSpan={6} className="text-center py-12 text-slate-400">暂无组件数据</td></tr>
+              {visibleList.length === 0 ? (
+                <tr><td colSpan={6} className="text-center py-12 text-slate-400">{search.trim() ? `未找到与「${search.trim()}」匹配的组件` : "暂无组件数据"}</td></tr>
               ) : (
-                components.filter(c =>
-                  fuzzyMatch(search, c.id, c.name, (c.items || []).map(i => i.productName || i.materialCode).join(" "))
-                ).map((c) => (
+                visibleList.map((c) => (
                   <tr key={c.id} className={"border-b border-slate-100 hover:bg-slate-50/50 " + (selected.has(`comp:${c.id}`) ? "bg-blue-50" : "")}>
                     <td className="px-2 py-2">
                       <input type="checkbox" checked={selected.has(`comp:${c.id}`)} onChange={() => toggleSelect(`comp:${c.id}`)} className="w-4 h-4 accent-blue-600" />
@@ -630,14 +628,12 @@ export default function ProductsPage() {
               </tr>
             </thead>
             <tbody>
-              {deliveryProducts.length === 0 ? (
+              {visibleList.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="text-center py-12 text-slate-400">暂无物料数据</td>
+                  <td colSpan={9} className="text-center py-12 text-slate-400">{search.trim() ? `未找到与「${search.trim()}」匹配的物料` : "暂无物料数据"}</td>
                 </tr>
               ) : (
-                deliveryProducts.filter(p =>
-                  fuzzyMatch(search, p.code, p.name, p.spec, p.surface, p.unit, p.customer)
-                ).map((product) => (
+                visibleList.map((product) => (
                   <tr key={product.id} className={"border-b border-slate-100 hover:bg-slate-50/50 " + (selected.has(`del:${product.id}`) ? "bg-blue-50" : "")}>
                     <td className="px-2 py-2">
                       <input type="checkbox" checked={selected.has(`del:${product.id}`)} onChange={() => toggleSelect(`del:${product.id}`)} className="w-4 h-4 accent-blue-600" />
@@ -676,12 +672,12 @@ export default function ProductsPage() {
               </tr>
             </thead>
             <tbody>
-              {filtered.length === 0 ? (
+              {visibleList.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="text-center py-12 text-slate-400">暂无产品数据</td>
+                  <td colSpan={9} className="text-center py-12 text-slate-400">{search.trim() ? `未找到与「${search.trim()}」匹配的产品` : "暂无产品数据"}</td>
                 </tr>
               ) : (
-                filtered.map((product) => (
+                visibleList.map((product) => (
                   <tr key={product.id} className={"border-b border-slate-100 hover:bg-slate-50/50 " + (selected.has(`prod:${product.id}`) ? "bg-blue-50" : "")}>
                     <td className="px-2 py-2">
                       <input type="checkbox" checked={selected.has(`prod:${product.id}`)} onChange={() => toggleSelect(`prod:${product.id}`)} className="w-4 h-4 accent-blue-600" />
