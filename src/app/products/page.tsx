@@ -11,6 +11,15 @@ type BomItem = ComponentItem;
 // 与采购单页一致的材质选项
 const materialOptions = ["普通铝板", "5052", "6063", "1060", "3003"];
 
+// 模糊匹配：忽略大小写/前后空格，支持多关键词（空格分隔，需全部命中）
+function fuzzyMatch(keyword: string, ...fields: (string | number | undefined | null)[]): boolean {
+  const raw = keyword.trim().toLowerCase();
+  if (!raw) return true;
+  const chunks = raw.split(/\s+/).filter(Boolean);
+  const hay = fields.map(f => String(f ?? "").toLowerCase()).join(" ");
+  return chunks.every(c => hay.includes(c));
+}
+
 function createEmptyProduct(): Product {
   return { id: "", name: "", spec: "", weightPerMeter: 0, material: "6063-T5", defaultSupplier: "", productType: "profile" };
 }
@@ -26,6 +35,17 @@ export default function ProductsPage() {
   const [formData, setFormData] = useState<Product>(createEmptyProduct());
   const [importOpen, setImportOpen] = useState(false);
   const [importKind, setImportKind] = useState<"profile" | "plate" | "delivery">("profile");
+
+  // 勾选定位（便于批量删除定位）：key = `${type}:${id}`
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const toggleSelect = (key: string) => {
+    setSelected(prev => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key); else next.add(key);
+      return next;
+    });
+  };
+  const clearSelected = () => setSelected(new Set());
 
   // 成品（DeliveryProduct）编辑状态
   const [deliveryDialogOpen, setDeliveryDialogOpen] = useState(false);
@@ -97,9 +117,10 @@ export default function ProductsPage() {
 
   const filtered = products.filter(p =>
     (typeFilter === "all" || (p.productType || "profile") === typeFilter) &&
-    (p.id.toLowerCase().includes(search.toLowerCase()) ||
-    p.name.toLowerCase().includes(search.toLowerCase()) ||
-    p.spec.toLowerCase().includes(search.toLowerCase()))
+    fuzzyMatch(search,
+      p.id, p.name, p.spec, p.material, p.defaultSupplier,
+      p.plateSpec, p.thickness, p.plateWidth, p.step, p.piecesPerSheet
+    )
   );
 
   const openAdd = () => {
@@ -526,6 +547,7 @@ export default function ProductsPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
+                <th className="w-8 px-2 py-2.5"></th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">组件编号</th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">组件名称</th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">组成物料</th>
@@ -535,14 +557,15 @@ export default function ProductsPage() {
             </thead>
             <tbody>
               {components.length === 0 ? (
-                <tr><td colSpan={5} className="text-center py-12 text-slate-400">暂无组件数据</td></tr>
+                <tr><td colSpan={6} className="text-center py-12 text-slate-400">暂无组件数据</td></tr>
               ) : (
                 components.filter(c =>
-                  !search ||
-                  c.id.toLowerCase().includes(search.toLowerCase()) ||
-                  c.name.toLowerCase().includes(search.toLowerCase())
+                  fuzzyMatch(search, c.id, c.name, (c.items || []).map(i => i.productName || i.materialCode).join(" "))
                 ).map((c) => (
-                  <tr key={c.id} className="border-b border-slate-100 hover:bg-slate-50/50">
+                  <tr key={c.id} className={"border-b border-slate-100 hover:bg-slate-50/50 " + (selected.has(`comp:${c.id}`) ? "bg-blue-50" : "")}>
+                    <td className="px-2 py-2">
+                      <input type="checkbox" checked={selected.has(`comp:${c.id}`)} onChange={() => toggleSelect(`comp:${c.id}`)} className="w-4 h-4 accent-blue-600" />
+                    </td>
                     <td className="px-4 py-2 font-mono text-blue-600">{c.id}</td>
                     <td className="px-4 py-2">{c.name}</td>
                     <td className="px-4 py-2">{(c.items || []).length > 0 ? `${(c.items || []).length} 项` : "-"}</td>
@@ -562,6 +585,7 @@ export default function ProductsPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
+                <th className="w-8 px-2 py-2.5"></th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">物料编号</th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">物料名称</th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">规格</th>
@@ -575,16 +599,16 @@ export default function ProductsPage() {
             <tbody>
               {deliveryProducts.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="text-center py-12 text-slate-400">暂无物料数据</td>
+                  <td colSpan={9} className="text-center py-12 text-slate-400">暂无物料数据</td>
                 </tr>
               ) : (
                 deliveryProducts.filter(p =>
-                  !search ||
-                  p.code.toLowerCase().includes(search.toLowerCase()) ||
-                  p.name.toLowerCase().includes(search.toLowerCase()) ||
-                  p.spec.toLowerCase().includes(search.toLowerCase())
+                  fuzzyMatch(search, p.code, p.name, p.spec, p.surface, p.unit, p.customer)
                 ).map((product) => (
-                  <tr key={product.id} className="border-b border-slate-100 hover:bg-slate-50/50">
+                  <tr key={product.id} className={"border-b border-slate-100 hover:bg-slate-50/50 " + (selected.has(`del:${product.id}`) ? "bg-blue-50" : "")}>
+                    <td className="px-2 py-2">
+                      <input type="checkbox" checked={selected.has(`del:${product.id}`)} onChange={() => toggleSelect(`del:${product.id}`)} className="w-4 h-4 accent-blue-600" />
+                    </td>
                     <td className="px-4 py-2 font-mono text-blue-600">{product.code || "-"}</td>
                     <td className="px-4 py-2">{product.name}</td>
                     <td className="px-4 py-2">{product.spec}</td>
@@ -607,6 +631,7 @@ export default function ProductsPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
+                <th className="w-8 px-2 py-2.5"></th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">类型</th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">产品编号</th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">产品名称</th>
@@ -620,11 +645,14 @@ export default function ProductsPage() {
             <tbody>
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="text-center py-12 text-slate-400">暂无产品数据</td>
+                  <td colSpan={9} className="text-center py-12 text-slate-400">暂无产品数据</td>
                 </tr>
               ) : (
                 filtered.map((product) => (
-                  <tr key={product.id} className="border-b border-slate-100 hover:bg-slate-50/50">
+                  <tr key={product.id} className={"border-b border-slate-100 hover:bg-slate-50/50 " + (selected.has(`prod:${product.id}`) ? "bg-blue-50" : "")}>
+                    <td className="px-2 py-2">
+                      <input type="checkbox" checked={selected.has(`prod:${product.id}`)} onChange={() => toggleSelect(`prod:${product.id}`)} className="w-4 h-4 accent-blue-600" />
+                    </td>
                     <td className="px-4 py-2">
                       <span className={"px-2 py-0.5 text-xs rounded-full " + ((product.productType || "profile") === "plate" ? "bg-orange-100 text-orange-700" : "bg-blue-100 text-blue-700")}>
                         {(product.productType || "profile") === "plate" ? "板材" : "型材"}
@@ -652,6 +680,12 @@ export default function ProductsPage() {
 
       <div className="mt-3 text-xs text-slate-400">
         共 {typeFilter === "delivery" ? deliveryProducts.length : typeFilter === "component" ? components.length : filtered.length} 条{typeFilter === "delivery" ? "物料" : typeFilter === "component" ? "组件" : "产品"}记录
+        {selected.size > 0 && (
+          <span className="ml-3 inline-flex items-center gap-2">
+            <span className="text-blue-600 font-medium">已勾选 {selected.size} 项</span>
+            <button onClick={clearSelected} className="px-2 py-0.5 rounded border border-slate-300 text-slate-500 hover:bg-slate-100">清除勾选</button>
+          </span>
+        )}
       </div>
 
       {deliveryDialogOpen && deliveryForm ? (
