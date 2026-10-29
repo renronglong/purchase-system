@@ -46,7 +46,7 @@ export default function PurchaseOrderDetailPage() {
             返回列表
           </Link>
           <Link
-            href={`/purchase/${orderId}/edit`}
+            href={`/purchase/${orderId}`}
             className="px-4 py-2 text-sm bg-amber-500 text-white rounded-md hover:bg-amber-600"
           >
             编辑
