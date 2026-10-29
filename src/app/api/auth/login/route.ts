@@ -21,8 +21,22 @@ export async function POST(req: NextRequest) {
 
     const sb = getSupabaseServer();
     const { data, error } = await sb.auth.signInWithPassword({ email, password });
-    if (error || !data.session)
+    if (error || !data.session) {
+      // 网络类错误：用原生 fetch 探测 SUPABASE_URL，把 Vercel 侧真实连接原因（DNS/连接）带出来
+      if (error?.message?.includes("fetch")) {
+        const su = process.env.SUPABASE_URL ?? "";
+        let probe = "no-url";
+        try {
+          const r = await fetch(su, { signal: AbortSignal.timeout(12000) });
+          probe = `HTTP ${r.status}`;
+        } catch (pe: any) {
+          const c = pe?.cause;
+          probe = `PROBE_FAIL: ${pe.message} [${c?.code || ""} ${c?.hostname || ""} ${c?.message || ""}]`;
+        }
+        return NextResponse.json({ error: error?.message, probe }, { status: 401 });
+      }
       return NextResponse.json({ error: error?.message || "登录失败" }, { status: 401 });
+    }
 
     const token = data.session.access_token;
     const user = mapServerUser(data.user);
