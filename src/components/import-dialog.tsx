@@ -133,10 +133,26 @@ export function ImportPanel({ kind, onImported, onDone }: { kind: Kind; onImport
 
   const doImport = () => {
     if (!rows) return;
+    // 已存在唯一键集合（库内存量 + 本次批内累积），用于精确统计“跳过重复”
+    const seenKey: Set<string> = new Set();
+    const isProdKind = kind === "product" || kind === "profile" || kind === "plate";
+    const keyOf = (c: Record<string, string>): string =>
+      isProdKind || kind === "delivery" ? (c["编号"] || "").trim() : (c["名称"] || "").trim();
+    const seedSeen = () => {
+      if (isProdKind) productStore.getAll().forEach(p => p.id && seenKey.add(String(p.id)));
+      else if (kind === "delivery") deliveryProductStore.getAll().forEach(d => d.code && seenKey.add(String(d.code)));
+      else if (kind === "supplier") supplierStore.getAll().forEach(s => s.name && seenKey.add(String(s.name)));
+      else if (kind === "customer") deliveryCustomerStore.getAll().forEach(c => c.name && seenKey.add(String(c.name)));
+    };
+    seedSeen();
     let n = 0;
+    let dup = 0;
     rows.forEach(r => {
       if (!r.valid) return;
       const c = r.cells;
+      const key = keyOf(c);
+      if (key && seenKey.has(key)) { dup++; return; }
+      if (key) seenKey.add(key);
       let missing = "";
       if (kind === "profile" || kind === "plate") {
         const wm = parseFloat(c["米重"]);
@@ -207,7 +223,7 @@ export function ImportPanel({ kind, onImported, onDone }: { kind: Kind; onImport
       void missing;
       n++;
     });
-    setResult("成功导入 " + n + " 条" + (rows.length - validCount > 0 ? "，跳过 " + (rows.length - validCount) + " 条空记录" : ""));
+    setResult("成功导入 " + n + " 条" + (dup > 0 ? "，跳过 " + dup + " 条重复" : "") + (rows.length - validCount > 0 ? "，跳过 " + (rows.length - validCount) + " 条空记录" : ""));
     setRows(null);
     setFileName("");
     if (onImported) onImported();

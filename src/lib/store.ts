@@ -272,6 +272,11 @@ export const deliveryCustomerStore = {
   },
   add(customer: Omit<DeliveryCustomer, "id">): DeliveryCustomer {
     const list = this.getAll();
+    // 名称查重：已存在相同单位名称时不重复写入
+    if (customer.name) {
+      const existing = list.find(c => c.name === customer.name);
+      if (existing) return existing;
+    }
     const newCustomer: DeliveryCustomer = { ...customer, id: generateId() };
     list.push(newCustomer);
     saveAll(KEYS.DELIVERY_CUSTOMERS, list);
@@ -310,6 +315,11 @@ export const deliveryCompanyStore = {
   },
   add(c: Omit<DeliveryCompany, "id">): DeliveryCompany {
     const list = this.getAll();
+    // 名称查重：已存在相同公司名称时不重复写入
+    if (c.name) {
+      const existing = list.find(x => x.name === c.name);
+      if (existing) return existing;
+    }
     const nc = { ...c, id: generateId() };
     list.push(nc); saveAll(KEYS.DELIVERY_COMPANIES, list); return nc;
   },
@@ -337,7 +347,11 @@ export const deliveryProductStore = {
   },
   add(product: Omit<DeliveryProduct, "id">): DeliveryProduct {
     const list = this.getAll();
-    const newProduct: DeliveryProduct = { ...product, id: generateId() };
+    const code = product.code && product.code.trim() ? product.code.trim() : "";
+    // 编号查重：已存在相同物料编号时不重复写入
+    const existing = code ? list.find(p => p.code === code) : undefined;
+    if (existing) return existing;
+    const newProduct: DeliveryProduct = { ...product, code, id: generateId() };
     list.push(newProduct);
     saveAll(KEYS.DELIVERY_PRODUCTS, list);
     return newProduct;
@@ -801,6 +815,11 @@ export const supplierStore = {
   },
   add(supplier: Omit<Supplier, "id">): Supplier {
     const suppliers = this.getAll();
+    // 名称查重：已存在相同供应商名称时不重复写入
+    if (supplier.name) {
+      const existing = suppliers.find(s => s.name === supplier.name);
+      if (existing) return existing;
+    }
     const newSupplier: Supplier = { ...supplier, id: generateId() };
     suppliers.push(newSupplier);
     saveAll(KEYS.SUPPLIERS, suppliers);
