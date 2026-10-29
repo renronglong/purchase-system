@@ -29,6 +29,35 @@ function matchColFilters<T>(item: T, filters: Record<string, string>, fields: Re
   });
 }
 
+// Excel 式列筛选输入框：有值时高亮 + 一键清除本列
+function ColFilterInput({ field, placeholder, value, onChange }: {
+  field: string;
+  placeholder: string;
+  value: string;
+  onChange: (field: string, v: string) => void;
+}) {
+  const active = value.trim().length > 0;
+  return (
+    <div className="relative">
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => onChange(field, e.target.value)}
+        placeholder={placeholder}
+        className={"w-full px-1.5 py-1 pr-5 text-xs border rounded focus:outline-none focus:ring-1 focus:ring-blue-500/30 " + (active ? "border-blue-400 bg-blue-50 text-blue-700 font-medium" : "border-slate-200")}
+      />
+      {active && (
+        <button
+          type="button"
+          onClick={() => onChange(field, "")}
+          title="清除本列筛选"
+          className="absolute right-0 top-1/2 -translate-y-1/2 w-4 h-4 flex items-center justify-center text-slate-400 hover:text-red-500 text-[10px] leading-none"
+        >✕</button>
+      )}
+    </div>
+  );
+}
+
 function createEmptyProduct(): Product {
   return { id: "", name: "", spec: "", weightPerMeter: 0, material: "6063-T5", defaultSupplier: "", productType: "profile" };
 }
@@ -61,9 +90,11 @@ export default function ProductsPage() {
   const setColFilter = (key: string, value: string) => {
     setColFilters(prev => ({ ...prev, [key]: value }));
   };
-  // 切换 tab 时清空列筛选，避免列筛选跨表残留污染
+  const clearColFilters = () => setColFilters({});
+  // 切换 tab 时清空列筛选与勾选，避免跨表残留污染/误删
   const changeTypeFilter = (t: "all" | "profile" | "plate" | "delivery" | "component") => {
     setColFilters({});
+    setSelected(new Set());
     setTypeFilter(t);
   };
 
@@ -169,6 +200,32 @@ export default function ProductsPage() {
     });
   };
   const typeLabel = typeFilter === "delivery" ? "物料" : typeFilter === "component" ? "组件" : "产品";
+  const activeFilterCount = Object.keys(colFilters).filter(k => (colFilters[k] || "").trim().length > 0).length;
+  // 批量删除已勾选项（按 key 前缀分派到对应数据表）
+  const handleBatchDelete = () => {
+    if (selected.size === 0) return;
+    const prodIds: string[] = [];
+    const delIds: string[] = [];
+    const compIds: string[] = [];
+    selected.forEach(k => {
+      const idx = k.indexOf(":");
+      const t = k.slice(0, idx);
+      const id = k.slice(idx + 1);
+      if (t === "prod") prodIds.push(id);
+      else if (t === "del") delIds.push(id);
+      else if (t === "comp") compIds.push(id);
+    });
+    const parts: string[] = [];
+    if (prodIds.length) parts.push(`产品 ${prodIds.length} 个`);
+    if (delIds.length) parts.push(`物料 ${delIds.length} 个`);
+    if (compIds.length) parts.push(`组件 ${compIds.length} 个`);
+    if (!confirm(`确定删除已勾选的 ${parts.join("、")}？删除后不可恢复。`)) return;
+    prodIds.forEach(id => productStore.remove(id));
+    delIds.forEach(id => deliveryProductStore.remove(id));
+    compIds.forEach(id => componentStore.remove(id));
+    setSelected(new Set());
+    loadProducts();
+  };
 
   const openAdd = () => {
     setFormData(createEmptyProduct());
@@ -571,18 +628,22 @@ export default function ProductsPage() {
             placeholder="搜索产品编号、名称、规格..."
             className="w-full max-w-md px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
           />
-          <div className="flex items-center gap-3 text-xs text-slate-500 ml-auto">
-            <span className="inline-flex items-center gap-1.5">
-              <input type="checkbox" checked={allVisibleSelected} onChange={toggleSelectAll} className="w-3.5 h-3.5 accent-blue-600" />
-              <span className="font-medium text-slate-600">全选</span>
-            </span>
+          <div className="flex items-center gap-2 text-xs text-slate-500 ml-auto">
             <span className="text-slate-400">共 <b className="text-slate-700">{visibleList.length}</b> 条{typeLabel}记录</span>
+            {activeFilterCount > 0 && (
+              <button onClick={clearColFilters} title="清除所有列筛选" className="px-2 py-1 rounded border border-amber-300 bg-amber-50 text-amber-700 hover:bg-amber-100">清除筛选({activeFilterCount})</button>
+            )}
             {selected.size > 0 && (
               <span className="inline-flex items-center gap-2">
                 <span className="text-blue-600 font-medium">已勾选 {selected.size} 项</span>
-                <button onClick={clearSelected} className="px-2 py-0.5 rounded border border-slate-300 text-slate-500 hover:bg-slate-100">清除勾选</button>
+                <button onClick={clearSelected} className="text-slate-500 hover:text-slate-700 underline">取消勾选</button>
               </span>
             )}
+            <button
+              onClick={handleBatchDelete}
+              disabled={selected.size === 0}
+              className={"px-2.5 py-1 rounded border " + (selected.size > 0 ? "border-red-300 bg-red-50 text-red-600 hover:bg-red-100" : "border-slate-200 text-slate-300 cursor-not-allowed")}
+            >删除已选{selected.size > 0 ? `(${selected.size})` : ""}</button>
           </div>
         </div>
         <div className="flex gap-2 mt-3">
@@ -609,7 +670,9 @@ export default function ProductsPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
-                <th className="w-8 px-2 py-2.5"></th>
+                <th className="w-8 px-2 py-2.5">
+                  <input type="checkbox" checked={allVisibleSelected} onChange={toggleSelectAll} className="w-4 h-4 accent-blue-600" title="全选/取消全选" />
+                </th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">组件编号</th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">组件名称</th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">组成物料</th>
@@ -618,8 +681,8 @@ export default function ProductsPage() {
               </tr>
               <tr className="bg-slate-50 border-b border-slate-200">
                 <td className="px-2 py-1"></td>
-                <td className="px-2 py-1"><input type="text" value={colFilters.id || ""} onChange={(e) => setColFilter("id", e.target.value)} placeholder="编号" className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500/30" /></td>
-                <td className="px-2 py-1"><input type="text" value={colFilters.name || ""} onChange={(e) => setColFilter("name", e.target.value)} placeholder="名称" className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500/30" /></td>
+                <td className="px-2 py-1"><ColFilterInput field="id" placeholder="编号" value={colFilters.id || ""} onChange={setColFilter} /></td>
+                <td className="px-2 py-1"><ColFilterInput field="name" placeholder="名称" value={colFilters.name || ""} onChange={setColFilter} /></td>
                 <td className="px-2 py-1"></td>
                 <td className="px-2 py-1"></td>
                 <td className="px-2 py-1"></td>
@@ -627,7 +690,7 @@ export default function ProductsPage() {
             </thead>
             <tbody>
               {compList.length === 0 ? (
-                <tr><td colSpan={6} className="text-center py-12 text-slate-400">{search.trim() ? `未找到与「${search.trim()}」匹配的组件` : "暂无组件数据"}</td></tr>
+                <tr><td colSpan={6} className="text-center py-12 text-slate-400">{search.trim() || activeFilterCount > 0 ? "没有符合当前搜索/筛选条件的组件" : "暂无组件数据"}</td></tr>
               ) : (
                 compList.map((c) => (
                   <tr key={c.id} className={"border-b border-slate-100 hover:bg-slate-50/50 " + (selected.has(`comp:${c.id}`) ? "bg-blue-50" : "")}>
@@ -653,7 +716,9 @@ export default function ProductsPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
-                <th className="w-8 px-2 py-2.5"></th>
+                <th className="w-8 px-2 py-2.5">
+                  <input type="checkbox" checked={allVisibleSelected} onChange={toggleSelectAll} className="w-4 h-4 accent-blue-600" title="全选/取消全选" />
+                </th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">物料编号</th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">物料名称</th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">规格</th>
@@ -665,20 +730,20 @@ export default function ProductsPage() {
               </tr>
               <tr className="bg-slate-50 border-b border-slate-200">
                 <td className="px-2 py-1"></td>
-                <td className="px-2 py-1"><input type="text" value={colFilters.code || ""} onChange={(e) => setColFilter("code", e.target.value)} placeholder="编号" className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500/30" /></td>
-                <td className="px-2 py-1"><input type="text" value={colFilters.name || ""} onChange={(e) => setColFilter("name", e.target.value)} placeholder="名称" className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500/30" /></td>
-                <td className="px-2 py-1"><input type="text" value={colFilters.spec || ""} onChange={(e) => setColFilter("spec", e.target.value)} placeholder="规格" className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500/30" /></td>
-                <td className="px-2 py-1"><input type="text" value={colFilters.surface || ""} onChange={(e) => setColFilter("surface", e.target.value)} placeholder="表面" className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500/30" /></td>
-                <td className="px-2 py-1"><input type="text" value={colFilters.unit || ""} onChange={(e) => setColFilter("unit", e.target.value)} placeholder="单位" className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500/30" /></td>
+                <td className="px-2 py-1"><ColFilterInput field="code" placeholder="编号" value={colFilters.code || ""} onChange={setColFilter} /></td>
+                <td className="px-2 py-1"><ColFilterInput field="name" placeholder="名称" value={colFilters.name || ""} onChange={setColFilter} /></td>
+                <td className="px-2 py-1"><ColFilterInput field="spec" placeholder="规格" value={colFilters.spec || ""} onChange={setColFilter} /></td>
+                <td className="px-2 py-1"><ColFilterInput field="surface" placeholder="表面" value={colFilters.surface || ""} onChange={setColFilter} /></td>
+                <td className="px-2 py-1"><ColFilterInput field="unit" placeholder="单位" value={colFilters.unit || ""} onChange={setColFilter} /></td>
                 <td className="px-2 py-1"></td>
-                <td className="px-2 py-1"><input type="text" value={colFilters.customer || ""} onChange={(e) => setColFilter("customer", e.target.value)} placeholder="客户" className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500/30" /></td>
+                <td className="px-2 py-1"><ColFilterInput field="customer" placeholder="客户" value={colFilters.customer || ""} onChange={setColFilter} /></td>
                 <td className="px-2 py-1"></td>
               </tr>
             </thead>
             <tbody>
               {delivList.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="text-center py-12 text-slate-400">{search.trim() ? `未找到与「${search.trim()}」匹配的物料` : "暂无物料数据"}</td>
+                  <td colSpan={9} className="text-center py-12 text-slate-400">{search.trim() || activeFilterCount > 0 ? "没有符合当前搜索/筛选条件的物料" : "暂无物料数据"}</td>
                 </tr>
               ) : (
                 delivList.map((product) => (
@@ -708,7 +773,9 @@ export default function ProductsPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
-                <th className="w-8 px-2 py-2.5"></th>
+                <th className="w-8 px-2 py-2.5">
+                  <input type="checkbox" checked={allVisibleSelected} onChange={toggleSelectAll} className="w-4 h-4 accent-blue-600" title="全选/取消全选" />
+                </th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">类型</th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">产品编号</th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">产品名称</th>
@@ -720,20 +787,20 @@ export default function ProductsPage() {
               </tr>
               <tr className="bg-slate-50 border-b border-slate-200">
                 <td className="px-2 py-1"></td>
-                <td className="px-2 py-1"><input type="text" value={colFilters.type || ""} onChange={(e) => setColFilter("type", e.target.value)} placeholder="类型" className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500/30" /></td>
-                <td className="px-2 py-1"><input type="text" value={colFilters.id || ""} onChange={(e) => setColFilter("id", e.target.value)} placeholder="编号" className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500/30" /></td>
-                <td className="px-2 py-1"><input type="text" value={colFilters.name || ""} onChange={(e) => setColFilter("name", e.target.value)} placeholder="名称" className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500/30" /></td>
-                <td className="px-2 py-1"><input type="text" value={colFilters.spec || ""} onChange={(e) => setColFilter("spec", e.target.value)} placeholder="规格" className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500/30" /></td>
+                <td className="px-2 py-1"><ColFilterInput field="type" placeholder="类型" value={colFilters.type || ""} onChange={setColFilter} /></td>
+                <td className="px-2 py-1"><ColFilterInput field="id" placeholder="编号" value={colFilters.id || ""} onChange={setColFilter} /></td>
+                <td className="px-2 py-1"><ColFilterInput field="name" placeholder="名称" value={colFilters.name || ""} onChange={setColFilter} /></td>
+                <td className="px-2 py-1"><ColFilterInput field="spec" placeholder="规格" value={colFilters.spec || ""} onChange={setColFilter} /></td>
                 <td className="px-2 py-1"></td>
-                <td className="px-2 py-1"><input type="text" value={colFilters.material || ""} onChange={(e) => setColFilter("material", e.target.value)} placeholder="材质" className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500/30" /></td>
-                <td className="px-2 py-1"><input type="text" value={colFilters.supplier || ""} onChange={(e) => setColFilter("supplier", e.target.value)} placeholder="供应商" className="w-full px-1.5 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500/30" /></td>
+                <td className="px-2 py-1"><ColFilterInput field="material" placeholder="材质" value={colFilters.material || ""} onChange={setColFilter} /></td>
+                <td className="px-2 py-1"><ColFilterInput field="supplier" placeholder="供应商" value={colFilters.supplier || ""} onChange={setColFilter} /></td>
                 <td className="px-2 py-1"></td>
               </tr>
             </thead>
             <tbody>
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="text-center py-12 text-slate-400">{search.trim() ? `未找到与「${search.trim()}」匹配的产品` : "暂无产品数据"}</td>
+                  <td colSpan={9} className="text-center py-12 text-slate-400">{search.trim() || activeFilterCount > 0 ? "没有符合当前搜索/筛选条件的产品" : "暂无产品数据"}</td>
                 </tr>
               ) : (
                 filtered.map((product) => (
