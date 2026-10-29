@@ -14,6 +14,35 @@
 // 由此：页面仍同步读内存（零改动），数据落服务端且按账号隔离（RLS）。
 
 import { apiList, apiCreate, apiUpdate, apiDelete } from "./api/client";
+import { getCurrentUserId, userStorage } from "./user-storage";
+
+// 收集「当前登录账号之外」的 legacy 存量数据（旧账号前缀/裸键），用于存量迁移
+function collectLegacyLocal<T>(key: string): T[] {
+  if (typeof window === "undefined") return [];
+  const uid = getCurrentUserId();
+  const out: T[] = [];
+  const seen = new Set<string>();
+  for (const raw of Object.keys(localStorage)) {
+    // 仅匹配目标业务 key 结尾的键：裸 <key> 或任意前缀 u_<xxx>_<key>
+    if (raw !== key && !raw.endsWith(`_${key}`)) continue;
+    // 跳过当前登录账号的键（u_<当前uid>_<key>）
+    if (uid && raw === `u_${uid}_${key}`) continue;
+    let arr: any[] = [];
+    try {
+      arr = JSON.parse(localStorage.getItem(raw) || "[]");
+    } catch {
+      arr = [];
+    }
+    if (!Array.isArray(arr) || arr.length === 0) continue;
+    for (const item of arr) {
+      const id = item?.id;
+      if (id && seen.has(String(id))) continue;
+      if (id) seen.add(String(id));
+      out.push(item);
+    }
+  }
+  return out;
+}
 
 // KEYS → Route resource 映射（与 src/app/api 目录一致）
 const KEY_TO_RESOURCE: Record<string, string> = {
@@ -73,11 +102,22 @@ export async function loadCollection<T>(key: string): Promise<T[]> {
   }
 
   // 服务端为空 → 用本地缓存（离线缓存或旧版存量数据），并把存量推送到服务端
-  const local = getServerCache<T>(key);
+  let local = getServerCache<T>(key);
+  if (local.length === 0) {
+    // 再尝试旧账号前缀/裸键的 legacy 存量（如 13800138000 旧数据）
+    local = collectLegacyLocal<T>(key);
+  }
   if (local.length > 0) {
     memoryCache.set(key, local);
-    // 存量迁移：异步推送到服务端
+    // 存量迁移：异步推送到服务端，并写回当前账号离线缓存
     void pushAll(resource, local);
+    if (typeof window !== "undefined") {
+      try {
+        userStorage.setItem(key, JSON.stringify(local));
+      } catch {
+        /* ignore */
+      }
+    }
   }
   return local;
 }
