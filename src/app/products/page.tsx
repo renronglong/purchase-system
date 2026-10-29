@@ -123,6 +123,24 @@ export default function ProductsPage() {
     )
   );
 
+  // 当前表格可见列表（按类型 + 搜索过滤后），用于统计与全选
+  const visibleList = typeFilter === "component"
+    ? components.filter(c => fuzzyMatch(search, c.id, c.name, (c.items || []).map(i => i.productName || i.materialCode).join(" ")))
+    : typeFilter === "delivery"
+    ? deliveryProducts.filter(p => fuzzyMatch(search, p.code, p.name, p.spec, p.surface, p.unit, p.customer))
+    : filtered;
+  const visibleKeys = visibleList.map(x => typeFilter === "component" ? `comp:${x.id}` : typeFilter === "delivery" ? `del:${x.id}` : `prod:${x.id}`);
+  const allVisibleSelected = visibleKeys.length > 0 && visibleKeys.every(k => selected.has(k));
+  const toggleSelectAll = () => {
+    setSelected(prev => {
+      const next = new Set(prev);
+      if (allVisibleSelected) visibleKeys.forEach(k => next.delete(k));
+      else visibleKeys.forEach(k => next.add(k));
+      return next;
+    });
+  };
+  const typeLabel = typeFilter === "delivery" ? "物料" : typeFilter === "component" ? "组件" : "产品";
+
   const openAdd = () => {
     setFormData(createEmptyProduct());
     setIsAdding(true);
@@ -516,13 +534,28 @@ export default function ProductsPage() {
 
       {/* 搜索 + 类型筛选 */}
       <div className="bg-white rounded-lg border border-slate-200 p-4 mb-4">
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="搜索产品编号、名称、规格..."
-          className="w-full max-w-md px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-        />
+        <div className="flex items-center gap-3 flex-wrap">
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="搜索产品编号、名称、规格..."
+            className="w-full max-w-md px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+          />
+          <div className="flex items-center gap-3 text-xs text-slate-500 ml-auto">
+            <span className="inline-flex items-center gap-1.5">
+              <input type="checkbox" checked={allVisibleSelected} onChange={toggleSelectAll} className="w-3.5 h-3.5 accent-blue-600" />
+              <span className="font-medium text-slate-600">全选</span>
+            </span>
+            <span className="text-slate-400">共 <b className="text-slate-700">{visibleList.length}</b> 条{typeLabel}记录</span>
+            {selected.size > 0 && (
+              <span className="inline-flex items-center gap-2">
+                <span className="text-blue-600 font-medium">已勾选 {selected.size} 项</span>
+                <button onClick={clearSelected} className="px-2 py-0.5 rounded border border-slate-300 text-slate-500 hover:bg-slate-100">清除勾选</button>
+              </span>
+            )}
+          </div>
+        </div>
         <div className="flex gap-2 mt-3">
           {([{ key: "all", label: "全部" },
             { key: "profile", label: "型材" },
@@ -675,16 +708,6 @@ export default function ProductsPage() {
               )}
             </tbody>
           </table>
-        )}
-      </div>
-
-      <div className="mt-3 text-xs text-slate-400">
-        共 {typeFilter === "delivery" ? deliveryProducts.length : typeFilter === "component" ? components.length : filtered.length} 条{typeFilter === "delivery" ? "物料" : typeFilter === "component" ? "组件" : "产品"}记录
-        {selected.size > 0 && (
-          <span className="ml-3 inline-flex items-center gap-2">
-            <span className="text-blue-600 font-medium">已勾选 {selected.size} 项</span>
-            <button onClick={clearSelected} className="px-2 py-0.5 rounded border border-slate-300 text-slate-500 hover:bg-slate-100">清除勾选</button>
-          </span>
         )}
       </div>
 
