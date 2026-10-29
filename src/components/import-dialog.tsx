@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import * as XLSX from "xlsx";
-import { productStore, supplierStore, deliveryCustomerStore } from "@/lib/store";
+import { productStore, supplierStore, deliveryCustomerStore, deliveryProductStore } from "@/lib/store";
 
-type Kind = "product" | "supplier" | "customer";
+type Kind = "product" | "supplier" | "customer" | "profile" | "plate" | "delivery";
 export type { Kind };
 
 interface ImportRow {
@@ -33,14 +33,47 @@ const COLS: Record<Kind, { header: string; key: string; wch: number }[]> = {
     { header: "联系电话", key: "电话", wch: 14 },
     { header: "联系地址", key: "地址", wch: 20 },
   ],
+  profile: [
+    { header: "产品编号", key: "编号", wch: 14 },
+    { header: "产品名称", key: "名称", wch: 18 },
+    { header: "规格尺寸", key: "规格", wch: 14 },
+    { header: "米重(kg/m)", key: "米重", wch: 12 },
+    { header: "材质", key: "材质", wch: 12 },
+    { header: "默认供应商", key: "供应商", wch: 16 },
+  ],
+  plate: [
+    { header: "产品编号", key: "编号", wch: 14 },
+    { header: "产品名称", key: "名称", wch: 16 },
+    { header: "材质", key: "材质", wch: 12 },
+    { header: "剪板宽度(mm)", key: "宽度", wch: 12 },
+    { header: "厚度(mm)", key: "厚度", wch: 10 },
+    { header: "步距(mm)", key: "步距", wch: 10 },
+    { header: "每张板数量", key: "每张数量", wch: 12 },
+    { header: "重量(KG)", key: "重量", wch: 10 },
+    { header: "刀数", key: "刀数", wch: 8 },
+    { header: "默认供应商", key: "供应商", wch: 16 },
+  ],
+  delivery: [
+    { header: "物料编号", key: "编号", wch: 12 },
+    { header: "物料名称", key: "名称", wch: 16 },
+    { header: "规格", key: "规格", wch: 14 },
+    { header: "表面处理", key: "表面", wch: 12 },
+    { header: "单位", key: "单位", wch: 8 },
+    { header: "米重(kg/m)", key: "米重", wch: 12 },
+    { header: "单价", key: "单价", wch: 10 },
+    { header: "客户", key: "客户", wch: 14 },
+  ],
 };
 
-const TITLES: Record<Kind, string> = { product: "导入产品", supplier: "导入供应商", customer: "导入客户" };
-const SHEETS: Record<Kind, string> = { product: "产品库导入模板", supplier: "供应商导入模板", customer: "客户导入模板" };
+const TITLES: Record<Kind, string> = { product: "导入产品", supplier: "导入供应商", customer: "导入客户", profile: "导入型材", plate: "导入板材", delivery: "导入物料" };
+const SHEETS: Record<Kind, string> = { product: "产品库导入模板", supplier: "供应商导入模板", customer: "客户导入模板", profile: "型材导入模板", plate: "板材导入模板", delivery: "物料导入模板" };
 const EXAMPLES: Record<Kind, (string | number)[]> = {
   product: ["TY-6001", "铝型材60系列", "60*40*2.0", 1.5, "6063-T5", "科丽"],
   supplier: ["科丽", "欧阳先生", "18666506359", "里水镇"],
   customer: ["示例客户公司", "张三", "13900000000", "佛山市南海区"],
+  profile: ["TY-6001", "铝型材60系列", "60*40*2.0", 1.5, "6063-T5", "科丽"],
+  plate: ["PLT-001", "5052铝板", "5052", 100, 1.2, 0.5, 200, 12.5, 8, "科丽"],
+  delivery: ["WL-001", "铝条", "20*3", "氧化", "米", 0.5, 15.5, "示例客户"],
 };
 
 // 纯内容面板（无遮罩），供「新增」对话框内嵌
@@ -84,10 +117,11 @@ export function ImportPanel({ kind, onImported, onDone }: { kind: Kind; onImport
           const v = arr[idx];
           cells[c.key] = v === null || v === undefined ? "" : String(v).trim();
         });
-        // 名称必填；产品带编号视为有效
+        // 名称/编号二选一必填；产品/型材/板材带编号即可
         const name = cells["名称"] || "";
         const id = cells["编号"] || "";
-        const valid = kind === "product" ? (id !== "" || name !== "") : name !== "";
+        const needId = kind === "product" || kind === "profile" || kind === "plate";
+        const valid = needId ? (id !== "" || name !== "") : name !== "";
         return { cells, valid };
       });
       setRows(parsed.filter(r => Object.values(r.cells).some(v => v !== "")));
@@ -104,7 +138,40 @@ export function ImportPanel({ kind, onImported, onDone }: { kind: Kind; onImport
       if (!r.valid) return;
       const c = r.cells;
       let missing = "";
-      if (kind === "product") {
+      if (kind === "profile" || kind === "plate") {
+        const wm = parseFloat(c["米重"]);
+        const id = c["编号"] || "";
+        const nf = (v: string): number | undefined => { const n = parseFloat(v); return isNaN(n) ? undefined : n; };
+        productStore.add({
+          id: id,
+          name: c["名称"] || "",
+          spec: c["规格"] || "",
+          weightPerMeter: isNaN(wm) ? undefined : wm,
+          material: c["材质"] || "",
+          defaultSupplier: c["供应商"] || "",
+          productType: kind === "plate" ? "plate" : "profile",
+          // 板材专属字段
+          ...(kind === "plate" ? {
+            plateWidth: nf(c["宽度"]),
+            thickness: nf(c["厚度"]),
+            step: nf(c["步距"]),
+            piecesPerSheet: nf(c["每张数量"]),
+            weight: nf(c["重量"]),
+            bladeCount: nf(c["刀数"]),
+          } : {}),
+        });
+      } else if (kind === "delivery") {
+        deliveryProductStore.add({
+          code: c["编号"] || "",
+          name: c["名称"] || "",
+          spec: c["规格"] || "",
+          surface: c["表面"] || "",
+          unit: c["单位"] || "",
+          weightPerMeter: parseFloat(c["米重"]) || 0,
+          unitPrice: parseFloat(c["单价"]) || 0,
+          customer: c["客户"] || "",
+        });
+      } else if (kind === "product") {
         const wm = parseFloat(c["米重"]);
         const id = c["编号"] || "";
         // PLT 开头自动识别为板材，与库存页判断一致；否则为型材
