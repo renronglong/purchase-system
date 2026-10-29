@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { productStore, supplierStore, deliveryProductStore, componentStore, purchaseOrderStore, quotationStore, salesOrderStore, deliveryCustomerStore, type Product, type DeliveryProduct, type Component, type ComponentItem } from "@/lib/store";
 import AddDialog from "@/components/add-dialog";
+import ImportDialog from "@/components/import-dialog";
 
 // 物料明细行：从物料库挑的多条物料组成一个组件
 type BomItem = ComponentItem;
@@ -23,6 +24,7 @@ export default function ProductsPage() {
   const [isAdding, setIsAdding] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [formData, setFormData] = useState<Product>(createEmptyProduct());
+  const [importOpen, setImportOpen] = useState(false);
 
   // 成品（DeliveryProduct）编辑状态
   const [deliveryDialogOpen, setDeliveryDialogOpen] = useState(false);
@@ -466,7 +468,17 @@ export default function ProductsPage() {
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl font-bold text-slate-900">产品库管理</h1>
-        <button
+        <div className="flex gap-2">
+          <button
+            onClick={() => setImportOpen(true)}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-white text-slate-700 text-sm font-medium rounded-md border border-slate-300 hover:bg-slate-50"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            批量导入
+          </button>
+          <button
           onClick={typeFilter === "delivery" ? openAddDelivery : typeFilter === "component" ? openAddComponent : openAdd}
           className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700"
         >
@@ -475,6 +487,7 @@ export default function ProductsPage() {
           </svg>
           {typeFilter === "delivery" ? "新增物料" : typeFilter === "component" ? "新增组件" : "新增产品"}
         </button>
+        </div>
       </div>
 
       {/* 搜索 + 类型筛选 */}
@@ -699,6 +712,10 @@ export default function ProductsPage() {
         >
           {form}
         </AddDialog>
+      ) : null}
+
+      {importOpen ? (
+        <ImportDialog kind="product" onClose={() => setImportOpen(false)} onImported={loadProducts} />
       ) : null}
 
       {componentDialogOpen && componentForm ? (
