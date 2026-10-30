@@ -994,6 +994,32 @@ async function loadAllFromServer(): Promise<void> {
       })
     )
   );
+  // 数据自愈：补齐「产品默认供应商被引用、但供应商库已缺失」的记录，
+  // 修复历史去重误删导致的悬空引用（如 BC-2001 的佛山市顺德钢板厂）。
+  try {
+    repairMissingSuppliers();
+  } catch {
+    /* 自愈失败不影响主流程 */
+  }
+}
+
+/** 补齐产品引用但供应商库缺失的供应商（按名称去重，只补不删） */
+function repairMissingSuppliers(): void {
+  const products = getServerCache<Product>(KEYS.PRODUCTS);
+  const suppliers = getServerCache<Supplier>(KEYS.SUPPLIERS);
+  if (products.length === 0) return;
+  const existing = new Set(suppliers.map((s) => (s.name || "").trim()).filter(Boolean));
+  const missing: string[] = [];
+  for (const p of products) {
+    const name = (p.defaultSupplier || "").trim();
+    if (name && !existing.has(name) && !missing.includes(name)) missing.push(name);
+  }
+  if (missing.length === 0) return;
+  const next = [...suppliers];
+  for (const name of missing) {
+    next.push({ id: generateId(), name, contact: "", phone: "", address: "" });
+  }
+  saveAll(KEYS.SUPPLIERS, next);
 }
 
 

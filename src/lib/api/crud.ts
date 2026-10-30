@@ -54,9 +54,39 @@ export function makeCrud(config: CrudConfig) {
         .select("*")
         .eq("user_id", uid);
       if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-      // 返回实体数组（去掉 user_id，返回 data 里的内容）
-      const entities = (data || []).map((row: any) => row.data || {});
-      return NextResponse.json(entities);
+
+      const rows: any[] = data || [];
+      // 读取入口统一去重：同一业务主键只保留 updated_at 最新的一条。
+      // 历史遗留的重复行（同 data.id、不同行 id）在返回时被折叠，
+      // 并把多余行物理删除，避免重复随每次读写反复放大。
+      const best = new Map<string, { entity: any; ts: string; rowId: string }>();
+      const staleRowIds: string[] = [];
+      for (const row of rows) {
+        const entity = row.data || {};
+        const bid = String(entity?.id ?? row.id);
+        const ts = String(row.updated_at || "");
+        const prev = best.get(bid);
+        if (!prev) {
+          best.set(bid, { entity, ts, rowId: row.id });
+        } else if (ts > prev.ts) {
+          staleRowIds.push(prev.rowId);
+          best.set(bid, { entity, ts, rowId: row.id });
+        } else {
+          staleRowIds.push(row.id);
+        }
+      }
+      if (staleRowIds.length > 0) {
+        try {
+          await supabase
+            .from(table)
+            .delete()
+            .eq("user_id", uid)
+            .in("id", staleRowIds);
+        } catch {
+          /* 清理失败不影响读取 */
+        }
+      }
+      return NextResponse.json(Array.from(best.values()).map((v) => v.entity));
     } catch (e: any) {
       return NextResponse.json({ error: e.message }, { status: 500 });
     }
@@ -71,6 +101,23 @@ export function makeCrud(config: CrudConfig) {
       const entity = { ...body, id };
       // 强制设置 user_id = 调用方 uid，不信任前端
       const supabase = getSupabaseServer();
+      // 幂等写入：同一账号下同一业务主键已存在则更新，不再插入新行。
+      // 这是防止「存量迁移/重试提交」把同一批数据写成多份的关键。
+      const { data: existing } = await supabase
+        .from(table)
+        .select("id")
+        .eq("user_id", uid)
+        .eq("data->>id", String(id))
+        .limit(1);
+      if (existing && existing.length > 0) {
+        const { error: upErr } = await supabase
+          .from(table)
+          .update({ data: entity, updated_at: new Date().toISOString() })
+          .eq("user_id", uid)
+          .eq("data->>id", String(id));
+        if (upErr) return NextResponse.json({ error: upErr.message }, { status: 500 });
+        return NextResponse.json(entity, { status: 200 });
+      }
       const { data, error } = await supabase
         .from(table)
         .insert({ user_id: uid, data: entity, id: crypto.randomUUID() })

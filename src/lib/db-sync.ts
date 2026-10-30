@@ -89,16 +89,24 @@ export async function loadCollection<T>(key: string): Promise<T[]> {
   if (!resource) return getServerCache<T>(key);
 
   let remote: T[] = [];
+  let remoteOk = true;
   try {
     remote = await apiList<T>(resource);
   } catch {
-    remote = [];
+    // 关键：请求失败（网络/鉴权未就绪）不能当成「服务端为空」，
+    // 否则会误触发下面的存量迁移，把同一批数据重复 POST 进数据库。
+    remoteOk = false;
   }
 
-  // 服务端有数据 → 以服务端为准
+  if (!remoteOk) {
+    return dedupeById(getServerCache<T>(key));
+  }
+
+  // 服务端有数据 → 以服务端为准（读取入口统一去重，双保险）
   if (remote.length > 0) {
-    memoryCache.set(key, remote);
-    return remote;
+    const clean = dedupeById(remote);
+    memoryCache.set(key, clean);
+    return clean;
   }
 
   // 服务端为空 → 用本地缓存（离线缓存或旧版存量数据），并把存量推送到服务端
@@ -107,9 +115,10 @@ export async function loadCollection<T>(key: string): Promise<T[]> {
     // 再尝试旧账号前缀/裸键的 legacy 存量（如 13800138000 旧数据）
     local = collectLegacyLocal<T>(key);
   }
+  local = dedupeById(local);
   if (local.length > 0) {
     memoryCache.set(key, local);
-    // 存量迁移：异步推送到服务端，并写回当前账号离线缓存
+    // 存量迁移：异步推送到服务端（POST 已做幂等 upsert，不会写重复），并写回当前账号离线缓存
     void pushAll(resource, local);
     if (typeof window !== "undefined") {
       try {
@@ -120,6 +129,25 @@ export async function loadCollection<T>(key: string): Promise<T[]> {
     }
   }
   return local;
+}
+
+/** 按业务 id 去重，保留首次出现的记录（数组顺序即服务端返回顺序） */
+function dedupeById<T>(arr: T[]): T[] {
+  if (!Array.isArray(arr)) return [];
+  const seen = new Set<string>();
+  const out: T[] = [];
+  for (const item of arr) {
+    const id = (item as any)?.id;
+    if (id === undefined || id === null || id === "") {
+      out.push(item);
+      continue;
+    }
+    const k = String(id);
+    if (seen.has(k)) continue;
+    seen.add(k);
+    out.push(item);
+  }
+  return out;
 }
 
 /** 把整个集合全量推送到服务端（存量迁移 / 全量重写） */
