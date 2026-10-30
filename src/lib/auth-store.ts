@@ -116,6 +116,31 @@ export const authStore = {
     }
   },
 
+  /** 用邮件链接 hash 里带回的 access_token 直接建立会话（Supabase implicit flow 兜底） */
+  async loginWithAccessToken(token: string) {
+    if (!token) return { success: false, error: "登录链接无效" };
+    try {
+      setAccessToken(token);
+      const res = await fetch("/api/auth/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) {
+        setAccessToken(null);
+        return { success: false, error: "登录链接已过期，请重新获取验证码" };
+      }
+      const data = await res.json();
+      if (!data?.user) {
+        setAccessToken(null);
+        return { success: false, error: "登录链接已过期，请重新获取验证码" };
+      }
+      setCurrentUserId(data.user.id);
+      return { success: true, user: data.user };
+    } catch (e: any) {
+      setAccessToken(null);
+      return { success: false, error: e?.message || "登录失败" };
+    }
+  },
+
   /** 用邮件链接里的 token_hash 换会话（验证码方式的兜底通道） */
   async loginWithToken(tokenHash: string) {
     try {

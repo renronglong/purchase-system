@@ -15,10 +15,30 @@ export default function LoginPage() {
   const [sending, setSending] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const { login, sendCode, loginWithCode, loginWithToken } = useAuth();
+  const { login, sendCode, loginWithCode, loginWithToken, loginWithAccessToken } = useAuth();
   const router = useRouter();
 
-  // 兜底通道：用户点邮件里的链接回来（?token_hash=...&type=email），直接换会话登录
+  // 兜底通道 1：邮件链接回来带 #access_token（Supabase implicit flow）
+  useEffect(() => {
+    const hash = window.location.hash.startsWith("#") ? window.location.hash.slice(1) : "";
+    if (!hash) return;
+    const hp = new URLSearchParams(hash);
+    const accessToken = hp.get("access_token");
+    if (!accessToken) return;
+    setLoading(true);
+    loginWithAccessToken(accessToken).then((r) => {
+      setLoading(false);
+      if (r.success) {
+        window.history.replaceState({}, "", "/login");
+        router.push("/");
+      } else {
+        setError(r.error || "登录链接已过期，请重新获取验证码");
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // 兜底通道 2：邮件链接回来带 ?token_hash=（Supabase token_hash flow）
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const tokenHash = params.get("token_hash");
