@@ -3,10 +3,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
 import {
-  purchaseOrderStore, supplierStore, productStore, previewPurchaseOrderNo,
+  purchaseOrderStore, supplierStore, productStore, previewPurchaseOrderNo, deliveryCompanyStore,
   type PurchaseOrder, type PurchaseOrderItem,
 } from "@/lib/store";
-import { purchasingCompanies, surfaceTreatments } from "@/lib/seed-data";
+import { surfaceTreatments } from "@/lib/seed-data";
 import ProductSearchSelect from "@/components/product-search-select";
 
 type OrderType = "profile" | "plate";
@@ -59,7 +59,7 @@ export default function PurchaseOrderFormPage() {
 
   // Determine order type from URL param or existing order
   const [orderType, setOrderType] = useState<OrderType>("profile");
-  const [company, setCompany] = useState(purchasingCompanies[0]);
+  const [company, setCompany] = useState("");
   const [orderNo, setOrderNo] = useState("");
   const [supplierId, setSupplierId] = useState("");
   const [supplierName, setSupplierName] = useState("");
@@ -72,6 +72,17 @@ export default function PurchaseOrderFormPage() {
   const [typeLocked, setTypeLocked] = useState(false); // lock type when editing
 
   const suppliers = supplierStore.getAll();
+
+  // 采购公司下拉：直接取「公司信息管理」的公司，按名称去重；历史单据里的公司名兜底保留
+  const companyNames = Array.from(
+    new Set(
+      deliveryCompanyStore
+        .getAll()
+        .map((c) => (c.name || "").trim())
+        .filter(Boolean)
+    )
+  );
+  if (company && !companyNames.includes(company)) companyNames.unshift(company);
 
   const loadOrder = useCallback(() => {
     if (!isEdit) return;
@@ -95,6 +106,11 @@ export default function PurchaseOrderFormPage() {
   useEffect(() => {
     loadOrder();
   }, [loadOrder]);
+
+  // 新建单：公司信息管理有数据时默认选中第一家（编辑单以单据原值为准）
+  useEffect(() => {
+    if (!company && companyNames.length > 0) setCompany(companyNames[0]);
+  }, [company, companyNames.length]);
 
   useEffect(() => {
     if (!isEdit) {
@@ -210,7 +226,7 @@ export default function PurchaseOrderFormPage() {
     }
 
     const orderData: any = {
-      company,
+      company: company || companyNames[0] || "",
       supplierId,
       supplierName,
       contact,
@@ -315,7 +331,8 @@ export default function PurchaseOrderFormPage() {
               onChange={(e) => setCompany(e.target.value)}
               className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
             >
-              {purchasingCompanies.map(c => (
+              {companyNames.length === 0 && <option value="">请先在「公司信息管理」里添加公司</option>}
+              {companyNames.map(c => (
                 <option key={c} value={c}>{c}</option>
               ))}
             </select>

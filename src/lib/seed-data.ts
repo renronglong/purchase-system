@@ -394,13 +394,7 @@ export const seedSuppliers: Supplier[] = [
   { id: "s12", name: "铮辉五金", contact: "黎先生", phone: "", address: "里水镇" },
 ];
 
-// 采购公司列表
-export const purchasingCompanies = [
-  "佛山市恒达金属制品有限公司",
-  "佛山市恒达金属制品有限公司",
-  "佛山市恒达金属制品有限公司",
-];
-
+// 采购公司/供方公司不再硬编码，统一从「公司信息管理」(deliveryCompanyStore) 读取
 // 表面处理选项
 export const surfaceTreatments = [
   "坯料",

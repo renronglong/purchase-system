@@ -7,7 +7,7 @@ import {
   quotationStore, productStore, deliveryProductStore, deliveryCustomerStore, deliveryCompanyStore, previewQuotationNo,
   type Quotation, type QuotationItem,
 } from "@/lib/store";
-import { purchasingCompanies, surfaceTreatments } from "@/lib/seed-data";
+import { surfaceTreatments } from "@/lib/seed-data";
 
 const materialOptions = ["普通铝板", "5052", "6063", "1060", "3003"];
 
@@ -57,7 +57,7 @@ export default function QuotationForm({ quotation }: { quotation?: Quotation }) 
   const editing = !!quotation;
 
   const [quoteDate, setQuoteDate] = useState(editing ? quotation.quoteDate : new Date().toISOString().slice(0, 10));
-  const [supplierCompany, setSupplierCompany] = useState(editing ? quotation.supplierCompany : purchasingCompanies[0]);
+  const [supplierCompany, setSupplierCompany] = useState(editing ? quotation.supplierCompany : "");
   const [supplierContact, setSupplierContact] = useState(editing ? quotation.supplierContact : "");
   const [supplierPhone, setSupplierPhone] = useState(editing ? quotation.supplierPhone : "");
   const [supplierAddress, setSupplierAddress] = useState(editing ? quotation.supplierAddress : "");
@@ -114,20 +114,26 @@ export default function QuotationForm({ quotation }: { quotation?: Quotation }) 
     }
   };
 
-  // 挂载时：若供方公司库有信息且当前字段为空，补全联系人/电话/地址
+  // 挂载时：新建单默认选中「公司信息管理」里的第一家公司；若该公司有信息且当前字段为空，补全联系人/电话/地址
   useEffect(() => {
-    const info = getCompanyInfo(supplierCompany, companies);
+    let companyName = supplierCompany;
+    if (!editing && !companyName) {
+      companyName = deliveryCompanyStore.getAll()[0]?.name || "";
+      if (companyName) setSupplierCompany(companyName);
+    }
+    if (!companyName) return;
+    const info = getCompanyInfo(companyName, companies);
     if (info) {
       if (info.contact) setSupplierContact(info.contact);
       if (info.phone) setSupplierPhone(info.phone);
       if (info.address) {
         setSupplierAddress(info.address);
       } else {
-        const addr = getCompanyAddress(supplierCompany);
+        const addr = getCompanyAddress(companyName);
         if (addr) setSupplierAddress(addr);
       }
     } else {
-      const addr = getCompanyAddress(supplierCompany);
+      const addr = getCompanyAddress(companyName);
       if (addr && !supplierAddress) setSupplierAddress(addr);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -252,7 +258,9 @@ export default function QuotationForm({ quotation }: { quotation?: Quotation }) 
             <h3 className="text-xs font-medium text-slate-500 mb-2">供方（报价单位）</h3>
             <div className="space-y-3">
               <select value={supplierCompany} onChange={(e) => handleSupplierCompanyChange(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md">
-                {Array.from(new Set([...supplierCompanyOptions, ...purchasingCompanies])).map(c => <option key={c} value={c}>{c}</option>)}
+                {supplierCompanyOptions.length === 0 && <option value="">请先在「公司信息管理」里添加公司</option>}
+                {supplierCompany && !supplierCompanyOptions.includes(supplierCompany) && <option value={supplierCompany}>{supplierCompany}</option>}
+                {supplierCompanyOptions.map(c => <option key={c} value={c}>{c}</option>)}
               </select>
               <input type="text" value={supplierContact} onChange={(e) => setSupplierContact(e.target.value)} placeholder="联系人" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" />
               <input type="text" value={supplierPhone} onChange={(e) => setSupplierPhone(e.target.value)} placeholder="电话" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" />
