@@ -84,6 +84,53 @@ export const authStore = {
     }
   },
 
+  /** 发送邮箱验证码（6 位数字，用于免密码登录/找回入口） */
+  async sendCode(email: string) {
+    if (!email.trim()) return { success: false, error: "请输入邮箱" };
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      return { success: false, error: "请输入有效的邮箱地址" };
+    }
+    try {
+      await post("/api/auth/send-code", { email: email.trim() });
+      return { success: true };
+    } catch (e: any) {
+      return { success: false, error: e?.message || "验证码发送失败" };
+    }
+  },
+
+  /** 用邮箱验证码登录（忘记密码时也能进系统） */
+  async loginWithCode(email: string, code: string) {
+    if (!email.trim()) return { success: false, error: "请输入邮箱" };
+    if (!/^\d{6}$/.test(code.trim())) return { success: false, error: "请输入 6 位数字验证码" };
+    try {
+      const data = await post<{ token: string; user: AppUser }>("/api/auth/verify-code", {
+        email: email.trim(),
+        code: code.trim(),
+      });
+      if (!data?.token) return { success: false, error: "登录失败" };
+      setAccessToken(data.token);
+      setCurrentUserId(data.user.id);
+      return { success: true, user: data.user };
+    } catch (e: any) {
+      return { success: false, error: e?.message || "验证码校验失败" };
+    }
+  },
+
+  /** 用邮件链接里的 token_hash 换会话（验证码方式的兜底通道） */
+  async loginWithToken(tokenHash: string) {
+    try {
+      const data = await post<{ token: string; user: AppUser }>("/api/auth/verify-code", {
+        token_hash: tokenHash,
+      });
+      if (!data?.token) return { success: false, error: "登录失败" };
+      setAccessToken(data.token);
+      setCurrentUserId(data.user.id);
+      return { success: true, user: data.user };
+    } catch (e: any) {
+      return { success: false, error: e?.message || "链接已失效，请重新获取验证码" };
+    }
+  },
+
   async getCurrentUser(): Promise<AppUser | null> {
     const token = getAccessToken();
     if (!token) return null; // 无 token 直接未登录，不触发任何网络请求

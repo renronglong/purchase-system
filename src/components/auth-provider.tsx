@@ -10,6 +10,9 @@ interface AuthContextType {
   currentUser: AppUser | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  sendCode: (email: string) => Promise<{ success: boolean; error?: string }>;
+  loginWithCode: (email: string, code: string) => Promise<{ success: boolean; error?: string }>;
+  loginWithToken: (tokenHash: string) => Promise<{ success: boolean; error?: string }>;
   register: (email: string, password: string, displayName: string, company: string) => Promise<{ success: boolean; error?: string; emailConfirmRequired?: boolean }>;
   logout: () => void;
 }
@@ -28,6 +31,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = useCallback(async (email: string, password: string) => {
     const result = await authStore.login(email, password);
+    if (result.success && result.user) {
+      setCurrentUserId(result.user.id);
+      initData();
+      setCurrentUser(result.user);
+      return { success: true };
+    }
+    return { success: false, error: result.error };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const sendCode = useCallback(async (email: string) => {
+    const result = await authStore.sendCode(email);
+    return result.success ? { success: true } : { success: false, error: result.error };
+  }, []);
+
+  const loginWithCode = useCallback(async (email: string, code: string) => {
+    const result = await authStore.loginWithCode(email, code);
+    if (result.success && result.user) {
+      setCurrentUserId(result.user.id);
+      initData();
+      setCurrentUser(result.user);
+      return { success: true };
+    }
+    return { success: false, error: result.error };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const loginWithToken = useCallback(async (tokenHash: string) => {
+    const result = await authStore.loginWithToken(tokenHash);
     if (result.success && result.user) {
       setCurrentUserId(result.user.id);
       initData();
@@ -90,7 +122,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ currentUser, loading, login, register, logout }}>
+    <AuthContext.Provider value={{ currentUser, loading, login, sendCode, loginWithCode, loginWithToken, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
