@@ -197,11 +197,11 @@ export default function LoginPage() {
                   <input
                     type="text"
                     inputMode="numeric"
-                    maxLength={6}
+                    maxLength={10}
                     value={code}
                     onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
                     className="flex-1 px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm tracking-widest"
-                    placeholder="6 位数字"
+                    placeholder="邮件中的数字验证码"
                     required
                   />
                   <button

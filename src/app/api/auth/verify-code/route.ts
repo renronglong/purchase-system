@@ -27,15 +27,18 @@ export async function POST(req: NextRequest) {
       ({ data, error } = await sb.auth.verifyOtp({ token_hash: tokenHash, type: "email" }));
     } else {
       if (!email) return NextResponse.json({ error: "请输入邮箱" }, { status: 400 });
-      if (!/^\d{6}$/.test(code))
-        return NextResponse.json({ error: "请输入 6 位数字验证码" }, { status: 400 });
+      if (!/^\d{6,10}$/.test(code))
+        return NextResponse.json({ error: "请输入邮件中的数字验证码" }, { status: 400 });
       ({ data, error } = await sb.auth.verifyOtp({ email, token: code, type: "email" }));
     }
     if (error || !data?.session) {
-      return NextResponse.json(
-        { error: error?.message || "验证码不正确或已过期，请重新获取" },
-        { status: 401 }
-      );
+      // 统一转成中文提示，避免把 Supabase 的英文原文抛给用户
+      const raw = String(error?.message || "");
+      let friendly = "验证码不正确或已过期，请重新获取";
+      if (/rate|too many/i.test(raw)) friendly = "尝试过于频繁，请稍后再试";
+      else if (/expired/i.test(raw)) friendly = "验证码已过期，请重新获取";
+      else if (/invalid|not found/i.test(raw)) friendly = "验证码不正确，请检查后重新输入";
+      return NextResponse.json({ error: friendly }, { status: 401 });
     }
     return NextResponse.json({
       token: data.session.access_token,

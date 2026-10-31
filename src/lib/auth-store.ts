@@ -84,7 +84,7 @@ export const authStore = {
     }
   },
 
-  /** 发送邮箱验证码（6 位数字，用于免密码登录/找回入口） */
+  /** 发送邮箱验证码（数字验证码，长度由 Supabase 项目配置决定，用于免密码登录/找回入口） */
   async sendCode(email: string) {
     if (!email.trim()) return { success: false, error: "请输入邮箱" };
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
@@ -101,7 +101,7 @@ export const authStore = {
   /** 用邮箱验证码登录（忘记密码时也能进系统） */
   async loginWithCode(email: string, code: string) {
     if (!email.trim()) return { success: false, error: "请输入邮箱" };
-    if (!/^\d{6}$/.test(code.trim())) return { success: false, error: "请输入 6 位数字验证码" };
+    if (!/^\d{6,10}$/.test(code.trim())) return { success: false, error: "请输入邮件中的数字验证码" };
     try {
       const data = await post<{ token: string; user: AppUser }>("/api/auth/verify-code", {
         email: email.trim(),
