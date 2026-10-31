@@ -51,8 +51,8 @@ export default function QuotationListPage() {
         />
       </div>
 
-      <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-white rounded-lg border border-slate-200 overflow-x-auto">
+        <table className="w-full text-sm min-w-[900px]">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200">
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">报价单编号</th>
@@ -60,7 +60,7 @@ export default function QuotationListPage() {
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">供方公司</th>
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">报价日期</th>
               <th className="text-right px-4 py-2.5 font-medium text-slate-600">明细数</th>
-              <th className="text-center px-4 py-2.5 font-medium text-slate-600">操作</th>
+              <th className="sticky right-0 z-10 bg-slate-50 text-center px-4 py-2.5 font-medium text-slate-600 shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.12)]">操作</th>
             </tr>
           </thead>
           <tbody>
@@ -74,8 +74,8 @@ export default function QuotationListPage() {
                   <td className="px-4 py-2">{q.supplierCompany}</td>
                   <td className="px-4 py-2">{q.quoteDate}</td>
                   <td className="px-4 py-2 text-right font-mono">{q.items.length}</td>
-                  <td className="px-4 py-2 text-center">
-                    <div className="flex items-center justify-center gap-3">
+                  <td className="sticky right-0 z-10 bg-white px-4 py-2.5 text-center shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.12)]">
+                    <div className="flex items-center justify-center gap-2">
                       <Link href={`/quote/${q.id}`} className="text-blue-600 hover:text-blue-800 text-xs">编辑</Link>
                       <Link href={`/quote/${q.id}/print`} className="text-orange-600 hover:text-orange-800 text-xs">打印</Link>
                       <button onClick={() => handleDelete(q.id)} className="text-red-500 hover:text-red-700 text-xs">删除</button>

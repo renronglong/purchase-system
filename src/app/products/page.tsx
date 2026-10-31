@@ -665,9 +665,9 @@ export default function ProductsPage() {
       </div>
 
       {/* 表格 */}
-      <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
+      <div className="bg-white rounded-lg border border-slate-200 overflow-x-auto">
         {typeFilter === "component" ? (
-          <table className="w-full text-sm">
+          <table className="w-full text-sm min-w-[900px]">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
                 <th className="w-8 px-2 py-2.5">
@@ -677,7 +677,7 @@ export default function ProductsPage() {
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">组件名称</th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">组成物料</th>
                 <th className="text-right px-4 py-2.5 font-medium text-slate-600">组件单价</th>
-                <th className="text-center px-4 py-2.5 font-medium text-slate-600">操作</th>
+                <th className="sticky right-0 z-10 bg-slate-50 text-center px-4 py-2.5 font-medium text-slate-600 shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.12)]">操作</th>
               </tr>
               <tr className="bg-slate-50 border-b border-slate-200">
                 <td className="px-2 py-1"></td>
@@ -701,8 +701,8 @@ export default function ProductsPage() {
                     <td className="px-4 py-2">{c.name}</td>
                     <td className="px-4 py-2">{(c.items || []).length > 0 ? `${(c.items || []).length} 项` : "-"}</td>
                     <td className="px-4 py-2 text-right font-mono">{c.unitPrice ? c.unitPrice.toFixed(2) : "-"}</td>
-                    <td className="px-4 py-2 text-center">
-                      <div className="flex items-center justify-center gap-3">
+                    <td className="sticky right-0 z-10 bg-white px-4 py-2.5 text-center shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.12)]">
+                      <div className="flex items-center justify-center gap-2">
                         <button onClick={() => openEditComponent(c)} className="text-amber-600 hover:text-amber-800 text-xs">编辑</button>
                         <button onClick={() => handleDeleteComponent(c.id)} className="text-red-500 hover:text-red-700 text-xs">删除</button>
                       </div>
@@ -713,7 +713,7 @@ export default function ProductsPage() {
             </tbody>
           </table>
         ) : typeFilter === "delivery" ? (
-          <table className="w-full text-sm">
+          <table className="w-full text-sm min-w-[900px]">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
                 <th className="w-8 px-2 py-2.5">
@@ -726,7 +726,7 @@ export default function ProductsPage() {
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">单位</th>
                 <th className="text-right px-4 py-2.5 font-medium text-slate-600">单价</th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">所属客户</th>
-                <th className="text-center px-4 py-2.5 font-medium text-slate-600">操作</th>
+                <th className="sticky right-0 z-10 bg-slate-50 text-center px-4 py-2.5 font-medium text-slate-600 shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.12)]">操作</th>
               </tr>
               <tr className="bg-slate-50 border-b border-slate-200">
                 <td className="px-2 py-1"></td>
@@ -758,8 +758,8 @@ export default function ProductsPage() {
                     <td className="px-4 py-2">{product.unit || "-"}</td>
                     <td className="px-4 py-2 text-right font-mono">{product.unitPrice ? product.unitPrice.toFixed(2) : "-"}</td>
                     <td className="px-4 py-2">{product.customer || "-"}</td>
-                    <td className="px-4 py-2 text-center">
-                      <div className="flex items-center justify-center gap-3">
+                    <td className="sticky right-0 z-10 bg-white px-4 py-2.5 text-center shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.12)]">
+                      <div className="flex items-center justify-center gap-2">
                         <button onClick={() => openEditDelivery(product)} className="text-amber-600 hover:text-amber-800 text-xs">编辑</button>
                         <button onClick={() => handleDeleteDelivery(product.id)} className="text-red-500 hover:text-red-700 text-xs">删除</button>
                       </div>
@@ -770,7 +770,7 @@ export default function ProductsPage() {
             </tbody>
           </table>
         ) : (
-          <table className="w-full text-sm">
+          <table className="w-full text-sm min-w-[900px]">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
                 <th className="w-8 px-2 py-2.5">
@@ -783,7 +783,7 @@ export default function ProductsPage() {
                 <th className="text-right px-4 py-2.5 font-medium text-slate-600">米重/重量(KG)</th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">材质</th>
                 <th className="text-left px-4 py-2.5 font-medium text-slate-600">默认供应商</th>
-                <th className="text-center px-4 py-2.5 font-medium text-slate-600">操作</th>
+                <th className="sticky right-0 z-10 bg-slate-50 text-center px-4 py-2.5 font-medium text-slate-600 shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.12)]">操作</th>
               </tr>
               <tr className="bg-slate-50 border-b border-slate-200">
                 <td className="px-2 py-1"></td>
@@ -819,8 +819,8 @@ export default function ProductsPage() {
                     <td className="px-4 py-2 text-right font-mono">{(() => { const w = product.weightPerMeter ?? product.weight; return w != null ? w.toFixed(3) : "-"; })()}</td>
                     <td className="px-4 py-2">{product.material}</td>
                     <td className="px-4 py-2">{product.defaultSupplier}</td>
-                    <td className="px-4 py-2 text-center">
-                      <div className="flex items-center justify-center gap-3">
+                    <td className="sticky right-0 z-10 bg-white px-4 py-2.5 text-center shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.12)]">
+                      <div className="flex items-center justify-center gap-2">
                         <button onClick={() => openEdit(product)} className="text-amber-600 hover:text-amber-800 text-xs">编辑</button>
                         <button onClick={() => handleDelete(product.id)} className="text-red-500 hover:text-red-700 text-xs">删除</button>
                       </div>

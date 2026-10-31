@@ -80,15 +80,15 @@ export default function CompaniesPage() {
         </div>
       )}
 
-      <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-white rounded-lg border border-slate-200 overflow-x-auto">
+        <table className="w-full text-sm min-w-[800px]">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200">
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">公司名称</th>
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">联系人</th>
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">电话</th>
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">地址</th>
-              <th className="text-center px-4 py-2.5 font-medium text-slate-600">操作</th>
+              <th className="sticky right-0 z-10 bg-slate-50 text-center px-4 py-2.5 font-medium text-slate-600 shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.12)]">操作</th>
             </tr>
           </thead>
           <tbody>
@@ -100,8 +100,8 @@ export default function CompaniesPage() {
                 <td className="px-4 py-2">{c.contact}</td>
                 <td className="px-4 py-2 font-mono">{c.phone}</td>
                 <td className="px-4 py-2">{c.address}</td>
-                <td className="px-4 py-2 text-center">
-                  <div className="flex items-center justify-center gap-3">
+                <td className="sticky right-0 z-10 bg-white px-4 py-2.5 text-center shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.12)]">
+                  <div className="flex items-center justify-center gap-2">
                     <button onClick={() => handleEdit(c)} className="text-amber-600 hover:text-amber-800 text-xs">编辑</button>
                     <button onClick={() => handleDelete(c.id)} className="text-red-500 hover:text-red-700 text-xs">删除</button>
                   </div>

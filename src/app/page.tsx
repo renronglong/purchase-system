@@ -129,8 +129,8 @@ export default function PurchaseOrderListPage() {
       </div>
 
       {/* 表格 */}
-      <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-white rounded-lg border border-slate-200 overflow-x-auto">
+        <table className="w-full text-sm min-w-[900px]">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200">
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">订单编号</th>
@@ -141,7 +141,7 @@ export default function PurchaseOrderListPage() {
               <th className="text-right px-4 py-2.5 font-medium text-slate-600">明细数</th>
               <th className="text-right px-4 py-2.5 font-medium text-slate-600">总数量</th>
               <th className="text-right px-4 py-2.5 font-medium text-slate-600">总重量(KG)</th>
-              <th className="text-center px-4 py-2.5 font-medium text-slate-600">操作</th>
+              <th className="sticky right-0 z-10 bg-slate-50 text-center px-4 py-2.5 font-medium text-slate-600 shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.12)]">操作</th>
             </tr>
           </thead>
           <tbody>
@@ -168,7 +168,7 @@ export default function PurchaseOrderListPage() {
                     <td className="px-4 py-2.5 text-right text-slate-600">
                       {isPlate ? (order.totalActualOutput ?? 0) : order.totalWeight.toFixed(2)}
                     </td>
-                    <td className="px-4 py-2.5 text-center">
+                    <td className="sticky right-0 z-10 bg-white px-4 py-2.5 text-center shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.12)]">
                       <div className="flex items-center justify-center gap-2">
                         <Link
                           href={`/purchase/${order.id}/detail`}

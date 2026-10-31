@@ -425,8 +425,8 @@ export default function DeliveryPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-lg border border-slate-200 overflow-hidden">
-        <table className="w-full text-sm">
+      <div className="bg-white rounded-lg border border-slate-200 overflow-x-auto">
+        <table className="w-full text-sm min-w-[900px]">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200">
               <th className="text-center px-3 py-2.5 w-10">
@@ -445,7 +445,7 @@ export default function DeliveryPage() {
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">客户</th>
               <th className="text-right px-4 py-2.5 font-medium text-slate-600">总金额</th>
               <th className="text-center px-4 py-2.5 font-medium text-slate-600">对帐状态</th>
-              <th className="text-center px-4 py-2.5 font-medium text-slate-600">操作</th>
+              <th className="sticky right-0 z-10 bg-slate-50 text-center px-4 py-2.5 font-medium text-slate-600 shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.12)]">操作</th>
             </tr>
           </thead>
           <tbody>
@@ -470,7 +470,7 @@ export default function DeliveryPage() {
                   <td className="px-4 py-2.5">{o.customer}</td>
                   <td className="px-4 py-2.5 text-right font-mono">{amt.toFixed(2)}</td>
                   <td className="px-4 py-2.5 text-center"><span className={`inline-block px-2 py-0.5 text-xs rounded-full ${statusColor(o.reconciled)}`}>{o.reconciled || "未对帐"}</span></td>
-                  <td className="px-4 py-2.5 text-center">
+                  <td className="sticky right-0 z-10 bg-white px-4 py-2.5 text-center shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.12)]">
                     <div className="flex items-center justify-center gap-2">
                       <button onClick={() => openEdit(o)} className="text-amber-600 hover:text-amber-800 text-xs">编辑</button>
                       <Link href={`/print/delivery/${o.id}`} target="_blank" className="text-emerald-600 hover:text-emerald-800 text-xs">打印</Link>

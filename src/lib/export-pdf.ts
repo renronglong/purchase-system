@@ -1,12 +1,10 @@
 "use client";
 
 /**
- * 单据导出 PDF 工具
+ * 单据导出工具
  * 思路：把打印区域（#print-area）按物理尺寸截图，再按目标纸张尺寸写入 PDF。
- * 内容超出一页时自动纵向分页，避免长单据被压扁。
+ * 同时产出 PNG，方便用户直接「复制图片」粘到微信/QQ。
  */
-
-export type ExportResult = "shared" | "downloaded" | "canceled";
 
 export interface PdfPageSize {
   /** 单据物理宽度（毫米） */
@@ -25,11 +23,28 @@ export const PDF_SIZE = {
   a4Portrait: { widthMm: 210, heightMm: 297 } as PdfPageSize,
 };
 
-/** 把 DOM 元素渲染成 PDF Blob */
-export async function elementToPdfBlob(
+export interface RenderedDoc {
+  pdfBlob: Blob;
+  /** 整张图（不分页），用于复制/保存图片 */
+  pngBlob: Blob | null;
+  pageCount: number;
+}
+
+function canvasToBlob(canvas: HTMLCanvasElement, type: string, quality?: number): Promise<Blob | null> {
+  return new Promise((resolve) => {
+    try {
+      canvas.toBlob((b) => resolve(b), type, quality);
+    } catch {
+      resolve(null);
+    }
+  });
+}
+
+/** 把 DOM 元素渲染成 PDF + PNG */
+export async function renderElementToPdf(
   el: HTMLElement,
   size: PdfPageSize
-): Promise<Blob> {
+): Promise<RenderedDoc> {
   const html2canvasMod: any = await import("html2canvas-pro");
   const html2canvas = html2canvasMod?.default || html2canvasMod;
   const jspdfMod: any = await import("jspdf");
@@ -61,9 +76,10 @@ export async function elementToPdfBlob(
 
   // 图片按宽度铺满后对应的总高度
   const imgHeightMm = (canvas.height * widthMm) / canvas.width;
+  let pageCount = 1;
 
-  // 单页装得下：直接放
   if (imgHeightMm <= heightMm + 0.5) {
+    // 单页装得下
     pdf.addImage(
       canvas.toDataURL("image/jpeg", 0.95),
       "JPEG",
@@ -74,85 +90,93 @@ export async function elementToPdfBlob(
       undefined,
       "FAST"
     );
-    return pdf.output("blob");
+  } else {
+    // 多页：按像素切片，逐页放入
+    pageCount = Math.ceil(imgHeightMm / heightMm);
+    const pxPerPage = Math.floor((canvas.height * heightMm) / imgHeightMm);
+
+    for (let i = 0; i < pageCount; i++) {
+      if (i > 0) pdf.addPage([widthMm, heightMm], "portrait");
+      const sy = i * pxPerPage;
+      const sh = Math.min(pxPerPage, canvas.height - sy);
+      if (sh <= 0) break;
+
+      const slice = document.createElement("canvas");
+      slice.width = canvas.width;
+      slice.height = sh;
+      const ctx = slice.getContext("2d");
+      if (!ctx) continue;
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, slice.width, slice.height);
+      ctx.drawImage(canvas, 0, sy, canvas.width, sh, 0, 0, canvas.width, sh);
+
+      const sliceHeightMm = (sh * widthMm) / canvas.width;
+      pdf.addImage(
+        slice.toDataURL("image/jpeg", 0.95),
+        "JPEG",
+        0,
+        0,
+        widthMm,
+        sliceHeightMm,
+        undefined,
+        "FAST"
+      );
+    }
   }
 
-  // 多页：按像素切片，逐页放入
-  const pageCount = Math.ceil(imgHeightMm / heightMm);
-  const pxPerPage = Math.floor((canvas.height * heightMm) / imgHeightMm);
+  const pdfBlob = pdf.output("blob");
+  const pngBlob = await canvasToBlob(canvas, "image/png");
 
-  for (let i = 0; i < pageCount; i++) {
-    if (i > 0) pdf.addPage([widthMm, heightMm], "portrait");
-    const sy = i * pxPerPage;
-    const sh = Math.min(pxPerPage, canvas.height - sy);
-    if (sh <= 0) break;
-
-    const slice = document.createElement("canvas");
-    slice.width = canvas.width;
-    slice.height = sh;
-    const ctx = slice.getContext("2d");
-    if (!ctx) continue;
-    ctx.fillStyle = "#ffffff";
-    ctx.fillRect(0, 0, slice.width, slice.height);
-    ctx.drawImage(canvas, 0, sy, canvas.width, sh, 0, 0, canvas.width, sh);
-
-    const sliceHeightMm = (sh * widthMm) / canvas.width;
-    pdf.addImage(
-      slice.toDataURL("image/jpeg", 0.95),
-      "JPEG",
-      0,
-      0,
-      widthMm,
-      sliceHeightMm,
-      undefined,
-      "FAST"
-    );
-  }
-
-  return pdf.output("blob");
+  return { pdfBlob, pngBlob, pageCount };
 }
 
-/** 优先调起系统分享（手机可发微信/QQ/存文件），不支持则下载 */
-export async function shareOrDownloadPdf(
-  blob: Blob,
-  filename: string
-): Promise<ExportResult> {
-  const name = filename.toLowerCase().endsWith(".pdf") ? filename : `${filename}.pdf`;
-  const file = new File([blob], name, { type: "application/pdf" });
-
-  const nav: any = typeof navigator !== "undefined" ? navigator : null;
-  try {
-    if (nav?.canShare && nav.canShare({ files: [file] })) {
-      await nav.share({ files: [file], title: name });
-      return "shared";
-    }
-  } catch (err: any) {
-    // 用户主动取消分享：不报错也不下载
-    if (err && err.name === "AbortError") return "canceled";
-    // 其他情况（如生成耗时导致分享手势失效）：继续走下载兜底
-  }
-
+/** 下载文件到本地 */
+export function downloadBlob(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = name;
+  a.download = filename;
   a.rel = "noopener";
   a.style.display = "none";
   document.body.appendChild(a);
   a.click();
   a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 5000);
-  return "downloaded";
 }
 
-/** 一步到位：元素 → PDF → 分享或下载 */
-export async function exportElementPdf(
-  el: HTMLElement,
-  size: PdfPageSize,
-  filename: string
-): Promise<ExportResult> {
-  const blob = await elementToPdfBlob(el, size);
-  return shareOrDownloadPdf(blob, filename);
+/** 调起系统分享面板（手机可发微信/QQ/邮件/存文件）；返回是否成功 */
+export async function shareFile(
+  blob: Blob,
+  filename: string,
+  title?: string
+): Promise<"shared" | "canceled" | "unsupported"> {
+  const file = new File([blob], filename, { type: blob.type || "application/octet-stream" });
+  const nav: any = typeof navigator !== "undefined" ? navigator : null;
+
+  if (!nav?.share || !nav?.canShare || !nav.canShare({ files: [file] })) {
+    return "unsupported";
+  }
+  try {
+    await nav.share({ files: [file], title: title || filename });
+    return "shared";
+  } catch (err: any) {
+    if (err && err.name === "AbortError") return "canceled";
+    return "unsupported";
+  }
+}
+
+/** 复制图片到剪贴板；返回是否成功 */
+export async function copyImageToClipboard(blob: Blob): Promise<boolean> {
+  try {
+    const CI: any = (window as any).ClipboardItem;
+    const clip: any = typeof navigator !== "undefined" ? navigator.clipboard : null;
+    if (!CI || !clip?.write) return false;
+    const png = blob.type === "image/png" ? blob : new Blob([blob], { type: "image/png" });
+    await clip.write([new CI({ "image/png": png })]);
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 /** 文件名安全化：去掉系统不允许的字符 */

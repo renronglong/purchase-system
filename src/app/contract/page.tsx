@@ -243,7 +243,7 @@ export default function ContractPage() {
       </div>
 
       {/* 列表 */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div className="bg-white rounded-lg shadow overflow-x-auto">
         <table className="min-w-full divide-y divide-slate-200 text-sm">
           <thead className="bg-slate-50">
             <tr>
@@ -252,7 +252,7 @@ export default function ContractPage() {
               <th className="px-4 py-3 text-left font-medium text-slate-600">签订日期</th>
               <th className="px-4 py-3 text-left font-medium text-slate-600">产品数</th>
               <th className="px-4 py-3 text-right font-medium text-slate-600">合同金额</th>
-              <th className="px-4 py-3 text-left font-medium text-slate-600">操作</th>
+              <th className="sticky right-0 z-10 bg-slate-50 px-4 py-3 text-left font-medium text-slate-600 shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.12)]">操作</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-200">
@@ -268,7 +268,7 @@ export default function ContractPage() {
                   <td className="px-4 py-3 text-right font-mono font-medium">
                     ¥{totalAmount(c).toLocaleString("zh-CN", { minimumFractionDigits: 2 })}
                   </td>
-                  <td className="px-4 py-3">
+                  <td className="sticky right-0 z-10 bg-white px-4 py-3 shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.12)]">
                     <div className="flex gap-1">
                       <button onClick={() => openEdit(c)} className="px-2 py-0.5 text-xs text-blue-600 hover:bg-blue-50 rounded">编辑</button>
                       <a href={`/print/contract/${c.id}`} target="_blank" rel="noopener noreferrer" className="px-2 py-0.5 text-xs text-green-600 hover:bg-green-50 rounded">打印</a>
