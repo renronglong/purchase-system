@@ -67,10 +67,13 @@ export async function renderElementToPdf(
   });
 
   const { widthMm, heightMm } = size;
+  // jsPDF 会按 orientation 强制宽高关系：横向单据必须传 landscape，
+  // 否则 241×140 会被翻成 140×241（导出后方向是竖的）。
+  const orientation: "portrait" | "landscape" = widthMm > heightMm ? "landscape" : "portrait";
   const pdf = new JsPDF({
     unit: "mm",
     format: [widthMm, heightMm],
-    orientation: "portrait",
+    orientation,
     compress: true,
   });
 
@@ -96,7 +99,7 @@ export async function renderElementToPdf(
     const pxPerPage = Math.floor((canvas.height * heightMm) / imgHeightMm);
 
     for (let i = 0; i < pageCount; i++) {
-      if (i > 0) pdf.addPage([widthMm, heightMm], "portrait");
+      if (i > 0) pdf.addPage([widthMm, heightMm], orientation);
       const sy = i * pxPerPage;
       const sh = Math.min(pxPerPage, canvas.height - sy);
       if (sh <= 0) break;
