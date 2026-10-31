@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams } from "next/navigation";
 import { reconciliationStore, deliveryNoteStore, type ReconciliationOrder } from "@/lib/store";
+import ExportPdfButton from "@/components/export-pdf-button";
+import { PDF_SIZE } from "@/lib/export-pdf";
 
 const MAKER_STORAGE_KEY = "print_maker_names";
 
@@ -270,7 +272,7 @@ export default function PrintReconciliationPage() {
       `}} />
 
       {/* Toolbar - only visible on screen */}
-      <div className="no-print fixed bottom-0 left-0 right-0 z-50 flex gap-2 bg-white border-t border-slate-200 shadow px-4 py-2 items-center justify-center">
+      <div className="no-print fixed bottom-0 left-0 right-0 z-50 flex flex-wrap gap-2 bg-white border-t border-slate-200 shadow px-4 py-2 items-center justify-center">
         <button onClick={() => setIsEditing(!isEditing)} className={`px-3 py-1.5 text-sm rounded-md font-medium ${isEditing ? "bg-blue-600 text-white" : "bg-slate-100 text-slate-700 hover:bg-slate-200"}`}>
           {isEditing ? "✓ 编辑中" : "️ 编辑"}
         </button>
@@ -298,6 +300,10 @@ export default function PrintReconciliationPage() {
           </>
         )}
         <button onClick={() => setHidePrices(!hidePrices)} className={`px-3 py-1.5 text-sm rounded-md font-medium ${hidePrices ? "bg-amber-600 text-white" : "bg-slate-200 text-slate-700"} hover:opacity-90 no-print`}>{hidePrices ? "显示价格" : "隐藏价格"}</button>
+        <ExportPdfButton
+          size={PDF_SIZE.continuous}
+          filename={`对帐单_${order.orderNo || ""}`}
+        />
         <button onClick={() => window.print()} className="px-3 py-1.5 bg-emerald-600 text-white text-sm rounded-md hover:bg-emerald-700 ml-2">打印</button>
         <button onClick={() => window.close()} className="px-3 py-1.5 bg-slate-400 text-white text-sm rounded-md hover:bg-slate-500">关闭</button>
       </div>

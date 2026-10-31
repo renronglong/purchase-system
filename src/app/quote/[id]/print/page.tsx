@@ -3,6 +3,8 @@
 import { useParams } from "next/navigation";
 import ExcelJS from "exceljs";
 import { quotationStore } from "@/lib/store";
+import ExportPdfButton from "@/components/export-pdf-button";
+import { PDF_SIZE } from "@/lib/export-pdf";
 
 export default function QuotationPrintPage() {
   const params = useParams<{ id: string }>();
@@ -183,6 +185,11 @@ export default function QuotationPrintPage() {
     <div className="p-8 bg-slate-100 min-h-screen">
       <div className="max-w-[980px] mx-auto flex justify-end gap-2 mb-4 no-print">
         <button onClick={handleExportExcel} className="px-4 py-2 bg-emerald-600 text-white text-sm rounded-md hover:bg-emerald-700">导出Excel</button>
+        <ExportPdfButton
+          size={PDF_SIZE.a4Portrait}
+          filename={`报价单_${q.quoteNo || ""}`}
+          className="px-4 py-2 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700 disabled:opacity-60"
+        />
         <button onClick={() => window.print()} className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700">打印</button>
       </div>
 

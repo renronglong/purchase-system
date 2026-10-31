@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { contractSeedData, type ContractData } from "@/lib/contract-seed-data";
+import ExportPdfButton from "@/components/export-pdf-button";
+import { PDF_SIZE } from "@/lib/export-pdf";
 
 // 数字转中文大写金额
 function numberToChinese(num: number): string {
@@ -86,9 +88,9 @@ export default function ContractPrintPage() {
     }
   }, [contract]);
 
-  // 页面加载后自动弹出打印
+  // 页面加载后自动弹出打印（仅桌面端，手机上不弹打印框，改用「导出PDF」按钮）
   useEffect(() => {
-    if (contract) {
+    if (contract && typeof window !== "undefined" && window.innerWidth >= 768) {
       const timer = setTimeout(() => {
         window.print();
       }, 300);
@@ -160,7 +162,12 @@ export default function ContractPrintPage() {
       `}} />
 
       <div className="no-print fixed top-4 right-4 z-50 flex gap-2">
-        <button onClick={handleExportPDF} className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 shadow-lg">导出PDF / 打印</button>
+        <ExportPdfButton
+          size={PDF_SIZE.a4Landscape}
+          filename={`${contract.customerName}_${contract.contractNo || ""}`}
+          className="px-4 py-2 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700 shadow-lg disabled:opacity-60"
+        />
+        <button onClick={handleExportPDF} className="px-4 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 shadow-lg">打印</button>
         <button onClick={() => window.close()} className="px-4 py-2 bg-slate-500 text-white text-sm rounded-md hover:bg-slate-600 shadow-lg">关闭</button>
       </div>
 
