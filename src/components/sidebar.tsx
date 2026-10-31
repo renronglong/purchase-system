@@ -185,7 +185,7 @@ export default function Sidebar({
         "fixed inset-y-0 left-0 z-50 w-60 transform transition-transform duration-300",
         open ? "translate-x-0" : "-translate-x-full",
         // 桌面端：静态占位，固定一屏高度，不随右侧内容滚动
-        "md:static md:translate-x-0 md:h-screen md:shrink-0"
+        "md:static md:translate-x-0 md:h-dvh md:shrink-0"
       )}
     >
       <div className="px-5 py-5 border-b border-slate-700 flex items-center justify-between">

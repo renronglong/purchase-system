@@ -21,7 +21,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 md:h-screen md:overflow-hidden">
+    <div className="min-h-screen bg-slate-50 md:h-dvh md:overflow-hidden">
       {/* 移动端顶部栏（仅 <md 显示） */}
       <div className="fixed top-0 inset-x-0 z-40 flex items-center justify-between px-4 py-3 bg-slate-900 md:hidden">
         <button
