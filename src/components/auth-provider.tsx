@@ -15,6 +15,7 @@ interface AuthContextType {
   loginWithToken: (tokenHash: string) => Promise<{ success: boolean; error?: string }>;
   loginWithAccessToken: (token: string) => Promise<{ success: boolean; error?: string }>;
   resetPassword: (email: string, code: string, newPassword: string) => Promise<{ success: boolean; error?: string }>;
+  changePassword: (oldPassword: string, newPassword: string) => Promise<{ success: boolean; error?: string }>;
   register: (email: string, password: string, displayName: string, company: string) => Promise<{ success: boolean; error?: string; emailConfirmRequired?: boolean }>;
   logout: () => void;
 }
@@ -89,6 +90,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return result.success ? { success: true } : { success: false, error: result.error };
   }, []);
 
+  const changePassword = useCallback(async (oldPassword: string, newPassword: string) => {
+    const result = await authStore.changePassword(oldPassword, newPassword);
+    return result.success ? { success: true } : { success: false, error: result.error };
+  }, []);
+
   const register = useCallback(async (email: string, password: string, displayName: string, company: string) => {
     const result = await authStore.register(email, password, displayName, company);
     if (result.success && result.user) {
@@ -141,7 +147,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ currentUser, loading, login, sendCode, loginWithCode, loginWithToken, loginWithAccessToken, resetPassword, register, logout }}>
+    <AuthContext.Provider value={{ currentUser, loading, login, sendCode, loginWithCode, loginWithToken, loginWithAccessToken, resetPassword, changePassword, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

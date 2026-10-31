@@ -190,6 +190,28 @@ export const authStore = {
     }
   },
 
+  /** 已登录状态下修改密码（需原密码校验） */
+  async changePassword(oldPassword: string, newPassword: string) {
+    if (!oldPassword) return { success: false, error: "请输入原密码" };
+    if (newPassword.length < 6) return { success: false, error: "新密码至少 6 位" };
+    if (oldPassword === newPassword) return { success: false, error: "新密码不能与原密码相同" };
+    const token = getAccessToken();
+    if (!token) return { success: false, error: "登录已过期，请重新登录" };
+    try {
+      const res = await fetch("/api/auth/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ oldPassword, newPassword }),
+      });
+      let data: any = {};
+      try { data = await res.json(); } catch { /* ignore */ }
+      if (!res.ok) return { success: false, error: data?.error || "密码修改失败" };
+      return { success: true };
+    } catch {
+      return { success: false, error: "网络错误，请重试" };
+    }
+  },
+
   async logout(): Promise<void> {
     setAccessToken(null);
     setCurrentUserId(null);
