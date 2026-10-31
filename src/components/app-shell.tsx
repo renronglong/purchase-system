@@ -21,7 +21,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 md:h-screen md:overflow-hidden">
       {/* 移动端顶部栏（仅 <md 显示） */}
       <div className="fixed top-0 inset-x-0 z-40 flex items-center justify-between px-4 py-3 bg-slate-900 md:hidden">
         <button
@@ -45,10 +45,10 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         />
       )}
 
-      <div className="flex min-h-screen">
+      <div className="flex min-h-screen md:h-full md:min-h-0">
         {/* 侧边栏：移动端抽屉（fixed 滑出）/ 桌面静态占位 */}
         <Sidebar open={mobileOpen} onClose={() => setMobileOpen(false)} />
-        <main className="flex-1 overflow-auto pt-14 md:pt-0">{children}</main>
+        <main className="min-w-0 flex-1 overflow-auto pt-14 md:h-full md:overflow-y-auto md:pt-0">{children}</main>
       </div>
     </div>
   );

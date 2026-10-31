@@ -184,8 +184,8 @@ export default function Sidebar({
         // 移动端：fixed 抽屉，默认左侧收起，open 时滑出
         "fixed inset-y-0 left-0 z-50 w-60 transform transition-transform duration-300",
         open ? "translate-x-0" : "-translate-x-full",
-        // 桌面端：静态占位，正常在左侧
-        "md:static md:translate-x-0 md:min-h-screen"
+        // 桌面端：静态占位，固定一屏高度，不随右侧内容滚动
+        "md:static md:translate-x-0 md:h-screen md:shrink-0"
       )}
     >
       <div className="px-5 py-5 border-b border-slate-700 flex items-center justify-between">
@@ -203,7 +203,7 @@ export default function Sidebar({
           </svg>
         </button>
       </div>
-      <nav className="flex-1 py-3">
+      <nav className="flex-1 overflow-y-auto py-3">
         {navItems.map((item) => {
           const isActive = item.href === "/"
             ? pathname === "/"
