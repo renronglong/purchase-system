@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   renderElementToPdf,
   shareFile,
@@ -33,6 +33,20 @@ export default function ExportPdfButton({
   const [doc, setDoc] = useState<RenderedDoc | null>(null);
   const [toast, setToast] = useState("");
   const [baseName, setBaseName] = useState("");
+  /** 当前设备是否支持系统分享文件（手机支持，多数桌面浏览器不支持） */
+  const [canShareFiles, setCanShareFiles] = useState(false);
+
+  useEffect(() => {
+    try {
+      const probe = new File([new Blob(["x"], { type: "application/pdf" })], "probe.pdf", {
+        type: "application/pdf",
+      });
+      const nav: any = navigator;
+      setCanShareFiles(!!(nav?.canShare && nav.canShare({ files: [probe] })));
+    } catch {
+      setCanShareFiles(false);
+    }
+  }, []);
 
   const showToast = (text: string) => {
     setToast(text);
@@ -62,12 +76,19 @@ export default function ExportPdfButton({
     }
   };
 
-  /** 分享：优先 PDF */
+  /** 分享：优先 PDF；不支持或失败时自动改为下载 */
   const handleShare = async () => {
     if (!doc) return;
     const result = await shareFile(doc.pdfBlob, `${baseName}.pdf`, baseName);
-    if (result === "shared") close();
-    else if (result === "unsupported") showToast("当前浏览器不支持系统分享，请用下载");
+    if (result === "shared") {
+      close();
+      return;
+    }
+    if (result === "canceled") return;
+    // 系统分享不可用：直接下载，避免用户点了没反应
+    downloadBlob(doc.pdfBlob, `${baseName}.pdf`);
+    showToast("当前设备不支持系统分享，已改为下载 PDF");
+    close();
   };
 
   /** 复制图片：直接粘到微信 */
@@ -126,6 +147,7 @@ export default function ExportPdfButton({
             </div>
 
             <div className="space-y-2">
+              {canShareFiles && (
               <button
                 onClick={handleShare}
                 className="flex w-full items-center gap-3 rounded-lg bg-blue-600 px-4 py-3 text-sm font-medium text-white hover:bg-blue-700"
@@ -135,10 +157,15 @@ export default function ExportPdfButton({
                 </svg>
                 分享（微信 / QQ / 邮件）
               </button>
+              )}
 
               <button
                 onClick={handleCopyImage}
-                className="flex w-full items-center gap-3 rounded-lg border border-slate-300 px-4 py-3 text-sm text-slate-700 hover:bg-slate-50"
+                className={
+                  canShareFiles
+                    ? "flex w-full items-center gap-3 rounded-lg border border-slate-300 px-4 py-3 text-sm text-slate-700 hover:bg-slate-50"
+                    : "flex w-full items-center gap-3 rounded-lg bg-blue-600 px-4 py-3 text-sm font-medium text-white hover:bg-blue-700"
+                }
               >
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75" />
