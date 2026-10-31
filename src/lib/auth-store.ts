@@ -116,6 +116,23 @@ export const authStore = {
     }
   },
 
+  /** 用邮箱验证码重置密码（忘记密码场景，改完用新密码走普通登录） */
+  async resetPassword(email: string, code: string, newPassword: string) {
+    if (!email.trim()) return { success: false, error: "请输入邮箱" };
+    if (!/^\d{6,10}$/.test(code.trim())) return { success: false, error: "请输入邮件中的数字验证码" };
+    if (newPassword.length < 6) return { success: false, error: "新密码至少 6 位" };
+    try {
+      await post("/api/auth/reset-password", {
+        email: email.trim(),
+        code: code.trim(),
+        newPassword,
+      });
+      return { success: true };
+    } catch (e: any) {
+      return { success: false, error: e?.message || "密码修改失败" };
+    }
+  },
+
   /** 用邮件链接 hash 里带回的 access_token 直接建立会话（Supabase implicit flow 兜底） */
   async loginWithAccessToken(token: string) {
     if (!token) return { success: false, error: "登录链接无效" };

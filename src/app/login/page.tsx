@@ -5,17 +5,19 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/auth-provider";
 
 export default function LoginPage() {
-  const [mode, setMode] = useState<"password" | "code">("password");
+  const [mode, setMode] = useState<"password" | "code" | "reset">("password");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [tip, setTip] = useState("");
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const { login, sendCode, loginWithCode, loginWithToken, loginWithAccessToken } = useAuth();
+  const { login, sendCode, loginWithCode, loginWithToken, loginWithAccessToken, resetPassword } = useAuth();
   const router = useRouter();
 
   // 兜底通道 1：邮件链接回来带 #access_token（Supabase implicit flow）
@@ -101,6 +103,24 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
+      if (mode === "reset") {
+        if (!code.trim()) { setError("请输入验证码"); setLoading(false); return; }
+        if (newPassword.length < 6) { setError("新密码至少 6 位"); setLoading(false); return; }
+        if (newPassword !== confirmPassword) { setError("两次输入的新密码不一致"); setLoading(false); return; }
+        const r = await resetPassword(email, code, newPassword);
+        if (r.success) {
+          setMode("password");
+          setPassword("");
+          setCode("");
+          setNewPassword("");
+          setConfirmPassword("");
+          setTip("密码已重置，请用新密码登录");
+        } else {
+          setError(r.error || "密码修改失败");
+        }
+        setLoading(false);
+        return;
+      }
       const result =
         mode === "password"
           ? await login(email, password)
@@ -117,7 +137,7 @@ export default function LoginPage() {
     }
   };
 
-  const switchMode = (m: "password" | "code") => {
+  const switchMode = (m: "password" | "code" | "reset") => {
     setMode(m);
     setError("");
     setTip("");
@@ -132,11 +152,11 @@ export default function LoginPage() {
 
         <div className="bg-white rounded-xl shadow-2xl p-8">
           <h2 className="text-xl font-semibold text-slate-800 mb-5 text-center">
-            登录账号
+            {mode === "reset" ? "重置密码" : "登录账号"}
           </h2>
 
-          {/* 登录方式切换 */}
-          <div className="flex p-1 bg-slate-100 rounded-lg mb-5">
+          {/* 登录方式切换（重置密码时不显示） */}
+          <div className={"flex p-1 bg-slate-100 rounded-lg mb-5 " + (mode === "reset" ? "hidden" : "")}>
             <button
               type="button"
               onClick={() => switchMode("password")}
@@ -174,7 +194,7 @@ export default function LoginPage() {
               />
             </div>
 
-            {mode === "password" ? (
+            {mode === "password" && (
               <div>
                 <label className="block text-sm font-medium text-slate-600 mb-1">
                   密码
@@ -187,8 +207,19 @@ export default function LoginPage() {
                   placeholder="请输入密码"
                   required
                 />
+                <div className="mt-1.5 text-right">
+                  <button
+                    type="button"
+                    onClick={() => { switchMode("reset"); setPassword(""); }}
+                    className="text-xs text-blue-600 hover:text-blue-800 hover:underline"
+                  >
+                    忘记密码？
+                  </button>
+                </div>
               </div>
-            ) : (
+            )}
+
+            {(mode === "code" || mode === "reset") && (
               <div>
                 <label className="block text-sm font-medium text-slate-600 mb-1">
                   验证码
@@ -213,10 +244,43 @@ export default function LoginPage() {
                     {sending ? "发送中..." : countdown > 0 ? `${countdown}s 后重发` : "发送验证码"}
                   </button>
                 </div>
-                <p className="mt-1.5 text-xs text-slate-400 leading-relaxed">
-                  忘记密码也能用这个方式直接登录，无需重置密码
-                </p>
+                {mode === "code" && (
+                  <p className="mt-1.5 text-xs text-slate-400 leading-relaxed">
+                    忘记密码也能用这个方式直接登录，无需重置密码
+                  </p>
+                )}
               </div>
+            )}
+
+            {mode === "reset" && (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-slate-600 mb-1">
+                    新密码
+                  </label>
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    placeholder="至少 6 位"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-600 mb-1">
+                    确认新密码
+                  </label>
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    placeholder="再输入一次新密码"
+                    required
+                  />
+                </div>
+              </>
             )}
 
             {tip && (
@@ -236,17 +300,26 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full py-2.5 bg-blue-600 text-white rounded-lg font-medium text-sm hover:bg-blue-700 transition-colors disabled:opacity-50"
             >
-              {loading ? "处理中..." : mode === "password" ? "登录" : "验证码登录"}
+              {loading ? "处理中..." : mode === "password" ? "登录" : mode === "code" ? "验证码登录" : "确认修改密码"}
             </button>
           </form>
 
           <div className="mt-6 text-center">
-            <button
-              onClick={() => router.push("/register")}
-              className="text-sm text-blue-600 hover:text-blue-800"
-            >
-              没有账号？点击注册
-            </button>
+            {mode === "reset" ? (
+              <button
+                onClick={() => { switchMode("password"); setCode(""); setNewPassword(""); setConfirmPassword(""); }}
+                className="text-sm text-blue-600 hover:text-blue-800"
+              >
+                想起密码了，返回登录
+              </button>
+            ) : (
+              <button
+                onClick={() => router.push("/register")}
+                className="text-sm text-blue-600 hover:text-blue-800"
+              >
+                没有账号？点击注册
+              </button>
+            )}
           </div>
         </div>
       </div>

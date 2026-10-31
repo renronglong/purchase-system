@@ -14,6 +14,7 @@ interface AuthContextType {
   loginWithCode: (email: string, code: string) => Promise<{ success: boolean; error?: string }>;
   loginWithToken: (tokenHash: string) => Promise<{ success: boolean; error?: string }>;
   loginWithAccessToken: (token: string) => Promise<{ success: boolean; error?: string }>;
+  resetPassword: (email: string, code: string, newPassword: string) => Promise<{ success: boolean; error?: string }>;
   register: (email: string, password: string, displayName: string, company: string) => Promise<{ success: boolean; error?: string; emailConfirmRequired?: boolean }>;
   logout: () => void;
 }
@@ -83,6 +84,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const resetPassword = useCallback(async (email: string, code: string, newPassword: string) => {
+    const result = await authStore.resetPassword(email, code, newPassword);
+    return result.success ? { success: true } : { success: false, error: result.error };
+  }, []);
+
   const register = useCallback(async (email: string, password: string, displayName: string, company: string) => {
     const result = await authStore.register(email, password, displayName, company);
     if (result.success && result.user) {
@@ -135,7 +141,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ currentUser, loading, login, sendCode, loginWithCode, loginWithToken, loginWithAccessToken, register, logout }}>
+    <AuthContext.Provider value={{ currentUser, loading, login, sendCode, loginWithCode, loginWithToken, loginWithAccessToken, resetPassword, register, logout }}>
       {children}
     </AuthContext.Provider>
   );
