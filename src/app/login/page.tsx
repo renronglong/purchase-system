@@ -168,16 +168,16 @@ export default function LoginPage() {
           </h2>
 
           {mode !== "reset" && (
-            <div className="mb-5 flex items-center justify-between gap-3 rounded-lg border border-dashed border-blue-200 bg-blue-50/70 px-3 py-2.5">
-              <span className="text-xs text-slate-500">演示账号，可直接体验完整功能</span>
-              <button
-                type="button"
-                onClick={fillDemo}
-                className="shrink-0 rounded-md bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700"
-              >
-                一键填入
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={fillDemo}
+              className="mb-5 flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-sky-500 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-500/30 transition-all hover:from-blue-700 hover:to-sky-600 hover:shadow-blue-500/40 active:scale-[0.99]"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M13 2 4.5 13.5H11l-1 8.5 8.5-11.5H12l1-8.5Z" />
+              </svg>
+              一键填入演示账号，体验完整功能
+            </button>
           )}
 
           {/* 登录方式切换（重置密码时不显示） */}
