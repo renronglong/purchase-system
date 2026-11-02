@@ -109,6 +109,8 @@ export default function ProductsPage() {
   const [componentDialogOpen, setComponentDialogOpen] = useState(false);
   const [componentForm, setComponentForm] = useState<Component | null>(null);
   const [isAddingComponent, setIsAddingComponent] = useState(false);
+  // 编辑组件时记住原始编号：用户改了「组件编号」后，仍需按旧编号找到原记录
+  const [componentOriginalId, setComponentOriginalId] = useState<string | null>(null);
   const [bomItems, setBomItems] = useState<BomItem[]>([]);
   const [hideBomPrices, setHideBomPrices] = useState(false);
 
@@ -349,6 +351,7 @@ export default function ProductsPage() {
     const id = `CMP_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
     setComponentForm({ id, name: "", items: [], unitPrice: 0 });
     setIsAddingComponent(true);
+    setComponentOriginalId(null);
     setBomItems([emptyBomItem()]);
     setComponentDialogOpen(true);
   };
@@ -356,6 +359,7 @@ export default function ProductsPage() {
   const openEditComponent = (c: Component) => {
     setComponentForm({ ...c, items: c.items || [] });
     setIsAddingComponent(false);
+    setComponentOriginalId(c.id);
     setBomItems((c.items && c.items.length > 0) ? c.items.map(i => ({ ...i })) : [emptyBomItem()]);
     setComponentDialogOpen(true);
   };
@@ -363,10 +367,16 @@ export default function ProductsPage() {
   const handleSaveComponent = () => {
     if (!componentForm) return;
     if (!componentForm.name || !componentForm.id) { alert("请填写组件编号和名称"); return; }
+    // 组件编号就是记录 id，改了编号必须按原编号定位记录，否则会「记录未找到」
+    const targetId = componentOriginalId ?? componentForm.id;
+    const newId = componentForm.id.trim();
+    const dup = componentStore.getAll().some(c => c.id === newId && (isAddingComponent || c.id !== targetId));
+    if (dup) { alert(`组件编号「${newId}」已存在，请换一个编号`); return; }
     const valid = bomItems.filter(i => i.materialCode || i.productName);
     const total = valid.reduce((s, i) => s + (i.amount || 0), 0);
     const payload: Component = {
       ...componentForm,
+      id: newId,
       items: valid,
       unitPrice: Math.round(total * 100) / 100,
     };
@@ -375,7 +385,7 @@ export default function ProductsPage() {
       if (isAddingComponent) {
         saved = componentStore.add(payload);
       } else {
-        saved = componentStore.update(componentForm.id, payload);
+        saved = componentStore.update(targetId, payload);
       }
     } catch (e) {
       alert("保存失败：" + (e instanceof Error ? e.message : String(e)));
@@ -385,6 +395,7 @@ export default function ProductsPage() {
     setComponentDialogOpen(false);
     setComponentForm(null);
     setIsAddingComponent(false);
+    setComponentOriginalId(null);
     setBomItems([]);
     loadProducts();
   };
