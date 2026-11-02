@@ -4,6 +4,10 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/auth-provider";
 
+// 演示账号：用于参赛/演示时快速登录
+const DEMO_EMAIL = "longge2623@agent.qq.com";
+const DEMO_PASSWORD = "123456";
+
 export default function LoginPage() {
   const [mode, setMode] = useState<"password" | "code" | "reset">("password");
   const [email, setEmail] = useState("");
@@ -16,6 +20,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
   const [countdown, setCountdown] = useState(0);
+  const [copied, setCopied] = useState<"email" | "password" | "">("");
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const { login, sendCode, loginWithCode, loginWithToken, loginWithAccessToken, resetPassword } = useAuth();
   const router = useRouter();
@@ -137,6 +142,36 @@ export default function LoginPage() {
     }
   };
 
+  // 复制文本（https 下用 Clipboard API，非安全上下文用 textarea 兜底）
+  const copyText = async (text: string, field: "email" | "password") => {
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+      }
+      setCopied(field);
+      setTimeout(() => setCopied(""), 1600);
+    } catch {
+      setError("复制失败，请手动选中复制");
+    }
+  };
+
+  const fillDemo = () => {
+    setMode("password");
+    setEmail(DEMO_EMAIL);
+    setPassword(DEMO_PASSWORD);
+    setError("");
+    setTip("已填入演示账号，点击登录即可");
+  };
+
   const switchMode = (m: "password" | "code" | "reset") => {
     setMode(m);
     setError("");
@@ -151,9 +186,49 @@ export default function LoginPage() {
         </div>
 
         <div className="bg-white rounded-xl shadow-2xl p-8">
-          <h2 className="text-xl font-semibold text-slate-800 mb-5 text-center">
+          <h2 className="text-xl font-semibold text-slate-800 mb-4 text-center">
             {mode === "reset" ? "重置密码" : "登录账号"}
           </h2>
+
+          {mode !== "reset" && (
+            <div className="mb-5 rounded-lg border border-dashed border-blue-200 bg-blue-50/70 px-3 py-2.5">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-xs font-semibold text-blue-700">演示账号</span>
+                <button
+                  type="button"
+                  onClick={fillDemo}
+                  className="text-xs text-blue-600 hover:text-blue-800 hover:underline"
+                >
+                  一键填入
+                </button>
+              </div>
+
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="w-8 shrink-0 text-xs text-slate-500">账号</span>
+                  <span className="flex-1 truncate text-xs text-slate-700 font-mono select-all">{DEMO_EMAIL}</span>
+                  <button
+                    type="button"
+                    onClick={() => copyText(DEMO_EMAIL, "email")}
+                    className="shrink-0 rounded border border-blue-200 bg-white px-2 py-0.5 text-[11px] text-blue-600 hover:bg-blue-50"
+                  >
+                    {copied === "email" ? "已复制" : "复制"}
+                  </button>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-8 shrink-0 text-xs text-slate-500">密码</span>
+                  <span className="flex-1 truncate text-xs text-slate-700 font-mono select-all">{DEMO_PASSWORD}</span>
+                  <button
+                    type="button"
+                    onClick={() => copyText(DEMO_PASSWORD, "password")}
+                    className="shrink-0 rounded border border-blue-200 bg-white px-2 py-0.5 text-[11px] text-blue-600 hover:bg-blue-50"
+                  >
+                    {copied === "password" ? "已复制" : "复制"}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* 登录方式切换（重置密码时不显示） */}
           <div className={"flex p-1 bg-slate-100 rounded-lg mb-5 " + (mode === "reset" ? "hidden" : "")}>
