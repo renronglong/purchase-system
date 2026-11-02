@@ -20,7 +20,6 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [sending, setSending] = useState(false);
   const [countdown, setCountdown] = useState(0);
-  const [copied, setCopied] = useState<"email" | "password" | "">("");
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const { login, sendCode, loginWithCode, loginWithToken, loginWithAccessToken, resetPassword } = useAuth();
   const router = useRouter();
@@ -142,28 +141,6 @@ export default function LoginPage() {
     }
   };
 
-  // 复制文本（https 下用 Clipboard API，非安全上下文用 textarea 兜底）
-  const copyText = async (text: string, field: "email" | "password") => {
-    try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(text);
-      } else {
-        const ta = document.createElement("textarea");
-        ta.value = text;
-        ta.style.position = "fixed";
-        ta.style.opacity = "0";
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand("copy");
-        document.body.removeChild(ta);
-      }
-      setCopied(field);
-      setTimeout(() => setCopied(""), 1600);
-    } catch {
-      setError("复制失败，请手动选中复制");
-    }
-  };
-
   const fillDemo = () => {
     setMode("password");
     setEmail(DEMO_EMAIL);
@@ -191,42 +168,15 @@ export default function LoginPage() {
           </h2>
 
           {mode !== "reset" && (
-            <div className="mb-5 rounded-lg border border-dashed border-blue-200 bg-blue-50/70 px-3 py-2.5">
-              <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs font-semibold text-blue-700">演示账号</span>
-                <button
-                  type="button"
-                  onClick={fillDemo}
-                  className="text-xs text-blue-600 hover:text-blue-800 hover:underline"
-                >
-                  一键填入
-                </button>
-              </div>
-
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <span className="w-8 shrink-0 text-xs text-slate-500">账号</span>
-                  <span className="flex-1 truncate text-xs text-slate-700 font-mono select-all">{DEMO_EMAIL}</span>
-                  <button
-                    type="button"
-                    onClick={() => copyText(DEMO_EMAIL, "email")}
-                    className="shrink-0 rounded border border-blue-200 bg-white px-2 py-0.5 text-[11px] text-blue-600 hover:bg-blue-50"
-                  >
-                    {copied === "email" ? "已复制" : "复制"}
-                  </button>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="w-8 shrink-0 text-xs text-slate-500">密码</span>
-                  <span className="flex-1 truncate text-xs text-slate-700 font-mono select-all">{DEMO_PASSWORD}</span>
-                  <button
-                    type="button"
-                    onClick={() => copyText(DEMO_PASSWORD, "password")}
-                    className="shrink-0 rounded border border-blue-200 bg-white px-2 py-0.5 text-[11px] text-blue-600 hover:bg-blue-50"
-                  >
-                    {copied === "password" ? "已复制" : "复制"}
-                  </button>
-                </div>
-              </div>
+            <div className="mb-5 flex items-center justify-between gap-3 rounded-lg border border-dashed border-blue-200 bg-blue-50/70 px-3 py-2.5">
+              <span className="text-xs text-slate-500">演示账号，可直接体验完整功能</span>
+              <button
+                type="button"
+                onClick={fillDemo}
+                className="shrink-0 rounded-md bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700"
+              >
+                一键填入
+              </button>
             </div>
           )}
 
