@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { productStore, supplierStore, deliveryProductStore, componentStore, purchaseOrderStore, quotationStore, salesOrderStore, deliveryCustomerStore, type Product, type DeliveryProduct, type Component, type ComponentItem } from "@/lib/store";
 import AddDialog from "@/components/add-dialog";
 import ImportDialog from "@/components/import-dialog";
+import { ComboInput } from "@/components/combo-input";
 
 // 物料明细行：从物料库挑的多条物料组成一个组件
 type BomItem = ComponentItem;
@@ -511,6 +512,8 @@ export default function ProductsPage() {
   ].filter(Boolean);
   const bomSurfaceOptions = Array.from(new Set(allSurfaceValues));
   const bomUnitOptions = Array.from(new Set(allUnitValues));
+  // 所属客户候选（仍允许手输新客户名）
+  const customerNameOptions = deliveryCustomerStore.getAll().map((c) => c.name).filter(Boolean);
   const bomTabContent = (
     <div className="overflow-x-auto">
       <table className="w-full text-xs min-w-[1000px]">
@@ -855,11 +858,19 @@ export default function ProductsPage() {
               </div>
               <div>
                 <label className="block text-xs text-slate-500 mb-1">表面处理</label>
-                <input type="text" list="bom-surface-list" value={deliveryForm.surface || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, surface: e.target.value }))} placeholder="- 选择或输入 -" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+                <ComboInput
+                  value={deliveryForm.surface || ""}
+                  onChange={(v) => setDeliveryForm(prev => ({ ...prev!, surface: v }))}
+                  options={bomSurfaceOptions}
+                />
               </div>
               <div>
                 <label className="block text-xs text-slate-500 mb-1">单位</label>
-                <input type="text" list="bom-unit-list" value={deliveryForm.unit || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, unit: e.target.value }))} placeholder="- 选择或输入 -" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+                <ComboInput
+                  value={deliveryForm.unit || ""}
+                  onChange={(v) => setDeliveryForm(prev => ({ ...prev!, unit: v }))}
+                  options={bomUnitOptions}
+                />
               </div>
               <div>
                 <label className="block text-xs text-slate-500 mb-1">米重(KG)</label>
@@ -871,10 +882,11 @@ export default function ProductsPage() {
               </div>
               <div>
                 <label className="block text-xs text-slate-500 mb-1">所属客户</label>
-                <select value={deliveryForm.customer || ""} onChange={(e) => setDeliveryForm(prev => ({ ...prev!, customer: e.target.value }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white">
-                  <option value="">- 请选择 -</option>
-                  {deliveryCustomerStore.getAll().map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
-                </select>
+                <ComboInput
+                  value={deliveryForm.customer || ""}
+                  onChange={(v) => setDeliveryForm(prev => ({ ...prev!, customer: v }))}
+                  options={customerNameOptions}
+                />
               </div>
             </div>
             <div className="px-6 py-4 border-t border-slate-100 flex justify-end gap-2">
