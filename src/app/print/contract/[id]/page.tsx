@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useParams } from "next/navigation";
 import { contractSeedData, type ContractData } from "@/lib/contract-seed-data";
+import { deliveryCompanyStore } from "@/lib/store";
 import ExportPdfButton from "@/components/export-pdf-button";
 import { PDF_SIZE } from "@/lib/export-pdf";
 
@@ -61,6 +62,8 @@ export default function ContractPrintPage() {
   const params = useParams();
   const contractId = params.id as string;
   const [contract, setContract] = useState<ContractData | null>(null);
+  // 乙方印章：取「公司信息管理」里对应公司的上传印章，没上传就不盖
+  const [sealUrl, setSealUrl] = useState<string>("");
 
   const loadContract = useCallback(() => {
     // 优先从 localStorage 读取编辑后的版本
@@ -80,6 +83,17 @@ export default function ContractPrintPage() {
   useEffect(() => {
     loadContract();
   }, [loadContract]);
+
+  useEffect(() => {
+    if (!contract) { setSealUrl(""); return; }
+    const withSeal = deliveryCompanyStore.getAll().filter((c) => !!c.seal);
+    const supplierName = (contract.supplierName || "").trim();
+    // 优先按供方名称精确匹配；只有一家配了印章时直接用它
+    const hit =
+      withSeal.find((c) => (c.name || "").trim() === supplierName) ||
+      (withSeal.length === 1 ? withSeal[0] : undefined);
+    setSealUrl(hit?.seal || "");
+  }, [contract]);
 
   // 设置文档标题为 客户名_合同编号（导出PDF时作为默认文件名）
   useEffect(() => {
@@ -329,17 +343,20 @@ export default function ContractPrintPage() {
               <div>纳税人识别号：{contract.supplierTaxNo}</div>
               <div style={{ marginTop: "2mm" }}>日期：{contract.signDate.slice(0,4)}年{contract.signDate.slice(5,7)}月{contract.signDate.slice(8,10)}日</div>
             </div>
-            {/* 乙方印章 */}
-            <img src="/seal-bililai.png" alt="" style={{
-              position: "absolute",
-              right: "12mm",
-              bottom: "0mm",
-              width: "38mm",
-              height: "38mm",
-              transform: "rotate(-8deg)",
-              opacity: 0.9,
-              pointerEvents: "none",
-            }} />
+            {/* 乙方印章：仅当该公司在「公司信息管理」里上传了印章时显示 */}
+            {sealUrl ? (
+              <img src={sealUrl} alt="" style={{
+                position: "absolute",
+                right: "12mm",
+                bottom: "0mm",
+                width: "38mm",
+                height: "38mm",
+                objectFit: "contain",
+                transform: "rotate(-8deg)",
+                opacity: 0.9,
+                pointerEvents: "none",
+              }} />
+            ) : null}
           </div>
         </div>
       </div>

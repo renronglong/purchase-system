@@ -1248,6 +1248,8 @@ export interface DeliveryCompany {
   address: string;
   contact: string;
   phone: string;
+  /** 公司印章（图片 dataURL，可选）。购销合同打印时盖在乙方位置。 */
+  seal?: string;
 }
 
 // 发货公司
