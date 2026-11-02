@@ -148,6 +148,8 @@ export interface Quotation {
   customerAddress: string;
   // 明细
   items: QuotationItem[];
+  componentNo?: string;   // 关联组件编号（可选）
+  componentName?: string; // 关联组件名称（可选）
   grandTotal: number;     // 总计（型号/模具费合计等展示用途）
   // 条款（备注区）
   terms: string[];        // 按行：1开模送样 2含运费 3付款方式 4有效期 5开模时间
@@ -225,6 +227,8 @@ export interface SalesOrder {
   orderStatus: string;
   maker?: string;
   items: SalesOrderItem[];
+  componentNo?: string;   // 关联组件编号（可选）
+  componentName?: string; // 关联组件名称（可选）
   deliveredItems?: DeliveredItem[];  // 已送货明细
   createdAt?: string;
   updatedAt?: string;

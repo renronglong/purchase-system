@@ -5,8 +5,9 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
   quotationStore, productStore, deliveryProductStore, deliveryCustomerStore, deliveryCompanyStore, previewQuotationNo,
-  type Quotation, type QuotationItem,
+  type Quotation, type QuotationItem, type Component,
 } from "@/lib/store";
+import { ComponentPicker } from "@/components/component-picker";
 import { surfaceTreatments } from "@/lib/seed-data";
 
 const materialOptions = ["普通铝板", "5052", "6063", "1060", "3003"];
@@ -67,6 +68,9 @@ export default function QuotationForm({ quotation }: { quotation?: Quotation }) 
   const [customerAddress, setCustomerAddress] = useState(editing ? quotation.customerAddress : "");
   const [items, setItems] = useState<QuotationItem[]>(editing ? quotation.items.map(i => ({ ...i })) : [createEmptyItem()]);
   const [terms, setTerms] = useState<string[]>(editing && quotation.terms.length > 0 ? [...quotation.terms] : [...defaultTerms]);
+  // 关联组件（可选）：选组件后把它的物料清单带进明细
+  const [linkedComponentNo, setLinkedComponentNo] = useState(editing ? (quotation.componentNo || "") : "");
+  const [linkedComponentName, setLinkedComponentName] = useState(editing ? (quotation.componentName || "") : "");
 
   // 物料/产品选择器状态
   const [pickOpen, setPickOpen] = useState(false);      // 选择面板是否打开
@@ -199,6 +203,28 @@ export default function QuotationForm({ quotation }: { quotation?: Quotation }) 
     setPickIndex(-1);
   };
 
+  // 从组件带入明细：组件物料清单 → 报价明细行
+  const applyComponent = (c: Component) => {
+    const rows: QuotationItem[] = (c.items || []).map(i => ({
+      id: generateItemId(),
+      productCode: i.materialCode || "",
+      spec: i.spec || "",
+      productName: i.productName || "",
+      unit: i.unit || "",
+      material: "",
+      surfaceTreatment: i.surface || "",
+      unitPrice: i.unitPrice || 0,
+      taxPrice: 0,
+      minOrderQty: 0,
+      moldFee: 0,
+      remark: i.remark || "",
+    }));
+    if (rows.length === 0) { alert(`组件「${c.id}」没有物料明细，请先在产品库补全`); return; }
+    setItems(prev => [...prev.filter(x => x.productName || x.productCode), ...rows]);
+    setLinkedComponentNo(c.id);
+    setLinkedComponentName(c.name || "");
+  };
+
   const addRow = () => setItems(prev => [...prev, createEmptyItem()]);
   const removeRow = (index: number) => setItems(prev => prev.filter((_, i) => i !== index));
 
@@ -216,12 +242,14 @@ export default function QuotationForm({ quotation }: { quotation?: Quotation }) 
         quoteDate, supplierCompany, supplierContact, supplierPhone, supplierAddress,
         customerName, customerContact, customerPhone, customerAddress,
         items: validItems, grandTotal, terms,
+        componentNo: linkedComponentNo, componentName: linkedComponentName,
       });
     } else {
       quotationStore.add({
         quoteDate, supplierCompany, supplierContact, supplierPhone, supplierAddress,
         customerName, customerContact, customerPhone, customerAddress,
         items: validItems, grandTotal, terms,
+        componentNo: linkedComponentNo, componentName: linkedComponentName,
       });
     }
     router.push("/quote");
@@ -285,8 +313,23 @@ export default function QuotationForm({ quotation }: { quotation?: Quotation }) 
 
       {/* 报价明细 */}
       <div className="bg-white rounded-lg border border-slate-200 p-5 mb-4">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-slate-700">报价明细</h2>
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <h2 className="text-sm font-semibold text-slate-700">报价明细</h2>
+            <ComponentPicker onPick={applyComponent} />
+            {linkedComponentNo ? (
+              <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-1 text-xs text-blue-700">
+                已关联组件：{linkedComponentNo}{linkedComponentName ? ` ${linkedComponentName}` : ""}
+                <button
+                  type="button"
+                  onClick={() => { setLinkedComponentNo(""); setLinkedComponentName(""); }}
+                  className="ml-1 text-blue-400 hover:text-blue-600"
+                >
+                  ✕
+                </button>
+              </span>
+            ) : null}
+          </div>
           <button onClick={addRow} className="px-3 py-1 text-sm text-blue-600 border border-blue-200 rounded-md hover:bg-blue-50">+ 添加行</button>
         </div>
         <div className="overflow-x-auto">

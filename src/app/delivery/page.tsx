@@ -5,8 +5,9 @@ import Link from "next/link";
 import {
   deliveryNoteStore, deliveryCustomerStore, deliveryProductStore, deliveryCompanyStore, previewDeliveryOrderNo,
   salesOrderStore,
-  type DeliveryNote, type DeliveryItem, type SalesOrder,
+  type DeliveryNote, type DeliveryItem, type SalesOrder, type Component,
 } from "@/lib/store";
+import { ComponentPicker } from "@/components/component-picker";
 import { exportInvoiceExcel, exportProjectTemplate } from "@/lib/export-invoice-excel";
 
 function genItemId(): string { return Math.random().toString(36).slice(2, 10); }
@@ -35,6 +36,9 @@ export default function DeliveryPage() {
   const [items, setItems] = useState<DeliveryItem[]>([emptyItem()]);
   const [reconciled, setReconciled] = useState("");
   const [maker, setMaker] = useState("易金兰");
+  // 关联组件（可选）：选组件后把它的物料清单带进明细
+  const [linkedComponentNo, setLinkedComponentNo] = useState("");
+  const [linkedComponentName, setLinkedComponentName] = useState("");
 
   const customers = deliveryCustomerStore.getAll();
   const companies = deliveryCompanyStore.getAll();
@@ -86,6 +90,7 @@ export default function DeliveryPage() {
     setCustomer(""); setOrderNo(""); setSelectedOrder(null);
     setDate(new Date().toISOString().slice(0, 10));
     setItems([emptyItem()]); setReconciled(""); setMaker("");
+    setLinkedComponentNo(""); setLinkedComponentName("");
     setShowForm(true);
   };
 
@@ -102,7 +107,29 @@ export default function DeliveryPage() {
     setItems(order.items.length > 0 ? order.items : [emptyItem()]);
     setReconciled(order.reconciled);
     setMaker(order.maker || "");
+    setLinkedComponentNo(order.componentNo || "");
+    setLinkedComponentName(order.componentName || "");
     setShowForm(true);
+  };
+
+  // 从组件带入明细：把组件的物料清单追加到当前明细（保留已手填的非空行）
+  const applyComponent = (c: Component) => {
+    const rows: DeliveryItem[] = (c.items || []).map(i => ({
+      id: genItemId(),
+      materialCode: i.materialCode || "",
+      productName: i.productName || "",
+      spec: i.spec || "",
+      surface: i.surface || "",
+      unit: i.unit || "",
+      qty: i.qty || 0,
+      unitPrice: i.unitPrice || 0,
+      amount: Math.round((i.qty || 0) * (i.unitPrice || 0) * 100) / 100,
+      remark: i.remark || "",
+    }));
+    if (rows.length === 0) { alert(`组件「${c.id}」没有物料明细，请先在产品库补全`); return; }
+    setItems(prev => [...prev.filter(x => x.materialCode || x.productName), ...rows]);
+    setLinkedComponentNo(c.id);
+    setLinkedComponentName(c.name || "");
   };
 
   // 选择订单后自动填充产品明细
@@ -118,6 +145,9 @@ export default function DeliveryPage() {
       return;
     }
     setSelectedOrder(order);
+    // 订单本身关联了组件时，一并带过来
+    setLinkedComponentNo(order.componentNo || "");
+    setLinkedComponentName(order.componentName || "");
     // 自动填充客户名称
     if (order.customer && !customer) {
       setCustomer(order.customer);
@@ -201,7 +231,7 @@ export default function DeliveryPage() {
         deliveryProductStore.add({ code: "", name: item.productName, spec: item.spec || "", surface: item.surface || "", unit: item.unit || "", weightPerMeter: 0, unitPrice: item.unitPrice || 0, customer: customer });
       }
     }
-    const data = { company, customer, orderNo, date, items: valid, reconciled, maker: maker.trim() };
+    const data = { company, customer, orderNo, date, items: valid, reconciled, maker: maker.trim(), componentNo: linkedComponentNo, componentName: linkedComponentName };
     let savedId = editId;
     if (editId) { deliveryNoteStore.update(editId, data); } else {
       const newOrder = deliveryNoteStore.add(data);
@@ -336,6 +366,22 @@ export default function DeliveryPage() {
           <datalist id="unit-list">
             {["pcs", "kg", "米", "套", "件"].map(u => <option key={u} value={u} />)}
           </datalist>
+
+          <div className="mb-3 flex flex-wrap items-center gap-3">
+            <ComponentPicker onPick={applyComponent} />
+            {linkedComponentNo ? (
+              <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-1 text-xs text-blue-700">
+                已关联组件：{linkedComponentNo}{linkedComponentName ? ` ${linkedComponentName}` : ""}
+                <button
+                  type="button"
+                  onClick={() => { setLinkedComponentNo(""); setLinkedComponentName(""); }}
+                  className="ml-1 text-blue-400 hover:text-blue-600"
+                >
+                  ✕
+                </button>
+              </span>
+            ) : null}
+          </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-xs min-w-[1000px]">

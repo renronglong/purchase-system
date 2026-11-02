@@ -558,6 +558,8 @@ export interface DeliveryNote {
   customer: string;
   orderNo: string;
   items: DeliveryItem[];
+  componentNo?: string;
+  componentName?: string;
   reconciled: string;
   company: string;
   maker?: string;
