@@ -11,6 +11,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 export function ComboInput({
   value,
   onChange,
+  onSelect,
   options,
   placeholder = "- 选择或输入 -",
   className = "",
@@ -18,6 +19,8 @@ export function ComboInput({
 }: {
   value: string;
   onChange: (v: string) => void;
+  /** 仅当用户从候选列表里点选时触发（手动打字不触发），适合做联动填充 */
+  onSelect?: (v: string) => void;
   options: string[];
   placeholder?: string;
   className?: string;
@@ -52,6 +55,7 @@ export function ComboInput({
 
   const pick = (v: string) => {
     onChange(v);
+    onSelect?.(v);
     setOpen(false);
     setQuery(null);
   };

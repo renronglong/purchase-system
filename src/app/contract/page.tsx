@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { type ContractData, type ContractItem } from "@/lib/contract-seed-data";
-import { deliveryCustomerStore, deliveryProductStore } from "@/lib/store";
+import { deliveryCustomerStore, deliveryProductStore, deliveryCompanyStore } from "@/lib/store";
+import { ComboInput } from "@/components/combo-input";
 
 function genItemId(): string { return Math.random().toString(36).slice(2, 10); }
 function genContractId(): string { return "ct" + Date.now().toString(36); }
@@ -62,6 +63,23 @@ export default function ContractPage() {
   const [supplierPhone, setSupplierPhone] = useState(DEFAULT_SUPPLIER.supplierPhone);
   const [supplierFax, setSupplierFax] = useState(DEFAULT_SUPPLIER.supplierFax);
   const [supplierTaxNo, setSupplierTaxNo] = useState(DEFAULT_SUPPLIER.supplierTaxNo);
+
+  // 公司信息管理里的公司，供「供方（乙方）」选择
+  const companyOptions = useMemo(
+    () => deliveryCompanyStore.getAll().map((c) => c.name).filter(Boolean),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [showForm]
+  );
+
+  // 选中公司后，把联系人/电话/地址带过来（传真、税号公司信息里没有，保留手填）
+  const applyCompany = (name: string) => {
+    const c = deliveryCompanyStore.getAll().find((x) => (x.name || "").trim() === name.trim());
+    if (!c) return;
+    setSupplierName(c.name || name);
+    setSupplierAddress(c.address || "");
+    setSupplierContact(c.contact || "");
+    setSupplierPhone(c.phone || "");
+  };
   const [items, setItems] = useState<ContractItem[]>([emptyItem()]);
   const [paymentTerms, setPaymentTerms] = useState("订金壹万元、余款到发货");
   const [deliveryDays, setDeliveryDays] = useState("15个工作日");
@@ -350,7 +368,14 @@ export default function ContractPage() {
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-xs text-slate-500 mb-1">公司名称</label>
-                    <input type="text" value={supplierName} onChange={e => setSupplierName(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md" />
+                    <ComboInput
+                      value={supplierName}
+                      onChange={setSupplierName}
+                      onSelect={applyCompany}
+                      options={companyOptions}
+                      placeholder="- 选择公司或手动输入 -"
+                    />
+                    <p className="mt-1 text-[11px] text-slate-400">从「公司信息管理」里选，可自动带出联系人和地址</p>
                   </div>
                   <div>
                     <label className="block text-xs text-slate-500 mb-1">联系人</label>
