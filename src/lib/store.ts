@@ -538,9 +538,9 @@ export const salesOrderStore = {
   search(keyword: string): SalesOrder[] {
     const kw = keyword.toLowerCase();
     return this.getAll().filter(o =>
-      o.orderNo.toLowerCase().includes(kw) ||
+      (o.orderNo || "").toLowerCase().includes(kw) ||
       (o.customerOrderNo || "").toLowerCase().includes(kw) ||
-      o.customer.toLowerCase().includes(kw)
+      (o.customer || "").toLowerCase().includes(kw)
     );
   },
   // 获取订单产品的剩余数量
@@ -732,14 +732,16 @@ function generateOrderNo(prefix: string, storageKey: string): string {
     String(now.getMonth() + 1).padStart(2, "0") +
     String(now.getDate()).padStart(2, "0");
   const dayPrefix = `${prefix}-${dateStr}-`;
-  const orders = getAll<PurchaseOrder | OutsourcingOrder>(storageKey);
+  // 各单据的单号字段名不统一：采购/委外/送货/对账/订单是 orderNo，报价单是 quoteNo。
+  // 这里统一按两种字段取值，并跳过历史脏数据（缺字段、非字符串），避免渲染期抛错。
+  const orders = getAll<PurchaseOrder | OutsourcingOrder | Quotation>(storageKey);
   let maxSeq = 0;
   for (const o of orders) {
-    if (o.orderNo.startsWith(dayPrefix)) {
-      const seqStr = o.orderNo.slice(dayPrefix.length);
-      const seq = parseInt(seqStr, 10);
-      if (!isNaN(seq) && seq > maxSeq) maxSeq = seq;
-    }
+    const raw = (o as { orderNo?: unknown; quoteNo?: unknown } | null);
+    const no = typeof raw?.orderNo === "string" ? raw.orderNo : (typeof raw?.quoteNo === "string" ? raw.quoteNo : "");
+    if (!no || !no.startsWith(dayPrefix)) continue;
+    const seq = parseInt(no.slice(dayPrefix.length), 10);
+    if (!isNaN(seq) && seq > maxSeq) maxSeq = seq;
   }
   const seq = String(maxSeq + 1).padStart(3, "0");
   return `${dayPrefix}${seq}`;
