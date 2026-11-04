@@ -162,7 +162,8 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (loading) return;
-    if (!currentUser && pathname !== "/login" && pathname !== "/register") {
+    const isPublic = pathname === "/login" || pathname === "/register" || pathname === "/intro";
+    if (!currentUser && !isPublic) {
       router.replace("/login");
     }
   }, [currentUser, loading, pathname, router]);

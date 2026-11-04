@@ -406,6 +406,22 @@ export default function LoginPage() {
               </button>
             )}
           </div>
+
+          <div className="mt-5 border-t border-dashed border-sky-200 pt-5">
+            <a
+              href="/intro"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex w-full items-center justify-center gap-2 rounded-lg border border-sky-200 bg-sky-50/80 py-2.5 text-sm font-medium text-sky-700 transition-colors hover:bg-sky-100"
+            >
+              <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5v-13Z" />
+                <path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5A1.5 1.5 0 0 0 20 18.5v-13Z" />
+              </svg>
+              查看完整功能介绍
+            </a>
+            <p className="mt-2 text-center text-[11px] text-slate-400">13 个业务模块、业务流转与使用说明，新窗口打开</p>
+          </div>
         </div>
         </div>
       </div>
