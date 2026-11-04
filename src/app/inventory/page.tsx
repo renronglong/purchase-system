@@ -43,6 +43,7 @@ interface InventorySummary {
   spec: string;
   surface: string;
   material?: string;
+  orderType: "profile" | "plate";
   unit: string;
   inboundQty: number;
   outboundQty: number;
@@ -319,6 +320,11 @@ export default function InventoryPage() {
   });
   const [productSearchKey, setProductSearchKey] = useState("");
 
+  // 库存调整弹窗
+  const [adjustTarget, setAdjustTarget] = useState<InventorySummary | null>(null);
+  const [adjustQty, setAdjustQty] = useState("");
+  const [adjustReason, setAdjustReason] = useState("");
+
   // 关联采购单状态
   const [selectedOrder, setSelectedOrder] = useState<PurchaseOrder | null>(null);
   const isPlate = formData.orderType === "plate";
@@ -592,6 +598,53 @@ export default function InventoryPage() {
     saveData(newRecords);
   };
 
+  // 打开库存调整弹窗
+  const openAdjust = (item: InventorySummary) => {
+    setAdjustTarget(item);
+    setAdjustQty(String(item.currentQty));
+    setAdjustReason("");
+  };
+
+  // 库存调整：把汇总库存改成实际盘点数，差额自动生成一条调整记录（可追溯）
+  const handleAdjustSave = () => {
+    if (!adjustTarget) return;
+    const target = parseFloat(adjustQty);
+    if (isNaN(target) || target < 0) {
+      alert("请输入大于等于 0 的实际库存数量");
+      return;
+    }
+    const diff = target - adjustTarget.currentQty;
+    if (Math.abs(diff) < 0.0001) {
+      setAdjustTarget(null);
+      return;
+    }
+    const type: "inbound" | "outbound" = diff > 0 ? "inbound" : "outbound";
+    const avgWeight =
+      adjustTarget.currentQty > 0 ? adjustTarget.currentWeight / adjustTarget.currentQty : 0;
+    const rec: InventoryRecord = {
+      id: genRecordNo(records, type),
+      type,
+      orderType: adjustTarget.orderType,
+      productCode: adjustTarget.productCode,
+      productName: adjustTarget.productName,
+      spec: adjustTarget.spec,
+      surface: adjustTarget.surface,
+      material: adjustTarget.material || "",
+      quantity: Math.abs(diff),
+      unit: adjustTarget.unit,
+      supplierName: "",
+      referenceNo: "库存调整",
+      operator: "系统",
+      remark: adjustReason || "盘点调整",
+      createdAt: new Date().toISOString(),
+      weight: avgWeight > 0 ? avgWeight * Math.abs(diff) : undefined,
+    };
+    saveData([rec, ...records]);
+    setAdjustTarget(null);
+    setAdjustQty("");
+    setAdjustReason("");
+  };
+
   // 计算库存汇总
   const getInventorySummary = (): InventorySummary[] => {
     const map = new Map<string, InventorySummary>();
@@ -608,6 +661,7 @@ export default function InventoryPage() {
           spec: r.spec,
           surface: r.surface,
           material: r.material || "",
+          orderType: rType,
           unit: r.unit,
           inboundQty: 0,
           outboundQty: 0,
@@ -1098,12 +1152,13 @@ export default function InventoryPage() {
                 <th className="px-4 py-3 text-right text-xs font-medium text-slate-600">当前库存</th>
                 <th className="px-4 py-3 text-right text-xs font-medium text-slate-600">库存重量(kg)</th>
                 <th className="px-4 py-3 text-center text-xs font-medium text-slate-600">单位</th>
+                <th className="px-4 py-3 text-center text-xs font-medium text-slate-600">操作</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {summary.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="px-4 py-8 text-center text-sm text-slate-400">
+                  <td colSpan={10} className="px-4 py-8 text-center text-sm text-slate-400">
                     暂无库存数据
                   </td>
                 </tr>
@@ -1131,6 +1186,14 @@ export default function InventoryPage() {
                       {item.currentWeight ? item.currentWeight.toFixed(3) : "-"}
                     </td>
                     <td className="px-4 py-3 text-sm text-center text-slate-600">{item.unit}</td>
+                    <td className="px-4 py-3 text-sm text-center whitespace-nowrap">
+                      <button
+                        onClick={() => openAdjust(item)}
+                        className="text-blue-600 hover:text-blue-800"
+                      >
+                        编辑
+                      </button>
+                    </td>
                   </tr>
                 ))
               )}
@@ -1219,6 +1282,83 @@ export default function InventoryPage() {
               )}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {/* 库存调整弹窗 */}
+      {adjustTarget && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+          onClick={() => setAdjustTarget(null)}
+        >
+          <div
+            className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="text-base font-semibold text-slate-900 mb-1">修改库存</h3>
+            <p className="text-xs text-slate-500 mb-4">
+              {adjustTarget.productCode} {adjustTarget.spec}{" "}
+              {adjustTarget.surface || adjustTarget.material || ""}
+            </p>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-medium text-slate-500 mb-1">当前库存</label>
+                <div className="text-sm font-mono text-slate-700">
+                  {adjustTarget.currentQty} {adjustTarget.unit}
+                </div>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-slate-500 mb-1">
+                  实际库存 <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="number"
+                  value={adjustQty}
+                  onChange={(e) => setAdjustQty(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  step="0.01"
+                  autoFocus
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-slate-500 mb-1">调整原因</label>
+                <input
+                  type="text"
+                  value={adjustReason}
+                  onChange={(e) => setAdjustReason(e.target.value)}
+                  className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  placeholder="如：盘点差异、损耗、录错"
+                />
+              </div>
+              {(() => {
+                const t = parseFloat(adjustQty);
+                if (isNaN(t)) return null;
+                const d = t - adjustTarget.currentQty;
+                if (Math.abs(d) < 0.0001)
+                  return <p className="text-xs text-slate-400">数量无变化</p>;
+                return (
+                  <p className="text-xs text-slate-500">
+                    保存后自动生成一条{d > 0 ? "入库" : "出库"}记录：
+                    {Math.abs(d).toFixed(2)} {adjustTarget.unit}
+                  </p>
+                );
+              })()}
+            </div>
+            <div className="mt-6 flex justify-end gap-3">
+              <button
+                onClick={() => setAdjustTarget(null)}
+                className="px-4 py-2 text-sm text-slate-600 border border-slate-200 rounded-md hover:bg-slate-50"
+              >
+                取消
+              </button>
+              <button
+                onClick={handleAdjustSave}
+                className="px-4 py-2 text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700"
+              >
+                保存
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
