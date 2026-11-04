@@ -338,6 +338,8 @@ export default function InventoryPage() {
       surface: "",
       material: "",
       quantity: "",
+      length: "",
+      weightPerMeter: "",
       unit: "条",
       piecesPerSheet: "",
       actualOutput: "",
@@ -405,6 +407,10 @@ export default function InventoryPage() {
           productCode: product.id,
           productName: product.name,
           spec: product.spec,
+          weightPerMeter:
+            product.weightPerMeter != null && Number(product.weightPerMeter) > 0
+              ? String(product.weightPerMeter)
+              : prev.weightPerMeter,
         };
         // 板材产品：自动带出材质和板材参数
         if (product.productType === "plate" || (product.id && String(product.id).startsWith("PLT"))) {
@@ -798,6 +804,46 @@ export default function InventoryPage() {
                 step="0.01"
               />
             </div>
+            {/* 长度 / 米重 / 重量（仅型材） */}
+            {!isPlate && (
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    长度（mm）
+                  </label>
+                  <input
+                    type="number"
+                    value={formData.length}
+                    onChange={(e) => setFormData({ ...formData, length: e.target.value })}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    step="1"
+                    placeholder="如 6000"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    米重（kg/m）
+                  </label>
+                  <input
+                    type="number"
+                    value={formData.weightPerMeter}
+                    onChange={(e) => setFormData({ ...formData, weightPerMeter: e.target.value })}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    step="0.001"
+                    placeholder="选择产品后自动带出"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    重量（kg）
+                  </label>
+                  <div className="w-full px-3 py-2 border border-slate-200 rounded-md text-sm bg-slate-50 text-slate-900 font-medium">
+                    {calcWeight > 0 ? calcWeight.toFixed(3) : "-"}
+                  </div>
+                  <p className="text-xs text-slate-400 mt-1">米重 × 长度 ÷ 1000 × 数量</p>
+                </div>
+              </>
+            )}
             {/* 单位 */}
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
@@ -1019,6 +1065,9 @@ export default function InventoryPage() {
                     }`}>
                       {item.currentQty}
                     </td>
+                    <td className="px-4 py-3 text-sm text-right text-slate-700">
+                      {item.currentWeight ? item.currentWeight.toFixed(3) : "-"}
+                    </td>
                     <td className="px-4 py-3 text-sm text-center text-slate-600">{item.unit}</td>
                   </tr>
                 ))
@@ -1030,8 +1079,8 @@ export default function InventoryPage() {
 
       {/* 入库/出库记录 */}
       {(activeTab === "inbound" || activeTab === "outbound") && (
-        <div className="bg-white rounded-lg shadow-sm border border-slate-200">
-          <table className="w-full">
+        <div className="bg-white rounded-lg shadow-sm border border-slate-200 overflow-x-auto">
+          <table className="w-full min-w-[1240px]">
             <thead className="bg-slate-50 border-b border-slate-200">
               <tr>
                 <th className="px-4 py-3 text-left text-xs font-medium text-slate-600">单号</th>
@@ -1074,6 +1123,12 @@ export default function InventoryPage() {
                         record.type === "inbound" ? "text-green-600" : "text-red-600"
                       }`}>
                         {record.type === "inbound" ? "+" : "-"}{record.quantity}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-right text-slate-600">
+                        {record.length ? record.length : "-"}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-right text-slate-600">
+                        {record.weight ? record.weight.toFixed(3) : "-"}
                       </td>
                       <td className="px-4 py-3 text-sm text-center text-slate-600">{record.unit}</td>
                       <td className="px-4 py-3 text-sm text-slate-600">{record.referenceNo}</td>
