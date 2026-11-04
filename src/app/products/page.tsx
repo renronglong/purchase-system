@@ -12,6 +12,24 @@ type BomItem = ComponentItem;
 // 与采购单页一致的材质选项
 const materialOptions = ["普通铝板", "5052", "6063", "1060", "3003"];
 
+// 板材：材质 → 牌号 / 板材规格 / 密度（二级联动，来自业务提供的板材填写规范）
+const PLATE_MATERIALS: {
+  material: string;
+  density: number;
+  grades: string[];
+  specs: [number, number][];
+}[] = [
+  { material: "冷轧板（SPCC）", density: 7.8, grades: ["SPCC", "SPCD", "SPCE", "DC01", "ST12", "08F", "Q195"], specs: [[1000, 2000], [1220, 2440], [1250, 2500]] },
+  { material: "铝合金板", density: 2.7, grades: ["1060", "5052", "6061", "7075"], specs: [[1000, 2000], [1220, 2440], [1500, 3000]] },
+  { material: "铜板材", density: 7.8, grades: ["T2", "TU2", "H62", "H68", "QSn6.5-0.1", "QBe2"], specs: [[600, 1500], [1000, 2000], [1200, 2400]] },
+  { material: "不锈钢板", density: 7.8, grades: ["201", "304", "304L", "316", "316L", "430", "2205"], specs: [[1000, 2000], [1220, 2440], [1500, 3000]] },
+  { material: "镀锌板（SGCC）", density: 7.8, grades: ["SGCC", "DX51D+Z", "DC51D+Z", "SECC"], specs: [[1000, 2000], [1220, 2440], [1250, 2500]] },
+  { material: "普通碳钢（铁板）", density: 7.8, grades: ["Q235B", "Q355B", "SS400", "A36", "SPHC", "45#"], specs: [[1500, 6000]] },
+  { material: "自定义", density: 0, grades: [], specs: [] },
+];
+
+const PLATE_MATERIAL_NAMES = PLATE_MATERIALS.map(m => m.material);
+
 // 模糊匹配：忽略大小写/前后空格，支持多关键词（空格分隔，需全部命中）
 function fuzzyMatch(keyword: string, ...fields: (string | number | undefined | null)[]): boolean {
   const raw = keyword.trim().toLowerCase();
@@ -230,6 +248,79 @@ export default function ProductsPage() {
     loadProducts();
   };
 
+  // 板材参数自动计算：
+  // 刀数 = 板材长 ÷ 剪板宽度；每张板数量 = 板材宽 ÷ 步距 × 刀数
+  // 单件重量(kg) = 板材宽 × 板材长 × 厚度 × 密度 ÷ 1000000 ÷ 每张板数量
+  const plateForm = (formData.productType || "profile") === "plate";
+  const plateAuto = (() => {
+    const sw = Number(formData.plateSpecWidth) || 0;
+    const sl = Number(formData.plateSpecLength) || 0;
+    const bw = Number(formData.plateWidth) || 0;
+    const st = Number(formData.step) || 0;
+    const th = Number(formData.thickness) || 0;
+    const dn = Number(formData.density) || 0;
+    const blades = bw > 0 && sl > 0 ? Math.floor(sl / bw) : 0;
+    const perSheet = st > 0 && blades > 0 ? Math.floor((sw / st) * blades) : 0;
+    const weight = perSheet > 0 && th > 0 && dn > 0
+      ? Math.round(((sw * sl * th * dn) / 1000000 / perSheet) * 1000) / 1000
+      : 0;
+    return { blades, perSheet, weight };
+  })();
+
+  // 上游参数一变，自动回填刀数 / 每张板数量 / 重量（算得出来才覆盖，仍可手动修正）
+  useEffect(() => {
+    if ((formData.productType || "profile") !== "plate") return;
+    setFormData(prev => {
+      const next = { ...prev };
+      if (plateAuto.blades > 0) next.bladeCount = plateAuto.blades;
+      if (plateAuto.perSheet > 0) next.piecesPerSheet = plateAuto.perSheet;
+      if (plateAuto.weight > 0) next.weight = plateAuto.weight;
+      const changed =
+        next.bladeCount !== prev.bladeCount ||
+        next.piecesPerSheet !== prev.piecesPerSheet ||
+        next.weight !== prev.weight;
+      return changed ? next : prev;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData.productType, formData.plateSpecWidth, formData.plateSpecLength, formData.plateWidth, formData.step, formData.thickness, formData.density]);
+
+  const plateGradeOptions = PLATE_MATERIALS.find(m => m.material === formData.material)?.grades ?? [];
+  const plateSpecOptions = PLATE_MATERIALS.find(m => m.material === formData.material)?.specs ?? [];
+  const plateSpecValue =
+    formData.plateSpecWidth && formData.plateSpecLength
+      ? `${formData.plateSpecWidth}×${formData.plateSpecLength}`
+      : "";
+
+  // 材质变更：牌号、板材规格按新材料重新联动，密度固定输出
+  const handlePlateMaterialChange = (material: string) => {
+    const cfg = PLATE_MATERIALS.find(m => m.material === material);
+    setFormData(prev => {
+      const grades = cfg?.grades ?? [];
+      const specs = cfg?.specs ?? [];
+      const keepGrade = grades.includes(prev.grade || "") ? prev.grade : "";
+      const keepSpec = specs.some(sp => sp[0] === prev.plateSpecWidth && sp[1] === prev.plateSpecLength);
+      return {
+        ...prev,
+        material,
+        grade: keepGrade,
+        density: cfg ? cfg.density : prev.density,
+        plateSpecWidth: keepSpec ? prev.plateSpecWidth : undefined,
+        plateSpecLength: keepSpec ? prev.plateSpecLength : undefined,
+      };
+    });
+  };
+
+  // 板材规格：选标准规格自动填宽长；手动改宽长后能匹配上就自动反选回标准规格
+  const handlePlateSpecSelect = (v: string) => {
+    if (!v) {
+      setFormData(prev => ({ ...prev, plateSpecWidth: undefined, plateSpecLength: undefined }));
+      return;
+    }
+    const [w, l] = v.split("×").map(Number);
+    if (!Number.isFinite(w) || !Number.isFinite(l)) return;
+    setFormData(prev => ({ ...prev, plateSpecWidth: w, plateSpecLength: l }));
+  };
+
   const openAdd = () => {
     setFormData(createEmptyProduct());
     setIsAdding(true);
@@ -254,6 +345,20 @@ export default function ProductsPage() {
       alert("产品编号已存在，请更换一个编号");
       return;
     }
+    const isPlateForm = (formData.productType || "profile") === "plate";
+    if (isPlateForm) {
+      // 板材：校验板材规格与密度，米重不适用
+      if (!(Number(formData.plateSpecWidth) > 0) || !(Number(formData.plateSpecLength) > 0)) {
+        alert("请选择或填写板材规格（宽 × 长）");
+        return;
+      }
+      if (!(Number(formData.density) > 0)) {
+        alert("请填写密度（选择材质后会自动带出）");
+        return;
+      }
+      saveProductAndClose({ ...formData, weightPerMeter: Number(formData.weightPerMeter) || 0 });
+      return;
+    }
     // 米重校验：必须为不小于 0 的数字
     const w = Number(formData.weightPerMeter);
     if (!Number.isFinite(w) || w < 0) {
@@ -261,6 +366,45 @@ export default function ProductsPage() {
       return;
     }
     saveProductAndClose({ ...formData, weightPerMeter: w });
+  };
+
+  // 板材导入模板下载：表头 + 2 行示例 + 填写说明
+  const handleDownloadPlateTemplate = async () => {
+    try {
+      const XLSX = await import("xlsx");
+      const header = ["产品编号", "产品名称", "剪板宽度(mm)", "厚度(mm)", "步距(mm)", "一次出数量", "材质", "牌号", "板材规格（宽*长）", "密度"];
+      const rows = [
+        ["PL-001", "门板", "100", "1.5", "50", "20", "冷轧板（SPCC）", "SPCC", "1000×2000", "7.8"],
+        ["PL-002", "侧板", "80", "2", "40", "15", "铝合金板", "5052", "1220×2440", "2.7"],
+      ];
+      const guide: (string | number)[][] = [
+        ["字段", "填写方式", "可选值 / 说明"],
+        ["产品编号", "手填", "唯一编号；重复编号会被跳过"],
+        ["产品名称", "手填", "—"],
+        ["剪板宽度(mm)", "手填", "成品件宽度，用于算刀数：刀数 = 板材长 ÷ 剪板宽度"],
+        ["厚度(mm)", "手填", "用于算重量"],
+        ["步距(mm)", "手填", "用于算每张板数量：每张板数量 = 板材宽 ÷ 步距 × 刀数"],
+        ["一次出数量", "手填", "一次冲剪出多少件"],
+        ["材质", "下拉", "冷轧板（SPCC） / 铝合金板 / 铜板材 / 不锈钢板 / 镀锌板（SGCC） / 普通碳钢（铁板） / 自定义"],
+        ["牌号", "二级联动", "随材质联动：SPCC、SPCD、5052、304、Q235B…；也可自定义"],
+        ["板材规格（宽*长）", "二级联动", "随材质联动：1000×2000、1220×2440、1500×6000…；也可填宽和长反选"],
+        ["密度", "固定输出", "冷轧板 7.8、铝合金板 2.7、铜/不锈钢/镀锌/碳钢 7.8；自定义可填"],
+        [],
+        ["计算公式", "", "每张板数量 = 板材规格宽 ÷ 步距 × 刀数"],
+        ["", "", "重量 = 板材规格宽 × 长 × 厚度 × 密度 ÷ 1000000 ÷ 每张板数量"],
+        ["", "", "刀数 = 板材规格长 ÷ 剪板宽度"],
+      ];
+      const ws = XLSX.utils.aoa_to_sheet([header, ...rows]);
+      ws["!cols"] = header.map(h => ({ wch: Math.max(14, h.length * 2 + 4) }));
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "板材");
+      const ws2 = XLSX.utils.aoa_to_sheet(guide);
+      ws2["!cols"] = [{ wch: 20 }, { wch: 12 }, { wch: 80 }];
+      XLSX.utils.book_append_sheet(wb, ws2, "填写说明");
+      XLSX.writeFile(wb, "板材导入模板.xlsx");
+    } catch (e) {
+      alert("模板下载失败：" + (e instanceof Error ? e.message : String(e)));
+    }
   };
 
   const closeDialog = () => {
@@ -461,6 +605,7 @@ export default function ProductsPage() {
             className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
           />
         </div>
+        {!plateForm && (
         <div>
           <label className="block text-xs text-slate-500 mb-1">材质</label>
           <input list="material-options" value={formData.material || ""} onChange={(e) => setFormData(prev => ({ ...prev, material: e.target.value }))} placeholder="选择或输入材质" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
@@ -468,6 +613,7 @@ export default function ProductsPage() {
             {materialOptions.map(m => <option key={m} value={m} />)}
           </datalist>
         </div>
+        )}
         <div>
           <label className="block text-xs text-slate-500 mb-1">默认供应商</label>
           <input list="supplier-options" value={formData.defaultSupplier || ""} onChange={(e) => setFormData(prev => ({ ...prev, defaultSupplier: e.target.value }))} placeholder="选择或输入供应商" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
@@ -475,34 +621,95 @@ export default function ProductsPage() {
             {supplierStore.getAll().map(s => <option key={s.id} value={s.name} />)}
           </datalist>
         </div>
-        {(formData.productType || "profile") === "plate" ? (
-          <>
-            <div>
-              <label className="block text-xs text-slate-500 mb-1">剪板宽度(mm)</label>
-              <input type="number" step="0.1" min="0" value={formData.plateWidth ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, plateWidth: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+        {plateForm && (
+          <div className="col-span-2 rounded-lg border border-orange-200 bg-orange-50/40 p-3 md:col-span-3">
+            <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+              <span className="text-xs font-semibold text-orange-700">板材参数</span>
+              <span className="text-[11px] leading-relaxed text-slate-500">
+                刀数 = 板材长 ÷ 剪板宽度　·　每张板数量 = 板材宽 ÷ 步距 × 刀数　·　重量 = 宽 × 长 × 厚度 × 密度 ÷ 1000000 ÷ 每张板数量
+              </span>
             </div>
-            <div>
-              <label className="block text-xs text-slate-500 mb-1">厚度(mm)</label>
-              <input type="number" step="0.1" min="0" value={formData.thickness ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, thickness: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">剪板宽度(mm) <span className="text-red-500">*</span></label>
+                <input type="number" step="0.1" min="0" value={formData.plateWidth ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, plateWidth: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">厚度(mm)</label>
+                <input type="number" step="0.01" min="0" value={formData.thickness ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, thickness: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">步距(mm)</label>
+                <input type="number" step="0.1" min="0" value={formData.step ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, step: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">一次出数量</label>
+                <input type="number" min="0" value={formData.outputPerTime ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, outputPerTime: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">材质 <span className="text-red-500">*</span></label>
+                <select value={formData.material || ""} onChange={(e) => handlePlateMaterialChange(e.target.value)} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+                  <option value="">请选择材质</option>
+                  {formData.material && !PLATE_MATERIAL_NAMES.includes(formData.material) && (
+                    <option value={formData.material}>{formData.material}</option>
+                  )}
+                  {PLATE_MATERIAL_NAMES.map(m => <option key={m} value={m}>{m}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">牌号</label>
+                {plateGradeOptions.length > 0 ? (
+                  <select value={formData.grade || ""} onChange={(e) => setFormData(prev => ({ ...prev, grade: e.target.value }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
+                    <option value="">请选择牌号</option>
+                    {formData.grade && !plateGradeOptions.includes(formData.grade) && (
+                      <option value={formData.grade}>{formData.grade}</option>
+                    )}
+                    {plateGradeOptions.map(g => <option key={g} value={g}>{g}</option>)}
+                  </select>
+                ) : (
+                  <input type="text" value={formData.grade || ""} onChange={(e) => setFormData(prev => ({ ...prev, grade: e.target.value }))} placeholder="选择材质后联动，或直接输入" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+                )}
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">板材规格（宽×长）<span className="text-red-500">*</span></label>
+                <select
+                  value={plateSpecOptions.some(sp => `${sp[0]}×${sp[1]}` === plateSpecValue) ? plateSpecValue : ""}
+                  onChange={(e) => handlePlateSpecSelect(e.target.value)}
+                  className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+                >
+                  <option value="">自定义 / 请选择</option>
+                  {plateSpecOptions.map(sp => (
+                    <option key={`${sp[0]}×${sp[1]}`} value={`${sp[0]}×${sp[1]}`}>{sp[0]}×{sp[1]}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">密度(g/cm³)</label>
+                <input type="number" step="0.01" min="0" value={formData.density ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, density: Number(e.target.value) }))} placeholder="随材质自动带出" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">板材宽(mm)</label>
+                <input type="number" step="1" min="0" value={formData.plateSpecWidth ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, plateSpecWidth: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">板材长(mm)</label>
+                <input type="number" step="1" min="0" value={formData.plateSpecLength ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, plateSpecLength: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">刀数（自动）</label>
+                <input type="number" readOnly value={plateAuto.blades || ""} placeholder="自动计算" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md bg-slate-100 text-slate-600 font-mono" />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">每张板数量（自动）</label>
+                <input type="number" readOnly value={plateAuto.perSheet || ""} placeholder="自动计算" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md bg-slate-100 text-slate-600 font-mono" />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-500 mb-1">重量(kg/件)（自动）</label>
+                <input type="number" readOnly value={plateAuto.weight || ""} placeholder="自动计算" className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md bg-slate-100 text-slate-600 font-mono" />
+              </div>
             </div>
-            <div>
-              <label className="block text-xs text-slate-500 mb-1">步距(mm)</label>
-              <input type="number" step="0.1" min="0" value={formData.step ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, step: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
-            </div>
-            <div>
-              <label className="block text-xs text-slate-500 mb-1">每张板数量</label>
-              <input type="number" min="0" value={formData.piecesPerSheet ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, piecesPerSheet: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
-            </div>
-            <div>
-              <label className="block text-xs text-slate-500 mb-1">重量(KG)</label>
-              <input type="number" step="0.001" min="0" value={formData.weight ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, weight: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
-            </div>
-            <div>
-              <label className="block text-xs text-slate-500 mb-1">刀数</label>
-              <input type="number" min="0" value={formData.bladeCount ?? ""} onChange={(e) => setFormData(prev => ({ ...prev, bladeCount: Number(e.target.value) }))} className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" />
-            </div>
-          </>
-        ) : null}
+          </div>
+        )}
       </div>
       <div className="flex gap-2 mt-4">
         <button onClick={handleSave} className="px-4 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700">保存</button>
@@ -618,6 +825,17 @@ export default function ProductsPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
             </svg>
             批量导入
+          </button>
+          ) : null}
+          {typeFilter === "plate" ? (
+          <button
+            onClick={handleDownloadPlateTemplate}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-white text-orange-700 text-sm font-medium rounded-md border border-orange-300 hover:bg-orange-50"
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M12 4v12m0 0l-4-4m4 4l4-4" />
+            </svg>
+            下载板材模板
           </button>
           ) : null}
           <button

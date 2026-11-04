@@ -17,6 +17,11 @@ export interface Product {
   perimeter?: number;       // 周长
   bladeCount?: number;      // 刀数
   outputPerTime?: number;   // 一次出数量
+  // 板材规格与牌号（按材质二级联动）
+  plateSpecWidth?: number;  // 板材规格-宽（整张原板，mm）
+  plateSpecLength?: number; // 板材规格-长（整张原板，mm）
+  grade?: string;           // 牌号（随材质联动）
+  density?: number;         // 密度（随材质固定输出，g/cm³）
   productType?: 'profile' | 'plate';  // 产品类型
   unitPrice?: number;  // 组件单价（当配置了组件 BOM 时 = 组件合计金额）
 }

@@ -23,17 +23,17 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-slate-50 md:h-dvh md:overflow-hidden">
       {/* 移动端顶部栏（仅 <md 显示） */}
-      <div className="fixed top-0 inset-x-0 z-40 flex items-center justify-between px-4 py-3 bg-slate-900 md:hidden">
+      <div className="fixed top-0 inset-x-0 z-40 flex items-center justify-between border-b border-sky-200 bg-sky-100 px-4 py-3 md:hidden">
         <button
           onClick={() => setMobileOpen(true)}
-          className="text-white p-1 -ml-1"
+          className="text-slate-700 p-1 -ml-1"
           aria-label="打开菜单"
         >
           <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
-        <span className="text-white text-sm font-medium">零配件生产销售管理系统</span>
+        <span className="text-sm font-medium text-slate-800">零配件生产销售管理系统</span>
         <span className="w-6" />
       </div>
 

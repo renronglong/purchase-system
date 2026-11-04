@@ -29,6 +29,7 @@ export default function PurchaseOrderDetailPage() {
   }
 
   const isPlate = (order.orderType || "profile") === "plate";
+  const isMaterial = order.orderType === "material";
 
   return (
     <div className="p-6">
@@ -37,6 +38,8 @@ export default function PurchaseOrderDetailPage() {
           <h1 className="text-xl font-bold text-slate-900">采购单详情</h1>
           {isPlate ? (
             <span className="px-2 py-0.5 text-sm bg-orange-100 text-orange-700 rounded">板材</span>
+          ) : isMaterial ? (
+            <span className="px-2 py-0.5 text-sm bg-emerald-100 text-emerald-700 rounded">其它物料</span>
           ) : (
             <span className="px-2 py-0.5 text-sm bg-blue-100 text-blue-700 rounded">型材</span>
           )}
@@ -64,7 +67,7 @@ export default function PurchaseOrderDetailPage() {
       <div className="bg-white rounded-lg border border-slate-200 p-5 mb-4">
         <div className="grid grid-cols-3 gap-4 text-sm">
           <div><span className="text-slate-500">订单编号：</span><span className="font-mono font-medium">{order.orderNo}</span></div>
-          <div><span className="text-slate-500">订单类型：</span>{isPlate ? "板材" : "型材"}</div>
+          <div><span className="text-slate-500">订单类型：</span>{isPlate ? "板材" : isMaterial ? "其它物料" : "型材"}</div>
           <div><span className="text-slate-500">制单日期：</span>{order.orderDate}</div>
           <div><span className="text-slate-500">采购公司：</span>{order.company}</div>
           <div><span className="text-slate-500">供应商：</span>{order.supplierName}</div>
@@ -84,10 +87,10 @@ export default function PurchaseOrderDetailPage() {
                 <th className="px-3 py-2 text-left font-medium text-slate-600">产品编号</th>
                 <th className="px-3 py-2 text-left font-medium text-slate-600">产品名称</th>
                 <th className="px-3 py-2 text-left font-medium text-slate-600">规格尺寸</th>
-                <th className="px-3 py-2 text-right font-medium text-slate-600">长度mm</th>
+                <th className="px-3 py-2 text-right font-medium text-slate-600">{isMaterial ? "单价" : "长度mm"}</th>
                 <th className="px-3 py-2 text-right font-medium text-slate-600">数量</th>
                 <th className="px-3 py-2 text-left font-medium text-slate-600">单位</th>
-                <th className="px-3 py-2 text-right font-medium text-slate-600">理论重量KG</th>
+                <th className="px-3 py-2 text-right font-medium text-slate-600">{isMaterial ? "金额" : "理论重量KG"}</th>
                 <th className="px-3 py-2 text-left font-medium text-slate-600">表面处理</th>
                 <th className="px-3 py-2 text-left font-medium text-slate-600">交货时间</th>
                 <th className="px-3 py-2 text-left font-medium text-slate-600">备注</th>
@@ -100,10 +103,10 @@ export default function PurchaseOrderDetailPage() {
                   <td className="px-3 py-2 font-mono text-blue-600">{item.productCode}</td>
                   <td className="px-3 py-2">{item.productName}</td>
                   <td className="px-3 py-2">{item.spec}</td>
-                  <td className="px-3 py-2 text-right">{item.length}</td>
+                  <td className="px-3 py-2 text-right">{isMaterial ? (item.unitPrice || 0).toFixed(2) : item.length}</td>
                   <td className="px-3 py-2 text-right">{item.quantity}</td>
                   <td className="px-3 py-2">{item.unit}</td>
-                  <td className="px-3 py-2 text-right font-mono">{item.totalWeight.toFixed(2)}</td>
+                  <td className="px-3 py-2 text-right font-mono">{isMaterial ? (item.amount || 0).toFixed(2) : item.totalWeight.toFixed(2)}</td>
                   <td className="px-3 py-2">{item.surfaceTreatment}</td>
                   <td className="px-3 py-2">{item.deliveryDate}</td>
                   <td className="px-3 py-2">{item.remark}</td>
@@ -115,7 +118,7 @@ export default function PurchaseOrderDetailPage() {
                 <td colSpan={5} className="px-3 py-2 text-right font-medium">合计</td>
                 <td className="px-3 py-2 text-right font-bold">{order.totalQuantity}</td>
                 <td></td>
-                <td className="px-3 py-2 text-right font-mono font-bold">{order.totalWeight.toFixed(2)}</td>
+                <td className="px-3 py-2 text-right font-mono font-bold">{isMaterial ? (order.totalAmount ?? 0).toFixed(2) : order.totalWeight.toFixed(2)}</td>
                 <td colSpan={3}></td>
               </tr>
             </tfoot>

@@ -8,6 +8,23 @@ import { useAuth } from "@/components/auth-provider";
 const DEMO_EMAIL = "longge2623@agent.qq.com";
 const DEMO_PASSWORD = "123456";
 
+// 登录页功能介绍（13 个业务模块）
+const FEATURES = [
+  { name: "采购单管理", desc: "新建采购单，按供应商/产品/日期检索" },
+  { name: "产品库", desc: "型材 / 板材 / 物料 / 组件四类" },
+  { name: "供应商", desc: "供应商档案与联系人" },
+  { name: "库存管理", desc: "入库 / 出库 / 库存汇总" },
+  { name: "委外加工", desc: "外协工序单据与导出" },
+  { name: "送货单管理", desc: "对账状态、开票明细导出" },
+  { name: "订单管理", desc: "草稿到完成全生命周期" },
+  { name: "报价单管理", desc: "在线报价与打印" },
+  { name: "对账单管理", desc: "草稿 / 已确认 / 已结清" },
+  { name: "购销合同", desc: "合同档案与打印" },
+  { name: "客户管理", desc: "客户档案与联系人" },
+  { name: "公司信息", desc: "抬头与开票信息" },
+  { name: "汇总表", desc: "月 / 季 / 年统计报表" },
+];
+
 export default function LoginPage() {
   const [mode, setMode] = useState<"password" | "code" | "reset">("password");
   const [email, setEmail] = useState("");
@@ -156,13 +173,56 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-      <div className="w-full max-w-md px-6">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">零配件生产销售管理系统</h1>
+    <div className="min-h-screen bg-gradient-to-br from-sky-100 via-sky-50 to-blue-100">
+      <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col items-center gap-10 px-5 py-10 lg:flex-row lg:items-center lg:justify-between lg:gap-14 lg:py-12">
+        {/* 功能介绍（移动端排在登录卡片下方） */}
+        <section className="order-2 w-full max-w-2xl lg:order-1">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/80 px-3 py-1 text-xs font-medium text-sky-700 ring-1 ring-sky-200">
+            <span className="h-1.5 w-1.5 rounded-full bg-sky-500" />
+            生产 + 销售一体化 · Web 端
+          </span>
+          <h2 className="mt-3 text-2xl font-bold leading-snug text-slate-800">
+            从采购到对账，一条零配件生意的主线都在这里
+          </h2>
+          <p className="mt-2 text-sm leading-relaxed text-slate-600">
+            面向零配件（金属加工类）企业，产品库按 型材 / 板材 / 物料 / 组件 四类组织，覆盖「采购 → 委外加工 → 库存 → 销售报价 / 订单 / 合同 → 送货 → 对账」完整链路。所有单据支持在线打印与导出。
+          </p>
+
+          <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-3">
+            {FEATURES.map((f) => (
+              <div key={f.name} className="rounded-lg bg-white/80 px-3 py-2 ring-1 ring-sky-100">
+                <div className="text-[13px] font-semibold text-slate-700">{f.name}</div>
+                <div className="mt-0.5 text-[11px] leading-snug text-slate-500">{f.desc}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-4 rounded-xl bg-white/70 p-4 ring-1 ring-sky-100">
+            <div className="mb-2 text-xs font-semibold text-slate-700">典型业务流转</div>
+            <ol className="space-y-1.5 text-[12px] leading-relaxed text-slate-600">
+              <li><b className="text-slate-700">1. 基础档案</b>：先建好产品库、供应商、客户、公司信息等基础数据。</li>
+              <li><b className="text-slate-700">2. 采购与生产</b>：下采购单，外协工序走委外加工，物料进出由库存入库 / 出库与库存汇总把控。</li>
+              <li><b className="text-slate-700">3. 销售闭环</b>：报价 → 订单（草稿 / 已确认 / 生产中 / 已发货 / 已完成）→ 购销合同 → 送货单（含对账状态与开票明细导出）。</li>
+              <li><b className="text-slate-700">4. 财务对账</b>：对账单（草稿 → 已确认 → 已结清），汇总表按客户或产品出月 / 季 / 年报表。</li>
+            </ol>
+          </div>
+
+          <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-[11px] text-slate-500">
+            <span>✓ 单据全生命周期状态流转</span>
+            <span>✓ 打印 / 导出 Excel / 发票模板</span>
+            <span>✓ 关键词 + 日期 + 状态多维筛选</span>
+            <span>✓ 一键演示账号，免注册体验</span>
+          </div>
+        </section>
+
+        {/* 登录卡片 */}
+        <div className="order-1 w-full max-w-md shrink-0 lg:order-2">
+        <div className="mb-6 text-center">
+          <h1 className="text-2xl font-bold text-slate-800 mb-1">零配件生产销售管理系统</h1>
+          <p className="text-sm text-slate-500">登录后开始使用</p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-2xl p-8">
+        <div className="bg-white rounded-xl p-8 shadow-xl shadow-sky-200/60 ring-1 ring-sky-100">
           <h2 className="text-xl font-semibold text-slate-800 mb-4 text-center">
             {mode === "reset" ? "重置密码" : "登录账号"}
           </h2>
@@ -346,6 +406,7 @@ export default function LoginPage() {
               </button>
             )}
           </div>
+        </div>
         </div>
       </div>
     </div>

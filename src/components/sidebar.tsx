@@ -180,7 +180,7 @@ export default function Sidebar({
     <>
     <aside
       className={cn(
-        "bg-slate-900 text-white flex flex-col shrink-0",
+        "bg-sky-100 text-slate-700 flex flex-col shrink-0 border-r border-sky-200",
         // 移动端：fixed 抽屉，默认左侧收起，open 时滑出
         "fixed inset-y-0 left-0 z-50 w-60 transform transition-transform duration-300",
         open ? "translate-x-0" : "-translate-x-full",
@@ -188,14 +188,14 @@ export default function Sidebar({
         "md:static md:translate-x-0 md:h-dvh md:shrink-0"
       )}
     >
-      <div className="px-5 py-5 border-b border-slate-700 flex items-center justify-between">
+      <div className="px-5 py-5 border-b border-sky-200 flex items-center justify-between">
         <div>
-          <h1 className="text-base font-bold tracking-wide">零配件生产销售管理系统</h1>
-          <p className="text-[10px] text-slate-500 mt-1">v2.2</p>
+          <h1 className="text-base font-bold tracking-wide text-slate-800">零配件生产销售管理系统</h1>
+          <p className="text-[10px] text-sky-600/80 mt-1">v2.2</p>
         </div>
         <button
           onClick={onClose}
-          className="text-slate-400 hover:text-white md:hidden p-1"
+          className="text-slate-400 hover:text-slate-700 md:hidden p-1"
           aria-label="关闭菜单"
         >
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -215,8 +215,8 @@ export default function Sidebar({
               className={cn(
                 "flex items-center gap-3 px-5 py-2.5 text-sm transition-colors",
                 isActive
-                  ? "bg-blue-600/20 text-blue-400 border-r-2 border-blue-400"
-                  : "text-slate-300 hover:bg-slate-800 hover:text-white"
+                  ? "bg-white text-blue-700 font-medium border-r-2 border-blue-500 shadow-sm shadow-sky-200/60"
+                  : "text-slate-600 hover:bg-white/70 hover:text-slate-900"
               )}
             >
               <NavIcon type={item.icon} />
@@ -225,14 +225,14 @@ export default function Sidebar({
           );
         })}
       </nav>
-      <div className="relative border-t border-slate-700 px-2 py-2">
+      <div className="relative border-t border-sky-200 px-2 py-2">
         {menuOpen && (
           <>
             <div className="fixed inset-0 z-0" onClick={() => setMenuOpen(false)} />
-            <div className="absolute bottom-full left-2 right-2 mb-1 z-10 rounded-lg border border-slate-700 bg-slate-800 py-1 shadow-xl">
+            <div className="absolute bottom-full left-2 right-2 mb-1 z-10 rounded-lg border border-sky-200 bg-white py-1 shadow-xl shadow-sky-200/50">
               <button
                 onClick={openPwdDialog}
-                className="flex w-full items-center gap-2.5 px-3 py-2 text-left text-sm text-slate-200 hover:bg-slate-700"
+                className="flex w-full items-center gap-2.5 px-3 py-2 text-left text-sm text-slate-700 hover:bg-sky-50"
               >
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
@@ -241,7 +241,7 @@ export default function Sidebar({
               </button>
               <button
                 onClick={handleLogout}
-                className="flex w-full items-center gap-2.5 px-3 py-2 text-left text-sm text-red-300 hover:bg-slate-700"
+                className="flex w-full items-center gap-2.5 px-3 py-2 text-left text-sm text-red-600 hover:bg-red-50"
               >
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
@@ -255,14 +255,14 @@ export default function Sidebar({
           onClick={() => setMenuOpen((v) => !v)}
           className={cn(
             "flex w-full items-center gap-2.5 rounded-lg px-2 py-2 transition-colors",
-            menuOpen ? "bg-slate-800" : "hover:bg-slate-800"
+            menuOpen ? "bg-white shadow-sm" : "hover:bg-white/70"
           )}
         >
           <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600 text-xs font-semibold text-white">
             {avatarText}
           </span>
           <span className="min-w-0 flex-1 text-left">
-            <span className="block truncate text-xs text-slate-200">{displayName}</span>
+            <span className="block truncate text-xs font-medium text-slate-800">{displayName}</span>
             <span className="block truncate text-[10px] text-slate-500">{displayEmail}</span>
           </span>
           <svg className="h-4 w-4 shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>

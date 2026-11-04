@@ -220,6 +220,7 @@ export default function PrintPurchasePage() {
   if (!order || !layout) return <div className="p-6 text-center text-slate-400">加载中...</div>;
 
   const isPlate = (order.orderType || "profile") === "plate";
+  const isMaterial = order.orderType === "material";
   const bc = isPlate ? BORDER_COLOR_PLATE : BORDER_COLOR;
 
   const tableRows = Array.from({ length: FIXED_ROWS }, (_, idx) => {
@@ -351,11 +352,15 @@ export default function PrintPurchasePage() {
                 <tr style={{ height: "5mm", borderTop: "none" }}>
                   {layout.xcHeaderLabels.map((label, i) => (
                     <th key={i} style={{ border: `1px solid ${bc}`, fontWeight: "bold", textAlign: "center", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋", whiteSpace: "nowrap" }}>
+                      {isMaterial ? (
+                        <span>{i === 4 ? "单价" : i === 7 ? "金额" : label}</span>
+                      ) : (
                       <EditableText value={label} fontSize={layout.cellFontSize} style={{ fontWeight: "bold" }} isEditing={isEditing} onBlur={v => {
                         const newLabels = [...layout.xcHeaderLabels];
                         newLabels[i] = v;
                         updateLayout("xcHeaderLabels", newLabels);
                       }} />
+                      )}
                       <span className="resize-handle no-print" onMouseDown={e => handleMouseDown(e, "xc", i)} />
                     </th>
                   ))}
@@ -368,10 +373,10 @@ export default function PrintPurchasePage() {
                     <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", fontFamily: "monospace", whiteSpace: "nowrap", overflow: "visible", fontSize: `${layout.cellFontSize - 1}px`, fontWeight: "bold" }}>{item.productCode}</td>
                     <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.productName}</td>
                     <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.spec}</td>
-                    <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.isEmpty ? "" : item.length}</td>
+                    <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.isEmpty ? "" : isMaterial ? (item.unitPrice || 0).toFixed(2) : item.length}</td>
                     <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.isEmpty ? "" : item.quantity}</td>
                     <td style={{ border: `1px solid ${bc}`, textAlign: "center", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.unit}</td>
-                    <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.isEmpty ? "" : item.totalWeight.toFixed(2)}</td>
+                    <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.isEmpty ? "" : isMaterial ? (item.amount || 0).toFixed(2) : item.totalWeight.toFixed(2)}</td>
                     <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.surfaceTreatment}</td>
                     <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.deliveryDate}</td>
                     <td style={{ border: `1px solid ${bc}`, padding: "0 1px", verticalAlign: "middle", overflow: "hidden", textOverflow: "ellipsis", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋" }}>{item.remark}</td>
@@ -383,7 +388,7 @@ export default function PrintPurchasePage() {
                   <td colSpan={5} style={{ border: `1px solid ${bc}`, padding: "0 2mm", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋", fontWeight: "bold", textAlign: "right" }}>合计</td>
                   <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋", fontWeight: "bold" }}>{order.totalQuantity}</td>
                   <td style={{ border: `1px solid ${bc}` }}></td>
-                  <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋", fontWeight: "bold" }}>{order.totalWeight.toFixed(2)}</td>
+                  <td style={{ border: `1px solid ${bc}`, textAlign: "right", padding: "0 1px", verticalAlign: "middle", fontSize: `${layout.cellFontSize}px`, fontFamily: "仿宋", fontWeight: "bold" }}>{isMaterial ? (order.totalAmount ?? 0).toFixed(2) : order.totalWeight.toFixed(2)}</td>
                   <td colSpan={4} style={{ border: `1px solid ${bc}` }}></td>
                 </tr>
               </tfoot>

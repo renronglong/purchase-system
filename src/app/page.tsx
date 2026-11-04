@@ -52,6 +52,9 @@ export default function PurchaseOrderListPage() {
     if (t === "plate") {
       return <span className="inline-block px-1.5 py-0.5 text-xs bg-orange-100 text-orange-700 rounded font-medium">板材</span>;
     }
+    if (t === "material") {
+      return <span className="inline-block px-1.5 py-0.5 text-xs bg-emerald-100 text-emerald-700 rounded font-medium">其它物料</span>;
+    }
     return <span className="inline-block px-1.5 py-0.5 text-xs bg-blue-100 text-blue-700 rounded font-medium">型材</span>;
   };
 
@@ -83,10 +86,17 @@ export default function PurchaseOrderListPage() {
               </Link>
               <Link
                 href="/purchase/new?type=plate"
-                className="block px-4 py-2 text-sm text-slate-700 hover:bg-orange-50 hover:text-orange-700 rounded-b-md border-t border-slate-100"
+                className="block px-4 py-2 text-sm text-slate-700 hover:bg-orange-50 hover:text-orange-700 border-t border-slate-100"
                 onClick={() => setShowNewDropdown(false)}
               >
                 新建板材采购单
+              </Link>
+              <Link
+                href="/purchase/new?type=material"
+                className="block px-4 py-2 text-sm text-slate-700 hover:bg-emerald-50 hover:text-emerald-700 rounded-b-md border-t border-slate-100"
+                onClick={() => setShowNewDropdown(false)}
+              >
+                新建其它物料采购单
               </Link>
             </div>
           )}
@@ -140,7 +150,7 @@ export default function PurchaseOrderListPage() {
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">供应商</th>
               <th className="text-right px-4 py-2.5 font-medium text-slate-600">明细数</th>
               <th className="text-right px-4 py-2.5 font-medium text-slate-600">总数量</th>
-              <th className="text-right px-4 py-2.5 font-medium text-slate-600">总重量(KG)</th>
+              <th className="text-right px-4 py-2.5 font-medium text-slate-600">总重量(KG)/金额</th>
               <th className="sticky right-0 z-10 bg-slate-50 text-center px-4 py-2.5 font-medium text-slate-600 shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.12)]">操作</th>
             </tr>
           </thead>
@@ -154,6 +164,7 @@ export default function PurchaseOrderListPage() {
             ) : (
               filteredOrders.map((order) => {
                 const isPlate = (order.orderType || "profile") === "plate";
+                const isMaterial = order.orderType === "material";
                 return (
                   <tr key={order.id} className="border-b border-slate-100 hover:bg-slate-50/50">
                     <td className="px-4 py-2.5 font-mono text-blue-600">{order.orderNo}</td>
@@ -166,7 +177,11 @@ export default function PurchaseOrderListPage() {
                       {isPlate ? (order.totalSheets ?? 0) : order.totalQuantity}
                     </td>
                     <td className="px-4 py-2.5 text-right text-slate-600">
-                      {isPlate ? (order.totalActualOutput ?? 0) : order.totalWeight.toFixed(2)}
+                      {isPlate
+                        ? (order.totalActualOutput ?? 0)
+                        : isMaterial
+                        ? `¥${(order.totalAmount ?? 0).toFixed(2)}`
+                        : order.totalWeight.toFixed(2)}
                     </td>
                     <td className="sticky right-0 z-10 bg-white px-4 py-2.5 text-center shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.12)]">
                       <div className="flex items-center justify-center gap-2">

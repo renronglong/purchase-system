@@ -91,6 +91,9 @@ export interface PurchaseOrderItem {
   piecesPerSheet?: number;  // 每张出材数
   actualOutput?: number;    // 实际出材数
   bladeCount?: number;      // 刀数
+  // 其它物料采购专属字段（可选）
+  unitPrice?: number;       // 单价
+  amount?: number;          // 金额 = 数量 × 单价
 }
 
 // 采购单
@@ -105,12 +108,13 @@ export interface PurchaseOrder {
   address: string;
   orderDate: string;
   maker: string;
-  orderType?: 'profile' | 'plate';  // 订单类型，默认 profile（向后兼容）
+  orderType?: 'profile' | 'plate' | 'material';  // 订单类型：型材 / 板材 / 其它物料，默认 profile（向后兼容）
   items: PurchaseOrderItem[];
   totalQuantity: number;
   totalWeight: number;
   totalSheets?: number;       // 板材用：总张数
   totalActualOutput?: number; // 板材用：总实际出材数
+  totalAmount?: number;       // 其它物料采购用：总金额
   createdAt: string;
   updatedAt: string;
 }

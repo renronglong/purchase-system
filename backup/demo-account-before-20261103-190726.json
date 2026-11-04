@@ -1,0 +1,511 @@
+{
+ "products": [
+  {
+   "id": "f67bdbbf-8146-48ec-ad40-76ff66607b9d",
+   "data": {
+    "id": "YL-869",
+    "name": "上盖板",
+    "spec": "117*23.65",
+    "material": "6063-T5",
+    "productType": "profile",
+    "weightPerMeter": 1.43,
+    "defaultSupplier": ""
+   },
+   "created_at": "2026-11-02T18:13:09.632772+00:00"
+  },
+  {
+   "id": "a0aa82f2-8d47-45f2-a131-60a61ff063cb",
+   "data": {
+    "id": "YL-870",
+    "name": "下盖板",
+    "spec": "108*6.7",
+    "material": "6063-T5",
+    "productType": "profile",
+    "weightPerMeter": 0.77,
+    "defaultSupplier": ""
+   },
+   "created_at": "2026-11-02T18:13:11.571617+00:00"
+  },
+  {
+   "id": "510893bd-e0c7-4c5e-9ff8-2eee6a59efec",
+   "data": {
+    "id": "PLT-YL-071",
+    "name": "档板",
+    "spec": "1220*51.9*1.2",
+    "step": 43,
+    "weight": 0.0211723768996961,
+    "material": "5052",
+    "thickness": 1.2,
+    "bladeCount": 47,
+    "plateWidth": 51.9,
+    "productType": "plate",
+    "piecesPerSheet": 1316,
+    "weightPerMeter": 0,
+    "defaultSupplier": "佛山市顺德钢板厂"
+   },
+   "created_at": "2026-11-02T18:17:50.051426+00:00"
+  }
+ ],
+ "suppliers": [
+  {
+   "id": "37764a6b-4f06-4213-9557-6d72eb13e9dc",
+   "data": {
+    "id": "mvzidjlkh7r02w",
+    "name": "佛山市顺德钢板厂",
+    "phone": "",
+    "address": "",
+    "contact": ""
+   },
+   "created_at": "2026-11-02T17:04:04.909406+00:00"
+  }
+ ],
+ "purchase_orders": [
+  {
+   "id": "9c1409ed-5ab1-4012-a65b-e58510a9c5ad",
+   "data": {
+    "id": "mvtj1ptdswht46",
+    "items": [
+     {
+      "id": "t49w54ta",
+      "spec": "117*23.65",
+      "unit": "支",
+      "length": 4000,
+      "remark": "",
+      "quantity": 500,
+      "productCode": "YL-869",
+      "productName": "上盖板",
+      "totalWeight": 2860,
+      "deliveryDate": "2026-11-10",
+      "weightPerMeter": 1.43,
+      "surfaceTreatment": "坯料"
+     }
+    ],
+    "maker": "易金兰",
+    "phone": "",
+    "address": "",
+    "company": "上栗县碧利五金塑料厂",
+    "contact": "",
+    "orderNo": "CG-20261029-001",
+    "createdAt": "2026-10-29T12:36:14.449Z",
+    "orderDate": "2026-10-29",
+    "orderType": "profile",
+    "updatedAt": "2026-11-02T18:25:07.352Z",
+    "supplierId": "mvzidjlkh7r02w",
+    "totalWeight": 2860,
+    "supplierName": "佛山市顺德钢板厂",
+    "totalQuantity": 500
+   },
+   "created_at": "2026-10-29T12:36:16.596572+00:00"
+  },
+  {
+   "id": "18162d1b-02a0-4027-b7a3-0453263c19d8",
+   "data": {
+    "id": "mvzlcj2gnkwvar",
+    "items": [
+     {
+      "id": "p3kckqoa",
+      "spec": "1220*51.9*1.2",
+      "unit": "",
+      "length": 0,
+      "remark": "",
+      "material": "5052",
+      "quantity": 100000,
+      "bladeCount": 47,
+      "productCode": "PLT-YL-071",
+      "productName": "档板",
+      "sheetsCount": 76,
+      "totalWeight": 0,
+      "actualOutput": 100016,
+      "deliveryDate": "2026-11-05",
+      "piecesPerSheet": 1316,
+      "weightPerMeter": 0,
+      "surfaceTreatment": ""
+     }
+    ],
+    "maker": "张三",
+    "phone": "",
+    "address": "",
+    "company": "上栗县碧利五金塑料厂",
+    "contact": "",
+    "orderNo": "CG-20261103-001",
+    "createdAt": "2026-11-02T18:27:15.208Z",
+    "orderDate": "2026-11-02",
+    "orderType": "plate",
+    "updatedAt": "2026-11-02T18:27:15.208Z",
+    "supplierId": "mvzidjlkh7r02w",
+    "totalSheets": 76,
+    "totalWeight": 0,
+    "supplierName": "佛山市顺德钢板厂",
+    "totalQuantity": 100000,
+    "totalActualOutput": 100016
+   },
+   "created_at": "2026-11-02T18:27:17.620033+00:00"
+  }
+ ],
+ "outsourcing_orders": [
+  {
+   "id": "bf146737-37d5-401e-b572-aaf500250c55",
+   "data": {
+    "id": "mvzl4y408nll27",
+    "items": [
+     {
+      "id": "m65p4opb",
+      "spec": "107*6.2*173.4",
+      "unit": "个",
+      "length": 0,
+      "remark": "",
+      "weight": 0,
+      "process": "氧化",
+      "surface": "铁灰色",
+      "quantity": 560,
+      "unitPrice": 5,
+      "productCode": "YL-869-2",
+      "productName": "下盖板"
+     }
+    ],
+    "phone": "",
+    "address": "",
+    "company": "上栗县碧利五金塑料厂",
+    "contact": "",
+    "orderNo": "WO-20261103-001",
+    "createdAt": "2026-11-02T18:21:21.456Z",
+    "orderDate": "2026-11-02",
+    "updatedAt": "2026-11-02T18:27:44.368Z",
+    "supplierId": "mvzidjlkh7r02w",
+    "totalPrice": 2800,
+    "totalWeight": 0,
+    "supplierName": "佛山市顺德钢板厂",
+    "totalQuantity": 560
+   },
+   "created_at": "2026-11-02T18:21:24.23459+00:00"
+  }
+ ],
+ "delivery_customers": [
+  {
+   "id": "99ed3b6d-33e4-4e89-afac-d5f81e547c2a",
+   "data": {
+    "id": "mvtfwbr1sj0jdx",
+    "name": "佛山市顺德区精工机械设备有限公司",
+    "email": "",
+    "phone": "0757-22335678",
+    "taxNo": "",
+    "address": "佛山市顺德区伦教街道工业大道8号",
+    "contact": "张建国",
+    "legalPerson": "",
+    "paymentTerms": ""
+   },
+   "created_at": "2026-10-29T11:08:04.67959+00:00"
+  }
+ ],
+ "delivery_companies": [
+  {
+   "id": "a3f31014-d776-487c-b2c5-4ab546e5a8a6",
+   "data": {
+    "id": "mvzl9i27mntfan",
+    "name": "上栗县碧利五金塑料厂",
+    "phone": "张三",
+    "address": "江西上栗县",
+    "contact": "13900139000"
+   },
+   "created_at": "2026-11-02T18:24:56.634409+00:00"
+  }
+ ],
+ "delivery_products": [
+  {
+   "id": "56580bea-11ed-45f1-82a8-841734c120ce",
+   "data": {
+    "id": "mvzl36tbgzmnht",
+    "code": "YL-869-2",
+    "name": "下盖板",
+    "spec": "107*6.2*173.4",
+    "unit": "个",
+    "surface": "铁灰色",
+    "customer": "佛山市顺德区精工机械设备有限公司",
+    "unitPrice": 33,
+    "weightPerMeter": 0
+   },
+   "created_at": "2026-11-02T18:20:02.765118+00:00"
+  }
+ ],
+ "delivery_notes": [
+  {
+   "id": "6daaf99a-a166-4369-ac0e-59868b9b32f5",
+   "data": {
+    "id": "mvzleh3kbn5pfd",
+    "date": "2026-11-02",
+    "items": [
+     {
+      "id": "f3n8yvym",
+      "qty": 560,
+      "spec": "107*6.2*173.4",
+      "unit": "个",
+      "amount": 18480,
+      "remark": "",
+      "surface": "铁灰色",
+      "unitPrice": 33,
+      "productName": "下盖板",
+      "materialCode": "YL-869-2"
+     }
+    ],
+    "maker": "",
+    "noteNo": "BL-20261103-001",
+    "company": "上栗县碧利五金塑料厂",
+    "orderNo": "",
+    "customer": "佛山市顺德区精工机械设备有限公司",
+    "reconciled": "",
+    "componentNo": "",
+    "componentName": ""
+   },
+   "created_at": "2026-11-02T18:28:48.152443+00:00"
+  }
+ ],
+ "components": [
+  {
+   "id": "ab209847-4784-4cb0-bd8b-5bb3ba2cde57",
+   "data": {
+    "id": "CMP_mvq9v0cb4h5s",
+    "name": "LZ",
+    "items": [
+     {
+      "id": "rzc5z8ih",
+      "qty": 0,
+      "spec": "500*80*160",
+      "unit": "套",
+      "amount": 0,
+      "remark": "",
+      "surface": "",
+      "unitPrice": 32,
+      "productName": "铝支撑",
+      "materialCode": "LZ-001-00"
+     },
+     {
+      "id": "20sk8bb4",
+      "qty": 0,
+      "spec": "70*70*20.4",
+      "unit": "pcs",
+      "amount": 0,
+      "remark": "",
+      "surface": "",
+      "unitPrice": 3.17,
+      "productName": "L型特殊铝块",
+      "materialCode": "LZ-002"
+     },
+     {
+      "id": "wp3uj2ly",
+      "qty": 0,
+      "spec": "180*80*3.0",
+      "unit": "pcs",
+      "amount": 0,
+      "remark": "",
+      "surface": "",
+      "unitPrice": 4.23,
+      "productName": "铝板3.0mm",
+      "materialCode": "LZ-003"
+     },
+     {
+      "id": "yuft9f8l",
+      "qty": 0,
+      "spec": "178*82*2.3",
+      "unit": "pcs",
+      "amount": 0,
+      "remark": "",
+      "surface": "",
+      "unitPrice": 3.2,
+      "productName": "方铝片2.3mm",
+      "materialCode": "LZ-004"
+     },
+     {
+      "id": "nflez1nu",
+      "qty": 0,
+      "spec": "70*36*30",
+      "unit": "pcs",
+      "amount": 0,
+      "remark": "",
+      "surface": "",
+      "unitPrice": 2.9,
+      "productName": "U型铝",
+      "materialCode": "LZ-005"
+     },
+     {
+      "id": "vav8ishn",
+      "qty": 0,
+      "spec": "54.5*27.3*50",
+      "unit": "pcs",
+      "amount": 0,
+      "remark": "",
+      "surface": "",
+      "unitPrice": 2.8,
+      "productName": "铝架配件",
+      "materialCode": "LZ-006"
+     },
+     {
+      "id": "mpxekcz7",
+      "qty": 0,
+      "spec": "35*35*200",
+      "unit": "pcs",
+      "amount": 0,
+      "remark": "",
+      "surface": "",
+      "unitPrice": 5.78,
+      "productName": "快速固定支架1孔",
+      "materialCode": "LZ-008"
+     },
+     {
+      "id": "zocg7139",
+      "qty": 0,
+      "spec": "35*35*200",
+      "unit": "pcs",
+      "amount": 0,
+      "remark": "",
+      "surface": "",
+      "unitPrice": 5.67,
+      "productName": "快速固定支架2孔",
+      "materialCode": "LZ-009"
+     },
+     {
+      "id": "gf8ux7w8",
+      "qty": 0,
+      "spec": "33.3*8.3*18",
+      "unit": "pcs",
+      "amount": 0,
+      "remark": "",
+      "surface": "",
+      "unitPrice": 0.7,
+      "productName": "U型制动钳",
+      "materialCode": "LZ-010"
+     },
+     {
+      "id": "ddpgm75t",
+      "qty": 0,
+      "spec": "42*20.8*10",
+      "unit": "pcs",
+      "amount": 0,
+      "remark": "",
+      "surface": "",
+      "unitPrice": 125,
+      "productName": "卡箍用卡扣",
+      "materialCode": "LZ-012"
+     }
+    ],
+    "unitPrice": 0
+   },
+   "created_at": "2026-11-02T18:53:05.201289+00:00"
+  }
+ ],
+ "reconciliation_orders": [
+  {
+   "id": "e4e45c1a-f2ad-4591-9cb4-7201e7ec5ed0",
+   "data": {
+    "id": "mvzlieuogg8fse",
+    "items": [
+     {
+      "id": "j5srf6c0",
+      "qty": 560,
+      "spec": "107*6.2*173.4",
+      "unit": "个",
+      "amount": 18480,
+      "orderNo": "",
+      "surface": "铁灰色",
+      "unitPrice": 33,
+      "productName": "下盖板",
+      "deliveryDate": "2026-11-02",
+      "materialCode": "YL-869-2",
+      "deliveryNoteNo": "BL-20261103-001"
+     }
+    ],
+    "remark": "",
+    "status": "草稿",
+    "endDate": "2026-11-30",
+    "orderNo": "DZ-20261103-001",
+    "customer": "佛山市顺德区精工机械设备有限公司",
+    "totalQty": 560,
+    "createdAt": "2026-11-02T18:31:49.680Z",
+    "startDate": "2026-11-01",
+    "updatedAt": "2026-11-02T18:31:49.680Z",
+    "totalAmount": 18480
+   },
+   "created_at": "2026-11-02T18:31:51.895353+00:00"
+  }
+ ],
+ "sales_orders": [
+  {
+   "id": "0d5507f4-3a48-483c-8904-2f5a6cb80b76",
+   "data": {
+    "id": "mvzlfw94wcn989",
+    "date": "2026-11-02",
+    "items": [
+     {
+      "id": "rgiwgn6y",
+      "qty": 560,
+      "spec": "107*6.2*173.4",
+      "unit": "个",
+      "amount": 18480,
+      "remark": "",
+      "surface": "铁灰色",
+      "unitPrice": 33,
+      "productName": "下盖板",
+      "materialCode": "YL-869-2"
+     }
+    ],
+    "maker": "",
+    "company": "",
+    "orderNo": "DD-20261103-001",
+    "customer": "佛山市顺德区精工机械设备有限公司",
+    "createdAt": "2026-11-02T18:29:52.264Z",
+    "updatedAt": "2026-11-02T18:29:52.264Z",
+    "componentNo": "",
+    "orderStatus": "草稿",
+    "componentName": ""
+   },
+   "created_at": "2026-11-02T18:29:54.294431+00:00"
+  }
+ ],
+ "quotations": [
+  {
+   "id": "52fbfed8-67d9-47cf-982d-245b745e4bc7",
+   "data": {
+    "id": "mvzlh37tk4lqvl",
+    "items": [
+     {
+      "id": "hgoy5hmq",
+      "spec": "107*6.2*173.4",
+      "unit": "个",
+      "remark": "",
+      "moldFee": 5800,
+      "material": "6063",
+      "taxPrice": 0,
+      "unitPrice": 33,
+      "minOrderQty": 500,
+      "productCode": "YL-869-2",
+      "productName": "下盖板",
+      "surfaceTreatment": "铁灰色"
+     }
+    ],
+    "terms": [
+     "1：依照图纸进行开模及送样。",
+     "2：此报价含运费",
+     "3：付款方式：",
+     "4：此报价单有效期为30天",
+     "5：开模时间20个工作日，出样20个工作日"
+    ],
+    "quoteNo": "BJ-20261103-001",
+    "createdAt": "2026-11-02T18:30:47.945Z",
+    "quoteDate": "2026-11-02",
+    "updatedAt": "2026-11-02T18:30:47.945Z",
+    "grandTotal": 33,
+    "componentNo": "",
+    "customerName": "佛山市顺德区精工机械设备有限公司",
+    "componentName": "",
+    "customerPhone": "0757-22335678",
+    "supplierPhone": "张三",
+    "customerAddress": "佛山市顺德区伦教街道工业大道8号",
+    "customerContact": "张建国",
+    "supplierAddress": "江西上栗县",
+    "supplierCompany": "上栗县碧利五金塑料厂",
+    "supplierContact": "13900139000"
+   },
+   "created_at": "2026-11-02T18:30:50.143385+00:00"
+  }
+ ],
+ "customer_accounts": []
+}

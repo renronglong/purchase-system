@@ -44,14 +44,14 @@ const COLS: Record<Kind, { header: string; key: string; wch: number }[]> = {
   plate: [
     { header: "产品编号", key: "编号", wch: 14 },
     { header: "产品名称", key: "名称", wch: 16 },
-    { header: "材质", key: "材质", wch: 12 },
-    { header: "剪板宽度(mm)", key: "宽度", wch: 12 },
+    { header: "剪板宽度(mm)", key: "宽度", wch: 13 },
     { header: "厚度(mm)", key: "厚度", wch: 10 },
     { header: "步距(mm)", key: "步距", wch: 10 },
-    { header: "每张板数量", key: "每张数量", wch: 12 },
-    { header: "重量(KG)", key: "重量", wch: 10 },
-    { header: "刀数", key: "刀数", wch: 8 },
-    { header: "默认供应商", key: "供应商", wch: 16 },
+    { header: "一次出数量", key: "一次出数量", wch: 12 },
+    { header: "材质", key: "材质", wch: 18 },
+    { header: "牌号", key: "牌号", wch: 12 },
+    { header: "板材规格（宽*长）", key: "板材规格", wch: 18 },
+    { header: "密度", key: "密度", wch: 8 },
   ],
   delivery: [
     { header: "物料编号", key: "编号", wch: 12 },
@@ -72,7 +72,7 @@ const EXAMPLES: Record<Kind, (string | number)[]> = {
   supplier: ["科丽", "欧阳先生", "18666506359", "里水镇"],
   customer: ["示例客户公司", "张三", "13900000000", "佛山市南海区"],
   profile: ["TY-6001", "铝型材60系列", "60*40*2.0", 1.5, "6063-T5", "科丽"],
-  plate: ["PLT-001", "5052铝板", "5052", 100, 1.2, 0.5, 200, 12.5, 8, "科丽"],
+  plate: ["PL-001", "门板", 100, 1.5, 50, 20, "冷轧板（SPCC）", "SPCC", "1000×2000", 7.8],
   delivery: ["WL-001", "铝条", "20*3", "氧化", "米", 0.5, 15.5, "示例客户"],
 };
 
@@ -154,10 +154,46 @@ export function ImportPanel({ kind, onImported, onDone }: { kind: Kind; onImport
       if (key && seenKey.has(key)) { dup++; return; }
       if (key) seenKey.add(key);
       let missing = "";
-      if (kind === "profile" || kind === "plate") {
+      if (kind === "plate") {
+        const nf = (v: string): number | undefined => { const n = parseFloat(v); return isNaN(n) ? undefined : n; };
+        // 板材规格写成「1000×2000 / 1000*2000 / 1000x2000」都能解析
+        const specRaw = (c["板材规格"] || "").replace(/\s/g, "");
+        const mm = specRaw.match(/^(\d+(?:\.\d+)?)[×xX*](\d+(?:\.\d+)?)$/);
+        const sw = mm ? Number(mm[1]) : undefined;
+        const sl = mm ? Number(mm[2]) : undefined;
+        const bw = nf(c["宽度"]);
+        const th = nf(c["厚度"]);
+        const st = nf(c["步距"]);
+        const dn = nf(c["密度"]);
+        // 刀数 = 板材长 ÷ 剪板宽度；每张板数量 = 板材宽 ÷ 步距 × 刀数；重量按公式反算
+        const blades = bw && bw > 0 && sl && sl > 0 ? Math.floor(sl / bw) : undefined;
+        const perSheet = st && st > 0 && blades && sw ? Math.floor((sw / st) * blades) : undefined;
+        const weight = sw && sl && th && dn && perSheet
+          ? Math.round((sw * sl * th * dn) / 1000000 / perSheet * 1000) / 1000
+          : undefined;
+        productStore.add({
+          id: c["编号"] || "",
+          name: c["名称"] || "",
+          spec: "",
+          weightPerMeter: 0,
+          material: c["材质"] || "",
+          defaultSupplier: "",
+          productType: "plate",
+          plateWidth: bw,
+          thickness: th,
+          step: st,
+          outputPerTime: nf(c["一次出数量"]),
+          grade: c["牌号"] || "",
+          plateSpecWidth: sw,
+          plateSpecLength: sl,
+          density: dn,
+          bladeCount: blades,
+          piecesPerSheet: perSheet,
+          weight,
+        });
+      } else if (kind === "profile") {
         const wm = parseFloat(c["米重"]);
         const id = c["编号"] || "";
-        const nf = (v: string): number | undefined => { const n = parseFloat(v); return isNaN(n) ? undefined : n; };
         productStore.add({
           id: id,
           name: c["名称"] || "",
@@ -165,16 +201,7 @@ export function ImportPanel({ kind, onImported, onDone }: { kind: Kind; onImport
           weightPerMeter: isNaN(wm) ? undefined : wm,
           material: c["材质"] || "",
           defaultSupplier: c["供应商"] || "",
-          productType: kind === "plate" ? "plate" : "profile",
-          // 板材专属字段
-          ...(kind === "plate" ? {
-            plateWidth: nf(c["宽度"]),
-            thickness: nf(c["厚度"]),
-            step: nf(c["步距"]),
-            piecesPerSheet: nf(c["每张数量"]),
-            weight: nf(c["重量"]),
-            bladeCount: nf(c["刀数"]),
-          } : {}),
+          productType: "profile",
         });
       } else if (kind === "delivery") {
         deliveryProductStore.add({

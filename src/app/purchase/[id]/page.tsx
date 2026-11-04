@@ -4,12 +4,13 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter, useParams, useSearchParams } from "next/navigation";
 import {
   purchaseOrderStore, supplierStore, productStore, previewPurchaseOrderNo, deliveryCompanyStore,
+  deliveryProductStore,
   type PurchaseOrder, type PurchaseOrderItem,
 } from "@/lib/store";
 import { surfaceTreatments } from "@/lib/seed-data";
 import ProductSearchSelect from "@/components/product-search-select";
 
-type OrderType = "profile" | "plate";
+type OrderType = "profile" | "plate" | "material";
 
 const materialOptions = ["普通铝板", "5052", "6063", "1060", "3003"];
 
@@ -41,6 +42,14 @@ function createEmptyItem(orderType: OrderType = "profile"): PurchaseOrderItem {
       piecesPerSheet: 0,
       actualOutput: 0,
       bladeCount: 0,
+    };
+  }
+  if (orderType === "material") {
+    return {
+      ...base,
+      unit: "",
+      unitPrice: 0,
+      amount: 0,
     };
   }
   return base;
@@ -120,6 +129,9 @@ export default function PurchaseOrderFormPage() {
       if (typeParam === "plate") {
         setOrderType("plate");
         setItems([createEmptyItem("plate")]);
+      } else if (typeParam === "material") {
+        setOrderType("material");
+        setItems([createEmptyItem("material")]);
       }
     }
   }, [isEdit, searchParams]);
@@ -155,6 +167,8 @@ export default function PurchaseOrderFormPage() {
         item.totalWeight = calcWeight(item.weightPerMeter, item.length, item.quantity);
       } else if (orderType === "plate") {
         return next.map((it, i) => i === index ? calcPlateFields(item) : it);
+      } else if (orderType === "material") {
+        item.amount = (item.quantity || 0) * (item.unitPrice || 0);
       }
       next[index] = item;
       return next;
@@ -193,6 +207,26 @@ export default function PurchaseOrderFormPage() {
     });
   };
 
+  // 其它物料采购：按物料编号从产品库「物料」带出名称/规格/表面处理/单位/单价
+  const handleMaterialCodeChange = (index: number, code: string) => {
+    const list = deliveryProductStore.getAll();
+    const hit = list.find((p) => p.code && p.code === code);
+    setItems((prev) => {
+      const next = [...prev];
+      const cur: PurchaseOrderItem = { ...next[index], productCode: code };
+      if (hit) {
+        cur.productName = hit.name || cur.productName;
+        cur.spec = hit.spec || cur.spec;
+        cur.surfaceTreatment = hit.surface || cur.surfaceTreatment;
+        cur.unit = hit.unit || cur.unit;
+        if (hit.unitPrice) cur.unitPrice = hit.unitPrice;
+      }
+      cur.amount = (cur.quantity || 0) * (cur.unitPrice || 0);
+      next[index] = cur;
+      return next;
+    });
+  };
+
   const handleOrderTypeChange = (newType: OrderType) => {
     if (typeLocked) return;
     setOrderType(newType);
@@ -213,15 +247,18 @@ export default function PurchaseOrderFormPage() {
   const totalWeight = items.reduce((sum, item) => sum + item.totalWeight, 0);
   const totalSheets = items.reduce((sum, item) => sum + (item.sheetsCount || 0), 0);
   const totalActualOutput = items.reduce((sum, item) => sum + (item.actualOutput || 0), 0);
+  const totalAmount = items.reduce((sum, item) => sum + (item.amount || (item.quantity || 0) * (item.unitPrice || 0)), 0);
 
   const handleSave = () => {
     if (!supplierName) {
       alert("请选择供应商");
       return;
     }
-    const validItems = items.filter(item => item.productCode);
+    const validItems = items.filter(item =>
+      orderType === "material" ? (item.productCode || item.productName) : item.productCode
+    );
     if (validItems.length === 0) {
-      alert("请至少添加一条产品明细");
+      alert(orderType === "material" ? "请至少添加一条物料明细（填写物料编号或名称）" : "请至少添加一条产品明细");
       return;
     }
 
@@ -244,6 +281,9 @@ export default function PurchaseOrderFormPage() {
       orderData.totalSheets = totalSheets;
       orderData.totalActualOutput = totalActualOutput;
     }
+    if (orderType === "material") {
+      orderData.totalAmount = totalAmount;
+    }
 
     // 保存制单人到历史记录
     if (maker) {
@@ -260,11 +300,34 @@ export default function PurchaseOrderFormPage() {
     if (!existingSuppliers.find(s => s.name === supplierName)) {
       supplierStore.add({ name: supplierName, contact: contact || "", phone: phone || "", address: address || "" });
     }
-    // 自动添加新产品到数据库
-    const existingProducts = productStore.getAll();
-    for (const item of validItems) {
-      if (item.productCode && !existingProducts.find(p => p.id === item.productCode)) {
-        productStore.add({ name: item.productName, spec: item.spec || "", weightPerMeter: item.weightPerMeter || 0, material: item.material || "" });
+    if (orderType === "material") {
+      // 其它物料采购：新物料回写产品库「物料」tab
+      const existingMats = deliveryProductStore.getAll();
+      for (const item of validItems) {
+        const dup = existingMats.find(m =>
+          item.productCode ? m.code === item.productCode : (m.name === item.productName && m.spec === item.spec)
+        );
+        if (!dup) {
+          const created = deliveryProductStore.add({
+            code: item.productCode || "",
+            name: item.productName,
+            spec: item.spec || "",
+            surface: item.surfaceTreatment || "",
+            unit: item.unit || "",
+            weightPerMeter: 0,
+            unitPrice: item.unitPrice || 0,
+            customer: "",
+          });
+          existingMats.push(created);
+        }
+      }
+    } else {
+      // 自动添加新产品到数据库
+      const existingProducts = productStore.getAll();
+      for (const item of validItems) {
+        if (item.productCode && !existingProducts.find(p => p.id === item.productCode)) {
+          productStore.add({ name: item.productName, spec: item.spec || "", weightPerMeter: item.weightPerMeter || 0, material: item.material || "" });
+        }
       }
     }
 
@@ -283,6 +346,7 @@ export default function PurchaseOrderFormPage() {
           {isEdit ? "编辑采购单" : "新建采购单"}
           {orderType === "plate" && <span className="ml-2 text-sm px-2 py-0.5 bg-orange-100 text-orange-700 rounded">板材</span>}
           {orderType === "profile" && <span className="ml-2 text-sm px-2 py-0.5 bg-blue-100 text-blue-700 rounded">型材</span>}
+          {orderType === "material" && <span className="ml-2 text-sm px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded">其它物料</span>}
         </h1>
         <div className="flex gap-2">
           <button
@@ -322,6 +386,7 @@ export default function PurchaseOrderFormPage() {
             >
               <option value="profile">型材</option>
               <option value="plate">板材</option>
+              <option value="material">其它物料</option>
             </select>
           </div>
           <div>
@@ -634,12 +699,158 @@ export default function PurchaseOrderFormPage() {
         </div>
       )}
 
+      {/* 明细表格 - 其它物料采购（格式参考产品库「物料」） */}
+      {orderType === "material" && (
+        <div className="bg-white rounded-lg border border-slate-200 overflow-x-auto">
+          <table className="w-full text-xs min-w-[1040px]">
+            <thead>
+              <tr className="bg-emerald-50 border-b border-emerald-200">
+                <th className="px-2 py-2 font-medium text-slate-600 w-10">序号</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-36">物料编号</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-32">产品名称</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-32">规格</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-24">表面处理</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-16">单位</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-20">数量</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-24">单价</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-24">金额</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-32">备注</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-12">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((item, index) => (
+                <tr key={item.id} className="border-b border-slate-100">
+                  <td className="px-2 py-1.5 text-center text-slate-500">{index + 1}</td>
+                  <td className="px-2 py-1.5">
+                    <input
+                      type="text"
+                      value={item.productCode}
+                      onChange={(e) => handleMaterialCodeChange(index, e.target.value)}
+                      list="purchase-material-code-list"
+                      placeholder="输入或选择物料编号"
+                      className="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+                    />
+                  </td>
+                  <td className="px-2 py-1.5">
+                    <input
+                      type="text"
+                      value={item.productName}
+                      onChange={(e) => updateItem(index, "productName", e.target.value)}
+                      list="purchase-material-name-list"
+                      className="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+                    />
+                  </td>
+                  <td className="px-2 py-1.5">
+                    <input
+                      type="text"
+                      value={item.spec}
+                      onChange={(e) => updateItem(index, "spec", e.target.value)}
+                      list="purchase-material-spec-list"
+                      className="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+                    />
+                  </td>
+                  <td className="px-2 py-1.5">
+                    <input
+                      type="text"
+                      value={item.surfaceTreatment}
+                      onChange={(e) => updateItem(index, "surfaceTreatment", e.target.value)}
+                      list="purchase-material-surface-list"
+                      placeholder="—"
+                      className="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+                    />
+                  </td>
+                  <td className="px-2 py-1.5">
+                    <input
+                      type="text"
+                      value={item.unit}
+                      onChange={(e) => updateItem(index, "unit", e.target.value)}
+                      list="purchase-material-unit-list"
+                      placeholder="—"
+                      className="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+                    />
+                  </td>
+                  <td className="px-2 py-1.5">
+                    <input
+                      type="number"
+                      value={item.quantity || ""}
+                      onChange={(e) => updateItem(index, "quantity", Number(e.target.value))}
+                      placeholder="0"
+                      className="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+                    />
+                  </td>
+                  <td className="px-2 py-1.5">
+                    <input
+                      type="number"
+                      step="0.01"
+                      value={item.unitPrice || ""}
+                      onChange={(e) => updateItem(index, "unitPrice", Number(e.target.value))}
+                      placeholder="0.00"
+                      className="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+                    />
+                  </td>
+                  <td className="px-2 py-1.5 text-right font-mono text-slate-700">
+                    {((item.quantity || 0) * (item.unitPrice || 0)).toFixed(2)}
+                  </td>
+                  <td className="px-2 py-1.5">
+                    <input
+                      type="text"
+                      value={item.remark}
+                      onChange={(e) => updateItem(index, "remark", e.target.value)}
+                      placeholder="备注"
+                      className="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-emerald-500/30"
+                    />
+                  </td>
+                  <td className="px-2 py-1.5 text-center">
+                    <button
+                      onClick={() => removeItem(index)}
+                      className="text-red-400 hover:text-red-600 text-xs"
+                      title="删除"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+            <tfoot>
+              <tr className="bg-emerald-50 border-t border-emerald-200">
+                <td colSpan={6} className="px-2 py-2 text-right text-sm font-medium text-slate-600">合计</td>
+                <td className="px-2 py-2 text-center font-mono font-bold text-slate-900">{totalQuantity}</td>
+                <td className="px-2 py-2"></td>
+                <td className="px-2 py-2 text-right font-mono font-bold text-slate-900">{totalAmount.toFixed(2)}</td>
+                <td colSpan={2}></td>
+              </tr>
+            </tfoot>
+          </table>
+          <datalist id="purchase-material-code-list">
+            {deliveryProductStore.getAll().filter(p => p.code).map(p => <option key={p.id} value={p.code}>{p.name}</option>)}
+          </datalist>
+          <datalist id="purchase-material-name-list">
+            {Array.from(new Set(deliveryProductStore.getAll().map(p => p.name).filter(Boolean))).map(n => <option key={n} value={n} />)}
+          </datalist>
+          <datalist id="purchase-material-spec-list">
+            {Array.from(new Set(deliveryProductStore.getAll().map(p => p.spec).filter(Boolean))).map(sp => <option key={sp} value={sp} />)}
+          </datalist>
+          <datalist id="purchase-material-surface-list">
+            {Array.from(new Set(deliveryProductStore.getAll().map(p => p.surface).filter(Boolean))).map(sf => <option key={sf} value={sf} />)}
+          </datalist>
+          <datalist id="purchase-material-unit-list">
+            {Array.from(new Set(deliveryProductStore.getAll().map(p => p.unit).filter(Boolean))).map(u => <option key={u} value={u} />)}
+          </datalist>
+        </div>
+      )}
+
       <div className="mt-3">
         <button
           onClick={addItem}
           className={`inline-flex items-center gap-1 px-3 py-1.5 text-xs border rounded-md hover:opacity-80 ${
             orderType === "plate"
               ? "text-orange-600 border-orange-200 hover:bg-orange-50"
+              : orderType === "material"
+              ? "text-emerald-600 border-emerald-200 hover:bg-emerald-50"
               : "text-blue-600 border-blue-200 hover:bg-blue-50"
           }`}
         >
