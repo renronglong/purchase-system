@@ -22,6 +22,9 @@ interface InventoryRecord {
   surface: string;
   material?: string; // 材质（板材）
   quantity: number;
+  length?: number; // 长度（mm，型材）
+  weightPerMeter?: number; // 米重（kg/m）
+  weight?: number; // 重量（kg）= 米重 × 长度 ÷ 1000 × 数量
   unit: string;
   piecesPerSheet?: number; // 单张数量（板材）
   actualOutput?: number; // 实际数量（板材）
@@ -44,6 +47,9 @@ interface InventorySummary {
   inboundQty: number;
   outboundQty: number;
   currentQty: number;
+  inboundWeight: number;
+  outboundWeight: number;
+  currentWeight: number;
 }
 
 const STORAGE_KEY = "inventory_records_local";
@@ -300,6 +306,8 @@ export default function InventoryPage() {
     surface: "",
     material: "",
     quantity: "",
+    length: "",
+    weightPerMeter: "",
     unit: "条",
     piecesPerSheet: "",
     actualOutput: "",
@@ -314,6 +322,15 @@ export default function InventoryPage() {
   // 关联采购单状态
   const [selectedOrder, setSelectedOrder] = useState<PurchaseOrder | null>(null);
   const isPlate = formData.orderType === "plate";
+
+  // 重量（kg）= 米重(kg/m) × 长度(mm) ÷ 1000 × 数量
+  const calcWeight = (() => {
+    const wpm = parseFloat(formData.weightPerMeter);
+    const len = parseFloat(formData.length);
+    const qty = parseFloat(formData.quantity);
+    if (!(wpm > 0) || !(len > 0) || !(qty > 0)) return 0;
+    return wpm * (len / 1000) * qty;
+  })();
 
   // 加载数据
   useEffect(() => {
@@ -366,6 +383,8 @@ export default function InventoryPage() {
       surface: record.surface,
       material: record.material || "",
       quantity: String(record.quantity),
+      length: record.length ? String(record.length) : "",
+      weightPerMeter: record.weightPerMeter ? String(record.weightPerMeter) : "",
       unit: record.unit,
       piecesPerSheet: record.piecesPerSheet ? String(record.piecesPerSheet) : "",
       actualOutput: record.actualOutput ? String(record.actualOutput) : "",
@@ -391,6 +410,8 @@ export default function InventoryPage() {
       piecesPerSheet: ot === "plate" ? prev.piecesPerSheet : "",
       actualOutput: ot === "plate" ? prev.actualOutput : "",
       bladeCount: ot === "plate" ? prev.bladeCount : "",
+      length: ot === "plate" ? "" : prev.length,
+      weightPerMeter: ot === "plate" ? "" : prev.weightPerMeter,
     }));
     if (ot === "profile") {
       setProductSearchKey("");
@@ -457,6 +478,12 @@ export default function InventoryPage() {
       quantity: plateItem
         ? String(item.sheetsCount || item.quantity || "")
         : String(item.quantity),
+      length: plateItem ? "" : item.length ? String(item.length) : prev.length,
+      weightPerMeter: plateItem
+        ? ""
+        : item.weightPerMeter
+        ? String(item.weightPerMeter)
+        : prev.weightPerMeter,
       unit: plateItem ? "张" : item.unit,
       piecesPerSheet: plateItem && item.piecesPerSheet ? String(item.piecesPerSheet) : "",
       actualOutput: plateItem && item.actualOutput ? String(item.actualOutput) : "",
@@ -482,6 +509,20 @@ export default function InventoryPage() {
 
     let newRecords: InventoryRecord[];
 
+    // 长度/米重优先用表单值；表单没填时从关联采购单的对应明细行兜底取
+    let calcLen = parseFloat(formData.length);
+    let calcWpm = parseFloat(formData.weightPerMeter);
+    if (selectedOrder) {
+      const hit = (selectedOrder.items as any[]).find(
+        (i) => i.productCode === formData.productCode && (!formData.spec || i.spec === formData.spec)
+      );
+      if (hit) {
+        if (!(calcLen > 0) && hit.length) calcLen = Number(hit.length);
+        if (!(calcWpm > 0) && hit.weightPerMeter) calcWpm = Number(hit.weightPerMeter);
+      }
+    }
+    const calcWt = calcWpm > 0 && calcLen > 0 ? calcWpm * (calcLen / 1000) * qty : 0;
+
     const plateExtra = isPlate
       ? {
           orderType: "plate" as const,
@@ -490,8 +531,18 @@ export default function InventoryPage() {
           piecesPerSheet: formData.piecesPerSheet ? Number(formData.piecesPerSheet) : undefined,
           actualOutput: formData.actualOutput ? Number(formData.actualOutput) : undefined,
           bladeCount: formData.bladeCount ? Number(formData.bladeCount) : undefined,
+          length: undefined,
+          weightPerMeter: undefined,
+          weight: undefined,
         }
-      : { orderType: "profile" as const, surface: formData.surface, material: "" };
+      : {
+          orderType: "profile" as const,
+          surface: formData.surface,
+          material: "",
+          length: calcLen > 0 ? calcLen : undefined,
+          weightPerMeter: calcWpm > 0 ? calcWpm : undefined,
+          weight: calcWt > 0 ? calcWt : undefined,
+        };
 
     if (editingRecord) {
       newRecords = records.map((r) =>
@@ -561,15 +612,23 @@ export default function InventoryPage() {
           inboundQty: 0,
           outboundQty: 0,
           currentQty: 0,
+          inboundWeight: 0,
+          outboundWeight: 0,
+          currentWeight: 0,
         });
       }
       const summary = map.get(groupKey)!;
+      const w = r.weight || 0;
       if (r.type === "inbound") {
         summary.inboundQty += r.quantity;
         summary.currentQty += r.quantity;
+        summary.inboundWeight += w;
+        summary.currentWeight += w;
       } else {
         summary.outboundQty += r.quantity;
         summary.currentQty -= r.quantity;
+        summary.outboundWeight += w;
+        summary.currentWeight -= w;
       }
     });
 
@@ -634,6 +693,7 @@ export default function InventoryPage() {
                           </>
                         ) : (
                           <>
+                            <th className="px-3 py-2 text-right text-xs font-medium text-blue-800">长度(mm)</th>
                             <th className="px-3 py-2 text-right text-xs font-medium text-blue-800">数量</th>
                             <th className="px-3 py-2 text-center text-xs font-medium text-blue-800">单位</th>
                           </>
@@ -665,6 +725,7 @@ export default function InventoryPage() {
                             </>
                           ) : (
                             <>
+                              <td className="px-3 py-2 text-xs text-right text-slate-700">{item.length || "-"}</td>
                               <td className="px-3 py-2 text-xs text-right text-slate-900">{item.quantity}</td>
                               <td className="px-3 py-2 text-xs text-center text-slate-600">{item.unit}</td>
                             </>
@@ -1035,13 +1096,14 @@ export default function InventoryPage() {
                 <th className="px-4 py-3 text-right text-xs font-medium text-slate-600">入库数量</th>
                 <th className="px-4 py-3 text-right text-xs font-medium text-slate-600">出库数量</th>
                 <th className="px-4 py-3 text-right text-xs font-medium text-slate-600">当前库存</th>
+                <th className="px-4 py-3 text-right text-xs font-medium text-slate-600">库存重量(kg)</th>
                 <th className="px-4 py-3 text-center text-xs font-medium text-slate-600">单位</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {summary.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="px-4 py-8 text-center text-sm text-slate-400">
+                  <td colSpan={9} className="px-4 py-8 text-center text-sm text-slate-400">
                     暂无库存数据
                   </td>
                 </tr>
@@ -1090,6 +1152,8 @@ export default function InventoryPage() {
                 <th className="px-4 py-3 text-left text-xs font-medium text-slate-600">材质/表面</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-slate-600">供应商</th>
                 <th className="px-4 py-3 text-right text-xs font-medium text-slate-600">数量</th>
+                <th className="px-4 py-3 text-right text-xs font-medium text-slate-600">长度(mm)</th>
+                <th className="px-4 py-3 text-right text-xs font-medium text-slate-600">重量(kg)</th>
                 <th className="px-4 py-3 text-center text-xs font-medium text-slate-600">单位</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-slate-600">关联单号</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-slate-600">操作员</th>
@@ -1100,7 +1164,7 @@ export default function InventoryPage() {
             <tbody className="divide-y divide-slate-100">
               {records.filter((r) => r.type === activeTab).length === 0 ? (
                 <tr>
-                  <td colSpan={12} className="px-4 py-8 text-center text-sm text-slate-400">
+                  <td colSpan={14} className="px-4 py-8 text-center text-sm text-slate-400">
                     暂无记录
                   </td>
                 </tr>
