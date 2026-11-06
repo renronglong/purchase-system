@@ -1,58 +1,77 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/auth-provider";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
+  const [code, setCode] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
-  const [captchaCode, setCaptchaCode] = useState("");
-  const [captchaToken, setCaptchaToken] = useState("");
-  const [captchaImage, setCaptchaImage] = useState("");
-  const [captchaLoading, setCaptchaLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
-  const { register } = useAuth();
+  const [sending, setSending] = useState(false);
+  const [countdown, setCountdown] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const { register, sendRegisterCode } = useAuth();
   const router = useRouter();
 
-  // 拉一张新的图形验证码（点击图片也会重新拉）
-  const loadCaptcha = useCallback(async () => {
-    setCaptchaLoading(true);
-    try {
-      const res = await fetch("/api/auth/captcha", { cache: "no-store" });
-      if (!res.ok) throw new Error("bad status");
-      const data = await res.json();
-      setCaptchaToken(data?.token || "");
-      setCaptchaImage(data?.image || "");
-      setCaptchaCode("");
-    } catch {
-      setCaptchaToken("");
-      setCaptchaImage("");
-      setError("验证码加载失败，请点击验证码区域重试");
-    } finally {
-      setCaptchaLoading(false);
-    }
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
   }, []);
 
-  useEffect(() => {
-    loadCaptcha();
-  }, [loadCaptcha]);
+  const startCountdown = () => {
+    setCountdown(60);
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => {
+      setCountdown((c) => {
+        if (c <= 1) {
+          if (timerRef.current) clearInterval(timerRef.current);
+          return 0;
+        }
+        return c - 1;
+      });
+    }, 1000);
+  };
+
+  const handleSendCode = async () => {
+    setError("");
+    setSuccess("");
+    if (!email.trim()) {
+      setError("请先输入邮箱");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setError("请输入有效的邮箱地址");
+      return;
+    }
+    setSending(true);
+    try {
+      const r = await sendRegisterCode(email.trim());
+      if (r.success) {
+        setSuccess("验证码已发送，请查收邮箱（含垃圾邮件箱）");
+        startCountdown();
+      } else {
+        setError(r.error || "验证码发送失败");
+      }
+    } catch {
+      setError("网络错误，请重试");
+    } finally {
+      setSending(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setSuccess("");
 
-    if (!captchaCode.trim()) {
-      setError("请输入图形验证码");
-      return;
-    }
-    if (!captchaToken) {
-      setError("验证码已失效，请点击图片刷新");
-      loadCaptcha();
+    if (!/^\d{6,10}$/.test(code.trim())) {
+      setError("请输入邮件中的 6 位数字验证码");
       return;
     }
 
@@ -63,19 +82,15 @@ export default function RegisterPage() {
         password,
         displayName || email.split("@")[0],
         "",
-        captchaToken,
-        captchaCode
+        code.trim()
       );
       if (result.success) {
         router.push("/");
       } else {
         setError(result.error || "操作失败");
-        // 验证码一次性使用，失败后换一张，避免重复提交同一 token
-        loadCaptcha();
       }
     } catch {
       setError("网络错误，请重试");
-      loadCaptcha();
     } finally {
       setLoading(false);
     }
@@ -107,6 +122,34 @@ export default function RegisterPage() {
               </div>
 
               <div>
+                <label className="mb-1 block text-sm font-medium text-slate-600">邮箱验证码</label>
+                <div className="flex items-stretch gap-2">
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={code}
+                    onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                    maxLength={10}
+                    autoComplete="one-time-code"
+                    className="min-w-0 flex-1 rounded-lg border border-slate-200 px-4 py-2.5 text-sm tracking-[0.2em] focus:border-transparent focus:ring-2 focus:ring-blue-500"
+                    placeholder="6 位数字验证码"
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={handleSendCode}
+                    disabled={sending || countdown > 0}
+                    className="h-11 w-[120px] shrink-0 rounded-lg border border-sky-200 bg-sky-50 text-sm font-medium text-sky-700 transition-colors hover:bg-sky-100 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {sending ? "发送中..." : countdown > 0 ? `${countdown} 秒后重发` : "获取验证码"}
+                  </button>
+                </div>
+                <p className="mt-1.5 text-[11px] text-slate-400">
+                  验证码发送到上方邮箱，10 分钟内有效；同一邮箱 60 秒内只能发一次
+                </p>
+              </div>
+
+              <div>
                 <label className="mb-1 block text-sm font-medium text-slate-600">显示名称</label>
                 <input
                   type="text"
@@ -127,47 +170,6 @@ export default function RegisterPage() {
                   placeholder="请输入密码（至少6位）"
                   required
                 />
-              </div>
-
-              <div>
-                <label className="mb-1 block text-sm font-medium text-slate-600">
-                  验证码
-                </label>
-                <div className="flex items-stretch gap-2">
-                  <input
-                    type="text"
-                    value={captchaCode}
-                    onChange={(e) => setCaptchaCode(e.target.value.toUpperCase())}
-                    maxLength={4}
-                    autoComplete="off"
-                    spellCheck={false}
-                    className="min-w-0 flex-1 rounded-lg border border-slate-200 px-4 py-2.5 text-sm tracking-[0.3em] uppercase focus:border-transparent focus:ring-2 focus:ring-blue-500"
-                    placeholder="请输入右侧字符"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={loadCaptcha}
-                    title="看不清？点击刷新"
-                    className="relative flex h-11 w-[128px] shrink-0 items-center justify-center overflow-hidden rounded-lg border border-sky-200 bg-sky-50 transition-colors hover:border-sky-300"
-                  >
-                    {captchaImage ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img
-                        src={captchaImage}
-                        alt="图形验证码"
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <span className="text-xs text-slate-400">
-                        {captchaLoading ? "加载中..." : "点击重试"}
-                      </span>
-                    )}
-                  </button>
-                </div>
-                <p className="mt-1.5 text-[11px] text-slate-400">
-                  不区分大小写，看不清可点击图片换一张（5 分钟内有效）
-                </p>
               </div>
 
               {error && (

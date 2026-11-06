@@ -45,8 +45,7 @@ export const authStore = {
     password: string,
     displayName: string,
     company: string,
-    captchaToken = "",
-    captchaCode = ""
+    code = ""
   ) {
     if (!email.trim()) return { success: false, error: "邮箱不能为空" };
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
@@ -54,7 +53,8 @@ export const authStore = {
     }
     if (password.length < 6) return { success: false, error: "密码至少6位" };
     if (!displayName.trim()) return { success: false, error: "显示名称不能为空" };
-    if (!captchaCode.trim()) return { success: false, error: "请输入图形验证码" };
+    if (!/^\d{6,10}$/.test(code.trim()))
+      return { success: false, error: "请输入邮件中的数字验证码" };
 
     try {
       await post("/api/auth/register", {
@@ -62,8 +62,7 @@ export const authStore = {
         password,
         displayName: displayName.trim(),
         company: company.trim(),
-        captchaToken,
-        captchaCode: captchaCode.trim(),
+        code: code.trim(),
       });
     } catch (e: any) {
       return { success: false, error: e.message };
@@ -102,6 +101,20 @@ export const authStore = {
     }
     try {
       await post("/api/auth/send-code", { email: email.trim() });
+      return { success: true };
+    } catch (e: any) {
+      return { success: false, error: e?.message || "验证码发送失败" };
+    }
+  },
+
+  /** 注册场景发送邮箱验证码（只对未注册邮箱发；已注册会提示去登录） */
+  async sendRegisterCode(email: string) {
+    if (!email.trim()) return { success: false, error: "请输入邮箱" };
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      return { success: false, error: "请输入有效的邮箱地址" };
+    }
+    try {
+      await post("/api/auth/send-code", { email: email.trim(), purpose: "register" });
       return { success: true };
     } catch (e: any) {
       return { success: false, error: e?.message || "验证码发送失败" };

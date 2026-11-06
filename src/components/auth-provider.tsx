@@ -21,9 +21,9 @@ interface AuthContextType {
     password: string,
     displayName: string,
     company: string,
-    captchaToken?: string,
-    captchaCode?: string
+    code?: string
   ) => Promise<{ success: boolean; error?: string; emailConfirmRequired?: boolean }>;
+  sendRegisterCode: (email: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
 }
 
@@ -107,10 +107,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     password: string,
     displayName: string,
     company: string,
-    captchaToken = "",
-    captchaCode = ""
+    code = ""
   ) => {
-    const result = await authStore.register(email, password, displayName, company, captchaToken, captchaCode);
+    const result = await authStore.register(email, password, displayName, company, code);
     if (result.success && result.user) {
       setCurrentUserId(result.user.id);
       initData();
@@ -119,6 +118,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
     return { success: false, error: result.error };
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const sendRegisterCode = useCallback(async (email: string) => {
+    return await authStore.sendRegisterCode(email);
   }, []);
 
   const logout = useCallback(() => {
@@ -161,7 +164,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ currentUser, loading, login, sendCode, loginWithCode, loginWithToken, loginWithAccessToken, resetPassword, changePassword, register, logout }}>
+    <AuthContext.Provider value={{ currentUser, loading, login, sendCode, loginWithCode, loginWithToken, loginWithAccessToken, resetPassword, changePassword, register, sendRegisterCode, logout }}>
       {children}
     </AuthContext.Provider>
   );
