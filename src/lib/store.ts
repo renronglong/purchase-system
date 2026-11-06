@@ -2,7 +2,7 @@ import { userStorage } from "./user-storage";
 import { authStore } from "./auth-store";
 import {
   getServerCache, setServerCache, clearServerCache,
-  loadCollection, saveServerData,
+  loadCollection, saveServerData, hasLoadedFromServer,
 } from "./db-sync";
 import { seedProducts, seedSuppliers, type Product, type Supplier } from "./seed-data";
 import {
@@ -712,7 +712,9 @@ function getAll<T>(key: string): T[] {
   // 服务端桥接：优先读内存缓存（由 db-sync 从服务端加载填充）
   const cached = getServerCache<T>(key);
   if (cached.length > 0) return cached;
-  // 回退 localStorage 离线缓存
+  // 服务端已确认该集合为空 → 这是空账号，绝不回退本地缓存（避免读到别的账号的残留）
+  if (hasLoadedFromServer(key)) return [];
+  // 尚未从服务端加载完成：回退 localStorage 离线缓存
   const data = userStorage.getItem(key);
   return data ? JSON.parse(data) : [];
 }

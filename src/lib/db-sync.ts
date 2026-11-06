@@ -16,31 +16,6 @@
 import { apiList, apiCreate, apiUpdate, apiDelete } from "./api/client";
 import { getCurrentUserId, userStorage } from "./user-storage";
 
-// 收集「旧版单用户时代」的裸键存量数据，用于存量迁移。
-//
-// 【重要·历史 bug 修复】旧实现会扫描 localStorage 里所有以 `_<key>` 结尾的键，
-// 于是把 `u_<其他账号uid>_<key>`（上一个登录账号的离线缓存）也当成存量数据，
-// 在新账号首次登录、服务端为空时整套推送到新账号名下 ——
-// 表现为「新注册账号一登录就自带一整套旧数据」。
-// 多账号数据必须严格按 `u_<uid>_` 前缀隔离：这里只允许读取裸键 `localStorage[<key>]`，
-// 任何带账号前缀的键都属于别的账号，绝不跨账号迁移。
-function collectLegacyLocal<T>(key: string): T[] {
-  if (typeof window === "undefined") return [];
-  let raw: string | null = null;
-  try {
-    raw = localStorage.getItem(key);
-  } catch {
-    return [];
-  }
-  if (!raw) return [];
-  try {
-    const arr = JSON.parse(raw);
-    return Array.isArray(arr) ? dedupeById(arr as T[]) : [];
-  } catch {
-    return [];
-  }
-}
-
 // KEYS → Route resource 映射（与 src/app/api 目录一致）
 const KEY_TO_RESOURCE: Record<string, string> = {
   aluminum_products: "products",
@@ -71,6 +46,16 @@ export function setServerCache<T>(key: string, data: T[]): void {
 
 export function clearServerCache(): void {
   memoryCache.clear();
+  loadedKeys.clear();
+}
+
+// 记录哪些集合已经成功从服务端加载过。
+// 用途：加载完成且服务端为空时，读取入口必须认定"这就是空账号"，
+// 不能再去读本地 localStorage 缓存（那里可能残留上一个账号的数据）。
+const loadedKeys = new Set<string>();
+
+export function hasLoadedFromServer(key: string): boolean {
+  return loadedKeys.has(key);
 }
 
 export function resourceOf(key: string): string | null {
@@ -96,8 +81,11 @@ export async function loadCollection<T>(key: string): Promise<T[]> {
   }
 
   if (!remoteOk) {
+    // 请求失败：保留内存缓存，且不标记为"已从服务端加载"，读取入口仍可用本地缓存兜底
     return dedupeById(getServerCache<T>(key));
   }
+
+  loadedKeys.add(key);
 
   // 服务端有数据 → 以服务端为准（读取入口统一去重，双保险）
   if (remote.length > 0) {
@@ -106,26 +94,19 @@ export async function loadCollection<T>(key: string): Promise<T[]> {
     return clean;
   }
 
-  // 服务端为空 → 用本地缓存（离线缓存或旧版存量数据），并把存量推送到服务端
-  let local = getServerCache<T>(key);
-  if (local.length === 0) {
-    // 再尝试旧账号前缀/裸键的 legacy 存量（如 13800138000 旧数据）
-    local = collectLegacyLocal<T>(key);
+  // 服务端明确返回空 → 这就是一个空账号（新注册用户）。
+  //
+  // 【重要】这里绝不能回退本地缓存、更不能把本地数据"迁移"到服务端：
+  // 旧逻辑会把 localStorage 里的存量数据推给当前账号，而同一浏览器里往往还留着
+  // 上一个登录账号的离线缓存，结果就是新注册账号一登录就自带一整套旧数据（跨账号数据污染）。
+  // 现在以服务端为唯一真相源：服务端空 = 账号空，同时清掉本地残留，避免下次读取又被当数据用。
+  memoryCache.set(key, []);
+  try {
+    userStorage.removeItem(key);
+  } catch {
+    /* ignore */
   }
-  local = dedupeById(local);
-  if (local.length > 0) {
-    memoryCache.set(key, local);
-    // 存量迁移：异步推送到服务端（POST 已做幂等 upsert，不会写重复），并写回当前账号离线缓存
-    void pushAll(resource, local);
-    if (typeof window !== "undefined") {
-      try {
-        userStorage.setItem(key, JSON.stringify(local));
-      } catch {
-        /* ignore */
-      }
-    }
-  }
-  return local;
+  return [];
 }
 
 /** 按业务 id 去重，保留首次出现的记录（数组顺序即服务端返回顺序） */
@@ -145,17 +126,6 @@ function dedupeById<T>(arr: T[]): T[] {
     out.push(item);
   }
   return out;
-}
-
-/** 把整个集合全量推送到服务端（存量迁移 / 全量重写） */
-async function pushAll(resource: string, entities: any[]): Promise<void> {
-  for (const e of entities) {
-    try {
-      await apiCreate(resource, e);
-    } catch {
-      /* 忽略单条失败，继续迁移 */
-    }
-  }
 }
 
 /** 页面写入后的异步同步到服务端（全量替换，简单可靠） */

@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState, useEffect, useCallback } from "react";
-import { deliveryProducts, type DeliveryProduct } from "@/lib/delivery-seed-data";
+import { deliveryProductStore, type DeliveryProduct } from "@/lib/store";
+import { userStorage } from "@/lib/user-storage";
 
 const KEYS = { BOM: "aluminum_bom_components" };
 
@@ -18,7 +19,7 @@ type BomMap = Record<string, BomSub[]>;
 function loadBom(): BomMap {
   if (typeof window === "undefined") return {};
   try {
-    const raw = window.localStorage.getItem(KEYS.BOM);
+    const raw = userStorage.getItem(KEYS.BOM);
     return raw ? (JSON.parse(raw) as BomMap) : {};
   } catch {
     return {};
@@ -33,33 +34,36 @@ export default function BomPage() {
   const [subDialogOpen, setSubDialogOpen] = useState(false);
   const [subSearch, setSubSearch] = useState("");
 
+  // 产品候选必须来自当前账号自己的产品库（服务端），不能再用内置演示常量
+  const [products, setProducts] = useState<DeliveryProduct[]>([]);
+  useEffect(() => { setProducts(deliveryProductStore.getAll()); }, []);
   useEffect(() => { setBom(loadBom()); }, []);
-  useEffect(() => { if (typeof window !== "undefined") window.localStorage.setItem(KEYS.BOM, JSON.stringify(bom)); }, [bom]);
+  useEffect(() => { if (typeof window !== "undefined") userStorage.setItem(KEYS.BOM, JSON.stringify(bom)); }, [bom]);
 
   const mainCandidates = useMemo(() => {
     const q = mainSearch.toLowerCase();
-    return deliveryProducts.filter(p =>
+    return products.filter(p =>
       !q || p.code.toLowerCase().includes(q) || p.name.toLowerCase().includes(q) || p.spec.toLowerCase().includes(q)
     );
-  }, [mainSearch]);
+  }, [mainSearch, products]);
 
-  const mainProduct: DeliveryProduct | undefined = deliveryProducts.find(p => p.id === selectedId);
+  const mainProduct: DeliveryProduct | undefined = products.find(p => p.id === selectedId);
 
   const subCandidates = useMemo(() => {
     const q = subSearch.toLowerCase();
     const added = mainProduct ? (bom[mainProduct.id] || []).map(s => s.id) : [];
-    return deliveryProducts.filter(p => {
+    return products.filter(p => {
       if (added.includes(p.id)) return false;
       return !q || p.code.toLowerCase().includes(q) || p.name.toLowerCase().includes(q) || p.spec.toLowerCase().includes(q);
     });
-  }, [subSearch, mainProduct, bom]);
+  }, [subSearch, mainProduct, bom, products]);
 
   const mainSubs = useMemo(() => {
     if (!mainProduct) return [];
     return (bom[mainProduct.id] || [])
-      .map(s => ({ sub: deliveryProducts.find(p => p.id === s.id), ...s }))
+      .map(s => ({ sub: products.find(p => p.id === s.id), ...s }))
       .filter(x => x.sub);
-  }, [mainProduct, bom]);
+  }, [mainProduct, bom, products]);
 
   const addSub = useCallback((p: DeliveryProduct) => {
     if (!mainProduct) return;
