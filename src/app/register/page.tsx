@@ -15,6 +15,8 @@ export default function RegisterPage() {
   const [sending, setSending] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  // 用户是否已经开始操作表单（用于区分"浏览器自动填充"和"用户自己输入"）
+  const interactedRef = useRef(false);
   const { register, sendRegisterCode } = useAuth();
   const router = useRouter();
 
@@ -23,6 +25,26 @@ export default function RegisterPage() {
       if (timerRef.current) clearInterval(timerRef.current);
     };
   }, []);
+
+  // 浏览器（Chrome / Edge）会无视 autocomplete="off"，把上次保存的邮箱、显示名称、
+  // 密码自动填进注册表单，看起来像"以前的信息没清空"。这里在挂载后多轮清理一次
+  // 非用户输入留下的预填值；用户一旦点了任一输入框就停止清理，绝不打断真实输入。
+  useEffect(() => {
+    const timers = [60, 250, 700, 1500].map((delay) =>
+      setTimeout(() => {
+        if (interactedRef.current) return;
+        setEmail((v) => (v ? "" : v));
+        setDisplayName((v) => (v ? "" : v));
+        setPassword((v) => (v ? "" : v));
+        setCode((v) => (v ? "" : v));
+      }, delay)
+    );
+    return () => timers.forEach((t) => clearTimeout(t));
+  }, []);
+
+  const markInteracted = () => {
+    interactedRef.current = true;
+  };
 
   const startCountdown = () => {
     setCountdown(60);
@@ -108,12 +130,16 @@ export default function RegisterPage() {
           <div className="rounded-xl bg-white p-8 shadow-xl shadow-sky-200/60 ring-1 ring-sky-100">
             <h2 className="mb-6 text-center text-xl font-semibold text-slate-800">注册新账号</h2>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4" autoComplete="off">
               <div>
                 <label className="mb-1 block text-sm font-medium text-slate-600">邮箱</label>
                 <input
                   type="email"
+                  name="reg_email"
+                  id="reg_email"
+                  autoComplete="off"
                   value={email}
+                  onFocus={markInteracted}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm focus:border-transparent focus:ring-2 focus:ring-blue-500"
                   placeholder="请输入邮箱（作为登录账号）"
@@ -126,8 +152,11 @@ export default function RegisterPage() {
                 <div className="flex items-stretch gap-2">
                   <input
                     type="text"
+                    name="reg_code"
+                    id="reg_code"
                     inputMode="numeric"
                     value={code}
+                    onFocus={markInteracted}
                     onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 10))}
                     maxLength={10}
                     autoComplete="one-time-code"
@@ -153,7 +182,11 @@ export default function RegisterPage() {
                 <label className="mb-1 block text-sm font-medium text-slate-600">显示名称</label>
                 <input
                   type="text"
+                  name="reg_display_name"
+                  id="reg_display_name"
+                  autoComplete="off"
                   value={displayName}
+                  onFocus={markInteracted}
                   onChange={(e) => setDisplayName(e.target.value)}
                   className="w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm focus:border-transparent focus:ring-2 focus:ring-blue-500"
                   placeholder="显示在侧边栏的名称"
@@ -164,7 +197,11 @@ export default function RegisterPage() {
                 <label className="mb-1 block text-sm font-medium text-slate-600">密码</label>
                 <input
                   type="password"
+                  name="reg_password"
+                  id="reg_password"
+                  autoComplete="new-password"
                   value={password}
+                  onFocus={markInteracted}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full rounded-lg border border-slate-200 px-4 py-2.5 text-sm focus:border-transparent focus:ring-2 focus:ring-blue-500"
                   placeholder="请输入密码（至少6位）"
