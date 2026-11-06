@@ -40,13 +40,21 @@ async function post<T>(path: string, body: any): Promise<T> {
 }
 
 export const authStore = {
-  async register(email: string, password: string, displayName: string, company: string) {
+  async register(
+    email: string,
+    password: string,
+    displayName: string,
+    company: string,
+    captchaToken = "",
+    captchaCode = ""
+  ) {
     if (!email.trim()) return { success: false, error: "邮箱不能为空" };
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
       return { success: false, error: "请输入有效的邮箱地址" };
     }
     if (password.length < 6) return { success: false, error: "密码至少6位" };
     if (!displayName.trim()) return { success: false, error: "显示名称不能为空" };
+    if (!captchaCode.trim()) return { success: false, error: "请输入图形验证码" };
 
     try {
       await post("/api/auth/register", {
@@ -54,6 +62,8 @@ export const authStore = {
         password,
         displayName: displayName.trim(),
         company: company.trim(),
+        captchaToken,
+        captchaCode: captchaCode.trim(),
       });
     } catch (e: any) {
       return { success: false, error: e.message };

@@ -16,7 +16,14 @@ interface AuthContextType {
   loginWithAccessToken: (token: string) => Promise<{ success: boolean; error?: string }>;
   resetPassword: (email: string, code: string, newPassword: string) => Promise<{ success: boolean; error?: string }>;
   changePassword: (oldPassword: string, newPassword: string) => Promise<{ success: boolean; error?: string }>;
-  register: (email: string, password: string, displayName: string, company: string) => Promise<{ success: boolean; error?: string; emailConfirmRequired?: boolean }>;
+  register: (
+    email: string,
+    password: string,
+    displayName: string,
+    company: string,
+    captchaToken?: string,
+    captchaCode?: string
+  ) => Promise<{ success: boolean; error?: string; emailConfirmRequired?: boolean }>;
   logout: () => void;
 }
 
@@ -95,8 +102,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return result.success ? { success: true } : { success: false, error: result.error };
   }, []);
 
-  const register = useCallback(async (email: string, password: string, displayName: string, company: string) => {
-    const result = await authStore.register(email, password, displayName, company);
+  const register = useCallback(async (
+    email: string,
+    password: string,
+    displayName: string,
+    company: string,
+    captchaToken = "",
+    captchaCode = ""
+  ) => {
+    const result = await authStore.register(email, password, displayName, company, captchaToken, captchaCode);
     if (result.success && result.user) {
       setCurrentUserId(result.user.id);
       initData();

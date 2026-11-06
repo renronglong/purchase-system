@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseServer } from "@/lib/supabase-server";
+import { verifyCaptcha } from "@/lib/captcha";
 
 /**
  * POST /api/auth/register
- * 注册（邮箱+密码）。在服务端用 admin API 创建账号，
+ * 注册（邮箱+密码+图形验证码）。在服务端用 admin API 创建账号，
  * email_confirm=true 免邮箱验证，注册即生效。
+ * captchaToken / captchaCode 由 /api/auth/captcha 下发并在此校验。
  */
 export async function POST(req: NextRequest) {
   try {
@@ -25,6 +27,10 @@ export async function POST(req: NextRequest) {
     if (password.length < 6)
       return NextResponse.json({ error: "密码至少6位" }, { status: 400 });
     if (!displayName) return NextResponse.json({ error: "显示名称不能为空" }, { status: 400 });
+
+    // 图形验证码校验（防机器人批量注册）
+    const cap = verifyCaptcha(body?.captchaToken || "", body?.captchaCode || "");
+    if (!cap.ok) return NextResponse.json({ error: cap.error }, { status: 400 });
 
     const sb = getSupabaseServer();
     const { data, error } = await sb.auth.admin.createUser({
