@@ -16,32 +16,29 @@
 import { apiList, apiCreate, apiUpdate, apiDelete } from "./api/client";
 import { getCurrentUserId, userStorage } from "./user-storage";
 
-// 收集「当前登录账号之外」的 legacy 存量数据（旧账号前缀/裸键），用于存量迁移
+// 收集「旧版单用户时代」的裸键存量数据，用于存量迁移。
+//
+// 【重要·历史 bug 修复】旧实现会扫描 localStorage 里所有以 `_<key>` 结尾的键，
+// 于是把 `u_<其他账号uid>_<key>`（上一个登录账号的离线缓存）也当成存量数据，
+// 在新账号首次登录、服务端为空时整套推送到新账号名下 ——
+// 表现为「新注册账号一登录就自带一整套旧数据」。
+// 多账号数据必须严格按 `u_<uid>_` 前缀隔离：这里只允许读取裸键 `localStorage[<key>]`，
+// 任何带账号前缀的键都属于别的账号，绝不跨账号迁移。
 function collectLegacyLocal<T>(key: string): T[] {
   if (typeof window === "undefined") return [];
-  const uid = getCurrentUserId();
-  const out: T[] = [];
-  const seen = new Set<string>();
-  for (const raw of Object.keys(localStorage)) {
-    // 仅匹配目标业务 key 结尾的键：裸 <key> 或任意前缀 u_<xxx>_<key>
-    if (raw !== key && !raw.endsWith(`_${key}`)) continue;
-    // 跳过当前登录账号的键（u_<当前uid>_<key>）
-    if (uid && raw === `u_${uid}_${key}`) continue;
-    let arr: any[] = [];
-    try {
-      arr = JSON.parse(localStorage.getItem(raw) || "[]");
-    } catch {
-      arr = [];
-    }
-    if (!Array.isArray(arr) || arr.length === 0) continue;
-    for (const item of arr) {
-      const id = item?.id;
-      if (id && seen.has(String(id))) continue;
-      if (id) seen.add(String(id));
-      out.push(item);
-    }
+  let raw: string | null = null;
+  try {
+    raw = localStorage.getItem(key);
+  } catch {
+    return [];
   }
-  return out;
+  if (!raw) return [];
+  try {
+    const arr = JSON.parse(raw);
+    return Array.isArray(arr) ? dedupeById(arr as T[]) : [];
+  } catch {
+    return [];
+  }
 }
 
 // KEYS → Route resource 映射（与 src/app/api 目录一致）

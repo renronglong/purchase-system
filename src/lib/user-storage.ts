@@ -19,7 +19,9 @@ export function setCurrentUserId(userId: string | null): void {
 
 function userKey(key: string): string {
   const userId = getCurrentUserId();
-  return userId ? `u_${userId}_${key}` : key;
+  // 当前账号未确定时（例如新标签页 sessionStorage 丢失）绝不能退化成裸键：
+  // 裸键会被当成「旧版存量数据」，在新账号首次登录时被迁移进别的账号。
+  return userId ? `u_${userId}_${key}` : `anon_${key}`;
 }
 
 export const userStorage = {
