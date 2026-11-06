@@ -63,6 +63,24 @@ export function resourceOf(key: string): string | null {
 }
 
 /**
+ * 清理「旧版单用户时代」遗留的裸键 localStorage 缓存。
+ *
+ * 这些裸键（aluminum_products / delivery_notes ...）是当年还没做多账号隔离时写的，
+ * 现在数据全部在服务端，裸键只会带来风险：一旦被任何路径当成"当前账号数据"，
+ * 就会让新注册账号看到上一个账号的内容。这里在每次登录初始化时统一清掉。
+ */
+export function purgeLegacyBareKeys(): void {
+  if (typeof window === "undefined") return;
+  for (const key of Object.keys(KEY_TO_RESOURCE)) {
+    try {
+      window.localStorage.removeItem(key);
+    } catch {
+      /* ignore */
+    }
+  }
+}
+
+/**
  * 从服务端拉取指定集合到内存+localStorage 缓存。
  * 返回该集合最新数组（服务端优先；若服务端为空则回退本地缓存/返回空）。
  */

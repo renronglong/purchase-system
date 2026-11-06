@@ -2,7 +2,7 @@ import { userStorage } from "./user-storage";
 import { authStore } from "./auth-store";
 import {
   getServerCache, setServerCache, clearServerCache,
-  loadCollection, saveServerData, hasLoadedFromServer,
+  loadCollection, saveServerData, hasLoadedFromServer, purgeLegacyBareKeys,
 } from "./db-sync";
 import { seedProducts, seedSuppliers, type Product, type Supplier } from "./seed-data";
 import {
@@ -997,6 +997,12 @@ const ALL_KEYS = [
 async function loadAllFromServer(): Promise<void> {
   if (typeof window === "undefined") return;
   clearServerCache();
+  // 清掉旧版遗留的裸键缓存，确保不会被任何路径误当成当前账号数据
+  try {
+    purgeLegacyBareKeys();
+  } catch {
+    /* ignore */
+  }
   await Promise.all(
     ALL_KEYS.map((k) =>
       loadCollection(k).then((data) => {
