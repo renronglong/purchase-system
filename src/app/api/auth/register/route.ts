@@ -47,11 +47,22 @@ export async function POST(req: NextRequest) {
     }
 
     // 2) 校验邮箱验证码（一次性，成功即失效）
-    const { data: verifyData, error: verifyError } = await sb.auth.verifyOtp({
+    // 注意：新注册用户的验证码来自 Supabase 的「Confirm signup」邮件，类型是 signup；
+    // 少数情况下（账号已确认过）才走 email/magiclink 类型，这里两种都兼容。
+    let verifyData: any = null;
+    let verifyError: any = null;
+    ({ data: verifyData, error: verifyError } = await sb.auth.verifyOtp({
       email,
       token: code,
-      type: "email",
-    });
+      type: "signup",
+    }));
+    if (verifyError || !verifyData?.user) {
+      ({ data: verifyData, error: verifyError } = await sb.auth.verifyOtp({
+        email,
+        token: code,
+        type: "email",
+      }));
+    }
     if (verifyError || !verifyData?.user) {
       return NextResponse.json(
         { error: friendlyOtpError(verifyError?.message || "") },

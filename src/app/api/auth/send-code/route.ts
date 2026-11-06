@@ -59,9 +59,11 @@ export async function POST(req: NextRequest) {
       const msg = error.message || "验证码发送失败";
       const hint = /rate|limit|too many|security purposes/i.test(msg)
         ? "发送过于频繁，请稍后再试（邮件服务有每小时次数限制）"
-        : /signup|not allowed|user not found/i.test(msg)
-          ? "该邮箱尚未注册，请先注册账号"
-          : msg;
+        : /sending.*email|confirmation email/i.test(msg)
+          ? "验证码邮件发送失败，请确认邮箱地址真实有效后重试"
+          : /signup|not allowed|user not found/i.test(msg)
+            ? "该邮箱尚未注册，请先注册账号"
+            : msg;
       return NextResponse.json({ error: hint }, { status: 400 });
     }
     return NextResponse.json({ success: true });
