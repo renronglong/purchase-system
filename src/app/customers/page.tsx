@@ -5,7 +5,7 @@ import { deliveryCustomerStore, type DeliveryCustomer } from "@/lib/store";
 import AddDialog from "@/components/add-dialog";
 
 function createEmpty(): Omit<DeliveryCustomer, "id"> {
-  return { name: "", address: "", contact: "", phone: "", taxNo: "", legalPerson: "", email: "", paymentTerms: "" };
+  return { name: "", address: "", contact: "", phone: "", taxNo: "", legalPerson: "", email: "", paymentTerms: "", bankName: "", bankAccount: "" };
 }
 
 export default function CustomersPage() {
@@ -71,6 +71,14 @@ export default function CustomersPage() {
         <div><label className="block text-xs text-slate-500 mb-1">邮箱</label>
           <input type="text" value={formData.email} onChange={(e) => setFormData(p => ({ ...p, email: e.target.value }))}
             className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" /></div>
+        <div className="col-span-2"><label className="block text-xs text-slate-500 mb-1">开户行</label>
+          <input type="text" value={formData.bankName || ""} onChange={(e) => setFormData(p => ({ ...p, bankName: e.target.value }))}
+            placeholder="如：中国工商银行中山分行港口支行"
+            className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" /></div>
+        <div className="col-span-2"><label className="block text-xs text-slate-500 mb-1">银行账号</label>
+          <input type="text" value={formData.bankAccount || ""} onChange={(e) => setFormData(p => ({ ...p, bankAccount: e.target.value }))}
+            placeholder="对公账号"
+            className="w-full px-3 py-1.5 text-sm border border-slate-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500" /></div>
       </div>
       <div className="flex gap-2 mt-4">
         <button onClick={handleSave} className="px-4 py-1.5 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700">保存</button>
@@ -95,26 +103,35 @@ export default function CustomersPage() {
       </div>
 
       <div className="bg-white rounded-lg border border-slate-200 overflow-x-auto">
-        <table className="w-full text-sm min-w-[800px]">
+        <table className="w-full text-sm min-w-[980px]">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200">
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">单位名称</th>
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">联系人</th>
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">电话</th>
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">地址</th>
+              <th className="text-left px-4 py-2.5 font-medium text-slate-600">开户行 / 账号</th>
               <th className="text-left px-4 py-2.5 font-medium text-slate-600">付款方式</th>
               <th className="sticky right-0 z-10 bg-slate-50 text-center px-4 py-2.5 font-medium text-slate-600 shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.12)]">操作</th>
             </tr>
           </thead>
           <tbody>
             {filtered.length === 0 ? (
-              <tr><td colSpan={6} className="text-center py-12 text-slate-400">暂无客户数据</td></tr>
+              <tr><td colSpan={7} className="text-center py-12 text-slate-400">暂无客户数据</td></tr>
             ) : filtered.map(c => (
               <tr key={c.id} className="border-b border-slate-100 hover:bg-slate-50/50">
                 <td className="px-4 py-2 font-medium">{c.name}</td>
                 <td className="px-4 py-2">{c.contact}</td>
                 <td className="px-4 py-2 font-mono">{c.phone}</td>
                 <td className="px-4 py-2">{c.address}</td>
+                <td className="px-4 py-2">
+                  {c.bankName || c.bankAccount ? (
+                    <div className="leading-tight">
+                      <div>{c.bankName || "-"}</div>
+                      <div className="font-mono text-xs text-slate-500">{c.bankAccount || ""}</div>
+                    </div>
+                  ) : "-"}
+                </td>
                 <td className="px-4 py-2">{c.paymentTerms}</td>
                 <td className="sticky right-0 z-10 bg-white px-4 py-2.5 text-center shadow-[-6px_0_8px_-6px_rgba(0,0,0,0.12)]">
                   <div className="flex items-center justify-center gap-2">

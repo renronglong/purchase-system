@@ -87,6 +87,7 @@ export default function PurchaseOrderDetailPage() {
                 <th className="px-3 py-2 text-left font-medium text-slate-600">产品编号</th>
                 <th className="px-3 py-2 text-left font-medium text-slate-600">产品名称</th>
                 <th className="px-3 py-2 text-left font-medium text-slate-600">规格尺寸</th>
+                {!isMaterial && <th className="px-3 py-2 text-left font-medium text-slate-600">材质</th>}
                 <th className="px-3 py-2 text-right font-medium text-slate-600">{isMaterial ? "单价" : "长度mm"}</th>
                 <th className="px-3 py-2 text-right font-medium text-slate-600">数量</th>
                 <th className="px-3 py-2 text-left font-medium text-slate-600">单位</th>
@@ -103,6 +104,7 @@ export default function PurchaseOrderDetailPage() {
                   <td className="px-3 py-2 font-mono text-blue-600">{item.productCode}</td>
                   <td className="px-3 py-2">{item.productName}</td>
                   <td className="px-3 py-2">{item.spec}</td>
+                  {!isMaterial && <td className="px-3 py-2">{item.material || "-"}</td>}
                   <td className="px-3 py-2 text-right">{isMaterial ? (item.unitPrice || 0).toFixed(2) : item.length}</td>
                   <td className="px-3 py-2 text-right">{item.quantity}</td>
                   <td className="px-3 py-2">{item.unit}</td>
@@ -115,7 +117,7 @@ export default function PurchaseOrderDetailPage() {
             </tbody>
             <tfoot>
               <tr className="bg-slate-50 border-t-2 border-slate-300">
-                <td colSpan={5} className="px-3 py-2 text-right font-medium">合计</td>
+                <td colSpan={isMaterial ? 5 : 6} className="px-3 py-2 text-right font-medium">合计</td>
                 <td className="px-3 py-2 text-right font-bold">{order.totalQuantity}</td>
                 <td></td>
                 <td className="px-3 py-2 text-right font-mono font-bold">{isMaterial ? (order.totalAmount ?? 0).toFixed(2) : order.totalWeight.toFixed(2)}</td>

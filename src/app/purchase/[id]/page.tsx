@@ -82,6 +82,17 @@ export default function PurchaseOrderFormPage() {
 
   const suppliers = supplierStore.getAll();
 
+  // 型材材质候选：取自产品库里型材已配置的材质，去重后供录入时选择（也可直接手填）
+  const profileMaterialOptions = Array.from(
+    new Set(
+      productStore
+        .getAll()
+        .filter((p) => (p.productType || "profile") === "profile")
+        .map((p) => (p.material || "").trim())
+        .filter(Boolean)
+    )
+  ).sort();
+
   // 采购公司下拉：直接取「公司信息管理」的公司，按名称去重；历史单据里的公司名兜底保留
   const companyNames = Array.from(
     new Set(
@@ -199,6 +210,8 @@ export default function PurchaseOrderFormPage() {
           productName: product.name,
           spec: product.spec,
           weightPerMeter: product.weightPerMeter || 0,
+          // 材质随产品关联带出：产品库配了材质就用产品库的，没配则保留手填值
+          material: (product.material || "").trim() || next[index].material || "",
         };
         item.totalWeight = calcWeight(item.weightPerMeter, item.length, item.quantity);
         next[index] = item;
@@ -479,13 +492,19 @@ export default function PurchaseOrderFormPage() {
       {/* 明细表格 - 型材 */}
       {orderType === "profile" && (
         <div className="bg-white rounded-lg border border-slate-200 overflow-x-auto">
-          <table className="w-full text-xs min-w-[1200px]">
+          <datalist id="profile-material-list">
+            {profileMaterialOptions.map((m) => (
+              <option key={m} value={m} />
+            ))}
+          </datalist>
+          <table className="w-full text-xs min-w-[1300px]">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
                 <th className="px-2 py-2 font-medium text-slate-600 w-10">序号</th>
                 <th className="px-2 py-2 font-medium text-slate-600 w-36">产品编号</th>
                 <th className="px-2 py-2 font-medium text-slate-600 w-24">产品名称</th>
                 <th className="px-2 py-2 font-medium text-slate-600 w-24">规格尺寸mm</th>
+                <th className="px-2 py-2 font-medium text-slate-600 w-24">材质</th>
                 <th className="px-2 py-2 font-medium text-slate-600 w-20">长度mm</th>
                 <th className="px-2 py-2 font-medium text-slate-600 w-16">数量</th>
                 <th className="px-2 py-2 font-medium text-slate-600 w-14">单位</th>
@@ -508,6 +527,16 @@ export default function PurchaseOrderFormPage() {
                   </td>
                   <td className="px-2 py-1.5 text-slate-600">{item.productName}</td>
                   <td className="px-2 py-1.5 text-slate-600">{item.spec}</td>
+                  <td className="px-2 py-1.5">
+                    <input
+                      type="text"
+                      list="profile-material-list"
+                      value={item.material || ""}
+                      onChange={(e) => updateItem(index, "material", e.target.value)}
+                      className="w-full px-2 py-1 text-xs border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500/30"
+                      placeholder="材质"
+                    />
+                  </td>
                   <td className="px-2 py-1.5">
                     <input
                       type="number"
@@ -582,7 +611,7 @@ export default function PurchaseOrderFormPage() {
             </tbody>
             <tfoot>
               <tr className="bg-slate-50 border-t border-slate-200">
-                <td colSpan={5} className="px-2 py-2 text-right text-sm font-medium text-slate-600">合计</td>
+                <td colSpan={6} className="px-2 py-2 text-right text-sm font-medium text-slate-600">合计</td>
                 <td className="px-2 py-2 text-center font-mono font-bold text-slate-900">{totalQuantity}</td>
                 <td className="px-2 py-2"></td>
                 <td className="px-2 py-2 text-right font-mono font-bold text-slate-900">{totalWeight.toFixed(2)}</td>

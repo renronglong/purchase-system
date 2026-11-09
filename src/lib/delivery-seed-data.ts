@@ -13,6 +13,9 @@ export interface DeliveryCustomer {
   legalPerson: string;
   email: string;
   paymentTerms: string;
+  // 银行信息（可选，向后兼容历史客户）
+  bankName?: string;     // 开户行
+  bankAccount?: string;  // 银行账号
 }
 
 export const deliveryCustomers: DeliveryCustomer[] = [

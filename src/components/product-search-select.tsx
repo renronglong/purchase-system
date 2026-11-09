@@ -90,6 +90,9 @@ export default function ProductSearchSelect({ value, onChange, placeholder = "è¾
               <span className="font-mono text-blue-600">{product.id}</span>
               <span className="ml-2 text-slate-700">{product.name}</span>
               <span className="ml-2 text-slate-400">{product.spec}</span>
+              {product.material ? (
+                <span className="ml-2 px-1.5 py-0.5 rounded bg-sky-50 text-sky-600 text-[11px]">{product.material}</span>
+              ) : null}
             </div>
           ))}
         </div>
